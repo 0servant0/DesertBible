@@ -400,6 +400,25 @@ document.getElementById("search").addEventListener("input", event => {
   grid.querySelectorAll(".category").forEach(card =>
     card.classList.toggle("hidden", !card.dataset.category.includes(query)));
 });
+  document.querySelectorAll("#scripture .verse").forEach(verse => {
+  verse.style.cursor = "pointer";
+
+  verse.addEventListener("click", () => {
+    document.querySelectorAll("#scripture .verse").forEach(item => {
+      item.style.backgroundColor = "";
+      item.style.borderLeftColor = "";
+    });
+
+    verse.style.backgroundColor = "#29291f";
+    verse.style.borderLeftColor = "#c9aa70";
+
+    const number = verse.querySelector(".verse-num").textContent;
+    const heading = document.querySelector("#scripture h2");
+
+    heading.textContent = "Micah " + number;
+  });
+});
+
 </script>
 </body>
 </html>
