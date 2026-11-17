@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10110f">
+<title>Scripture Atlas | Bible Research</title>
+<style>
+:root {
+  --bg: #10110f;
+  --panel: #191a17;
+  --panel2: #20211d;
+  --text: #f1efe7;
+  --muted: #aaa99e;
+  --gold: #c9aa70;
+  --line: #34352e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.65 -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+header {
+  padding: 22px 6%;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.brand { font-size: 19px; letter-spacing: 2px; }
+.brand span { color: var(--gold); }
+.small { color: var(--muted); font-size: 12px; }
+.hero {
+  padding: 55px 6% 38px;
+  background: radial-gradient(ellipse at top right,
+    #343025 0%, var(--bg) 65%);
+}
+.eyebrow {
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+h1 { font-size: clamp(35px, 6vw, 58px); line-height: 1.1; margin: 12px 0; }
+h2 { font-size: 23px; margin-top: 0; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+p { color: var(--muted); }
+.hero p { max-width: 640px; }
+main { padding: 30px 6% 70px; max-width: 1500px; margin: auto; }
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  align-items: center; margin-bottom: 25px;
+}
+input {
+  flex: 1; min-width: 190px; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel); color: var(--text);
+}
+button {
+  padding: 10px 14px; border-radius: 8px;
+  border: 1px solid var(--line); color: var(--text);
+  background: var(--panel2);
+}
+button:hover, button.active {
+  border-color: var(--gold); color: var(--gold);
+}
+.layout {
+  display: grid; grid-template-columns: 230px minmax(0, 1fr);
+  gap: 22px; align-items: start;
+}
+nav, .panel, .verse, .category {
+  border: 1px solid var(--line);
+  background: var(--panel); border-radius: 12px;
+}
+nav { padding: 12px; position: sticky; top: 12px; }
+.nav-title {
+  color: var(--muted); font-size: 11px;
+  letter-spacing: 1.5px; padding: 10px;
+}
+nav button { width: 100%; text-align: left; margin: 2px 0; }
+.content { min-width: 0; }
+.panel { padding: 24px; margin-bottom: 18px; }
+.panel-head {
+  display: flex; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; align-items: center;
+}
+.verse {
+  padding: 18px; margin: 12px 0;
+  border-left: 3px solid var(--gold);
+}
+.verse-num { color: var(--gold); font-weight: 700; }
+.verse p { color: var(--text); }
+.categories {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.category {
+  padding: 18px; text-align: left; color: var(--text);
+  min-height: 115px;
+}
+.category p { font-size: 13px; margin-bottom: 0; }
+.category .number { color: var(--gold); font-size: 12px; }
+.pill {
+  display: inline-block; padding: 3px 9px; border-radius: 20px;
+  background: #29291f; color: var(--gold); font-size: 11px;
+}
+.hidden { display: none !important; }
+footer {
+  border-top: 1px solid var(--line); padding: 25px 6%;
+  color: var(--muted); font-size: 12px;
+}
+@media (max-width: 720px) {
+  header { padding: 18px 5%; }
+  .hero { padding: 40px 5% 25px; }
+  main { padding: 22px 5% 45px; }
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; }
+  .nav-links { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .categories { grid-template-columns: 1fr; }
+  .panel { padding: 18px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">SCRIPTURE <span>ATLAS</span></div>
+  <div class="small">BIBLE RESEARCH PROJECT · PROTOTYPE</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Explore the text. Investigate the evidence.</div>
+  <h1>Go beyond<br>the written word.</h1>
+  <p>Explore Scripture through original languages, historical records,
+  archaeology, ancient manuscripts, geography, and scholarly research.
+  Follow the evidence back to its sources.</p>
+  <span class="pill">FIRST CHAPTER · MICAH 1</span>
+</section>
+
+<main>
+  <div class="toolbar">
+    <input id="search" type="search"
+      placeholder="Search research categories..." aria-label="Search categories">
+    <button id="allButton">All categories</button>
+  </div>
+
+  <div class="layout">
+    <nav>
+      <div class="nav-title">CHAPTER NAVIGATION</div>
+      <div class="nav-links">
+        <button class="active" data-view="overview">Chapter overview</button>
+        <button data-view="scripture">Read Scripture</button>
+        <button data-view="categories">Research categories</button>
+        <button data-view="sources">Sources & evidence</button>
+      </div>
+      <div class="nav-title">CHAPTER</div>
+      <p style="padding:0 10px">Micah 1</p>
+      <p class="small" style="padding:0 10px">More chapters will be added as the platform develops.</p>
+    </nav>
+
+    <div class="content">
+      <section class="view" id="overview">
+        <div class="panel">
+          <div class="eyebrow">Prophetic literature</div>
+          <h2>Micah 1 — Chapter Research</h2>
+          <p>This chapter introduces Micah's prophetic message and names
+          Samaria and Jerusalem. Explore the text alongside historical
+          context and the evidence relevant to its setting.</p>
+          <div class="panel-head">
+            <span class="pill">Historical investigation</span>
+            <button data-go="scripture">Read the chapter →</button>
+          </div>
+        </div>
+        <h2>Explore this chapter</h2>
+        <div class="categories">
+          <button class="category" data-go="categories">
+            <div class="number">01 / TEXT</div>
+            <h3>Scripture & translations</h3>
+            <p>Read the chapter and compare available translations.</p>
+          </button>
+          <button class="category" data-go="categories">
+            <div class="number">02 / LANGUAGE</div>
+            <h3>Hebrew word studies</h3>
+            <p>Investigate original wording, grammar, and meaning.</p>
+          </button>
+          <button class="category" data-go="categories">
+            <div class="number">03 / HISTORY</div>
+            <h3>Historical setting</h3>
+            <p>Explore people, kingdoms, events, and chronology.</p>
+          </button>
+          <button class="category" data-go="categories">
+            <div class="number">04 / EVIDENCE</div>
+            <h3>Archaeology & records</h3>
+            <p>Examine discoveries and independent historical sources.</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="view hidden" id="scripture">
+        <div class="panel">
+          <div class="eyebrow">Scripture reader</div>
+          <h2>Micah 1</h2>
+          <p>The final reader will contain the selected translation,
+          verse-by-verse navigation, and links to related research.
+          No Bible text has been inserted into this initial shell yet.</p>
+          <p><strong>Next:</strong> Add a verified, legally usable translation
+          and connect each verse to its research.</p>
+        </div>
+      </section>
+
+      <section class="view hidden" id="categories">
+        <div class="panel">
+          <div class="eyebrow">Research library</div>
+          <h2>Chapter categories</h2>
+          <p>Select a category to open its research workspace.
+          Each workspace will eventually contain documented findings,
+          citations, images, and relevant verse connections.</p>
+          <div class="categories" id="categoryGrid"></div>
+        </div>
+      </section>
+
+      <section class="view hidden" id="sources">
+        <div class="panel">
+          <div class="eyebrow">Research integrity</div>
+          <h2>Sources & evidence</h2>
+          <p>No historical evidence has been entered yet. Each future
+          claim must link to an identifiable source, explain what that
+          source supports, and state its limitations.</p>
+          <div class="verse">
+            <h3>Required evidence record</h3>
+            <p>Claim · Source · Date · Provenance · Supporting evidence ·
+            Limitations · Scholarly disagreements · Citation link</p>
+          </div>
+          <span class="pill">No unsupported claims</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  SCRIPTURE ATLAS · EARLY PROTOTYPE<br>
+  Historical claims, interpretations, and theological beliefs must be
+  distinguished. Research content and citations are still being developed.
+</footer>
+
+<script>
+const categories = [
+  ["Scripture & translations","Chapter text, translation comparison, reading tools."],
+  ["Original languages","Hebrew, Aramaic, Greek, grammar, and word meanings."],
+  ["Cross-references","Related verses, quotations, and biblical connections."],
+  ["Historical context","Authorship questions, audience, and historical setting."],
+  ["People & figures","People mentioned and their historical backgrounds."],
+  ["Places & geography","Ancient locations, modern identifications, and maps."],
+  ["Historical timeline","Events, estimated dates, and competing chronologies."],
+  ["Archaeology","Excavations, artifacts, inscriptions, and limitations."],
+  ["Ancient documents","Records, letters, chronicles, and royal inscriptions."],
+  ["Manuscripts","Ancient copies, textual variants, and transmission."],
+  ["Scholarly commentary","Academic research and competing interpretations."],
+  ["Theology","Theological themes and traditions of interpretation."],
+  ["Culture & daily life","Customs, laws, worship, economics, and warfare."],
+  ["Literary analysis","Genre, structure, poetry, imagery, and rhetoric."],
+  ["Prophecy & fulfillment","Claims, proposed fulfillments, and disagreements."],
+  ["Evidence verification","Claims, support, uncertainty, and confidence."],
+  ["Visual exploration","Maps, artifacts, manuscripts, and reconstructions."],
+  ["Research library","Bibliographies, publications, and primary sources."],
+  ["Research assistant","Source-linked answers with clear uncertainty."],
+  ["Study tools","Notes, bookmarks, questions, and learning tools."]
+];
+
+const grid = document.getElementById("categoryGrid");
+categories.forEach((item, index) => {
+  const button = document.createElement("button");
+  button.className = "category";
+  button.dataset.category = item.join(" ").toLowerCase();
+  button.innerHTML = `<div class="number">CATEGORY ${String(index+1).padStart(2,"0")}</div>
+    <h3></h3><p></p>`;
+  button.querySelector("h3").textContent = item[0];
+  button.querySelector("p").textContent = item[1];
+  button.addEventListener("click", () => {
+    alert(item[0] + "\\n\\nThis research workspace will be built in a later step.");
+  });
+  grid.appendChild(button);
+});
+
+function showView(id) {
+  document.querySelectorAll(".view").forEach(view =>
+    view.classList.toggle("hidden", view.id !== id));
+  document.querySelectorAll("nav button[data-view]").forEach(button =>
+    button.classList.toggle("active", button.dataset.view === id));
+}
+document.querySelectorAll("nav button[data-view]").forEach(button =>
+  button.addEventListener("click", () => showView(button.dataset.view)));
+document.querySelectorAll("[data-go]").forEach(button =>
+  button.addEventListener("click", () => showView(button.dataset.go)));
+document.getElementById("allButton").addEventListener("click", () => {
+  document.getElementById("search").value = "";
+  grid.querySelectorAll(".category").forEach(card => card.classList.remove("hidden"));
+  showView("categories");
+});
+document.getElementById("search").addEventListener("input", event => {
+  const query = event.target.value.toLowerCase();
+  showView("categories");
+  grid.querySelectorAll(".category").forEach(card =>
+    card.classList.toggle("hidden", !card.dataset.category.includes(query)));
+});
+</script>
+</body>
+</html>
