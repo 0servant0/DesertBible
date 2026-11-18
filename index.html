@@ -374,8 +374,33 @@ categories.forEach((item, index) => {
   button.querySelector("h3").textContent = item[0];
   button.querySelector("p").textContent = item[1];
   button.addEventListener("click", () => {
-    alert(item[0] + "\\n\\nThis research workspace will be built in a later step.");
+  let workspace = document.getElementById("researchWorkspace");
+
+  if (!workspace) {
+    workspace = document.createElement("div");
+    workspace.id = "researchWorkspace";
+    workspace.className = "panel";
+    grid.insertAdjacentElement("afterend", workspace);
+  }
+
+  const passage = document.querySelector("#scripture h2").textContent;
+
+  workspace.innerHTML = `
+    <div class="eyebrow">DESERTBIBLE RESEARCH</div>
+    <h2>${item[0]}</h2>
+    <p>${item[1]}</p>
+    <p><strong>Selected passage:</strong> ${passage}</p>
+    <p>Research materials, source citations, and verified findings will appear in this workspace.</p>
+    <button id="closeResearch">Return to categories</button>
+  `;
+
+  document.getElementById("closeResearch").addEventListener("click", () => {
+    workspace.remove();
   });
+
+  workspace.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
   grid.appendChild(button);
 });
 
