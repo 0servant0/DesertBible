@@ -516,12 +516,26 @@ document.getElementById("search").addEventListener("input", event => {
             `
         }
       `;
-    } else {
-      details.innerHTML = `
-        <h3>${category} — Micah ${number}</h3>
-        <p>This category is not yet researched for this verse. Verified evidence, source citations, and relevant limitations must be added before conclusions are presented.</p>
-      `;
-    }
+  } else {
+  details.innerHTML = `
+    <h3>${category} — Micah ${number}</h3>
+
+    <h4>Research Findings</h4>
+    <div id="researchFindings">
+      <p>Verified research has not yet been added.</p>
+    </div>
+
+    <h4>Sources and Citations</h4>
+    <div id="researchSources">
+      <p>Sources must be verified before publication.</p>
+    </div>
+
+    <h4>Evidence and Limitations</h4>
+    <div id="researchLimitations">
+      <p>Conclusions will be added after the evidence is reviewed.</p>
+    </div>
+  `;
+}
   });
 });
     });
