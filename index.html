@@ -400,24 +400,61 @@ document.getElementById("search").addEventListener("input", event => {
   grid.querySelectorAll(".category").forEach(card =>
     card.classList.toggle("hidden", !card.dataset.category.includes(query)));
 });
-  document.querySelectorAll("#scripture .verse").forEach(verse => {
+ document.querySelectorAll("#scripture .verse").forEach(verse => {
   verse.style.cursor = "pointer";
 
   verse.addEventListener("click", () => {
     document.querySelectorAll("#scripture .verse").forEach(item => {
       item.style.backgroundColor = "";
-      item.style.borderLeftColor = "";
+      item.style.borderLeft = "";
     });
 
     verse.style.backgroundColor = "#29291f";
-    verse.style.borderLeftColor = "#c9aa70";
+    verse.style.borderLeft = "4px solid #c9aa70";
 
     const number = verse.querySelector(".verse-num").textContent;
-    const heading = document.querySelector("#scripture h2");
+    const scripture = document.getElementById("scripture");
+    let research = document.getElementById("verseResearch");
 
-    heading.textContent = "Micah " + number;
+    if (!research) {
+      research = document.createElement("div");
+      research.id = "verseResearch";
+      research.className = "panel";
+      scripture.appendChild(research);
+    }
+
+    research.innerHTML = `
+      <div class="eyebrow">VERSE RESEARCH WORKSPACE</div>
+      <h2>Micah ${number}</h2>
+      <p>Choose a research category for this verse.</p>
+      <div class="categories">
+        <button class="category" data-research="Original language">Original Hebrew</button>
+        <button class="category" data-research="Translation comparison">Translation comparison</button>
+        <button class="category" data-research="Historical context">Historical context</button>
+        <button class="category" data-research="Archaeological evidence">Archaeological evidence</button>
+        <button class="category" data-research="Ancient documents">Ancient documents</button>
+        <button class="category" data-research="Cross-references">Bible cross-references</button>
+        <button class="category" data-research="Scholarly commentary">Scholarly commentary</button>
+        <button class="category" data-research="Evidence assessment">Evidence assessment</button>
+      </div>
+      <div id="researchDetails">
+        <p>Select a category above to open its research workspace.</p>
+      </div>
+    `;
+
+    research.querySelectorAll("[data-research]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.getElementById("researchDetails").innerHTML =
+          "<h3>" + button.dataset.research + "</h3>" +
+          "<p>Research for Micah " + number +
+          " will be documented here with credible sources, citations, dates, and explanations of what the evidence does and does not establish.</p>";
+      });
+    });
+
+    research.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });
+
 
 </script>
 </body>
