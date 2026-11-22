@@ -601,6 +601,170 @@ details.innerHTML = `
 `;
 
  
+const historicalContext = {
+    "1": {
+      title: "Micah's identity and historical setting",
+      context: "Micah identifies himself as a Morasthite, associated with Moresheth in Judah's Shephelah. The heading places his ministry during the reigns of Jotham, Ahaz, and Hezekiah, kings of Judah, in the eighth century BCE.",
+      evidence: "Micah 1:1; Jeremiah 26:18–19 preserves a later account of Micah's prophecy concerning Jerusalem. Assyrian records provide independent evidence for the imperial setting of this period.",
+      church: "Ancient Christian interpreters received Micah as a prophet whose words addressed both judgment and divine purpose. This is evidence of reception history, not independent proof of the eighth-century events.",
+      limit: "The heading does not establish the exact date of every oracle or prove that the entire book was composed at one time."
+    },
+    "2": {
+      title: "The nations summoned as witnesses",
+      context: "The summons to the earth and its fullness uses the language of a public hearing. The passage presents judgment as extending beyond a private dispute between Judah and Israel.",
+      evidence: "Compare Deuteronomy 30:19 and Isaiah 1:2, where creation or heavenly witnesses are summoned in covenant-related language.",
+      church: "Christian interpreters have read this universal summons as emphasizing God's authority over all nations.",
+      limit: "The imagery is theological and literary; it does not document a literal international court proceeding."
+    },
+    "3": {
+      title: "The Lord's coming in judgment",
+      context: "Micah depicts the Lord leaving his place and descending. The following verses describe mountains melting and valleys splitting, using powerful imagery to portray divine intervention.",
+      evidence: "Compare Judges 5:4–5 and Habakkuk 3:3–6 for related imagery of divine appearance and trembling creation.",
+      church: "Didymus the Blind, in his Commentary on Zechariah, §136, cites Micah 1:3 and interprets God's going out in relation to salvation or wrath.",
+      limit: "The imagery should not automatically be treated as a report of a specific geological event."
+    },
+    "4": {
+      title: "Mountains melting and valleys splitting",
+      context: "Mountains and valleys symbolize the apparent stability of the land being overwhelmed by divine judgment. The imagery communicates the severity of the coming crisis.",
+      evidence: "Compare Nahum 1:5 and Psalm 97:5 for similar poetic descriptions of mountains responding to God's presence.",
+      church: "This verse belongs to the broader Christian tradition of interpreting prophetic theophany imagery as a sign of divine power and judgment.",
+      limit: "No specific geological event can be securely identified from this verse alone."
+    },
+    "5": {
+      title: "Jacob, Israel, Samaria, and Jerusalem",
+      context: "Micah identifies the transgression of Jacob with Samaria and the high places of Judah with Jerusalem. Samaria was the capital of the northern kingdom of Israel; Jerusalem was the capital of Judah.",
+      evidence: "Compare 1 Kings 16:24, 1 Kings 12:28–33, and Isaiah 1:21–23 for the political and religious setting of the two kingdoms.",
+      church: "Christian readers have often understood the passage as a warning against religious corruption and injustice.",
+      limit: "The verse gives a prophetic evaluation of the kingdoms; it is not a complete description of every inhabitant or religious practice."
+    },
+    "6": {
+      title: "The threatened destruction of Samaria",
+      context: "Samaria's destruction is announced using imagery of ruins, vineyards, and exposed foundations. The Assyrian conquest of the northern kingdom culminated in the fall of Samaria, conventionally dated around 722/721 BCE.",
+      evidence: "Compare 2 Kings 17:3–6 and 18:9–11. Assyrian royal inscriptions provide additional evidence for Assyrian campaigns in the region.",
+      church: "Later Christian interpretation commonly read Samaria's fall as an example of prophetic warning and judgment.",
+      limit: "The historical fall of Samaria is well established, but this verse alone does not prove the precise date when Micah delivered the oracle."
+    },
+    "7": {
+      title: "Idols, wealth, and religious judgment",
+      context: "The verse connects carved images and the wealth associated with religious practices with Samaria's coming humiliation. Its language reflects prophetic condemnation of idolatry.",
+      evidence: "Compare 2 Kings 17:7–18 for the biblical account of the northern kingdom's religious practices and downfall.",
+      church: "Christian interpreters have used this passage in discussions of idolatry and misplaced trust.",
+      limit: "The verse's theological accusations should not be used to infer the exact composition or value of specific archaeological finds."
+    },
+    "8": {
+      title: "Lament and public mourning",
+      context: "Micah responds with mourning, nakedness, and animal-like cries. Such imagery communicates grief and humiliation in the face of national disaster.",
+      evidence: "Compare Isaiah 20:2–4 and Jeremiah 48:37–38 for prophetic descriptions of mourning and public humiliation.",
+      church: "Christian tradition has read prophetic lament as a model of grief over sin and destruction.",
+      limit: "The imagery does not by itself establish that Micah performed every described action as a documented public ritual."
+    },
+    "9": {
+      title: "The crisis reaches Judah and Jerusalem",
+      context: "The wound is described as incurable and extending to Judah, reaching the gate of Jerusalem. This presents the threat as moving beyond Samaria toward Judah's political center.",
+      evidence: "Compare 2 Kings 18:13–17 and Isaiah 36:1–2 for the Assyrian invasion of Judah under Sennacherib in 701 BCE.",
+      church: "Later Christian readers interpreted Jerusalem's vulnerability as a warning that political or religious status did not guarantee immunity from judgment.",
+      limit: "Scholars debate how Micah 1:8–16 relates to particular Assyrian campaigns; the 701 BCE invasion is important context but should not be asserted as the certain date of this oracle."
+    },
+    "10": {
+      title: "Gath and the wordplay of lament",
+      context: "The reference to Gath introduces a sequence of place names and wordplay in Micah 1:10–16. The line echoes the language of lament and warns against public triumph over Judah's distress.",
+      evidence: "Compare 2 Samuel 1:20, where Gath appears in a lament concerning Israel's defeat. Archaeological excavations identify Tell es-Safi as the leading candidate for ancient Gath.",
+      church: "The verse has been read within the broader biblical theme of lament before hostile nations.",
+      limit: "The precise historical circumstances behind this line and the full force of its wordplay remain debated."
+    },
+    "11": {
+      title: "The towns of the Shephelah",
+      context: "Micah names towns in a lament whose sound and meaning appear to contribute to the poem's wordplay. Several place-name identifications remain uncertain.",
+      evidence: "George A. Pierce's study of Micah 1:10–16 examines the text alongside archaeology and geography.",
+      church: "No specific early Christian interpretation of this verse is established by the sources listed here.",
+      limit: "Proposed modern identifications of individual towns are scholarly hypotheses, not settled facts."
+    },
+    "12": {
+      title: "Maroth and the arrival of disaster",
+      context: "Maroth is associated with bitter expectation, while the verse describes disaster reaching Jerusalem's gate. The place-name may contribute to the poem's wordplay.",
+      evidence: "The verse belongs to the geographical lament of Micah 1:10–16. Compare 2 Kings 18:13–17 for the later Assyrian invasion of Judah.",
+      church: "Origen, in Against Celsus VI.55–56, cites Micah 1:12–13 and interprets the language in a theological discussion of suffering and conversion.",
+      limit: "The precise location of Maroth and the event envisioned by the verse are not securely established."
+    },
+    "13": {
+      title: "Lachish and military vulnerability",
+      context: "Lachish was a major fortified city in Judah's Shephelah. Micah connects it with chariots and calls it a beginning of sin for the daughter of Zion.",
+      evidence: "The Assyrian campaign of 701 BCE is independently illustrated by Sennacherib's palace reliefs depicting the siege of Lachish, now in the British Museum. Compare 2 Kings 18:14, 17 and 19:8.",
+      church: "Origen cites this verse in Against Celsus VI.55–56 as part of his interpretation of Micah's message.",
+      limit: "The reliefs confirm the siege of Lachish in 701 BCE, not that Micah 1:13 must have been written specifically about that siege."
+    },
+    "14": {
+      title: "Moresheth-gath and farewell gifts",
+      context: "Micah names Moresheth-gath, associated with his home region, and refers to parting gifts. The wording suggests loss and separation in the face of coming danger.",
+      evidence: "Micah 1:1 identifies Micah as a Morasthite. Pierce's study discusses the geography and wordplay of this section.",
+      church: "The verse contributes to later readings of Micah as a prophet whose message emerged from Judah's threatened rural communities.",
+      limit: "The exact meaning of the gifts and the political arrangement implied are debated."
+    },
+    "15": {
+      title: "Mareshah and the coming conqueror",
+      context: "Mareshah is another town in Judah's Shephelah. The verse uses wordplay to portray the town's loss and the arrival of an inheritor or conqueror.",
+      evidence: "Compare the regional setting of Mareshah with the broader geography of Judah's western foothills. Site identification and archaeological chronology must be evaluated independently.",
+      church: "No specific early Christian interpretation of this verse is established by the sources listed here.",
+      limit: "The identity of the conqueror is not named explicitly in the verse; assigning it to one campaign requires further argument."
+    },
+    "16": {
+      title: "Shaving the head as mourning",
+      context: "Shaving the head is a sign of mourning and humiliation. The verse calls Judah to grieve for children who are described as going into exile.",
+      evidence: "Compare Isaiah 3:24, Jeremiah 7:29, and Amos 8:10 for related mourning imagery. Assyrian expansion provides the wider historical setting of displacement and deportation.",
+      church: "Micah 1:16 has a history of Christian interpretation within the chapter's wider themes of mourning, judgment, and exile; specific claims about individual church fathers should be linked to the particular text they discuss.",
+      limit: "The verse predicts or portrays loss and exile but does not identify every person deported or establish one exact deportation date."
+    }
+  };
+
+  const verseKey = String(number).trim().split(":").pop();
+  const item = historicalContext[verseKey];
+
+  const sources = [
+    {
+      label: "Micah 1 — USCCB Bible text and notes",
+      url: "https://bible.usccb.org/bible/micah/1"
+    },
+    {
+      label: "George A. Pierce — Micah 1:10–16, text, archaeology, and geography",
+      url: "https://rsc.byu.edu/prophets-prophecies-old-testament/understanding-micahs-lament-judah-micah-110-16-through-text-archaeology-geography"
+    },
+    {
+      label: "Riemer Roukema — Micah in Ancient Christianity",
+      url: "https://doi.org/10.1515/9783110666021"
+    },
+    {
+      label: "Via Patrum — Micah 1 and the Church Fathers",
+      url: "https://viapatrum.org/scripture/micah/1/"
+    },
+    {
+      label: "British Museum — search for the Lachish reliefs",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Lachish"
+    }
+  ];
+
+  if (item) {
+    details.innerHTML = `
+      <h3>Historical Context — Micah 1:${verseKey}</h3>
+      <h4>${item.title}</h4>
+      <h4>Historical and cultural setting</h4>
+      <p>${item.context}</p>
+      <h4>Biblical and historical evidence</h4>
+      <p>${item.evidence}</p>
+      <h4>Church history and reception</h4>
+      <p>${item.church}</p>
+      <h4>Scholarly limits and uncertainty</h4>
+      <p>${item.limit}</p>
+      <h4>Research sources</h4>
+      <ul>
+        ${sources.map(source => `
+          <li><a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a></li>
+        `).join("")}
+      </ul>
+      <p><strong>Research standard:</strong> Historical evidence, biblical interpretation, and later Christian reception are distinct categories. Proposed dates and place identifications are not presented as certain when scholarship remains divided.</p>
+    `;
+  } else {
+    details.innerHTML = "<p>Historical context has not been entered for this verse.</p>";
+  }
 } else {
   details.innerHTML =
     "<h3>" + category + " — Micah " + number + "</h3>" +
