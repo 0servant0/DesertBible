@@ -765,7 +765,53 @@ const historicalContext = {
   } else {
     details.innerHTML = "<p>Historical context has not been entered for this verse.</p>";
   }
-} else {
+} else if (category === "Translation comparison") {  
+      const verseKey = String(number).trim().split(":").pop();
+
+const translations = [
+  {
+    name: "World English Bible Updated Edition (WEBU)",
+    url: `https://ebible.org/engwebu/MIC01.htm`,
+    type: "Modern English translation"
+  },
+  {
+    name: "American Standard Version (ASV, 1901)",
+    url: `https://www.biblegateway.com/passage/?search=Micah%201%3A${verseKey}&version=ASV`,
+    type: "Formal-equivalence English translation"
+  },
+  {
+    name: "King James Version (KJV, 1611)",
+    url: `https://www.biblegateway.com/passage/?search=Micah%201%3A${verseKey}&version=KJV`,
+    type: "Historical English translation"
+  }
+];
+
+details.innerHTML = `
+  <h3>Translation Comparison — Micah 1:${verseKey}</h3>
+  <p>Compare how English translations render the same verse. Open each source to verify its wording in context.</p>
+  <h4>Source texts</h4>
+  <ul>
+    ${translations.map(t => `
+      <li>
+        <strong>${t.name}</strong> — ${t.type}<br>
+        <a href="${t.url}" target="_blank" rel="noopener noreferrer">
+          Open translation source
+        </a>
+      </li>
+    `).join("")}
+  </ul>
+  <h4>Comparison checklist</h4>
+  <ul>
+    <li>Differences in wording and sentence structure</li>
+    <li>Hebrew terms translated differently</li>
+    <li>Differences in meaning, emphasis, and ambiguity</li>
+    <li>Footnotes and textual variants, where documented</li>
+    <li>Whether a difference reflects translation choice or a different underlying text</li>
+  </ul>
+  <p><strong>Accuracy note:</strong> A difference in English wording does not by itself prove a difference in the Hebrew source. Verify each claim against the original-language text and the translation's documented textual basis.</p>
+`;
+      } else {
+      
   details.innerHTML =
     "<h3>" + category + " — Micah " + number + "</h3>" +
     "<h4>Research Findings</h4>" +
