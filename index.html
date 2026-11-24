@@ -1680,7 +1680,1088 @@ function showBibleVerseResearch(reference) {
     showOriginalLanguage();
     return;
   }
+if (key === "Translation comparison") {
+  details.replaceChildren();
 
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+
+  const bibleBooks = {
+    "Genesis": "GEN",
+    "Exodus": "EXO",
+    "Leviticus": "LEV",
+    "Numbers": "NUM",
+    "Deuteronomy": "DEU",
+    "Joshua": "JOS",
+    "Judges": "JDG",
+    "Ruth": "RUT",
+    "1 Samuel": "1SA",
+    "2 Samuel": "2SA",
+    "1 Kings": "1KI",
+    "2 Kings": "2KI",
+    "1 Chronicles": "1CH",
+    "2 Chronicles": "2CH",
+    "Ezra": "EZR",
+    "Nehemiah": "NEH",
+    "Esther": "EST",
+    "Job": "JOB",
+    "Psalms": "PSA",
+    "Psalm": "PSA",
+    "Proverbs": "PRO",
+    "Ecclesiastes": "ECC",
+    "Song of Solomon": "SNG",
+    "Song of Songs": "SNG",
+    "Isaiah": "ISA",
+    "Jeremiah": "JER",
+    "Lamentations": "LAM",
+    "Ezekiel": "EZK",
+    "Daniel": "DAN",
+    "Hosea": "HOS",
+    "Joel": "JOL",
+    "Amos": "AMO",
+    "Obadiah": "OBA",
+    "Jonah": "JON",
+    "Micah": "MIC",
+    "Nahum": "NAM",
+    "Habakkuk": "HAB",
+    "Zephaniah": "ZEP",
+    "Haggai": "HAG",
+    "Zechariah": "ZEC",
+    "Malachi": "MAL",
+    "Matthew": "MAT",
+    "Mark": "MRK",
+    "Luke": "LUK",
+    "John": "JHN",
+    "Acts": "ACT",
+    "Romans": "ROM",
+    "1 Corinthians": "1CO",
+    "2 Corinthians": "2CO",
+    "Galatians": "GAL",
+    "Ephesians": "EPH",
+    "Philippians": "PHP",
+    "Colossians": "COL",
+    "1 Thessalonians": "1TH",
+    "2 Thessalonians": "2TH",
+    "1 Timothy": "1TI",
+    "2 Timothy": "2TI",
+    "Titus": "TIT",
+    "Philemon": "PHM",
+    "Hebrews": "HEB",
+    "James": "JAS",
+    "1 Peter": "1PE",
+    "2 Peter": "2PE",
+    "1 John": "1JN",
+    "2 John": "2JN",
+    "3 John": "3JN",
+    "Jude": "JUD",
+    "Revelation": "REV"
+  };
+
+  const currentBookId = bibleBooks[book];
+
+  const api = "https://bible.helloao.org/api";
+
+  const referenceText = `${book} ${ch}:${vs}`;
+
+  const addSource = (parent, label, url) => {
+    if (!url || !/^https?:\/\//i.test(url)) return;
+
+    const p = make("p", null, parent);
+    const a = make("a", label, p);
+
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+  };
+
+  const createCard = (parent, title) => {
+    const card = make("section", null, parent);
+    card.className = "verse";
+
+    make("h3", title, card);
+
+    card.style.padding = "18px";
+    card.style.marginBottom = "15px";
+
+    return card;
+  };
+
+  const field = (parent, label, value) => {
+    if (!value) return;
+
+    make("h4", label, parent);
+    make("p", value, parent);
+  };
+
+  make(
+    "h3",
+    `Translation Comparison — ${referenceText}`,
+    details
+  );
+
+  make(
+    "p",
+    "Compare the selected Scripture across multiple published Bible translations. The biblical text is retrieved directly from digital editions without AI-generated substitutions.",
+    details
+  );
+
+  if (!currentBookId) {
+    make(
+      "p",
+      "The selected Bible book could not be identified.",
+      details
+    );
+    return;
+  }
+
+  // ======================================
+  // TRANSLATION RESEARCH PROFILES
+  // ======================================
+
+  const profiles = [
+    {
+      pattern: /berean standard bible/i,
+      title: "Berean Standard Bible",
+      abbreviation: "BSB",
+      date: "Modern English edition",
+      method: "Balances accuracy and readable English.",
+      notes: "Useful for general study and comparison with original-language resources."
+    },
+    {
+      pattern: /king james version|authorized version/i,
+      title: "King James Version",
+      abbreviation: "KJV",
+      date: "Originally published in 1611",
+      method: "Traditional English translation.",
+      notes: "Uses historical English vocabulary and early modern printed Hebrew and Greek textual traditions."
+    },
+    {
+      pattern: /american standard version/i,
+      title: "American Standard Version",
+      abbreviation: "ASV",
+      date: "1901",
+      method: "Generally formal-equivalence translation.",
+      notes: "Notable for close attention to source-language wording."
+    },
+    {
+      pattern: /world english bible/i,
+      title: "World English Bible",
+      abbreviation: "WEB",
+      date: "Modern English edition",
+      method: "Modern English translation derived substantially from the ASV tradition.",
+      notes: "Useful for comparing traditional translation wording with contemporary English."
+    },
+    {
+      pattern: /young.s literal translation/i,
+      title: "Young's Literal Translation",
+      abbreviation: "YLT",
+      date: "First published in 1862",
+      method: "Strongly literal translation approach.",
+      notes: "Frequently retains source-language structures that sound unusual in English."
+    },
+    {
+      pattern: /darby/i,
+      title: "Darby Bible",
+      abbreviation: "DBY",
+      date: "Nineteenth century",
+      method: "Generally close attention to original-language wording.",
+      notes: "Useful as a historical translation comparison."
+    },
+    {
+      pattern: /webster/i,
+      title: "Webster's Bible",
+      abbreviation: "WBT",
+      date: "1833",
+      method: "Revision of traditional King James English.",
+      notes: "Useful for studying changes in English vocabulary and expression."
+    },
+    {
+      pattern: /douay.rheims/i,
+      title: "Douay-Rheims Bible",
+      abbreviation: "DRB",
+      date: "New Testament 1582; Old Testament 1609–1610",
+      method: "English translation principally from the Latin Vulgate.",
+      notes: "Provides an important historical Catholic translation perspective. Verse numbering may differ."
+    },
+    {
+      pattern: /literal standard version/i,
+      title: "Literal Standard Version",
+      abbreviation: "LSV",
+      date: "2020",
+      method: "Strongly literal translation approach.",
+      notes: "Useful for investigating differences between literal rendering and fluent English."
+    },
+    {
+      pattern: /updated american standard version/i,
+      title: "Updated American Standard Version",
+      abbreviation: "UASV",
+      date: "Modern English edition",
+      method: "Formal-equivalence approach.",
+      notes: "Useful for close comparison of source-language wording."
+    },
+    {
+      pattern: /basic english/i,
+      title: "Bible in Basic English",
+      abbreviation: "BBE",
+      date: "Complete Bible published in 1949",
+      method: "Restricted English vocabulary.",
+      notes: "Useful for examining simplified expressions of biblical concepts."
+    },
+    {
+      pattern: /open english bible/i,
+      title: "Open English Bible",
+      abbreviation: "OEB",
+      date: "Modern English edition",
+      method: "Contemporary English translation.",
+      notes: "Coverage depends on the available edition."
+    },
+    {
+      pattern: /targum/i,
+      title: "Targum",
+      abbreviation: "TARGUM",
+      date: "Ancient and late antique traditions",
+      method: "Aramaic translation and interpretation.",
+      notes: "Interpretive expansions must be distinguished from the underlying Hebrew wording."
+    }
+  ];
+
+  const getName = translation =>
+    translation.englishName ||
+    translation.name ||
+    translation.id;
+
+  const getProfile = translation =>
+    profiles.find(profile =>
+      profile.pattern.test(getName(translation))
+    );
+
+  // ======================================
+  // RETRIEVE AND CACHE SOURCE DATA
+  // ======================================
+
+  if (!window.desertBibleTranslationCache) {
+    window.desertBibleTranslationCache = new Map();
+  }
+
+  const cache = window.desertBibleTranslationCache;
+
+  async function getJSON(url) {
+    if (cache.has(url)) {
+      return cache.get(url);
+    }
+
+    const request = (async () => {
+      const controller = new AbortController();
+
+      const timeout = setTimeout(
+        () => controller.abort(),
+        20000
+      );
+
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
+
+      } finally {
+        clearTimeout(timeout);
+      }
+    })();
+
+    cache.set(url, request);
+
+    try {
+      const result = await request;
+
+      if (cache.size > 200) {
+        cache.delete(cache.keys().next().value);
+      }
+
+      return result;
+
+    } catch (error) {
+      cache.delete(url);
+      throw error;
+    }
+  }
+
+  // ======================================
+  // TRANSLATION SELECTION
+  // ======================================
+
+  const controls = make("div", null, details);
+  controls.style.marginBottom = "20px";
+
+  const output = make("div", null, details);
+
+  const status = make(
+    "p",
+    "Loading available Bible translations...",
+    output
+  );
+
+  let selectedTranslations = [];
+  let renderVersion = 0;
+
+  async function loadTranslation(
+    translation,
+    parent,
+    showChapter
+  ) {
+    const profile = getProfile(translation);
+
+    const card = createCard(
+      parent,
+      getName(translation)
+    );
+
+    make("p", referenceText, card);
+
+    const textArea = make(
+      "div",
+      null,
+      card
+    );
+
+    make("p", "Loading Scripture...", textArea);
+
+    const endpoint =
+      `${api}/${encodeURIComponent(translation.id)}` +
+      `/${currentBookId}/${ch}.simple.json`;
+
+    try {
+      const data = await getJSON(endpoint);
+
+      const entries = data.chapter?.content;
+
+      if (!Array.isArray(entries)) {
+        throw new Error("Invalid chapter data");
+      }
+
+      const verses = entries.filter(
+        entry => entry.type === "verse"
+      );
+
+      const exact = verses.filter(
+        entry => Number(entry.number) === vs
+      );
+
+      textArea.replaceChildren();
+
+      if (exact.length) {
+        exact.forEach(entry => {
+          if (typeof entry.text === "string" &&
+              entry.text.trim()) {
+            const scripture = make(
+              "p",
+              entry.text,
+              textArea
+            );
+
+            scripture.style.fontSize = "1.15rem";
+            scripture.style.lineHeight = "1.8";
+            scripture.style.whiteSpace = "pre-wrap";
+
+            scripture.dir =
+              translation.textDirection || "ltr";
+
+            scripture.lang =
+              translation.language || "en";
+
+          } else {
+            make(
+              "p",
+              "This verse entry contains no separately readable text.",
+              textArea
+            );
+          }
+        });
+
+      } else {
+        make(
+          "p",
+          "No separate verse with this number is returned by this edition. Check the surrounding chapter for combined verses, textual differences or alternative numbering.",
+          textArea
+        );
+      }
+
+      if (profile) {
+        field(
+          card,
+          "Translation History",
+          profile.date
+        );
+
+        field(
+          card,
+          "Translation Approach",
+          profile.method
+        );
+
+        field(
+          card,
+          "Research Significance",
+          profile.notes
+        );
+      }
+
+      const chapterPanel = make(
+        "details",
+        null,
+        card
+      );
+
+      chapterPanel.open = showChapter;
+
+      make(
+        "summary",
+        `Read Complete Chapter — ${book} ${ch}`,
+        chapterPanel
+      );
+
+      entries.forEach(entry => {
+        if (
+          entry.type === "verse" &&
+          typeof entry.text === "string"
+        ) {
+          const line = make(
+            "p",
+            `${entry.number}. ${entry.text}`,
+            chapterPanel
+          );
+
+          line.style.lineHeight = "1.7";
+
+          line.dir =
+            translation.textDirection || "ltr";
+
+          if (Number(entry.number) === vs) {
+            line.style.fontWeight = "bold";
+            line.style.borderLeft =
+              "3px solid #c9aa70";
+
+            line.style.paddingLeft = "10px";
+          }
+
+        } else if (
+          entry.type === "heading" &&
+          typeof entry.text === "string"
+        ) {
+          make(
+            "h4",
+            entry.text,
+            chapterPanel
+          );
+        }
+      });
+
+      const footnotes = data.chapter?.footnotes;
+
+      if (
+        Array.isArray(footnotes) &&
+        footnotes.length
+      ) {
+        const notePanel = make(
+          "details",
+          null,
+          card
+        );
+
+        make(
+          "summary",
+          "Source Edition Footnotes and Notes",
+          notePanel
+        );
+
+        footnotes.forEach(note => {
+          if (
+            typeof note.text === "string"
+          ) {
+            make(
+              "p",
+              note.text,
+              notePanel
+            );
+
+          } else if (
+            typeof note === "string"
+          ) {
+            make(
+              "p",
+              note,
+              notePanel
+            );
+
+          } else {
+            const pre = make(
+              "pre",
+              JSON.stringify(note, null, 2),
+              notePanel
+            );
+
+            pre.style.whiteSpace = "pre-wrap";
+            pre.style.overflowWrap = "anywhere";
+          }
+        });
+      }
+
+      const metadata = {
+        ...translation,
+        ...(data.translation || {})
+      };
+
+      field(
+        card,
+        "Digital Edition",
+        getName(metadata)
+      );
+
+      field(
+        card,
+        "Copyright and Attribution",
+        metadata.licenseNotice
+      );
+
+      field(
+        card,
+        "License Information",
+        metadata.licenseNotes
+      );
+
+      addSource(
+        card,
+        "Translation Publisher",
+        metadata.website
+      );
+
+      addSource(
+        card,
+        "Translation License",
+        metadata.licenseUrl
+      );
+
+      addSource(
+        card,
+        "Verify Original Digital Scripture Text",
+        endpoint
+      );
+
+    } catch (error) {
+      textArea.replaceChildren();
+
+      make(
+        "p",
+        "This translation could not be retrieved for the selected chapter. The edition may not contain this book, or the source may be temporarily unavailable.",
+        textArea
+      );
+
+      const retry = make(
+        "button",
+        "Retry Translation",
+        textArea
+      );
+
+      retry.type = "button";
+
+      retry.addEventListener("click", () => {
+        card.remove();
+
+        loadTranslation(
+          translation,
+          parent,
+          showChapter
+        );
+      });
+
+      addSource(
+        card,
+        "Translation Publisher",
+        translation.website
+      );
+    }
+  }
+
+  async function renderComparisons(
+    showChapter = false
+  ) {
+    const version = ++renderVersion;
+
+    output.replaceChildren();
+
+    if (!selectedTranslations.length) {
+      make(
+        "p",
+        "Select at least one translation to compare.",
+        output
+      );
+
+      return;
+    }
+
+    make(
+      "h3",
+      `${selectedTranslations.length} Selected Translations`,
+      output
+    );
+
+    const grid = make(
+      "div",
+      null,
+      output
+    );
+
+    grid.style.display = "grid";
+
+    grid.style.gridTemplateColumns =
+      "repeat(auto-fit, minmax(min(100%, 320px), 1fr))";
+
+    grid.style.gap = "16px";
+
+    const slots = selectedTranslations.map(
+      translation => ({
+        translation,
+        parent: make("div", null, grid)
+      })
+    );
+
+    // Limit simultaneous network requests.
+
+    for (
+      let start = 0;
+      start < slots.length;
+      start += 5
+    ) {
+      if (version !== renderVersion) return;
+
+      await Promise.allSettled(
+        slots.slice(start, start + 5).map(
+          slot => loadTranslation(
+            slot.translation,
+            slot.parent,
+            showChapter
+          )
+        )
+      );
+    }
+  }
+
+  async function initializeTranslations() {
+    controls.replaceChildren();
+    output.replaceChildren();
+
+    make(
+      "p",
+      "Retrieving the translation catalogue...",
+      output
+    );
+
+    try {
+      const data = await getJSON(
+        `${api}/available_translations.json`
+      );
+
+      if (!Array.isArray(data.translations)) {
+        throw new Error("Invalid catalogue");
+      }
+
+      const englishTranslations =
+        data.translations.filter(
+          translation =>
+            translation.language === "eng"
+        );
+
+      // Prefer complete editions with known,
+      // redistributable translation families.
+      // Publisher terms still govern each edition.
+
+      const permittedProfiles = [
+        "BSB",
+        "KJV",
+        "ASV",
+        "WEB",
+        "YLT",
+        "DBY",
+        "WBT",
+        "DRB"
+      ];
+
+      const available = englishTranslations
+        .filter(translation => {
+          const profile = getProfile(translation);
+
+          return (
+            profile &&
+            permittedProfiles.includes(
+              profile.abbreviation
+            ) &&
+            Number(
+              translation.numberOfBooks
+            ) >= 66
+          );
+        })
+        .sort((a, b) => {
+          const aIndex = permittedProfiles.indexOf(
+            getProfile(a).abbreviation
+          );
+
+          const bIndex = permittedProfiles.indexOf(
+            getProfile(b).abbreviation
+          );
+
+          return (
+            aIndex - bIndex ||
+            getName(a).localeCompare(getName(b))
+          );
+        });
+
+      if (!available.length) {
+        throw new Error(
+          "No matching complete editions"
+        );
+      }
+
+      const defaults = [];
+
+      permittedProfiles.forEach(abbreviation => {
+        const edition = available.find(
+          translation =>
+            getProfile(translation).abbreviation
+              === abbreviation
+        );
+
+        if (edition) defaults.push(edition);
+      });
+
+      selectedTranslations = defaults;
+
+      make(
+        "h3",
+        "1. Select Bible Translations",
+        controls
+      );
+
+      const selector = make(
+        "details",
+        null,
+        controls
+      );
+
+      make(
+        "summary",
+        "Customize Translation Selection",
+        selector
+      );
+
+      const checkboxes = new Map();
+
+      available.forEach(translation => {
+        const row = make(
+          "div",
+          null,
+          selector
+        );
+
+        row.style.padding = "6px 0";
+
+        const label = make(
+          "label",
+          null,
+          row
+        );
+
+        label.style.display = "flex";
+        label.style.alignItems = "center";
+        label.style.gap = "10px";
+
+        const checkbox = make(
+          "input",
+          null,
+          label
+        );
+
+        checkbox.type = "checkbox";
+
+        checkbox.checked = defaults.some(
+          item => item.id === translation.id
+        );
+
+        checkboxes.set(
+          translation.id,
+          checkbox
+        );
+
+        make(
+          "span",
+          `${getName(translation)} (${translation.id})`,
+          label
+        );
+      });
+
+      const selectAll = make(
+        "button",
+        "Select All Available Editions",
+        selector
+      );
+
+      selectAll.type = "button";
+
+      selectAll.addEventListener("click", () => {
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = true;
+        });
+      });
+
+      const reset = make(
+        "button",
+        "Restore Recommended Editions",
+        selector
+      );
+
+      reset.type = "button";
+      reset.style.marginLeft = "8px";
+
+      reset.addEventListener("click", () => {
+        checkboxes.forEach((checkbox, id) => {
+          checkbox.checked = defaults.some(
+            item => item.id === id
+          );
+        });
+      });
+
+      const chapterLabel = make(
+        "label",
+        null,
+        controls
+      );
+
+      chapterLabel.style.display = "block";
+      chapterLabel.style.margin = "15px 0";
+
+      const showChapter = make(
+        "input",
+        null,
+        chapterLabel
+      );
+
+      showChapter.type = "checkbox";
+
+      make(
+        "span",
+        " Display complete chapters",
+        chapterLabel
+      );
+
+      const compare = make(
+        "button",
+        "Compare Selected Translations",
+        controls
+      );
+
+      compare.type = "button";
+
+      compare.addEventListener("click", () => {
+        selectedTranslations = available.filter(
+          translation =>
+            checkboxes.get(
+              translation.id
+            ).checked
+        );
+
+        renderComparisons(
+          showChapter.checked
+        );
+      });
+
+      renderComparisons();
+
+    } catch (error) {
+      output.replaceChildren();
+
+      make(
+        "p",
+        "The translation catalogue is currently unavailable. Retry to reconnect to the published Scripture database.",
+        output
+      );
+
+      const retry = make(
+        "button",
+        "Retry Translation Catalogue",
+        output
+      );
+
+      retry.type = "button";
+
+      retry.addEventListener(
+        "click",
+        initializeTranslations
+      );
+    }
+  }
+
+  initializeTranslations();
+
+  // ======================================
+  // TRANSLATION RESEARCH GUIDE
+  // ======================================
+
+  make(
+    "h3",
+    "2. Understanding Translation Differences",
+    details
+  );
+
+  const methods = [
+    [
+      "Formal Equivalence",
+      "Prioritizes correspondence with source-language wording and grammatical structure where practical."
+    ],
+    [
+      "Functional Equivalence",
+      "Prioritizes communicating the meaning of the source text naturally in the receiving language."
+    ],
+    [
+      "Literal Rendering",
+      "Retains source-language structures more extensively, sometimes at the expense of natural English."
+    ],
+    [
+      "Textual Traditions",
+      "Translations may follow different Hebrew, Aramaic, Greek or Latin textual editions and evaluate manuscript variants differently."
+    ],
+    [
+      "Lexical Differences",
+      "A Hebrew or Greek word may have several appropriate English equivalents depending on context."
+    ],
+    [
+      "Grammar and Syntax",
+      "Differences in word order, tense, verbal aspect and sentence structure can influence translation choices."
+    ],
+    [
+      "Idioms and Figures of Speech",
+      "Some translations preserve the original expression while others communicate its contextual meaning."
+    ],
+    [
+      "Divine Names",
+      "Translations may represent the divine name and divine titles using different conventions."
+    ],
+    [
+      "Verse Numbering",
+      "Hebrew, Greek, Latin and English traditions sometimes number passages differently. Matching verse numbers do not always establish identical textual content."
+    ],
+    [
+      "Textual Variants",
+      "An absent or bracketed verse may reflect manuscript evidence, editorial decisions or versification differences. Investigate the actual textual witnesses before drawing conclusions."
+    ]
+  ];
+
+  methods.forEach(([title, description]) => {
+    const panel = make(
+      "details",
+      null,
+      details
+    );
+
+    make("summary", title, panel);
+    make("p", description, panel);
+  });
+
+  // ======================================
+  // PASSAGE-SPECIFIC RESEARCH
+  // ======================================
+
+  make(
+    "h3",
+    "3. Investigate the Selected Passage",
+    details
+  );
+
+  const researchLinks = [
+    [
+      `Translation Research — ${referenceText}`,
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(
+        `"${referenceText}" Bible translation`
+      )
+    ],
+    [
+      `Textual Criticism — ${referenceText}`,
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(
+        `"${referenceText}" textual criticism`
+      )
+    ],
+    [
+      "STEP Bible — Original Language Research",
+      "https://www.stepbible.org/"
+    ],
+    [
+      "New Testament Virtual Manuscript Room",
+      "https://ntvmr.uni-muenster.de/"
+    ],
+    [
+      "Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    ],
+    [
+      "Codex Sinaiticus",
+      "https://www.codexsinaiticus.org/"
+    ],
+    [
+      "Berean Bible — Translation Resources",
+      "https://berean.bible/"
+    ],
+    [
+      "World English Bible",
+      "https://worldenglish.bible/"
+    ],
+    [
+      "Digital Scripture Database Documentation",
+      "https://bible.helloao.org/docs/reference/translations/"
+    ]
+  ];
+
+  researchLinks.forEach(([label, url]) => {
+    addSource(details, label, url);
+  });
+
+  // ======================================
+  // RESEARCH INTEGRITY
+  // ======================================
+
+  make(
+    "h3",
+    "4. Textual Accuracy and Research Integrity",
+    details
+  );
+
+  const standards = [
+    "Scripture wording is retrieved from the identified digital translation rather than generated or rewritten.",
+    "Translation differences are not automatically classified as contradictions or errors.",
+    "Original-language research and manuscript evidence should be consulted when evaluating significant differences.",
+    "Missing verses are identified without substituting wording from another edition.",
+    "Translation publisher information, source links and available license notices are retained.",
+    "The comparison uses matching numerical references. Where numbering differs, the complete chapter should be consulted.",
+    "Modern copyrighted translations require appropriate publication permission before being added to a public or commercial platform."
+  ];
+
+  standards.forEach(statement => {
+    make(
+      "p",
+      "• " + statement,
+      details
+    );
+  });
+
+  return;
+}
+    
   if (key === "Historical context") {
     showHistoricalContext();
     return;
