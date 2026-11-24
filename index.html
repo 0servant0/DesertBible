@@ -1687,70 +1687,608 @@ function showBibleVerseResearch(reference) {
   }
 if (key === "Ancient documents") {
   details.replaceChildren();
-  make("h3", `Ancient Documents — ${passage}`, details);
 
-  if (reference.book !== "Micah" || chapter !== 1) {
-    make("p", "Passage-specific ancient documents have not yet been entered.", details);
-    return;
-  }
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+
+  make("h3", `Ancient Documents — ${passage}`, details);
 
   const documents = [
     {
-      first: 1,
-      last: 7,
-      title: "Assyrian Evidence for Samaria's Fall",
-      date: "Approximately 722–721 BCE",
-      content: "Assyrian inscriptions and Babylonian chronicles provide historical evidence concerning the fall of Samaria and Assyrian expansion.",
-      connection: "Micah 1:1–7 names Samaria and announces judgment against it.",
-      limits: "The evidence does not establish the exact date of Micah's oracle.",
-      url: "https://epub.ub.uni-muenchen.de/58861/1/Radner_Hasegawa_Levin_BZAW_511_2018.pdf"
+      title: "Epic of Gilgamesh — Tablet XI",
+      date: "First millennium BCE surviving copies",
+      origin: "Mesopotamia",
+      type: "Comparative ancient literature",
+      passages: [["Genesis", 6, 9]],
+      content: "The flood narrative describes Utnapishtim surviving a catastrophic flood aboard a boat.",
+      relevance: "Provides comparative literary background for the Genesis flood narrative.",
+      limits: "Literary similarities do not establish that both accounts describe the same historical event.",
+      source: "British Museum",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Gilgamesh"
     },
     {
-      first: 10,
-      last: 16,
-      title: "Sennacherib's Royal Inscription",
-      date: "Campaign of 701 BCE",
-      content: "Sennacherib records his campaign against Judah, names Hezekiah, and describes the capture of fortified cities and deportation of inhabitants.",
-      connection: "Provides historical context for the threatened towns of Judah in Micah 1:10–16.",
-      limits: "Assyrian royal propaganda must be evaluated critically. The inscription does not establish the precise date of Micah's prophecy.",
+      title: "Enuma Elish",
+      date: "Second to first millennium BCE; composition date debated",
+      origin: "Babylonia",
+      type: "Comparative ancient literature",
+      passages: [["Genesis", 1, 2]],
+      content: "A Babylonian creation composition describing divine conflict and the ordering of the cosmos.",
+      relevance: "Provides comparative ancient Near Eastern creation literature.",
+      limits: "The theological differences between Genesis and Enuma Elish must be preserved.",
+      source: "British Museum",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Enuma%20Elish"
+    },
+    {
+      title: "Code of Hammurabi",
+      date: "Approximately eighteenth century BCE",
+      origin: "Babylonia; discovered at Susa",
+      type: "Comparative legal document",
+      passages: [
+        ["Exodus", 21, 23],
+        ["Leviticus", 19, 20],
+        ["Leviticus", 24, 25],
+        ["Deuteronomy", 19, 25]
+      ],
+      content: "Ancient Babylonian legal judgments concerning property, injury, family and economic matters.",
+      relevance: "Provides comparative legal material for biblical law.",
+      limits: "Similar legal provisions do not establish direct literary dependence.",
+      source: "Louvre Collections",
+      url: "https://collections.louvre.fr/en/"
+    },
+    {
+      title: "Merneptah Stele",
+      date: "Approximately 1208 BCE",
+      origin: "Egypt",
+      type: "Independent historical inscription",
+      passages: [
+        ["Joshua", 1, 24],
+        ["Judges", 1, 21]
+      ],
+      content: "An Egyptian victory inscription containing an early reference to a people named Israel in Canaan.",
+      relevance: "Provides external evidence for Israel's presence in Canaan by the late thirteenth century BCE.",
+      limits: "Does not establish the chronology or individual events of the biblical conquest.",
+      source: "UCLA Encyclopedia of Egyptology",
+      url: "https://escholarship.org/uc/nelc_uee"
+    },
+    {
+      title: "Amarna Letters",
+      date: "Fourteenth century BCE",
+      origin: "Akhetaten, Egypt",
+      type: "Diplomatic correspondence",
+      passages: [
+        ["Joshua", 10, 12],
+        ["Judges", 1, 1]
+      ],
+      content: "Diplomatic correspondence between Egyptian rulers and regional rulers, including rulers in Canaan.",
+      relevance: "Documents political conditions in Late Bronze Age Canaan.",
+      limits: "The letters do not identify Joshua or establish the biblical conquest chronology.",
+      source: "British Museum",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Amarna%20letter"
+    },
+    {
+      title: "Tel Dan Inscription",
+      date: "Approximately ninth century BCE",
+      origin: "Tel Dan",
+      type: "Independent historical inscription",
+      passages: [
+        ["2 Samuel", 5, 7],
+        ["1 Kings", 12, 12],
+        ["2 Kings", 8, 10],
+        ["1 Chronicles", 11, 17]
+      ],
+      content: "An Aramaic victory inscription containing a widely accepted reference to the House of David.",
+      relevance: "Provides evidence for a dynastic designation associated with David.",
+      limits: "Does not independently establish every event in David's biography.",
+      source: "Israel Museum",
+      url: "https://www.imj.org.il/en"
+    },
+    {
+      title: "Mesha Stele",
+      date: "Approximately 840 BCE",
+      origin: "Dhiban, ancient Moab",
+      type: "Independent historical inscription",
+      passages: [
+        ["2 Kings", 1, 1],
+        ["2 Kings", 3, 3]
+      ],
+      content: "King Mesha describes Moab's relationship with Israel and claims victories over Israelite control.",
+      relevance: "Provides a Moabite perspective on the conflict involving Israel and Moab.",
+      limits: "The inscription presents royal ideology and differs from the biblical narrative in perspective.",
+      source: "Louvre Collections",
+      url: "https://collections.louvre.fr/en/"
+    },
+    {
+      title: "Black Obelisk of Shalmaneser III",
+      date: "Approximately 825 BCE; tribute associated with 841 BCE",
+      origin: "Nimrud, Assyria",
+      type: "Independent historical inscription",
+      passages: [["2 Kings", 9, 10]],
+      content: "An Assyrian monument records tribute attributed to Jehu of the house of Omri.",
+      relevance: "Provides external evidence for Jehu's relationship with Assyria.",
+      limits: "The depicted individual cannot securely be identified as Jehu personally.",
+      source: "British Museum",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Black%20Obelisk"
+    },
+    {
+      title: "Royal Inscriptions of Tiglath-pileser III",
+      date: "744–727 BCE",
+      origin: "Neo-Assyrian Empire",
+      type: "Independent historical records",
+      passages: [
+        ["2 Kings", 15, 16],
+        ["1 Chronicles", 5, 5],
+        ["2 Chronicles", 28, 28],
+        ["Isaiah", 7, 8]
+      ],
+      content: "Royal inscriptions document Assyrian expansion, tribute and western military campaigns.",
+      relevance: "Provides historical context for Assyrian intervention involving Israel and Judah.",
+      limits: "Royal claims require comparison with independent evidence.",
+      source: "ORACC — RINAP 1",
+      url: "https://oracc.museum.upenn.edu/rinap/rinap1/"
+    },
+    {
+      title: "Royal Inscriptions of Sargon II",
+      date: "721–705 BCE",
+      origin: "Neo-Assyrian Empire",
+      type: "Independent historical records",
+      passages: [
+        ["2 Kings", 17, 18],
+        ["Isaiah", 20, 20],
+        ["Micah", 1, 1],
+        ["Hosea", 13, 14]
+      ],
+      content: "The inscriptions include accounts of Assyrian activities in Samaria and other western territories.",
+      relevance: "Documents the imperial setting of Israel's downfall.",
+      limits: "Responsibility and chronology concerning Samaria's conquest require comparison with other historical sources.",
+      source: "ORACC — RINAP 2",
+      url: "https://oracc.museum.upenn.edu/rinap/rinap2/"
+    },
+    {
+      title: "Sennacherib's Royal Annals",
+      date: "Campaign of 701 BCE; surviving editions recorded subsequently",
+      origin: "Nineveh, Assyria",
+      type: "Independent historical inscription",
+      passages: [
+        ["2 Kings", 18, 19],
+        ["2 Chronicles", 32, 32],
+        ["Isaiah", 36, 37],
+        ["Micah", 1, 1]
+      ],
+      content: "Sennacherib records his campaign against Judah, names Hezekiah and describes the capture of fortified settlements.",
+      relevance: "Provides independent historical evidence for the Assyrian campaign against Judah.",
+      limits: "The inscription does not claim Jerusalem's capture and presents the Assyrian royal perspective.",
+      source: "ORACC — Sennacherib 022",
       url: "https://oracc.museum.upenn.edu/rinap/rinap3/Q003496"
     },
     {
-      first: 13,
-      last: 13,
-      title: "The Lachish Reliefs",
-      date: "Approximately 700–681 BCE",
-      content: "Assyrian palace reliefs depict the siege and capture of Lachish during Sennacherib's campaign of 701 BCE.",
-      connection: "Micah 1:13 explicitly names Lachish.",
-      limits: "The reliefs document the siege, not the date or divine fulfillment of Micah's oracle.",
+      title: "Lachish Reliefs",
+      date: "Early seventh century BCE; depicting events of 701 BCE",
+      origin: "South-West Palace, Nineveh",
+      type: "Inscribed visual historical record",
+      passages: [
+        ["2 Kings", 18, 19],
+        ["2 Chronicles", 32, 32],
+        ["Isaiah", 36, 37],
+        ["Micah", 1, 1, 13, 13]
+      ],
+      content: "Assyrian palace reliefs depict the siege and capture of Lachish.",
+      relevance: "Provides independent evidence for Lachish's capture during Sennacherib's campaign.",
+      limits: "Does not establish the date or fulfillment of Micah's oracle.",
+      source: "British Museum",
       url: "https://www.britishmuseum.org/collection/search?keyword=Lachish"
+    },
+    {
+      title: "Babylonian Jerusalem Chronicle",
+      date: "Records events including 597 BCE",
+      origin: "Babylonia",
+      type: "Independent historical chronicle",
+      passages: [
+        ["2 Kings", 24, 24],
+        ["2 Chronicles", 36, 36],
+        ["Jeremiah", 22, 24],
+        ["Ezekiel", 1, 1]
+      ],
+      content: "Records Nebuchadnezzar II's campaign against Jerusalem and the appointment of a replacement king.",
+      relevance: "Provides external chronological evidence for Jerusalem's capture in 597 BCE.",
+      limits: "This entry concerns the earlier capture, not Jerusalem's final destruction in 587/586 BCE.",
+      source: "British Museum — BM 21946",
+      url: "https://www.britishmuseum.org/collection/search?keyword=21946"
+    },
+    {
+      title: "Cyrus Cylinder",
+      date: "After the conquest of Babylon in 539 BCE",
+      origin: "Babylon",
+      type: "Royal foundation inscription",
+      passages: [
+        ["Ezra", 1, 6],
+        ["2 Chronicles", 36, 36],
+        ["Isaiah", 44, 45]
+      ],
+      content: "Cyrus describes his rule over Babylon and restoration of displaced cult images and sanctuaries.",
+      relevance: "Provides comparative imperial context for restoration policies under Cyrus.",
+      limits: "Does not explicitly mention Jerusalem, Judah or the biblical decree.",
+      source: "British Museum",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Cyrus%20Cylinder"
+    },
+    {
+      title: "Ketef Hinnom Silver Amulets",
+      date: "Late seventh or early sixth century BCE",
+      origin: "Jerusalem",
+      type: "Ancient inscription and textual parallel",
+      passages: [["Numbers", 6, 6, 24, 26]],
+      content: "Silver amulets preserve blessing language closely resembling the priestly blessing.",
+      relevance: "Provides early material evidence for the transmission of biblical-style blessing formulas.",
+      limits: "Does not establish the composition date of the entire Book of Numbers.",
+      source: "Israel Museum",
+      url: "https://www.imj.org.il/en"
+    },
+    {
+      title: "Josephus — Antiquities of the Jews",
+      date: "Approximately 93–94 CE",
+      origin: "Roman Empire",
+      type: "Ancient historical literature",
+      passages: [
+        ["Matthew", 14, 14],
+        ["Mark", 6, 6],
+        ["Luke", 3, 3],
+        ["Luke", 23, 23],
+        ["John", 18, 19],
+        ["Acts", 12, 12]
+      ],
+      content: "Josephus discusses Jewish history, rulers, John the Baptist and events of the Roman period. Relevant sections include Antiquities 18.63–64, 18.116–119 and 19.343–350.",
+      relevance: "Provides external historical context for selected New Testament people and events.",
+      limits: "Josephus wrote retrospectively. The passage concerning Jesus in Antiquities 18.63–64 has disputed textual elements.",
+      source: "Perseus Digital Library",
+      url: "https://www.perseus.tufts.edu/"
+    },
+    {
+      title: "Pontius Pilate Inscription",
+      date: "26–36 CE",
+      origin: "Caesarea Maritima",
+      type: "Independent historical inscription",
+      passages: [
+        ["Matthew", 27, 27],
+        ["Mark", 15, 15],
+        ["Luke", 23, 23],
+        ["John", 18, 19]
+      ],
+      content: "A Latin dedication preserves the name of Pontius Pilate and his prefectural title.",
+      relevance: "Independently attests the Roman official associated with the Gospel trial narratives.",
+      limits: "Does not independently document the trial or crucifixion of Jesus.",
+      source: "Israel Museum",
+      url: "https://www.imj.org.il/en"
+    },
+    {
+      title: "Gallio Inscription",
+      date: "Approximately 52 CE",
+      origin: "Delphi, Greece",
+      type: "Independent chronological inscription",
+      passages: [["Acts", 18, 18]],
+      content: "A fragmentary imperial letter of Claudius identifies Gallio as proconsul of Achaia.",
+      relevance: "Provides an important chronological anchor for Paul's time in Corinth.",
+      limits: "Does not independently name Paul or document his hearing before Gallio.",
+      source: "Searchable Greek Inscriptions",
+      url: "https://epigraphy.packhum.org/"
+    },
+    {
+      title: "Tacitus — Annals 15.44",
+      date: "Early second century CE",
+      origin: "Roman Empire",
+      type: "Later independent historical literature",
+      passages: [
+        ["Matthew", 27, 27],
+        ["Mark", 15, 15],
+        ["Luke", 23, 23],
+        ["John", 19, 19]
+      ],
+      content: "Tacitus discusses Christians in Rome and reports the execution of Christus under Pontius Pilate during Tiberius' reign.",
+      relevance: "Provides a later Roman literary reference to the execution of Jesus.",
+      limits: "Tacitus was not an eyewitness and does not identify his source.",
+      source: "Perseus Digital Library",
+      url: "https://www.perseus.tufts.edu/"
+    },
+    {
+      title: "Pliny the Younger — Letters 10.96–97",
+      date: "Approximately 112 CE",
+      origin: "Bithynia-Pontus, Roman Empire",
+      type: "Early Christian reception and Roman administration",
+      passages: [
+        ["1 Peter", 1, 5],
+        ["Revelation", 2, 3]
+      ],
+      content: "Correspondence between Pliny and Trajan discusses Roman administrative treatment of Christians and Christian worship practices.",
+      relevance: "Provides later comparative evidence for Christianity under Roman provincial administration.",
+      limits: "These letters concern a later period and do not establish the circumstances of the selected biblical passage.",
+      source: "Perseus Digital Library",
+      url: "https://www.perseus.tufts.edu/"
     }
   ];
 
-  const relevant = documents.filter(doc =>
-    verseNumber >= doc.first &&
-    verseNumber <= doc.last
-  );
+  function addLink(parent, label, url) {
+    const p = make("p", undefined, parent);
+    const a = document.createElement("a");
 
-  if (!relevant.length) {
-    make("p", "No verse-specific ancient document has been assigned to this passage yet.", details);
+    a.textContent = label;
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+
+    p.appendChild(a);
   }
 
-  relevant.forEach(doc => {
+  const matched = documents.filter(doc =>
+    doc.passages.some(range => {
+      const [b, first, last, startVerse, endVerse] = range;
+
+      if (book !== b || ch < first || ch > last) {
+        return false;
+      }
+
+      if (startVerse !== undefined && vs < startVerse) {
+        return false;
+      }
+
+      if (endVerse !== undefined && vs > endVerse) {
+        return false;
+      }
+
+      return true;
+    })
+  );
+
+  make(
+    "p",
+    "Explore ancient written records, inscriptions, comparative literature and historical sources associated with the selected passage.",
+    details
+  );
+
+  make("h4", "1. Associated Ancient Documents", details);
+
+  if (!matched.length) {
+    make(
+      "p",
+      "No ancient document is currently indexed to this passage in the local catalogue. This does not establish that relevant evidence is absent.",
+      details
+    );
+  }
+
+  matched.forEach(doc => {
     const card = make("section", undefined, details);
     card.className = "verse";
 
     make("h3", doc.title, card);
-    make("h4", "Historical date", card);
+
+    make("h4", "Document Classification", card);
+    make("p", doc.type, card);
+
+    make("h4", "Historical Date", card);
     make("p", doc.date, card);
-    make("h4", "Historical evidence", card);
+
+    make("h4", "Origin and Provenance", card);
+    make("p", doc.origin, card);
+
+    make("h4", "Document Contents", card);
     make("p", doc.content, card);
+
     make("h4", "Connection to Scripture", card);
-    make("p", doc.connection, card);
-    make("h4", "Evidence limitations", card);
+    make("p", doc.relevance, card);
+
+    make("h4", "Historical Limitations", card);
     make("p", doc.limits, card);
-    link(card, "Examine the source", doc.url);
+
+    make("h4", "Associated Biblical Passages", card);
+
+    make(
+      "p",
+      doc.passages.map(r =>
+        `${r[0]} ${r[1]}${r[1] !== r[2] ? "–" + r[2] : ""}${r.length > 3 ? ":" + r[3] + "–" + r[4] : ""}`
+      ).join("; "),
+      card
+    );
+
+    make("h4", "Source and Verification", card);
+    addLink(card, doc.source, doc.url);
   });
+
+  make("h4", "2. Ancient Manuscript Research", details);
+
+  const oldTestament = [
+    "Genesis", "Exodus", "Leviticus", "Numbers",
+    "Deuteronomy", "Joshua", "Judges", "Ruth",
+    "1 Samuel", "2 Samuel", "1 Kings", "2 Kings",
+    "1 Chronicles", "2 Chronicles", "Ezra",
+    "Nehemiah", "Esther", "Job", "Psalms",
+    "Proverbs", "Ecclesiastes", "Song of Solomon",
+    "Isaiah", "Jeremiah", "Lamentations",
+    "Ezekiel", "Daniel", "Hosea", "Joel",
+    "Amos", "Obadiah", "Jonah", "Micah",
+    "Nahum", "Habakkuk", "Zephaniah",
+    "Haggai", "Zechariah", "Malachi"
+  ];
+
+  if (oldTestament.includes(book)) {
+
+    make(
+      "p",
+      "Investigate surviving Hebrew, Aramaic and Greek textual witnesses through these manuscript collections. Individual manuscript coverage must be verified.",
+      details
+    );
+
+    addLink(
+      details,
+      "Leon Levy Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    );
+
+    addLink(
+      details,
+      "Israel Museum — Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/"
+    );
+
+    addLink(
+      details,
+      "Codex Sinaiticus",
+      "https://codexsinaiticus.org/"
+    );
+
+  } else {
+
+    make(
+      "p",
+      "Investigate surviving Greek New Testament manuscripts, textual witnesses, manuscript dates and textual variants.",
+      details
+    );
+
+    addLink(
+      details,
+      "New Testament Virtual Manuscript Room — INTF",
+      "https://ntvmr.uni-muenster.de/"
+    );
+
+    addLink(
+      details,
+      "Center for the Study of New Testament Manuscripts",
+      "https://www.csntm.org/"
+    );
+
+    addLink(
+      details,
+      "Codex Sinaiticus",
+      "https://codexsinaiticus.org/"
+    );
+  }
+
+  make("h4", "3. Primary Source Research Archives", details);
+
+  const archives = [
+    [
+      "Open Richly Annotated Cuneiform Corpus",
+      "https://oracc.museum.upenn.edu/"
+    ],
+    [
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    [
+      "British Museum Collections",
+      "https://www.britishmuseum.org/collection"
+    ],
+    [
+      "Louvre Collections",
+      "https://collections.louvre.fr/en/"
+    ],
+    [
+      "Papyri.info",
+      "https://papyri.info/"
+    ],
+    [
+      "Perseus Digital Library",
+      "https://www.perseus.tufts.edu/"
+    ],
+    [
+      "Searchable Greek Inscriptions",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "Internet Ancient History Sourcebook",
+      "https://sourcebooks.fordham.edu/ancient/asbook.asp"
+    ]
+  ];
+
+  archives.forEach(([label, url]) =>
+    addLink(details, label, url)
+  );
+
+  make("h4", "4. Passage-Specific Research", details);
+
+  const selectedPassage = `${book} ${ch}:${vs}`;
+
+  const searches = [
+    [
+      "Ancient documents and historical evidence",
+      `"${selectedPassage}" ancient documents historical evidence`
+    ],
+    [
+      "Ancient inscriptions",
+      `"${selectedPassage}" ancient inscriptions epigraphy`
+    ],
+    [
+      "Manuscripts and textual witnesses",
+      `"${selectedPassage}" manuscripts textual criticism`
+    ],
+    [
+      "Comparative ancient literature",
+      `"${selectedPassage}" comparative ancient literature`
+    ],
+    [
+      "Academic historical research",
+      `"${selectedPassage}" historical context archaeology`
+    ]
+  ];
+
+  searches.forEach(([label, query]) => {
+    addLink(
+      details,
+      label,
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(query)
+    );
+  });
+
+  make("h4", "5. Evidence Assessment", details);
+
+  make(
+    "p",
+    `Selected passage: ${selectedPassage}`,
+    details
+  );
+
+  make(
+    "p",
+    `Associated catalogue records: ${matched.length}`,
+    details
+  );
+
+  make(
+    "p",
+    "Independent historical inscriptions may attest people, places, political relationships or events.",
+    details
+  );
+
+  make(
+    "p",
+    "Ancient manuscripts provide evidence concerning textual transmission, preservation and textual variation.",
+    details
+  );
+
+  make(
+    "p",
+    "Comparative ancient literature provides cultural and literary context but does not automatically establish historical confirmation.",
+    details
+  );
+
+  make(
+    "p",
+    "Chapter-level associations provide broader context and do not necessarily establish a direct connection to every verse.",
+    details
+  );
+
+  make("h4", "6. Research Integrity", details);
+
+  make(
+    "p",
+    "Historical evidence, biblical interpretation and theological conclusions must be distinguished. Uncertain dates, disputed interpretations and incomplete evidence must be acknowledged.",
+    details
+  );
+
+  make(
+    "p",
+    "Catalogue coverage is not exhaustive. Archive links and scholarly searches are research resources, not independently verified passage-specific findings.",
+    details
+  );
 
   return;
 }
