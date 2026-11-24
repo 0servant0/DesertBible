@@ -765,51 +765,134 @@ const historicalContext = {
   } else {
     details.innerHTML = "<p>Historical context has not been entered for this verse.</p>";
   }
-} else if (category === "Translation comparison") {  
-      const verseKey = String(number).trim().split(":").pop();
+} else if (category === "Translation comparison") {
+  const verseKey = String(number).trim().split(":").pop();
+  const verseNumber = Number(verseKey);
+  const reference = `Micah 1:${verseKey}`;
+  const encodedReference = encodeURIComponent(reference);
 
-const translations = [
-  {
-    name: "World English Bible Updated Edition (WEBU)",
-    url: `https://ebible.org/engwebu/MIC01.htm`,
-    type: "Modern English translation"
-  },
-  {
-    name: "American Standard Version (ASV, 1901)",
-    url: `https://www.biblegateway.com/passage/?search=Micah%201%3A${verseKey}&version=ASV`,
-    type: "Formal-equivalence English translation"
-  },
-  {
-    name: "King James Version (KJV, 1611)",
-    url: `https://www.biblegateway.com/passage/?search=Micah%201%3A${verseKey}&version=KJV`,
-    type: "Historical English translation"
+  const translations = [
+    {
+      id: "web",
+      name: "World English Bible (WEB)",
+      note: "API edition; not the WEB Updated Edition (WEBU)."
+    },
+    {
+      id: "asv",
+      name: "American Standard Version (ASV, 1901)",
+      note: "Formal English translation."
+    },
+    {
+      id: "kjv",
+      name: "King James Version (KJV, 1611)",
+      note: "Historical English translation."
+    }
+  ];
+
+  const escapeHTML = value =>
+    String(value).replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+
+  if (!Number.isInteger(verseNumber) ||
+      verseNumber < 1 || verseNumber > 16) {
+    details.innerHTML =
+      "<p>Invalid verse number. Select Micah 1:1–16.</p>";
+  } else {
+    details.innerHTML = `
+      <h3>Translation Comparison — ${reference}</h3>
+      <p>Retrieving the selected verse from the listed translations...</p>
+    `;
+
+    Promise.all(translations.map(async translation => {
+      const url =
+        `https://bible-api.com/${encodedReference}?translation=${translation.id}`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`${translation.name} request failed.`);
+      }
+
+      const data = await response.json();
+
+      if (!data.text || !data.verses ||
+          !data.verses.some(v => Number(v.verse) === verseNumber)) {
+        throw new Error(`No verified verse text returned for ${translation.name}.`);
+      }
+
+      return {
+        ...translation,
+        text: data.text.trim(),
+        url
+      };
+    }))
+    .then(results => {
+      details.innerHTML = `
+        <h3>Translation Comparison — ${reference}</h3>
+
+        <p>
+          Compare the wording of each translation. WEB below is not
+          WEBU; consult the official WEBU source separately.
+        </p>
+
+        ${results.map(item => `
+          <section>
+            <h4>${escapeHTML(item.name)}</h4>
+            <p>${escapeHTML(item.note)}</p>
+            <blockquote>${escapeHTML(item.text)}</blockquote>
+            <a href="${item.url}" target="_blank"
+               rel="noopener noreferrer">Verify API source</a>
+          </section>
+        `).join("")}
+
+        <h4>WEB Updated Edition (WEBU)</h4>
+        <p>
+          <a href="https://ebible.org/engwebu/MIC01.htm#v1"
+             target="_blank" rel="noopener noreferrer">
+            Open the official WEBU text and notes for Micah 1
+          </a>
+        </p>
+
+        <h4>Original Hebrew</h4>
+        <p>
+          <a href="https://ebible.org/hebwlc/MIC01.htm"
+             target="_blank" rel="noopener noreferrer">
+            Consult the Westminster Leningrad Codex (WLC)
+          </a>
+        </p>
+
+        <h4>Analysis checklist</h4>
+        <ul>
+          <li>Record exact differences in wording.</li>
+          <li>Identify the Hebrew word or grammatical construction involved.</li>
+          <li>Check whether differences reflect translation choices or documented textual variants.</li>
+          <li>Support explanations with scholarly references; do not infer a variant from English wording alone.</li>
+        </ul>
+
+        <p><strong>Research limitation:</strong>
+        This code retrieves verse text. It does not automatically
+        establish the meaning of each difference or provide scholarly
+        conclusions. Those findings must be researched and cited separately.</p>
+      `;
+    })
+    .catch(error => {
+      details.innerHTML = `
+        <h3>Translation Comparison — ${reference}</h3>
+        <p>Verse retrieval failed: ${escapeHTML(error.message)}</p>
+        <p>Please retry later or consult the source links directly.</p>
+        <p>
+          <a href="https://ebible.org/engwebu/MIC01.htm"
+             target="_blank" rel="noopener noreferrer">Official WEBU text</a>
+        </p>
+      `;
+    });
   }
-];
 
-details.innerHTML = `
-  <h3>Translation Comparison — Micah 1:${verseKey}</h3>
-  <p>Compare how English translations render the same verse. Open each source to verify its wording in context.</p>
-  <h4>Source texts</h4>
-  <ul>
-    ${translations.map(t => `
-      <li>
-        <strong>${t.name}</strong> — ${t.type}<br>
-        <a href="${t.url}" target="_blank" rel="noopener noreferrer">
-          Open translation source
-        </a>
-      </li>
-    `).join("")}
-  </ul>
-  <h4>Comparison checklist</h4>
-  <ul>
-    <li>Differences in wording and sentence structure</li>
-    <li>Hebrew terms translated differently</li>
-    <li>Differences in meaning, emphasis, and ambiguity</li>
-    <li>Footnotes and textual variants, where documented</li>
-    <li>Whether a difference reflects translation choice or a different underlying text</li>
-  </ul>
-  <p><strong>Accuracy note:</strong> A difference in English wording does not by itself prove a difference in the Hebrew source. Verify each claim against the original-language text and the translation's documented textual basis.</p>
-`;
       } else {
       
   details.innerHTML =
