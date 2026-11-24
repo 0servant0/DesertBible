@@ -1685,6 +1685,902 @@ function showBibleVerseResearch(reference) {
     showHistoricalContext();
     return;
   }
+
+    if (key === "Scholarly commentary") {
+  details.replaceChildren();
+
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+
+  const bookNames = [
+    "Genesis","Exodus","Leviticus","Numbers",
+    "Deuteronomy","Joshua","Judges","Ruth",
+    "1 Samuel","2 Samuel","1 Kings","2 Kings",
+    "1 Chronicles","2 Chronicles","Ezra",
+    "Nehemiah","Esther","Job","Psalms",
+    "Proverbs","Ecclesiastes","Song of Solomon",
+    "Isaiah","Jeremiah","Lamentations",
+    "Ezekiel","Daniel","Hosea","Joel","Amos",
+    "Obadiah","Jonah","Micah","Nahum",
+    "Habakkuk","Zephaniah","Haggai",
+    "Zechariah","Malachi","Matthew","Mark",
+    "Luke","John","Acts","Romans",
+    "1 Corinthians","2 Corinthians",
+    "Galatians","Ephesians","Philippians",
+    "Colossians","1 Thessalonians",
+    "2 Thessalonians","1 Timothy","2 Timothy",
+    "Titus","Philemon","Hebrews","James",
+    "1 Peter","2 Peter","1 John","2 John",
+    "3 John","Jude","Revelation"
+  ];
+
+  const commentaryIds = [
+    "GEN","EXO","LEV","NUM","DEU","JOS",
+    "JDG","RUT","1SA","2SA","1KI","2KI",
+    "1CH","2CH","EZR","NEH","EST","JOB",
+    "PSA","PRO","ECC","SNG","ISA","JER",
+    "LAM","EZK","DAN","HOS","JOL","AMO",
+    "OBA","JON","MIC","NAM","HAB","ZEP",
+    "HAG","ZEC","MAL","MAT","MRK","LUK",
+    "JHN","ACT","ROM","1CO","2CO","GAL",
+    "EPH","PHP","COL","1TH","2TH","1TI",
+    "2TI","TIT","PHM","HEB","JAS","1PE",
+    "2PE","1JN","2JN","3JN","JUD","REV"
+  ];
+
+  const bookIndex = bookNames.indexOf(book);
+  const currentBookId = commentaryIds[bookIndex];
+
+  const referenceText = `${book} ${ch}:${vs}`;
+
+  const addSource = (parent, label, url) => {
+    const p = make("p", null, parent);
+    const a = make("a", label, p);
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+    return a;
+  };
+
+  const createCard = (parent, title) => {
+    const section = make("section", null, parent);
+    section.className = "verse";
+    make("h3", title, section);
+    return section;
+  };
+
+  const field = (parent, title, value) => {
+    make("h4", title, parent);
+    make("p", value, parent);
+  };
+
+  make(
+    "h3",
+    `Scholarly Commentary — ${referenceText}`,
+    details
+  );
+
+  make(
+    "p",
+    "Explore biblical interpretation, historical scholarship, Christian theology, apologetics and the history of interpretation through identifiable sources.",
+    details
+  );
+
+  if (!currentBookId) {
+    make("p", "The selected book identifier could not be resolved.", details);
+    return;
+  }
+
+  // ======================================
+  // 1. MODERN SCHOLARSHIP AND APOLOGETICS
+  // ======================================
+
+  make("h3", "1. Modern Scholarship and Apologetics", details);
+
+  const modernRecords = [
+    {
+      author: "Peter J. Williams",
+      discipline: "Biblical languages and textual scholarship",
+      title: "The Surprising Genius of Jesus",
+      year: "2023",
+      passages: [
+        ["Luke",15,15,11,32]
+      ],
+      classification: "Passage-specific literary interpretation",
+      commentary: "Williams examines the parable of the two sons as a carefully constructed narrative that communicates at several levels. He emphasizes its accessibility to ordinary listeners alongside its deeper connections with the Hebrew Scriptures.",
+      importance: "Useful for investigating Jesus's literary skill, knowledge of Scripture and communication with different audiences.",
+      limitations: "The literary argument should be evaluated separately from broader historical and theological conclusions.",
+      source: "Crossway — discussion by Peter J. Williams",
+      url: "https://www.crossway.org/articles/how-does-the-parable-of-the-two-sons-display-the-genius-of-jesus/"
+    },
+    {
+      author: "Peter J. Williams",
+      discipline: "Gospel scholarship",
+      title: "How Did Jesus's Stories Get Passed On?",
+      year: "2023",
+      passages: [
+        ["Luke",15,16],
+        ["Matthew",7,7,1,1],
+        ["Matthew",7,7,12,12],
+        ["Luke",6,6,31,31],
+        ["Luke",6,6,37,37]
+      ],
+      classification: "Literary and transmission research",
+      commentary: "Williams argues that recurring characteristics within Jesus's teachings are consistent with a recognizable originating teacher. Repeated oral teaching offers a possible explanation for the preservation of sayings across the Gospels.",
+      importance: "Connects Gospel transmission with literary coherence and oral teaching.",
+      limitations: "This is an argument about transmission and authorship, not a complete reconstruction of the transmission process.",
+      source: "Crossway — original article",
+      url: "https://www.crossway.org/articles/how-did-jesuss-stories-get-passed-on/"
+    },
+    {
+      author: "Peter J. Williams",
+      discipline: "Biblical scholarship and Christian theology",
+      title: "What Is the Single Best Explanation for Jesus's Genius?",
+      year: "2024",
+      passages: [
+        ["John",1,1,1,3],
+        ["Luke",2,2,41,52]
+      ],
+      classification: "Theological interpretation",
+      commentary: "Williams relates Jesus's wisdom to his understanding of Christ's divine identity and the description of Christ as the Word. He also acknowledges Luke's portrayal of Jesus developing in wisdom.",
+      importance: "Provides a theological perspective on the relationship between Christ's divine identity and human development.",
+      limitations: "The theological conclusion is distinct from independent historical demonstration.",
+      source: "Crossway — original article",
+      url: "https://www.crossway.org/articles/what-is-the-single-best-explanation-for-jesuss-genius/"
+    },
+    {
+      author: "William Lane Craig",
+      discipline: "Philosophy and philosophical theology",
+      title: "In Quest of the Historical Adam",
+      year: "2021",
+      passages: [
+        ["Genesis",1,11]
+      ],
+      classification: "Literary, theological and scientific discussion",
+      commentary: "Craig argues that the primeval narratives combine historical interests with figurative literary elements. He defends the existence of a historical Adam while distinguishing questions of biblical interpretation from scientific investigation.",
+      importance: "Provides an alternative to both strictly literalistic readings and interpretations that deny any historical Adam.",
+      limitations: "His genre classification and proposed reconciliation with human origins research are debated.",
+      source: "Eerdmans — publication description",
+      url: "https://www.eerdmans.com/9780802884909/in-quest-of-the-historical-adam/"
+    },
+    {
+      author: "William Lane Craig",
+      discipline: "Philosophical theology",
+      title: "The Historical Adam and Figurative Imagery",
+      year: "Published video discussion",
+      passages: [
+        ["Genesis",2,3]
+      ],
+      classification: "Passage-level theological interpretation",
+      commentary: "Craig interprets aspects of the garden narrative as figurative representations of a historical human rebellion. He argues that anthropomorphic portrayals of God need not be understood as literal descriptions.",
+      importance: "Useful for comparing interpretations of the creation and fall narratives.",
+      limitations: "Other interpreters disagree about which narrative details should be understood figuratively.",
+      source: "Reasonable Faith — original discussion",
+      url: "https://www.reasonablefaith.org/videos/short-videos/how-do-you-know-what-is-myth-what-is-history-in-genesis/"
+    },
+    {
+      author: "William Lane Craig",
+      discipline: "Philosophy and Christian apologetics",
+      title: "Jesus' Resurrection",
+      year: "Published apologetic essay",
+      passages: [
+        ["1 Corinthians",15,15],
+        ["Matthew",28,28],
+        ["Mark",16,16],
+        ["Luke",24,24],
+        ["John",20,21]
+      ],
+      classification: "Historical and philosophical argument",
+      commentary: "Craig develops a cumulative historical argument involving reports of resurrection appearances, the empty tomb and the emergence of early Christian resurrection belief.",
+      importance: "Provides a structured defense of the historical resurrection.",
+      limitations: "The strength of the historical premises and the inference to a supernatural explanation remain subjects of scholarly and philosophical disagreement. This essay is not a separate exposition of every associated verse.",
+      source: "Reasonable Faith — original essay",
+      url: "https://www.reasonablefaith.org/writings/popular-writings/existence-nature-of-god/jesus-resurrection/"
+    },
+    {
+      author: "William Lane Craig",
+      discipline: "Philosophical theology",
+      title: "The Historical Adam in Romans",
+      year: "2026",
+      passages: [
+        ["Romans",5,5]
+      ],
+      classification: "Passage-level theological argument",
+      commentary: "Craig argues that Paul's treatment of Adam assigns consequences to Adam beyond the Genesis narrative and therefore commits the reader to a historical individual.",
+      importance: "Connects the interpretation of Genesis with Pauline theology concerning sin and humanity.",
+      limitations: "Other theologians understand Paul's use of Adam differently and dispute the implications for human biological ancestry.",
+      source: "Reasonable Faith — published discussion",
+      url: "https://www.reasonablefaith.org/media/reasonable-faith-podcast/n-t-wright-francis-collins-and-the-historical-adam-william-lane-craig-responds/"
+    },
+    {
+      author: "John Lennox",
+      discipline: "Mathematics, philosophy of science and apologetics",
+      title: "Seven Days That Divide the World",
+      year: "2011; subsequently revised",
+      passages: [
+        ["Genesis",1,2]
+      ],
+      classification: "Creation narrative interpretation",
+      commentary: "Lennox examines interpretations of the creation days and argues that accepting contemporary scientific estimates of the age of the earth does not necessarily require rejecting biblical authority.",
+      importance: "Provides a framework for distinguishing biblical claims about creation from questions of physical chronology.",
+      limitations: "Christians differ concerning creation chronology, literary structure and the relationship between Scripture and science.",
+      source: "John Lennox — official publication page",
+      url: "https://johnlennox.org/book/seven-days-that-divide-the-world/"
+    },
+    {
+      author: "Wesley Huff and Andy Steiger",
+      discipline: "Biblical manuscripts and apologetics",
+      title: "Can I Trust the Bible? — The Right Text",
+      year: "Published educational series",
+      passages: [
+        ["John",5,5,1,9]
+      ],
+      classification: "Textual criticism",
+      commentary: "The series discusses John 5:4 as an example of explanatory material entering the manuscript tradition and considers how textual variants affect assessments of biblical transmission.",
+      importance: "Encourages readers to examine actual manuscript differences rather than assuming that every printed edition contains identical wording.",
+      limitations: "The exact origin of the longer reading requires specialist textual analysis. Manuscript preservation and theological authority are distinct questions.",
+      source: "Wesley Huff — original educational resource",
+      url: "https://wesley-huff-5hsb.squarespace.com/can-i-trust-the-bible"
+    },
+    {
+      author: "Wesley Huff and Andy Steiger",
+      discipline: "Biblical canon and apologetics",
+      title: "Can I Trust the Bible? — The Right Books",
+      year: "Published educational series",
+      passages: [
+        ["Philemon",1,1,24,24]
+      ],
+      classification: "Canon and apostolic association",
+      commentary: "The educational material directs readers to Philemon 24 when considering relationships between early Christian writers and apostolic witnesses.",
+      importance: "Provides context for discussions concerning apostolic association and recognition of New Testament writings.",
+      limitations: "The passage alone does not establish the identity, authorship or canonical status of every associated writing.",
+      source: "Wesley Huff — original educational resource",
+      url: "https://wesley-huff-5hsb.squarespace.com/can-i-trust-the-bible"
+    }
+  ];
+
+  const matchesPassage = ranges =>
+    ranges.some(range => {
+      const [
+        rangeBook,
+        firstChapter,
+        lastChapter,
+        firstVerse = 1,
+        lastVerse = Infinity
+      ] = range;
+
+      if (rangeBook !== book) return false;
+      if (ch < firstChapter || ch > lastChapter) return false;
+
+      if (ch === firstChapter && vs < firstVerse) return false;
+      if (ch === lastChapter && vs > lastVerse) return false;
+
+      return true;
+    });
+
+  const matchedModern = modernRecords.filter(
+    item => matchesPassage(item.passages)
+  );
+
+  if (matchedModern.length) {
+    matchedModern.forEach(item => {
+      const card = createCard(details, item.author);
+
+      field(card, "Discipline", item.discipline);
+      field(card, "Publication", item.title);
+      field(card, "Date", item.year);
+      field(card, "Research Classification", item.classification);
+      field(card, "Editorial Summary of the Author's Position", item.commentary);
+      field(card, "Research Significance", item.importance);
+      field(card, "Limitations and Alternative Interpretations", item.limitations);
+
+      addSource(card, item.source, item.url);
+    });
+  } else {
+    make(
+      "p",
+      "No passage-specific publication by the indexed modern authors is currently connected to this verse. General research resources are provided separately below.",
+      details
+    );
+  }
+
+  // ======================================
+  // 2. FEATURED AUTHORS RESEARCH LIBRARY
+  // ======================================
+
+  make("h3", "2. Featured Authors Research Library", details);
+
+  const featuredAuthors = [
+    {
+      name: "Peter J. Williams",
+      discipline: "Biblical languages, textual criticism and Gospel scholarship",
+      works: "Can We Trust the Gospels?; The Surprising Genius of Jesus; Early Syriac Translation Technique and the Textual Criticism of the Greek Gospels.",
+      website: "https://www.crossway.org/press-room/the-surprising-genius-of-jesus-tpb/",
+      domain: "crossway.org"
+    },
+    {
+      name: "William Lane Craig",
+      discipline: "Philosophy, philosophical theology and Christian apologetics",
+      works: "Reasonable Faith; In Quest of the Historical Adam; historical resurrection research.",
+      website: "https://www.reasonablefaith.org/",
+      domain: "reasonablefaith.org"
+    },
+    {
+      name: "John Lennox",
+      discipline: "Mathematics, philosophy of science and Christian apologetics",
+      works: "Seven Days That Divide the World; God's Undertaker; Can Science Explain Everything?",
+      website: "https://johnlennox.org/",
+      domain: "johnlennox.org"
+    },
+    {
+      name: "Cliffe and Stuart Knechtle",
+      discipline: "Christian ministry and public apologetics",
+      works: "What Evidence Is There That the New Testament Is Reliable?",
+      website: "https://www.biblegateway.com/learn/bible-101/about-the-bible/is-new-testament-reliable/",
+      domain: "biblegateway.com"
+    },
+    {
+      name: "Wesley Huff",
+      discipline: "Biblical manuscripts, textual transmission and Christian apologetics",
+      works: "Can I Trust the Bible? — educational series.",
+      website: "https://wesley-huff-5hsb.squarespace.com/can-i-trust-the-bible",
+      domain: "wesley-huff-5hsb.squarespace.com"
+    }
+  ];
+
+  featuredAuthors.forEach(author => {
+    const card = createCard(details, author.name);
+
+    field(card, "Research Area", author.discipline);
+    field(card, "Selected Publications and Resources", author.works);
+
+    make(
+      "p",
+      "General research resource. The links below do not establish that this author has published commentary on the selected verse.",
+      card
+    );
+
+    addSource(card, "Published Research", author.website);
+
+    addSource(
+      card,
+      `Search for ${referenceText}`,
+      "https://www.google.com/search?q=" +
+      encodeURIComponent(
+        `site:${author.domain} "${referenceText}" "${author.name}"`
+      )
+    );
+
+    addSource(
+      card,
+      "Search Academic Publications",
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(
+        `"${author.name}" "${referenceText}"`
+      )
+    );
+
+    addSource(
+      card,
+      "Search Lectures and Discussions",
+      "https://www.youtube.com/results?search_query=" +
+      encodeURIComponent(
+        `${author.name} ${referenceText}`
+      )
+    );
+  });
+
+  // ======================================
+  // 3. ADDITIONAL RESEARCHERS
+  // ======================================
+
+  make("h3", "3. Additional Academic Research", details);
+
+  const additionalScholars = [
+    ["Bruce M. Metzger","New Testament textual criticism"],
+    ["Daniel B. Wallace","Greek grammar and manuscript research"],
+    ["Michael J. Kruger","New Testament canon"],
+    ["F. F. Bruce","Biblical history and New Testament scholarship"],
+    ["Craig S. Keener","Historical and cultural biblical context"],
+    ["D. A. Carson","New Testament interpretation"],
+    ["N. T. Wright","New Testament history and Pauline theology"],
+    ["Richard Bauckham","Gospel traditions and early Christianity"],
+    ["Larry Hurtado","Early Christian devotion to Jesus"],
+    ["Michael F. Bird","Early Christianity and New Testament theology"],
+    ["Gary Habermas","Resurrection apologetics"],
+    ["John H. Walton","Old Testament and ancient Near Eastern studies"],
+    ["Kenneth A. Kitchen","Egyptology and ancient Near Eastern history"],
+    ["Gordon J. Wenham","Pentateuch and Old Testament interpretation"],
+    ["Tremper Longman III","Old Testament literary interpretation"],
+    ["Christopher J. H. Wright","Old Testament theology"],
+    ["Michael S. Heiser","Hebrew Bible and ancient Near Eastern religion"],
+    ["Emanuel Tov","Hebrew Bible textual criticism"],
+    ["John D. Meade","Biblical canon and textual transmission"],
+    ["Gregory R. Lanier","New Testament and Septuagint research"],
+    ["Bart D. Ehrman","New Testament textual criticism and early Christianity"],
+    ["Elaine Pagels","Early Christianity and religious literature"],
+    ["John J. Collins","Second Temple Judaism and apocalyptic literature"],
+    ["Carol A. Newsom","Hebrew Bible and Dead Sea Scrolls"],
+    ["Adele Berlin","Hebrew Bible poetry and literary studies"],
+    ["Robert Alter","Hebrew Bible literary interpretation"],
+    ["James D. G. Dunn","Early Christianity and Pauline theology"],
+    ["E. P. Sanders","Second Temple Judaism and historical Jesus research"]
+  ];
+
+  const scholarDirectory = make(
+    "details", null, details
+  );
+
+  make(
+    "summary",
+    "Open Academic Research Directory",
+    scholarDirectory
+  );
+
+  make(
+    "p",
+    "These researchers represent differing academic and theological perspectives. Search results require individual verification and are not automatically treated as commentary.",
+    scholarDirectory
+  );
+
+  additionalScholars.forEach(([name, subject]) => {
+    make("h4", name, scholarDirectory);
+    make("p", subject, scholarDirectory);
+
+    addSource(
+      scholarDirectory,
+      `Research ${referenceText}`,
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(`"${name}" "${referenceText}"`)
+    );
+  });
+
+  // ======================================
+  // 4. FULL-BIBLE CLASSICAL COMMENTARIES
+  // ======================================
+
+  make("h3", "4. Full-Bible Commentary Collections", details);
+
+  make(
+    "p",
+    "Commentary is retrieved from published digital collections. Exact verse-number matches and chapter-level material are identified separately. Historical commentaries may reflect older scholarship.",
+    details
+  );
+
+  const commentaryLibrary = [
+    {
+      id: "matthew-henry",
+      name: "Matthew Henry",
+      work: "Commentary on the Whole Bible",
+      period: "Early eighteenth century",
+      tradition: "Protestant devotional and theological exposition"
+    },
+    {
+      id: "adam-clarke",
+      name: "Adam Clarke",
+      work: "Commentary and Critical Notes",
+      period: "Early nineteenth century",
+      tradition: "Methodist biblical interpretation"
+    },
+    {
+      id: "john-gill",
+      name: "John Gill",
+      work: "Exposition of the Bible",
+      period: "Eighteenth century",
+      tradition: "Reformed Baptist exposition"
+    },
+    {
+      id: "jamieson-fausset-brown",
+      name: "Jamieson, Fausset and Brown",
+      work: "Commentary Critical and Explanatory on the Whole Bible",
+      period: "Nineteenth century",
+      tradition: "Protestant critical and explanatory commentary"
+    },
+    {
+      id: "keil-delitzsch",
+      name: "Carl Friedrich Keil and Franz Delitzsch",
+      work: "Biblical Commentary on the Old Testament",
+      period: "Nineteenth century",
+      tradition: "Old Testament historical and philological scholarship",
+      oldTestamentOnly: true
+    },
+    {
+      id: "john-calvin",
+      name: "John Calvin",
+      work: "Biblical Commentaries",
+      period: "Sixteenth century",
+      tradition: "Reformation-era biblical interpretation"
+    }
+  ];
+
+  const commentaryCache = new Map();
+
+  async function retrieveCommentary(item) {
+    const endpoint =
+      `https://bible.helloao.org/api/c/${item.id}/${currentBookId}/${ch}.simple.json`;
+
+    if (commentaryCache.has(endpoint)) {
+      return commentaryCache.get(endpoint);
+    }
+
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      throw new Error(`Source response: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.chapter?.content)) {
+      throw new Error("Unexpected commentary source format");
+    }
+
+    commentaryCache.set(endpoint, data);
+    return data;
+  }
+
+  commentaryLibrary
+    .filter(item => !item.oldTestamentOnly || bookIndex < 39)
+    .forEach(item => {
+      const card = createCard(details, item.name);
+
+      field(card, "Publication", item.work);
+      field(card, "Historical Period", item.period);
+      field(card, "Interpretive Tradition", item.tradition);
+
+      const contents = make("div", null, card);
+
+      const loadButton = make(
+        "button",
+        `Read Commentary — ${referenceText}`,
+        card
+      );
+
+      loadButton.type = "button";
+
+      loadButton.addEventListener("click", async () => {
+        loadButton.disabled = true;
+        contents.replaceChildren();
+
+        make("p", "Retrieving published commentary...", contents);
+
+        try {
+          const data = await retrieveCommentary(item);
+
+          contents.replaceChildren();
+
+          const entries = data.chapter.content.filter(
+            entry =>
+              entry.type === "verse" &&
+              typeof entry.text === "string" &&
+              entry.text.trim()
+          );
+
+          const exactEntries = entries.filter(
+            entry => Number(entry.number) === vs
+          );
+
+          if (exactEntries.length) {
+            make("h4", "Selected Verse Number Entry", contents);
+
+            exactEntries.forEach(entry => {
+              make("p", entry.text, contents);
+            });
+
+            make(
+              "p",
+              "This entry begins at the selected verse number in the digital edition. It may discuss additional surrounding verses.",
+              contents
+            );
+          } else {
+            make(
+              "p",
+              "This edition does not return a separate commentary entry beginning at the selected verse.",
+              contents
+            );
+          }
+
+          const chapterPanel = make(
+            "details", null, contents
+          );
+
+          make(
+            "summary",
+            `Read Complete Commentary for ${book} ${ch}`,
+            chapterPanel
+          );
+
+          if (data.chapter.introduction) {
+            make(
+              "p",
+              data.chapter.introduction,
+              chapterPanel
+            );
+          }
+
+          entries.forEach(entry => {
+            make(
+              "h4",
+              `${book} ${ch}:${entry.number} — Section Beginning`,
+              chapterPanel
+            );
+
+            make("p", entry.text, chapterPanel);
+          });
+
+          if (!entries.length) {
+            make(
+              "p",
+              "No verse-numbered commentary entries were returned by this edition.",
+              chapterPanel
+            );
+          }
+
+          make(
+            "p",
+            `Digital source: ${data.commentary?.name || item.work}`,
+            contents
+          );
+
+          addSource(
+            contents,
+            "View Original Digital Source",
+            `https://bible.helloao.org/api/c/${item.id}/${currentBookId}/${ch}.simple.json`
+          );
+
+          if (data.commentary?.licenseUrl) {
+            addSource(
+              contents,
+              "Source License",
+              data.commentary.licenseUrl
+            );
+          }
+
+          if (data.commentary?.licenseNotes) {
+            make(
+              "p",
+              data.commentary.licenseNotes,
+              contents
+            );
+          }
+
+        } catch (error) {
+          contents.replaceChildren();
+
+          make(
+            "p",
+            "This commentary could not be retrieved. The edition may not cover this chapter, or the source may be temporarily unavailable.",
+            contents
+          );
+
+          addSource(
+            contents,
+            "Consult STEP Bible Commentary Library",
+            "https://www.stepbible.org/"
+          );
+
+        } finally {
+          loadButton.disabled = false;
+        }
+      });
+    });
+
+  // ======================================
+  // 5. EARLY CHURCH INTERPRETATION
+  // ======================================
+
+  make("h3", "5. Early Church and Historical Interpretation", details);
+
+  const churchFathers = [
+    ["Clement of Rome","Late first century"],
+    ["Ignatius of Antioch","Early second century"],
+    ["Polycarp of Smyrna","Second century"],
+    ["Justin Martyr","Second century"],
+    ["Irenaeus of Lyons","Second century"],
+    ["Tertullian","Second and third centuries"],
+    ["Origen of Alexandria","Third century"],
+    ["Athanasius of Alexandria","Fourth century"],
+    ["Basil of Caesarea","Fourth century"],
+    ["Gregory of Nazianzus","Fourth century"],
+    ["Gregory of Nyssa","Fourth century"],
+    ["John Chrysostom","Fourth and fifth centuries"],
+    ["Jerome","Fourth and fifth centuries"],
+    ["Augustine of Hippo","Fourth and fifth centuries"],
+    ["Cyril of Alexandria","Fifth century"],
+    ["Theodoret of Cyrus","Fifth century"]
+  ];
+
+  make(
+    "p",
+    "Investigate how early Christian authors interpreted Scripture. Later reception history must not be confused with contemporary historical testimony.",
+    details
+  );
+
+  addSource(
+    details,
+    "New Advent — Church Fathers",
+    "https://www.newadvent.org/fathers/"
+  );
+
+  addSource(
+    details,
+    "Christian Classics Ethereal Library",
+    "https://www.ccel.org/"
+  );
+
+  const fathersPanel = make("details", null, details);
+
+  make(
+    "summary",
+    "Search Individual Church Fathers",
+    fathersPanel
+  );
+
+  churchFathers.forEach(([name, period]) => {
+    make("h4", name, fathersPanel);
+    make("p", period, fathersPanel);
+
+    addSource(
+      fathersPanel,
+      `Investigate ${referenceText}`,
+      "https://www.google.com/search?q=" +
+      encodeURIComponent(
+        `site:newadvent.org/fathers "${name}" "${referenceText}"`
+      )
+    );
+  });
+
+  // ======================================
+  // 6. ACADEMIC RESEARCH DATABASES
+  // ======================================
+
+  make("h3", "6. Academic Research Databases", details);
+
+  const researchDatabases = [
+    [
+      "Google Scholar — Selected Passage",
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(`"${referenceText}" biblical studies`)
+    ],
+    [
+      "Google Scholar — Historical Context",
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(`"${referenceText}" historical context`)
+    ],
+    [
+      "Google Scholar — Textual Criticism",
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(`"${referenceText}" textual criticism`)
+    ],
+    [
+      "Google Scholar — Alternative Interpretations",
+      "https://scholar.google.com/scholar?q=" +
+      encodeURIComponent(`"${referenceText}" interpretation debate`)
+    ],
+    [
+      "Tyndale Bulletin",
+      "https://www.tyndalebulletin.org/"
+    ],
+    [
+      "Society of Biblical Literature",
+      "https://www.sbl-site.org/"
+    ],
+    [
+      "STEP Bible",
+      "https://www.stepbible.org/"
+    ],
+    [
+      "Bible Odyssey — Academic Biblical Studies",
+      "https://www.bibleodyssey.org/"
+    ],
+    [
+      "Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    ],
+    [
+      "New Testament Virtual Manuscript Room",
+      "https://ntvmr.uni-muenster.de/"
+    ],
+    [
+      "Codex Sinaiticus",
+      "https://www.codexsinaiticus.org/"
+    ],
+    [
+      "Open Richly Annotated Cuneiform Corpus",
+      "https://oracc.museum.upenn.edu/"
+    ],
+    [
+      "Internet Archive — Historical Publications",
+      "https://archive.org/search?query=" +
+      encodeURIComponent(`${book} biblical commentary`)
+    ]
+  ];
+
+  researchDatabases.forEach(([name, url]) => {
+    addSource(details, name, url);
+  });
+
+  // ======================================
+  // 7. SCHOLARLY EVALUATION
+  // ======================================
+
+  make("h3", "7. Scholarly Evaluation and Research Integrity", details);
+
+  const evaluation = [
+    [
+      "Textual Evidence",
+      "Examine manuscript readings, textual variants and the original Hebrew, Aramaic or Greek."
+    ],
+    [
+      "Historical Evidence",
+      "Distinguish contemporary documents and archaeological evidence from later historical interpretation."
+    ],
+    [
+      "Literary Analysis",
+      "Consider genre, structure, rhetoric, context and relationships with other ancient texts."
+    ],
+    [
+      "Theological Interpretation",
+      "Identify the author's theological commitments and distinguish them from established historical findings."
+    ],
+    [
+      "Apologetic Arguments",
+      "Evaluate the premises, evidence and conclusions of arguments defending Christian beliefs."
+    ],
+    [
+      "Competing Interpretations",
+      "Consult relevant scholars representing different theological and methodological perspectives."
+    ],
+    [
+      "Source Verification",
+      "Verify author, publication, date, page number or lecture timestamp before attributing a specific claim."
+    ],
+    [
+      "Copyright and Attribution",
+      "Modern copyrighted publications are summarized and linked rather than reproduced in full. Public-domain status and digital edition licenses must be considered separately."
+    ]
+  ];
+
+  evaluation.forEach(([title, description]) => {
+    field(details, title, description);
+  });
+
+  make("h3", "8. Research Coverage", details);
+
+  make(
+    "p",
+    `Selected passage: ${referenceText}`,
+    details
+  );
+
+  make(
+    "p",
+    `Indexed modern publications associated with this passage: ${matchedModern.length}.`,
+    details
+  );
+
+  make(
+    "p",
+    "Absence of an indexed publication does not establish that an author has never discussed this passage. Search links are research leads, not verified quotations or endorsements.",
+    details
+  );
+
+  addSource(
+    details,
+    "Commentary API Documentation",
+    "https://bible.helloao.org/docs/reference/commentaries/"
+  );
+
+  make(
+    "p",
+    "Research standard: DesertBible distinguishes published commentary, editorial summaries, historical evidence, theological interpretation and unverified research leads.",
+    details
+  );
+
+  return;
+}
 if (key === "Ancient documents") {
   details.replaceChildren();
 
