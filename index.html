@@ -2766,6 +2766,1145 @@ if (key === "Translation comparison") {
     showHistoricalContext();
     return;
   }
+    if (key === "Cross-references") {
+  details.replaceChildren();
+
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+  const passageName = `${book} ${ch}:${vs}`;
+  const API = "https://bible.helloao.org";
+
+  // =========================================
+  // COMPLETE BIBLICAL BOOK INDEX
+  // =========================================
+
+  const books = [
+    ["GEN", "Genesis"],
+    ["EXO", "Exodus"],
+    ["LEV", "Leviticus"],
+    ["NUM", "Numbers"],
+    ["DEU", "Deuteronomy"],
+    ["JOS", "Joshua"],
+    ["JDG", "Judges"],
+    ["RUT", "Ruth"],
+    ["1SA", "1 Samuel"],
+    ["2SA", "2 Samuel"],
+    ["1KI", "1 Kings"],
+    ["2KI", "2 Kings"],
+    ["1CH", "1 Chronicles"],
+    ["2CH", "2 Chronicles"],
+    ["EZR", "Ezra"],
+    ["NEH", "Nehemiah"],
+    ["EST", "Esther"],
+    ["JOB", "Job"],
+    ["PSA", "Psalms"],
+    ["PRO", "Proverbs"],
+    ["ECC", "Ecclesiastes"],
+    ["SNG", "Song of Solomon"],
+    ["ISA", "Isaiah"],
+    ["JER", "Jeremiah"],
+    ["LAM", "Lamentations"],
+    ["EZK", "Ezekiel"],
+    ["DAN", "Daniel"],
+    ["HOS", "Hosea"],
+    ["JOL", "Joel"],
+    ["AMO", "Amos"],
+    ["OBA", "Obadiah"],
+    ["JON", "Jonah"],
+    ["MIC", "Micah"],
+    ["NAM", "Nahum"],
+    ["HAB", "Habakkuk"],
+    ["ZEP", "Zephaniah"],
+    ["HAG", "Haggai"],
+    ["ZEC", "Zechariah"],
+    ["MAL", "Malachi"],
+    ["MAT", "Matthew"],
+    ["MRK", "Mark"],
+    ["LUK", "Luke"],
+    ["JHN", "John"],
+    ["ACT", "Acts"],
+    ["ROM", "Romans"],
+    ["1CO", "1 Corinthians"],
+    ["2CO", "2 Corinthians"],
+    ["GAL", "Galatians"],
+    ["EPH", "Ephesians"],
+    ["PHP", "Philippians"],
+    ["COL", "Colossians"],
+    ["1TH", "1 Thessalonians"],
+    ["2TH", "2 Thessalonians"],
+    ["1TI", "1 Timothy"],
+    ["2TI", "2 Timothy"],
+    ["TIT", "Titus"],
+    ["PHM", "Philemon"],
+    ["HEB", "Hebrews"],
+    ["JAS", "James"],
+    ["1PE", "1 Peter"],
+    ["2PE", "2 Peter"],
+    ["1JN", "1 John"],
+    ["2JN", "2 John"],
+    ["3JN", "3 John"],
+    ["JUD", "Jude"],
+    ["REV", "Revelation"]
+  ];
+
+  const names = Object.fromEntries(books);
+
+  const order = Object.fromEntries(
+    books.map(([id], index) => [id, index])
+  );
+
+  const normalize = value =>
+    String(value).toLowerCase()
+      .replace(/[^a-z0-9]/g, "")
+      .replace(/^psalm$/, "psalms")
+      .replace(/^songofsongs$/, "songofsolomon");
+
+  const matchedBook = books.find(
+    ([id, name]) =>
+      normalize(name) === normalize(book) ||
+      normalize(id) === normalize(book)
+  );
+
+  const sourceBook = matchedBook
+    ? matchedBook[0]
+    : null;
+
+  // =========================================
+  // INTERFACE HELPERS
+  // =========================================
+
+  const addSource = (parent, label, url) => {
+    const p = make("p", null, parent);
+    const a = make("a", label, p);
+
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+
+    return a;
+  };
+
+  const field = (parent, label, value) => {
+    make("h4", label, parent);
+    make("p", value, parent);
+  };
+
+  const actionButton = (parent, label, action) => {
+    const b = make("button", label, parent);
+
+    b.type = "button";
+    b.className = "category";
+    b.style.margin = "6px 6px 6px 0";
+    b.style.padding = "10px";
+    b.addEventListener("click", action);
+
+    return b;
+  };
+
+  make(
+    "h3",
+    `Cross-References — ${passageName}`,
+    details
+  );
+
+  make(
+    "p",
+    "Explore connections between biblical passages through related language, historical events, quotations, theological themes and parallel accounts.",
+    details
+  );
+
+  // =========================================
+  // RESEARCH WORKSPACE
+  // =========================================
+
+  const workspace = make("div", null, details);
+
+  const status = make(
+    "p",
+    "Loading biblical cross-references...",
+    workspace
+  );
+
+  status.setAttribute("role", "status");
+
+  // =========================================
+  // REQUEST CACHE AND ERROR HANDLING
+  // =========================================
+
+  if (!(window.desertBibleCrossRefCache instanceof Map)) {
+    window.desertBibleCrossRefCache = new Map();
+  }
+
+  const cache = window.desertBibleCrossRefCache;
+
+  async function fetchJSON(url) {
+    if (cache.has(url)) {
+      return cache.get(url);
+    }
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(
+      () => controller.abort(),
+      15000
+    );
+
+    const request = (async () => {
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
+      } finally {
+        clearTimeout(timeout);
+      }
+    })();
+
+    cache.set(url, request);
+
+    if (cache.size > 200) {
+      cache.delete(cache.keys().next().value);
+    }
+
+    try {
+      return await request;
+    } catch (error) {
+      if (cache.get(url) === request) {
+        cache.delete(url);
+      }
+
+      throw error;
+    }
+  }
+
+  // =========================================
+  // SCRIPTURE TEXT RETRIEVAL
+  // =========================================
+
+  function extractText(content) {
+    if (typeof content === "string") {
+      return content;
+    }
+
+    if (Array.isArray(content)) {
+      return content.map(extractText).join("");
+    }
+
+    if (content && typeof content === "object") {
+      if (typeof content.text === "string") {
+        return content.text;
+      }
+
+      if (Array.isArray(content.content)) {
+        return extractText(content.content);
+      }
+    }
+
+    return "";
+  }
+
+  async function getPassageText(ref, translation) {
+    const data = await fetchJSON(
+      `${API}/api/${translation}/${ref.book}/${ref.chapter}.json`
+    );
+
+    const content = data.chapter?.content;
+
+    if (!Array.isArray(content)) {
+      throw new Error("Unexpected Bible text format.");
+    }
+
+    const firstVerse = Number(ref.verse);
+    const lastVerse = Number(ref.endVerse ?? ref.verse);
+
+    const selected = content.filter(item =>
+      item.type === "verse" &&
+      Number(item.number) >= firstVerse &&
+      Number(item.number) <= lastVerse
+    );
+
+    if (!selected.length) {
+      return [];
+    }
+
+    return selected.map(item => ({
+      verse: item.number,
+      text: extractText(item.content).trim()
+    }));
+  }
+
+  // =========================================
+  // REFERENCE FORMATTING
+  // =========================================
+
+  function formatReference(ref) {
+    const name = names[ref.book] || ref.book;
+
+    const range =
+      ref.endVerse &&
+      Number(ref.endVerse) !== Number(ref.verse)
+        ? `-${ref.endVerse}`
+        : "";
+
+    return `${name} ${ref.chapter}:${ref.verse}${range}`;
+  }
+
+  function testament(id) {
+    if (order[id] === undefined) {
+      return "Unclassified";
+    }
+
+    return order[id] < 39
+      ? "Old Testament"
+      : "New Testament";
+  }
+
+  function referenceGroup(ref) {
+    if (ref.book === sourceBook) {
+      return "Same biblical book";
+    }
+
+    if (testament(ref.book) !== testament(sourceBook)) {
+      return "Connection between the Testaments";
+    }
+
+    return "Connection within the same Testament";
+  }
+
+  // =========================================
+  // EDITORIAL RESEARCH GUIDE
+  // =========================================
+
+  const guide = make("details", null, details);
+
+  make(
+    "summary",
+    "Understanding Biblical Cross-References",
+    guide
+  );
+
+  const relationshipTypes = [
+    [
+      "Direct Quotations",
+      "A biblical writer explicitly quotes another biblical passage."
+    ],
+    [
+      "Prophecy and Fulfillment",
+      "A later passage explicitly identifies or is interpreted as fulfilling an earlier prophetic passage."
+    ],
+    [
+      "Parallel Accounts",
+      "Different biblical passages describe the same or closely related events."
+    ],
+    [
+      "Thematic Connections",
+      "Passages address related theological or ethical themes."
+    ],
+    [
+      "Linguistic Connections",
+      "Passages contain related words, expressions or literary imagery."
+    ],
+    [
+      "Historical Connections",
+      "Passages refer to related people, places, institutions or historical circumstances."
+    ],
+    [
+      "Typology",
+      "An interpretive relationship between earlier and later biblical persons, institutions or events."
+    ],
+    [
+      "Literary Allusions",
+      "A passage may echo another biblical text without explicitly quoting it."
+    ],
+    [
+      "Interpretive Caution",
+      "A cross-reference indicates a proposed relationship. It does not automatically establish identical meaning, authorial intention or prophetic fulfillment."
+    ]
+  ];
+
+  relationshipTypes.forEach(([title, text]) =>
+    field(guide, title, text)
+  );
+
+  make(
+    "p",
+    "These categories explain possible relationships. The imported dataset does not individually classify every reference into these relationship types.",
+    guide
+  );
+
+  // =========================================
+  // SOURCE AND LICENSING INFORMATION
+  // =========================================
+
+  const sources = make("details", null, details);
+
+  make(
+    "summary",
+    "Research Sources, Methodology and Licensing",
+    sources
+  );
+
+  field(
+    sources,
+    "Primary Cross-Reference Dataset",
+    "OpenBible.info Bible Cross References, distributed through the Free Use Bible API."
+  );
+
+  field(
+    sources,
+    "Documented Dataset Coverage",
+    "344,799 cross-references covering 66 books and 1,189 chapters, with references indexed for 29,364 verses."
+  );
+
+  field(
+    sources,
+    "Relevance Scores",
+    "Scores reflect community assessments of the usefulness of proposed cross-references. They are not probabilities, percentages, theological verdicts or measures of historical certainty."
+  );
+
+  field(
+    sources,
+    "Data Attribution",
+    "Cross-reference data by OpenBible.info, licensed under Creative Commons Attribution 4.0. Reformatted by the Free Use Bible API. DesertBible adds filtering, sorting, passage previews and presentation."
+  );
+
+  addSource(
+    sources,
+    "OpenBible.info — Original Cross-Reference Dataset",
+    "https://www.openbible.info/labs/cross-references/"
+  );
+
+  addSource(
+    sources,
+    "Free Use Bible API — Dataset Documentation",
+    "https://bible.helloao.org/docs/reference/datasets/"
+  );
+
+  addSource(
+    sources,
+    "Creative Commons Attribution 4.0 License",
+    "https://creativecommons.org/licenses/by/4.0/"
+  );
+
+  addSource(
+    sources,
+    "Treasury of Scripture Knowledge — Study Resource",
+    "https://www.studylight.org/concordances/eng/tsk.html"
+  );
+
+  addSource(
+    sources,
+    "Berean Standard Bible",
+    "https://berean.bible/"
+  );
+
+  // =========================================
+  // LOAD REFERENCES FOR SELECTED VERSE
+  // =========================================
+
+  async function loadReferences() {
+    workspace.replaceChildren();
+
+    const loading = make(
+      "p",
+      "Retrieving cross-references for " + passageName + "...",
+      workspace
+    );
+
+    loading.setAttribute("role", "status");
+
+    try {
+      if (
+        !sourceBook ||
+        !Number.isInteger(ch) ||
+        !Number.isInteger(vs)
+      ) {
+        throw new Error("Invalid scripture reference.");
+      }
+
+      const endpoint =
+        `${API}/api/d/open-cross-ref/${sourceBook}/${ch}.json`;
+
+      const data = await fetchJSON(endpoint);
+
+      if (!workspace.isConnected) return;
+
+      const content = data.chapter?.content;
+
+      if (!Array.isArray(content)) {
+        throw new Error("Unexpected cross-reference format.");
+      }
+
+      const entry = content.find(
+        item => Number(item.verse) === vs
+      );
+
+      const raw = entry?.references || [];
+
+      const unique = new Map();
+
+      raw.forEach(ref => {
+        const start = Number(ref.verse);
+        const end = Number(ref.endVerse ?? start);
+
+        if (
+          !names[ref.book] ||
+          !Number.isInteger(Number(ref.chapter)) ||
+          Number(ref.chapter) < 1 ||
+          !Number.isInteger(start) ||
+          start < 1 ||
+          !Number.isInteger(end) ||
+          end < start
+        ) return;
+
+        const id =
+          `${ref.book}:${ref.chapter}:${start}:${end}`;
+
+        const previous = unique.get(id);
+
+        if (
+          !previous ||
+          (ref.score ?? -Infinity) >
+          (previous.score ?? -Infinity)
+        ) {
+          unique.set(id, ref);
+        }
+      });
+
+      const references = Array.from(unique.values());
+
+      workspace.replaceChildren();
+
+      // =======================================
+      // SELECTED VERSE
+      // =======================================
+
+      make("h3", "1. Selected Scripture", workspace);
+
+      const selectedCard = make(
+        "section",
+        null,
+        workspace
+      );
+
+      selectedCard.className = "verse";
+      selectedCard.style.padding = "16px";
+
+      make("h4", passageName, selectedCard);
+
+      const selectedText = make(
+        "p",
+        "Loading selected scripture...",
+        selectedCard
+      );
+
+      make(
+        "p",
+        "Berean Standard Bible (BSB)",
+        selectedCard
+      );
+
+      getPassageText({
+        book: sourceBook,
+        chapter: ch,
+        verse: vs
+      }, "BSB").then(lines => {
+        selectedText.textContent = lines.length
+          ? lines.map(line => line.text).join(" ")
+          : "Selected verse text unavailable in this edition.";
+      }).catch(() => {
+        selectedText.textContent =
+          "Scripture text could not be retrieved.";
+      });
+
+      // =======================================
+      // REFERENCE STATISTICS
+      // =======================================
+
+      make(
+        "h3",
+        "2. Cross-Reference Overview",
+        workspace
+      );
+
+      const otCount = references.filter(ref =>
+        testament(ref.book) === "Old Testament"
+      ).length;
+
+      const ntCount = references.filter(ref =>
+        testament(ref.book) === "New Testament"
+      ).length;
+
+      const sameBookCount = references.filter(ref =>
+        ref.book === sourceBook
+      ).length;
+
+      const connectedBooks = new Set(
+        references.map(ref => ref.book)
+      ).size;
+
+      field(
+        workspace,
+        "Total Unique Cross-References",
+        String(references.length)
+      );
+
+      field(
+        workspace,
+        "Old Testament References",
+        String(otCount)
+      );
+
+      field(
+        workspace,
+        "New Testament References",
+        String(ntCount)
+      );
+
+      field(
+        workspace,
+        "References Within This Book",
+        String(sameBookCount)
+      );
+
+      field(
+        workspace,
+        "Distinct Biblical Books Referenced",
+        String(connectedBooks)
+      );
+
+      if (!references.length) {
+        make(
+          "p",
+          "No cross-references are currently indexed for this verse in the selected dataset. This does not establish that no meaningful biblical connections exist.",
+          workspace
+        );
+
+        addSource(
+          workspace,
+          "Investigate Additional References",
+          "https://www.google.com/search?q=" +
+          encodeURIComponent(
+            `"${passageName}" Bible cross references`
+          )
+        );
+
+        return;
+      }
+
+      // =======================================
+      // SEARCH, FILTER AND SORT CONTROLS
+      // =======================================
+
+      make(
+        "h3",
+        "3. Explore Related Scriptures",
+        workspace
+      );
+
+      const controls = make(
+        "div",
+        null,
+        workspace
+      );
+
+      controls.style.display = "grid";
+      controls.style.gap = "10px";
+      controls.style.marginBottom = "18px";
+
+      function makeSelect(label, options) {
+        const wrapper = make("label", null, controls);
+
+        make("span", label, wrapper);
+
+        const select = make("select", null, wrapper);
+
+        select.style.display = "block";
+        select.style.width = "100%";
+        select.style.padding = "10px";
+
+        options.forEach(([value, title]) => {
+          const option = make("option", title, select);
+          option.value = value;
+        });
+
+        return select;
+      }
+
+      const filter = makeSelect(
+        "Filter by Biblical Relationship",
+        [
+          ["all", "All cross-references"],
+          ["ot", "Old Testament"],
+          ["nt", "New Testament"],
+          ["same", "Within the selected book"],
+          ["other", "Other biblical books"],
+          ["cross", "Between the Testaments"]
+        ]
+      );
+
+      const bookFilter = makeSelect(
+        "Filter by Biblical Book",
+        [
+          ["all", "All connected books"],
+          ...books
+            .filter(([id]) =>
+              references.some(ref => ref.book === id)
+            )
+            .map(([id, name]) => [id, name])
+        ]
+      );
+
+      const sort = makeSelect(
+        "Sort Cross-References",
+        [
+          ["score", "Highest relevance score first"],
+          ["canonical", "Canonical biblical order"],
+          ["reverse", "Reverse biblical order"]
+        ]
+      );
+
+      const translation = makeSelect(
+        "Reference Text Translation",
+        [
+          ["BSB", "Berean Standard Bible"],
+          ["KJV", "King James Version"]
+        ]
+      );
+
+      const searchLabel = make(
+        "label",
+        "Search Related Scripture References",
+        controls
+      );
+
+      const search = make(
+        "input",
+        null,
+        searchLabel
+      );
+
+      search.type = "search";
+      search.placeholder = "Example: Isaiah 53";
+      search.style.display = "block";
+      search.style.width = "100%";
+      search.style.padding = "10px";
+
+      const count = make("p", "", workspace);
+      count.setAttribute("role", "status");
+
+      const results = make(
+        "div",
+        null,
+        workspace
+      );
+
+      const pageSize = 20;
+      let visibleCount = pageSize;
+
+      // =======================================
+      // DISPLAY RELATED SCRIPTURES
+      // =======================================
+
+      function renderReference(ref, parent) {
+        const card = make(
+          "section",
+          null,
+          parent
+        );
+
+        card.className = "verse";
+        card.style.padding = "18px";
+        card.style.marginBottom = "16px";
+        card.style.borderLeft =
+          "3px solid #c9aa70";
+
+        const title = formatReference(ref);
+
+        make("h3", title, card);
+
+        make(
+          "p",
+          `${testament(ref.book)} | ${referenceGroup(ref)}`,
+          card
+        );
+
+        make(
+          "p",
+          `Community relevance score: ${
+            ref.score ?? "Not supplied"
+          }`,
+          card
+        );
+
+        const textPanel = make("details", null, card);
+
+        make(
+          "summary",
+          "Read Complete Referenced Passage",
+          textPanel
+        );
+
+        const textBody = make(
+          "div",
+          null,
+          textPanel
+        );
+
+        const selectedTranslation = translation.value;
+        let loadingText = false;
+        let loaded = false;
+
+        async function loadText() {
+          if (loadingText || loaded) return;
+
+          loadingText = true;
+
+          textBody.replaceChildren();
+
+          make(
+            "p",
+            "Loading scripture text...",
+            textBody
+          );
+
+          try {
+            const lines = await getPassageText(
+              ref,
+              selectedTranslation
+            );
+
+            if (!textBody.isConnected) return;
+
+            textBody.replaceChildren();
+
+            if (!lines.length) {
+              make(
+                "p",
+                "The referenced verse text is unavailable in this translation.",
+                textBody
+              );
+              return;
+            }
+
+            make(
+              "h4",
+              selectedTranslation === "BSB"
+                ? "Berean Standard Bible"
+                : "King James Version",
+              textBody
+            );
+
+            lines.forEach(line => {
+              make(
+                "p",
+                `${line.verse}. ${line.text}`,
+                textBody
+              );
+            });
+
+            const expected =
+              Number(ref.endVerse ?? ref.verse) -
+              Number(ref.verse) + 1;
+
+            if (lines.length !== expected) {
+              make(
+                "p",
+                "Some verses may be absent or numbered differently in this edition.",
+                textBody
+              );
+            }
+
+            loaded = true;
+
+          } catch (error) {
+            textBody.replaceChildren();
+
+            make(
+              "p",
+              "Scripture text could not be loaded. Please retry.",
+              textBody
+            );
+
+            actionButton(
+              textBody,
+              "Retry Scripture Text",
+              loadText
+            );
+          } finally {
+            loadingText = false;
+          }
+        }
+
+        textPanel.addEventListener(
+          "toggle",
+          () => {
+            if (textPanel.open) {
+              loadText();
+            }
+          }
+        );
+
+        // Explore the referenced verse directly.
+
+        actionButton(
+          card,
+          "Research This Scripture",
+          () => {
+            showBibleVerseResearch({
+              book: names[ref.book],
+              chapter: Number(ref.chapter),
+              verse: Number(ref.verse)
+            });
+          }
+        );
+
+        actionButton(
+          card,
+          "Copy Scripture Reference",
+          async () => {
+            try {
+              await navigator.clipboard.writeText(title);
+              copyStatus.textContent =
+                "Reference copied.";
+            } catch (error) {
+              copyStatus.textContent =
+                "Copy this reference manually: " + title;
+            }
+          }
+        );
+
+        const copyStatus = make("p", "", card);
+        copyStatus.setAttribute("role", "status");
+
+        addSource(
+          card,
+          "Read Passage in Biblical Context",
+          "https://www.biblegateway.com/passage/?search=" +
+          encodeURIComponent(title) +
+          "&version=" + selectedTranslation
+        );
+
+        addSource(
+          card,
+          "Investigate Commentary and Related Scholarship",
+          "https://scholar.google.com/scholar?q=" +
+          encodeURIComponent(
+            `"${passageName}" "${title}"`
+          )
+        );
+      }
+
+      // =======================================
+      // FILTERING AND PAGINATION ENGINE
+      // =======================================
+
+      function canonicalCompare(a, b) {
+        return (
+          order[a.book] - order[b.book] ||
+          Number(a.chapter) - Number(b.chapter) ||
+          Number(a.verse) - Number(b.verse)
+        );
+      }
+
+      function renderResults() {
+        results.replaceChildren();
+
+        const query = search.value
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .trim();
+
+        let filtered = references.filter(ref => {
+          if (
+            bookFilter.value !== "all" &&
+            ref.book !== bookFilter.value
+          ) return false;
+
+          if (
+            filter.value === "ot" &&
+            testament(ref.book) !== "Old Testament"
+          ) return false;
+
+          if (
+            filter.value === "nt" &&
+            testament(ref.book) !== "New Testament"
+          ) return false;
+
+          if (
+            filter.value === "same" &&
+            ref.book !== sourceBook
+          ) return false;
+
+          if (
+            filter.value === "other" &&
+            ref.book === sourceBook
+          ) return false;
+
+          if (
+            filter.value === "cross" &&
+            testament(ref.book) === testament(sourceBook)
+          ) return false;
+
+          if (query) {
+            const title = formatReference(ref)
+              .toLowerCase()
+              .replace(/\s+/g, "");
+
+            if (!title.includes(query)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+
+        if (sort.value === "score") {
+          filtered.sort((a, b) =>
+            (b.score ?? -Infinity) -
+            (a.score ?? -Infinity) ||
+            canonicalCompare(a, b)
+          );
+        } else if (sort.value === "reverse") {
+          filtered.sort((a, b) =>
+            canonicalCompare(b, a)
+          );
+        } else {
+          filtered.sort(canonicalCompare);
+        }
+
+        count.textContent =
+          `Showing ${Math.min(visibleCount, filtered.length)} of ${filtered.length} matching references.`;
+
+        if (!filtered.length) {
+          make(
+            "p",
+            "No references match the selected filters.",
+            results
+          );
+
+          return;
+        }
+
+        filtered
+          .slice(0, visibleCount)
+          .forEach(ref =>
+            renderReference(ref, results)
+          );
+
+        if (visibleCount < filtered.length) {
+          actionButton(
+            results,
+            "Load More Cross-References",
+            () => {
+              visibleCount += pageSize;
+              renderResults();
+            }
+          );
+
+          actionButton(
+            results,
+            "Show All Cross-References",
+            () => {
+              visibleCount = filtered.length;
+              renderResults();
+            }
+          );
+        }
+      }
+
+      function resetResults() {
+        visibleCount = pageSize;
+        renderResults();
+      }
+
+      filter.addEventListener(
+        "change",
+        resetResults
+      );
+
+      bookFilter.addEventListener(
+        "change",
+        resetResults
+      );
+
+      sort.addEventListener(
+        "change",
+        resetResults
+      );
+
+      translation.addEventListener(
+        "change",
+        resetResults
+      );
+
+      search.addEventListener(
+        "input",
+        resetResults
+      );
+
+      actionButton(
+        controls,
+        "Reset All Filters",
+        () => {
+          filter.value = "all";
+          bookFilter.value = "all";
+          sort.value = "score";
+          translation.value = "BSB";
+          search.value = "";
+          resetResults();
+        }
+      );
+
+      renderResults();
+
+    } catch (error) {
+      if (!workspace.isConnected) return;
+
+      workspace.replaceChildren();
+
+      make(
+        "h4",
+        "Cross-Reference Service Unavailable",
+        workspace
+      );
+
+      make(
+        "p",
+        "The cross-reference dataset could not be retrieved. This is a loading error, not an absence of biblical evidence.",
+        workspace
+      );
+
+      actionButton(
+        workspace,
+        "Retry Loading Cross-References",
+        loadReferences
+      );
+
+      addSource(
+        workspace,
+        "Research Cross-References at OpenBible.info",
+        "https://www.openbible.info/labs/cross-references/"
+      );
+
+      console.error(
+        "DesertBible cross-reference error:",
+        error
+      );
+    }
+  }
+
+  loadReferences();
+
+  return;
+}
 if (key === "Archaeological evidence") {
   details.replaceChildren();
 
