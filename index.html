@@ -1539,6 +1539,134 @@ function showBibleVerseResearch(reference) {
       );
     }
   }
+ function showHistoricalContext() {
+    details.replaceChildren();
+
+    make("h3", `Historical Context & Timeline — ${passage}`, details);
+
+    const section = (heading, paragraphs) => {
+      const area = make("section", undefined, details);
+      area.style.margin = "18px 0";
+      make("h4", heading, area);
+      paragraphs.forEach(text => make("p", text, area));
+      return area;
+    };
+
+    section("1. Historical setting", [
+      reference.book === "Micah"
+        ? "Micah 1 belongs to a prophetic book whose opening heading places Micah of Moresheth during the reigns of Jotham, Ahaz, and Hezekiah, kings of Judah. These reigns belong to the eighth century BCE. The heading identifies the broad setting; it does not establish the exact date when each individual oracle was delivered."
+        : `This workspace is examining ${passage}. Its historical setting must be established from the passage, its literary context, and independently identifiable historical sources. A date or event should not be assigned solely because it is traditionally associated with the book.`,
+      "Historical conclusions, the biblical text's own claims, later religious interpretation, and modern scholarly reconstructions must be recorded separately."
+    ]);
+
+    section("2. Political and geographic context", [
+      reference.book === "Micah"
+        ? "Micah names Samaria, capital of the northern kingdom of Israel, and Jerusalem, capital of the southern kingdom of Judah. Moresheth is generally associated with the Shephelah, the lowland region between Judah's central hill country and the coastal plain. The passage's references to towns in Judah place its message within a landscape affected by regional conflict and Assyrian expansion."
+        : "Record the kingdoms or empires involved, political boundaries, rulers, settlements, trade routes, and geographic features only when reliable sources support their relevance to this passage.",
+      "A place-name identification is not automatically certain. Distinguish a widely accepted identification from a debated location or an unconfirmed proposal."
+    ]);
+
+    section("3. Historical timeline", [
+      "Dates below are important background milestones for Micah's historical world. They provide context, not proof that a particular verse was written or fulfilled on that date."
+    ]);
+
+    const timeline = [
+      {
+        date: "c. 8th century BCE",
+        title: "Micah's stated prophetic setting",
+        text: "Micah 1:1 names Jotham, Ahaz, and Hezekiah of Judah. The verse supplies a broad royal framework, not an exact year for every oracle."
+      },
+      {
+        date: "853 BCE",
+        title: "Battle of Qarqar",
+        text: "Assyrian royal records describe a major campaign involving a coalition of rulers in the Levant. This illustrates the wider regional power struggle during the period, but does not directly document Micah's prophecy."
+      },
+      {
+        date: "722/721 BCE",
+        title: "Fall of Samaria",
+        text: "Samaria's fall is conventionally dated around 722/721 BCE. Biblical accounts and Assyrian evidence are important to reconstructing the event; the precise sequence and the roles of Shalmaneser V and Sargon II require careful source comparison."
+      },
+      {
+        date: "701 BCE",
+        title: "Sennacherib's campaign in Judah",
+        text: "Assyrian records and the biblical accounts describe Sennacherib's campaign against Judah, including the capture of Lachish. This is relevant background for Micah's references to Judah's towns, but does not independently date each oracle in Micah 1."
+      },
+      {
+        date: "612 BCE",
+        title: "Fall of Nineveh",
+        text: "Nineveh fell to a coalition led by Babylonians and Medes. This marks a major shift in the political balance of the ancient Near East, after Micah's eighth-century setting."
+      },
+      {
+        date: "597 BCE",
+        title: "Babylonian capture of Jerusalem",
+        text: "Babylonian forces captured Jerusalem and deported members of its population. This belongs to the later history of Judah, not the immediate setting of Micah's ministry."
+      },
+      {
+        date: "587/586 BCE",
+        title: "Destruction of Jerusalem and the First Temple",
+        text: "Jerusalem and the First Temple were destroyed by the Babylonians. The exact year depends on chronological reconstruction; this event must not be confused with the earlier Assyrian crisis."
+      }
+    ];
+
+    const list = make("ol", undefined, details);
+
+    timeline.forEach(event => {
+      const item = make("li", undefined, list);
+      item.style.marginBottom = "14px";
+      make("strong", `${event.date} — ${event.title}`, item);
+      make("p", event.text, item);
+    });
+
+    section("4. What the evidence can establish", [
+      "Biblical text: establishes what the passage says and how it presents its setting. It is a primary source for the text's claims, but a claim about an event still requires historical analysis.",
+      "Ancient inscriptions and chronicles: may independently document rulers, campaigns, places, or political events. Their date, provenance, translation, and original purpose must be checked.",
+      "Archaeology: can establish material remains, destruction layers, settlement patterns, and objects. Dating and attribution require specialist evidence; an artifact should not be linked to a verse merely because the general period matches.",
+      "Later Jewish and Christian interpretation: documents how communities understood the passage. Reception history is important, but is not the same as contemporary evidence for the event."
+    ]);
+
+    section("5. Chronology and uncertainty", [
+      "Use an approximate date when the evidence supports only a range. Identify whether a date is directly stated in a source, inferred by comparing sources, or disputed among specialists.",
+      "Do not assume that a prophet's lifetime, a book's final composition, the date of an individual oracle, and the date of a later event described in interpretation are identical.",
+      "Where sources disagree, present the competing explanations and the evidence each relies on instead of silently selecting one."
+    ]);
+
+    section("6. Sources for verification", [
+      "The following are starting points for checking the historical setting. Each specific claim must be connected to the relevant passage, inscription, artifact record, or scholarly publication before it is presented as verified."
+    ]);
+
+    const sources = [
+      {
+        label: "The British Museum — collection and ancient Near Eastern records",
+        url: "https://www.britishmuseum.org/collection"
+      },
+      {
+        label: "ORACC — Open Richly Annotated Cuneiform Corpus",
+        url: "https://oracc.museum.upenn.edu/"
+      },
+      {
+        label: "Bible Odyssey — Society of Biblical Literature",
+        url: "https://www.bibleodyssey.org/"
+      },
+      {
+        label: "The University of Munich — scholarly study concerning Samaria and Assyrian conquests",
+        url: "https://epub.ub.uni-muenchen.de/58861/1/Radner_Hasegawa_Levin_BZAW_511_2018.pdf"
+      }
+    ];
+
+    const sourceList = make("ul", undefined, details);
+
+    sources.forEach(source => {
+      const item = make("li", undefined, sourceList);
+      link(item, source.label, source.url);
+    });
+
+    section("7. Research status and limits", [
+      reference.book === "Micah"
+        ? "The historical framework above is relevant to Micah, but the timeline is broader than this individual verse. It must not be cited as proof that the verse predicts, describes, or was written during any one listed event."
+        : "The timeline above is a general ancient Near Eastern chronology, not a verified timeline for this passage. Passage-specific dates, people, locations, and events must be researched before they can be labeled established.",
+      "This workspace separates historical background from direct evidence. A source link is a route to verification, not proof that every statement on this page has been confirmed by that source."
+    ]);
+  }
 
   categories.forEach(([key, label]) => {
     const button = make("button", undefined, grid);
@@ -1547,24 +1675,25 @@ function showBibleVerseResearch(reference) {
     make("h3", key, button);
     make("p", label, button);
 
-    button.addEventListener("click", () => {
-      if (key === "Original language") {
-        showOriginalLanguage();
-        return;
-      }
+  button.addEventListener("click", () => {
+  if (key === "Original language") {
+    showOriginalLanguage();
+    return;
+  }
 
-      details.replaceChildren();
-      make("h3", `${key} — ${passage}`, details);
-      make(
-        "p",
-        `This category is not being changed in this step. Its research must be completed separately using passage-specific, identifiable sources.`,
-        details
-      );
-    });
-  });
+  if (key === "Historical context") {
+    showHistoricalContext();
+    return;
+  }
 
-  research.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+  details.replaceChildren();
+  make("h3", `${key} — ${passage}`, details);
+  make(
+    "p",
+    "This category will be completed separately with passage-specific findings, identifiable sources, citations, and documented limitations.",
+    details
+  );
+});
 
 
 populateChapterOptions();
