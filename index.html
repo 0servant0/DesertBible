@@ -769,130 +769,163 @@ const historicalContext = {
   const verseKey = String(number).trim().split(":").pop();
   const verseNumber = Number(verseKey);
   const reference = `Micah 1:${verseKey}`;
-  const encodedReference = encodeURIComponent(reference);
 
-  const translations = [
-    {
-      id: "web",
-      name: "World English Bible (WEB)",
-      note: "API edition; not the WEB Updated Edition (WEBU)."
-    },
-    {
-      id: "asv",
-      name: "American Standard Version (ASV, 1901)",
-      note: "Formal English translation."
-    },
-    {
-      id: "kjv",
-      name: "King James Version (KJV, 1611)",
-      note: "Historical English translation."
-    }
+  const editions = [
+    { id: "web", name: "World English Bible (WEB)" },
+    { id: "asv", name: "American Standard Version (ASV, 1901)" },
+    { id: "kjv", name: "King James Version (KJV)" }
   ];
 
-  const escapeHTML = value =>
-    String(value).replace(/[&<>"']/g, char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]);
+  const safe = value => String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[c]);
 
   if (!Number.isInteger(verseNumber) ||
       verseNumber < 1 || verseNumber > 16) {
-    details.innerHTML =
-      "<p>Invalid verse number. Select Micah 1:1–16.</p>";
+    details.innerHTML = "<p>Select a valid verse in Micah 1.</p>";
   } else {
     details.innerHTML = `
       <h3>Translation Comparison — ${reference}</h3>
-      <p>Retrieving the selected verse from the listed translations...</p>
+      <p>Loading translation texts...</p>
     `;
 
-    Promise.all(translations.map(async translation => {
-      const url =
-        `https://bible-api.com/${encodedReference}?translation=${translation.id}`;
+    Promise.all(editions.map(async edition => {
+      try {
+        const url =
+          `https://bible-api.com/${encodeURIComponent(reference)}?translation=${edition.id}`;
+        const response = await fetch(url);
 
-      const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Source unavailable");
+        }
 
-      if (!response.ok) {
-        throw new Error(`${translation.name} request failed.`);
+        const data = await response.json();
+        const verse = data.verses?.find(
+          v => Number(v.verse) === verseNumber
+        );
+
+        if (!verse || !verse.text) {
+          throw new Error("Selected verse was not returned");
+        }
+
+        return {
+          ...edition,
+          text: verse.text.trim(),
+          source: url,
+          error: null
+        };
+      } catch (error) {
+        return {
+          ...edition,
+          text: null,
+          source: null,
+          error: "Text could not be retrieved. Verify using the source links."
+        };
       }
+    })).then(results => {
+      const available = results.filter(item => item.text);
 
-      const data = await response.json();
+      const tokenize = text =>
+        text.match(/[A-Za-z0-9’'-]+|[^\s]/g) || [];
 
-      if (!data.text || !data.verses ||
-          !data.verses.some(v => Number(v.verse) === verseNumber)) {
-        throw new Error(`No verified verse text returned for ${translation.name}.`);
-      }
+      const normalized = text =>
+        tokenize(text).map(word =>
+          word.toLowerCase().replace(/[.,;:!?]/g, "")
+        );
 
-      return {
-        ...translation,
-        text: data.text.trim(),
-        url
-      };
-    }))
-    .then(results => {
+      const wordSets = available.map(item =>
+        new Set(normalized(item.text))
+      );
+
       details.innerHTML = `
         <h3>Translation Comparison — ${reference}</h3>
 
         <p>
-          Compare the wording of each translation. WEB below is not
-          WEBU; consult the official WEBU source separately.
+          Compare the exact returned wording below. WEB is not the
+          World English Bible Updated Edition (WEBU); editions must
+          be identified accurately.
         </p>
 
         ${results.map(item => `
           <section>
-            <h4>${escapeHTML(item.name)}</h4>
-            <p>${escapeHTML(item.note)}</p>
-            <blockquote>${escapeHTML(item.text)}</blockquote>
-            <a href="${item.url}" target="_blank"
-               rel="noopener noreferrer">Verify API source</a>
+            <h4>${safe(item.name)}</h4>
+            ${
+              item.text
+                ? `<blockquote>${safe(item.text)}</blockquote>
+                   <a href="${safe(item.source)}"
+                      target="_blank" rel="noopener noreferrer">
+                      Verify source text
+                   </a>`
+                : `<p>${safe(item.error)}</p>`
+            }
           </section>
         `).join("")}
 
-        <h4>WEB Updated Edition (WEBU)</h4>
-        <p>
-          <a href="https://ebible.org/engwebu/MIC01.htm#v1"
-             target="_blank" rel="noopener noreferrer">
-            Open the official WEBU text and notes for Micah 1
-          </a>
-        </p>
+        <h4>Word-choice differences</h4>
+        ${
+          available.length >= 2
+            ? `<p>
+                Words below are present in one returned translation
+                but absent from at least one other translation.
+                This is a mechanical comparison, not a determination
+                of theological or lexical significance.
+              </p>
+              <ul>
+                ${available.map((item, index) => {
+                  const unique = [...new Set(normalized(item.text))]
+                    .filter(word =>
+                      word && wordSets.some((set, otherIndex) =>
+                        otherIndex !== index && !set.has(word)
+                      )
+                    );
 
-        <h4>Original Hebrew</h4>
-        <p>
-          <a href="https://ebible.org/hebwlc/MIC01.htm"
-             target="_blank" rel="noopener noreferrer">
-            Consult the Westminster Leningrad Codex (WLC)
-          </a>
-        </p>
+                  return `<li><strong>${safe(item.name)}:</strong>
+                    ${unique.length
+                      ? safe(unique.join(", "))
+                      : "No unique normalized words detected."}
+                  </li>`;
+                }).join("")}
+              </ul>`
+            : "<p>Insufficient retrieved texts for comparison. Retry or use the source links.</p>"
+        }
 
-        <h4>Analysis checklist</h4>
+        <h4>Verify the edition and original text</h4>
         <ul>
-          <li>Record exact differences in wording.</li>
-          <li>Identify the Hebrew word or grammatical construction involved.</li>
-          <li>Check whether differences reflect translation choices or documented textual variants.</li>
-          <li>Support explanations with scholarly references; do not infer a variant from English wording alone.</li>
+          <li>
+            <a href="https://ebible.org/engwebu/MIC01.htm"
+               target="_blank" rel="noopener noreferrer">
+              World English Bible Updated Edition (WEBU), Micah 1
+            </a>
+          </li>
+          <li>
+            <a href="https://ebible.org/hebwlc/MIC01.htm"
+               target="_blank" rel="noopener noreferrer">
+              Westminster Leningrad Codex (WLC), Hebrew text
+            </a>
+          </li>
         </ul>
 
-        <p><strong>Research limitation:</strong>
-        This code retrieves verse text. It does not automatically
-        establish the meaning of each difference or provide scholarly
-        conclusions. Those findings must be researched and cited separately.</p>
+        <h4>Research conclusion</h4>
+        <p>
+          Do not infer that a wording difference represents a
+          manuscript variant. Establish the Hebrew or Greek form,
+          grammar, and context, then consult a documented textual
+          apparatus or scholarly source. Record uncertainty where
+          the evidence does not settle a question.
+        </p>
       `;
-    })
-    .catch(error => {
+    }).catch(() => {
       details.innerHTML = `
         <h3>Translation Comparison — ${reference}</h3>
-        <p>Verse retrieval failed: ${escapeHTML(error.message)}</p>
-        <p>Please retry later or consult the source links directly.</p>
-        <p>
-          <a href="https://ebible.org/engwebu/MIC01.htm"
-             target="_blank" rel="noopener noreferrer">Official WEBU text</a>
-        </p>
+        <p>Translation retrieval failed. Check your connection and retry.</p>
+        <a href="https://ebible.org/engwebu/MIC01.htm"
+           target="_blank" rel="noopener noreferrer">
+          Open WEBU source text
+        </a>
       `;
     });
   }
-
       } else {
       
   details.innerHTML =
