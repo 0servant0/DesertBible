@@ -1685,7 +1685,75 @@ function showBibleVerseResearch(reference) {
     showHistoricalContext();
     return;
   }
+if (key === "Ancient documents") {
+  details.replaceChildren();
+  make("h3", `Ancient Documents — ${passage}`, details);
 
+  if (reference.book !== "Micah" || chapter !== 1) {
+    make("p", "Passage-specific ancient documents have not yet been entered.", details);
+    return;
+  }
+
+  const documents = [
+    {
+      first: 1,
+      last: 7,
+      title: "Assyrian Evidence for Samaria's Fall",
+      date: "Approximately 722–721 BCE",
+      content: "Assyrian inscriptions and Babylonian chronicles provide historical evidence concerning the fall of Samaria and Assyrian expansion.",
+      connection: "Micah 1:1–7 names Samaria and announces judgment against it.",
+      limits: "The evidence does not establish the exact date of Micah's oracle.",
+      url: "https://epub.ub.uni-muenchen.de/58861/1/Radner_Hasegawa_Levin_BZAW_511_2018.pdf"
+    },
+    {
+      first: 10,
+      last: 16,
+      title: "Sennacherib's Royal Inscription",
+      date: "Campaign of 701 BCE",
+      content: "Sennacherib records his campaign against Judah, names Hezekiah, and describes the capture of fortified cities and deportation of inhabitants.",
+      connection: "Provides historical context for the threatened towns of Judah in Micah 1:10–16.",
+      limits: "Assyrian royal propaganda must be evaluated critically. The inscription does not establish the precise date of Micah's prophecy.",
+      url: "https://oracc.museum.upenn.edu/rinap/rinap3/Q003496"
+    },
+    {
+      first: 13,
+      last: 13,
+      title: "The Lachish Reliefs",
+      date: "Approximately 700–681 BCE",
+      content: "Assyrian palace reliefs depict the siege and capture of Lachish during Sennacherib's campaign of 701 BCE.",
+      connection: "Micah 1:13 explicitly names Lachish.",
+      limits: "The reliefs document the siege, not the date or divine fulfillment of Micah's oracle.",
+      url: "https://www.britishmuseum.org/collection/search?keyword=Lachish"
+    }
+  ];
+
+  const relevant = documents.filter(doc =>
+    verseNumber >= doc.first &&
+    verseNumber <= doc.last
+  );
+
+  if (!relevant.length) {
+    make("p", "No verse-specific ancient document has been assigned to this passage yet.", details);
+  }
+
+  relevant.forEach(doc => {
+    const card = make("section", undefined, details);
+    card.className = "verse";
+
+    make("h3", doc.title, card);
+    make("h4", "Historical date", card);
+    make("p", doc.date, card);
+    make("h4", "Historical evidence", card);
+    make("p", doc.content, card);
+    make("h4", "Connection to Scripture", card);
+    make("p", doc.connection, card);
+    make("h4", "Evidence limitations", card);
+    make("p", doc.limits, card);
+    link(card, "Examine the source", doc.url);
+  });
+
+  return;
+}
   details.replaceChildren();
   make("h3", `${key} — ${passage}`, details);
   make(
@@ -1694,6 +1762,10 @@ function showBibleVerseResearch(reference) {
     details
   );
 });
+});
+research.scrollIntoView({
+  behavior: "smooth",
+  block: "start"
 });
 }
 
