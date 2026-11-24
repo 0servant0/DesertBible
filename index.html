@@ -139,7 +139,7 @@ footer {
   <p>Explore Scripture through original languages, historical records,
   archaeology, ancient manuscripts, geography, and scholarly research.
   Follow the evidence back to its sources.</p>
-  <span class="pill">FIRST CHAPTER · MICAH 1</span>
+ <span class="pill">ALL 66 BOOKS · SCRIPTURE RESEARCH</span>
 </section>
 
 <main>
@@ -201,107 +201,56 @@ footer {
         </div>
       </section>
 
-    <section class="view hidden" id="scripture">
+<section class="view hidden" id="scripture">
   <div class="panel">
-    <div class="eyebrow">Scripture reader · Old Testament</div>
-    <h2>Micah 1</h2>
-    <p>Read the chapter verse by verse. Research connections will be added next.</p>
-    <span class="pill">World English Bible · Updated edition</span>
+    <div class="eyebrow">Scripture reader · Entire Bible</div>
+    <h2 id="scriptureHeading">Read Scripture</h2>
+    <p>Choose a book and chapter, then select any verse to open its research categories.</p>
+
+    <label for="bibleBook">Book</label>
+    <select id="bibleBook">
+      <optgroup label="Old Testament">
+        <option>Genesis</option><option>Exodus</option><option>Leviticus</option>
+        <option>Numbers</option><option>Deuteronomy</option><option>Joshua</option>
+        <option>Judges</option><option>Ruth</option><option>1 Samuel</option>
+        <option>2 Samuel</option><option>1 Kings</option><option>2 Kings</option>
+        <option>1 Chronicles</option><option>2 Chronicles</option><option>Ezra</option>
+        <option>Nehemiah</option><option>Esther</option><option>Job</option>
+        <option>Psalms</option><option>Proverbs</option><option>Ecclesiastes</option>
+        <option>Song of Solomon</option><option>Isaiah</option><option>Jeremiah</option>
+        <option>Lamentations</option><option>Ezekiel</option><option>Daniel</option>
+        <option>Hosea</option><option>Joel</option><option>Amos</option>
+        <option>Obadiah</option><option>Jonah</option><option selected>Micah</option>
+        <option>Nahum</option><option>Habakkuk</option><option>Zephaniah</option>
+        <option>Haggai</option><option>Zechariah</option><option>Malachi</option>
+      </optgroup>
+      <optgroup label="New Testament">
+        <option>Matthew</option><option>Mark</option><option>Luke</option>
+        <option>John</option><option>Acts</option><option>Romans</option>
+        <option>1 Corinthians</option><option>2 Corinthians</option>
+        <option>Galatians</option><option>Ephesians</option><option>Philippians</option>
+        <option>Colossians</option><option>1 Thessalonians</option>
+        <option>2 Thessalonians</option><option>1 Timothy</option>
+        <option>2 Timothy</option><option>Titus</option><option>Philemon</option>
+        <option>Hebrews</option><option>James</option><option>1 Peter</option>
+        <option>2 Peter</option><option>1 John</option><option>2 John</option>
+        <option>3 John</option><option>Jude</option><option>Revelation</option>
+      </optgroup>
+    </select>
+
+    <label for="bibleChapter">Chapter</label>
+    <select id="bibleChapter"></select>
+    <button id="loadBibleChapter" type="button">Load chapter</button>
+    <p class="small">English text source: Bible API, World English Bible (WEB). This is not the WEB Updated Edition (WEBU).</p>
+    <p id="bibleStatus" role="status" aria-live="polite"></p>
   </div>
 
   <div class="panel">
-    <h3>Chapter text</h3>
-
-    <div class="verse" id="micah-1-1">
-      <span class="verse-num">1:1</span>
-      <p>The LORD’s word that came to Micah of Morasheth in the days of Jotham, Ahaz, and Hezekiah, kings of Judah, which he saw concerning Samaria and Jerusalem.</p>
-    </div>
-
-    <div class="verse" id="micah-1-2">
-      <span class="verse-num">1:2</span>
-      <p>Hear, you peoples, all of you! Listen, O earth, and all that is therein. Let the Lord GOD be witness against you, the Lord from his holy temple.</p>
-    </div>
-
-    <div class="verse" id="micah-1-3">
-      <span class="verse-num">1:3</span>
-      <p>For behold, the LORD comes out of his place, and will come down and tread on the high places of the earth.</p>
-    </div>
-
-    <div class="verse" id="micah-1-4">
-      <span class="verse-num">1:4</span>
-      <p>The mountains melt under him, and the valleys split apart like wax before the fire, like waters that are poured down a steep place.</p>
-    </div>
-
-    <div class="verse" id="micah-1-5">
-      <span class="verse-num">1:5</span>
-      <p>“All this is for the disobedience of Jacob, and for the sins of the house of Israel. What is the disobedience of Jacob? Isn’t it Samaria? And what are the high places of Judah? Aren’t they Jerusalem?</p>
-    </div>
-
-    <div class="verse" id="micah-1-6">
-      <span class="verse-num">1:6</span>
-      <p>Therefore I will make Samaria like a rubble heap of the field, like places for planting vineyards; and I will pour down its stones into the valley, and I will uncover its foundations.</p>
-    </div>
-
-    <div class="verse" id="micah-1-7">
-      <span class="verse-num">1:7</span>
-      <p>All her idols will be beaten to pieces, all her temple gifts will be burned with fire, and I will destroy all her images; for of the hire of a prostitute has she gathered them, and to the hire of a prostitute shall they return.</p>
-    </div>
-
-    <div class="verse" id="micah-1-8">
-      <span class="verse-num">1:8</span>
-      <p>For this I will lament and wail. I will go stripped and naked. I will howl like the jackals and mourn like the ostriches.</p>
-    </div>
-
-    <div class="verse" id="micah-1-9">
-      <span class="verse-num">1:9</span>
-      <p>For her wounds are incurable; for it has come even to Judah. It reaches to the gate of my people, even to Jerusalem.</p>
-    </div>
-
-    <div class="verse" id="micah-1-10">
-      <span class="verse-num">1:10</span>
-      <p>Don’t tell it in Gath. Don’t weep at all. At Beth Ophrah I have rolled myself in the dust.</p>
-    </div>
-
-    <div class="verse" id="micah-1-11">
-      <span class="verse-num">1:11</span>
-      <p>Pass on, inhabitant of Shaphir, in nakedness and shame. The inhabitant of Zaanan won’t come out. The wailing of Beth Ezel will take from you his protection.</p>
-    </div>
-
-    <div class="verse" id="micah-1-12">
-      <span class="verse-num">1:12</span>
-      <p>For the inhabitant of Maroth waits anxiously for good, because evil has come down from the LORD to the gate of Jerusalem.</p>
-    </div>
-
-    <div class="verse" id="micah-1-13">
-      <span class="verse-num">1:13</span>
-      <p>Harness the chariot to the swift steed, inhabitant of Lachish. She was the beginning of sin to the daughter of Zion; for the transgressions of Israel were found in you.</p>
-    </div>
-
-    <div class="verse" id="micah-1-14">
-      <span class="verse-num">1:14</span>
-      <p>Therefore you will give a parting gift to Moresheth Gath. The houses of Achzib will be a deceitful thing to the kings of Israel.</p>
-    </div>
-
-    <div class="verse" id="micah-1-15">
-      <span class="verse-num">1:15</span>
-      <p>I will yet bring a conqueror to you, inhabitants of Mareshah. The glory of Israel will come to Adullam.</p>
-    </div>
-
-    <div class="verse" id="micah-1-16">
-      <span class="verse-num">1:16</span>
-      <p>Shave your heads, and cut off your hair for the children of your delight. Enlarge your baldness like the vulture, for they have gone into captivity from you!</p>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>Translation source</h3>
-    <p>This chapter uses the updated World English Bible. The wording should remain unchanged when identified by that translation name.</p>
-    <a href="https://ebible.org/engwebu/MIC01.htm"
-       target="_blank" rel="noopener noreferrer">
-      Verify Micah 1 against the published source →
-    </a>
+    <h3 id="chapterHeading">Chapter text</h3>
+    <div id="bibleVerses"></div>
   </div>
 </section>
+
 
 
       <section class="view hidden" id="categories">
@@ -1095,7 +1044,229 @@ const historicalContext = {
   });
 });
 
+const bibleChapterCounts = {
+  "Genesis":50,"Exodus":40,"Leviticus":27,"Numbers":36,"Deuteronomy":34,
+  "Joshua":24,"Judges":21,"Ruth":4,"1 Samuel":31,"2 Samuel":24,
+  "1 Kings":22,"2 Kings":25,"1 Chronicles":29,"2 Chronicles":36,
+  "Ezra":10,"Nehemiah":13,"Esther":10,"Job":42,"Psalms":150,
+  "Proverbs":31,"Ecclesiastes":12,"Song of Solomon":8,"Isaiah":66,
+  "Jeremiah":52,"Lamentations":5,"Ezekiel":48,"Daniel":12,"Hosea":14,
+  "Joel":3,"Amos":9,"Obadiah":1,"Jonah":4,"Micah":7,"Nahum":3,
+  "Habakkuk":3,"Zephaniah":3,"Haggai":2,"Zechariah":14,"Malachi":4,
+  "Matthew":28,"Mark":16,"Luke":24,"John":21,"Acts":28,"Romans":16,
+  "1 Corinthians":16,"2 Corinthians":13,"Galatians":6,"Ephesians":6,
+  "Philippians":4,"Colossians":4,"1 Thessalonians":5,
+  "2 Thessalonians":3,"1 Timothy":6,"2 Timothy":4,"Titus":3,
+  "Philemon":1,"Hebrews":13,"James":5,"1 Peter":5,"2 Peter":3,
+  "1 John":5,"2 John":1,"3 John":1,"Jude":1,"Revelation":22
+};
 
-</script>
+const bibleBook = document.getElementById("bibleBook");
+const bibleChapter = document.getElementById("bibleChapter");
+const bibleVerses = document.getElementById("bibleVerses");
+const bibleStatus = document.getElementById("bibleStatus");
+const bibleHeading = document.getElementById("scriptureHeading");
+const chapterHeading = document.getElementById("chapterHeading");
+
+let currentBibleReference = {
+  book: "Micah",
+  chapter: 1,
+  verse: null
+};
+
+function populateChapterOptions() {
+  const book = bibleBook.value;
+  const count = bibleChapterCounts[book];
+
+  bibleChapter.replaceChildren();
+
+  for (let chapter = 1; chapter <= count; chapter++) {
+    const option = document.createElement("option");
+    option.value = String(chapter);
+    option.textContent = `Chapter ${chapter}`;
+    bibleChapter.appendChild(option);
+  }
+
+  if (book === "Micah") bibleChapter.value = "1";
+}
+
+bibleBook.addEventListener("change", populateChapterOptions);
+
+async function loadBibleChapter() {
+  const book = bibleBook.value;
+  const chapter = Number(bibleChapter.value);
+  const reference = `${book} ${chapter}`;
+
+  bibleStatus.textContent = "Loading chapter…";
+  bibleVerses.replaceChildren();
+
+  try {
+    const url = `https://bible-api.com/${encodeURIComponent(reference)}?translation=web`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`The text service returned ${response.status}.`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.verses) || data.verses.length === 0) {
+      throw new Error("No verse text was returned for this chapter.");
+    }
+
+    currentBibleReference = { book, chapter, verse: null };
+    bibleHeading.textContent = reference;
+    chapterHeading.textContent = reference;
+    bibleStatus.textContent =
+      `Loaded ${data.verses.length} verses. Select a verse to research.`;
+
+    data.verses.forEach(item => {
+      const verse = document.createElement("div");
+      verse.className = "verse";
+      verse.tabIndex = 0;
+      verse.setAttribute("role", "button");
+      verse.setAttribute(
+        "aria-label",
+        `${book} ${chapter}:${item.verse}. Open verse research`
+      );
+
+      const number = document.createElement("span");
+      number.className = "verse-num";
+      number.textContent = `${chapter}:${item.verse}`;
+
+      const text = document.createElement("p");
+      text.textContent = item.text.trim();
+
+      verse.append(number, text);
+
+      const openResearch = () => {
+        currentBibleReference = {
+          book,
+          chapter,
+          verse: Number(item.verse)
+        };
+
+        document.querySelectorAll("#bibleVerses .verse").forEach(node => {
+          node.style.backgroundColor = "";
+          node.style.borderLeft = "";
+          node.setAttribute("aria-pressed", "false");
+        });
+
+        verse.style.backgroundColor = "#29291f";
+        verse.style.borderLeft = "4px solid #c9aa70";
+        verse.setAttribute("aria-pressed", "true");
+
+        showBibleVerseResearch(currentBibleReference);
+      };
+
+      verse.addEventListener("click", openResearch);
+      verse.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openResearch();
+        }
+      });
+
+      bibleVerses.appendChild(verse);
+    });
+  } catch (error) {
+    bibleStatus.textContent =
+      `Could not load the chapter. Check your connection and try again. Details: ${error.message}`;
+  }
+}
+
+document.getElementById("loadBibleChapter")
+  .addEventListener("click", loadBibleChapter);
+
+function showBibleVerseResearch(reference) {
+  let research = document.getElementById("verseResearch");
+
+  if (!research) {
+    research = document.createElement("div");
+    research.id = "verseResearch";
+    research.className = "panel";
+    document.getElementById("scripture").appendChild(research);
+  }
+
+  const passage =
+    `${reference.book} ${reference.chapter}:${reference.verse}`;
+
+  research.replaceChildren();
+
+  const eyebrow = document.createElement("div");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "VERSE RESEARCH WORKSPACE";
+
+  const heading = document.createElement("h2");
+  heading.textContent = passage;
+
+  const description = document.createElement("p");
+  description.textContent =
+    "Choose a category. Research must be specific to this passage and supported by cited sources.";
+
+  const categories = [
+    ["Original language", "Original Hebrew / Aramaic / Greek"],
+    ["Translation comparison", "Translation comparison"],
+    ["Historical context", "Historical context"],
+    ["Archaeological evidence", "Archaeological evidence"],
+    ["Ancient documents", "Ancient documents"],
+    ["Cross-references", "Bible cross-references"],
+    ["Scholarly commentary", "Scholarly commentary"],
+    ["Evidence assessment", "Evidence assessment"]
+  ];
+
+  const grid = document.createElement("div");
+  grid.className = "categories";
+
+  const details = document.createElement("div");
+  details.id = "researchDetails";
+  details.className = "research-content";
+  details.innerHTML =
+    "<p>Select a category. Existing Micah-specific research must not be presented as verified research for other books.</p>";
+
+  categories.forEach(([key, label]) => {
+    const button = document.createElement("button");
+    button.className = "category";
+    button.textContent = label;
+    button.addEventListener("click", () => {
+      details.replaceChildren();
+
+      const title = document.createElement("h3");
+      title.textContent = `${label} — ${passage}`;
+
+      const message = document.createElement("p");
+      message.textContent =
+        key === "Original language"
+          ? "Original-language data must be loaded from an identified Hebrew, Aramaic, or Greek source for this exact passage. Existing Micah-only data is not reused for other books."
+          : `The ${label} workspace is selected for ${passage}. Only passage-specific evidence with identifiable sources should be displayed here.`;
+
+      details.append(title, message);
+
+      if (key === "Original language") {
+        const source = document.createElement("p");
+        const link = document.createElement("a");
+
+        link.href = reference.book === "Micah"
+          ? "https://ebible.org/hebwlc/MIC01.htm"
+          : "https://ebible.org/";
+
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Consult the source collection";
+
+        source.appendChild(link);
+        details.appendChild(source);
+      }
+    });
+
+    grid.appendChild(button);
+  });
+
+  research.append(eyebrow, heading, description, grid, details);
+  research.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+populateChapterOptions();
+loadBibleChapter();</script>
 </body>
 </html>
