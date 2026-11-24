@@ -2766,6 +2766,1524 @@ if (key === "Translation comparison") {
     showHistoricalContext();
     return;
   }
+    if (key === "Evidence assessment") {
+  details.replaceChildren();
+
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+  const passageName = `${book} ${ch}:${vs}`;
+
+  const normalize = value =>
+    String(value).toLowerCase()
+      .replace(/[^a-z0-9]/g, "")
+      .replace(/^psalm$/, "psalms")
+      .replace(/^songofsongs$/, "songofsolomon");
+
+  const addSource = (parent, label, url) => {
+    const p = make("p", null, parent);
+    const a = make("a", label, p);
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+    return a;
+  };
+
+  const field = (parent, title, content) => {
+    make("h4", title, parent);
+    make("p", content, parent);
+  };
+
+  const section = (title, parent = details) => {
+    const card = make("section", null, parent);
+    card.style.padding = "18px";
+    card.style.marginBottom = "18px";
+    card.style.borderLeft = "3px solid #c9aa70";
+    card.style.borderRadius = "8px";
+    card.style.background = "rgba(255,255,255,0.025)";
+    make("h3", title, card);
+    return card;
+  };
+
+  // =========================================
+  // SCRIPTURE AND RESEARCH CLASSIFICATION
+  // =========================================
+
+  const bookGroups = [
+    {
+      name: "Pentateuch",
+      books: [
+        "Genesis", "Exodus", "Leviticus",
+        "Numbers", "Deuteronomy"
+      ],
+      approach:
+        "Examine ancient Near Eastern literature, legal traditions, historical geography, manuscript transmission and the archaeological record. Distinguish proposed historical settings from independently established events.",
+      limitation:
+        "Comparative ancient literature and cultural parallels do not independently demonstrate that a particular biblical event occurred."
+    },
+    {
+      name: "Old Testament Historical Books",
+      books: [
+        "Joshua", "Judges", "Ruth",
+        "1 Samuel", "2 Samuel",
+        "1 Kings", "2 Kings",
+        "1 Chronicles", "2 Chronicles",
+        "Ezra", "Nehemiah", "Esther"
+      ],
+      approach:
+        "Investigate settlement history, inscriptions, royal records, administrative documents, political chronology and excavation reports.",
+      limitation:
+        "Confirmation of a ruler, location or political event does not establish every detail of the associated narrative."
+    },
+    {
+      name: "Poetry and Wisdom Literature",
+      books: [
+        "Job", "Psalms", "Proverbs",
+        "Ecclesiastes", "Song of Solomon"
+      ],
+      approach:
+        "Examine literary structure, ancient wisdom traditions, Hebrew terminology, manuscript witnesses and cultural background.",
+      limitation:
+        "Poetic imagery, wisdom sayings and theological reflections should not automatically be treated as literal historical claims."
+    },
+    {
+      name: "Prophetic Literature",
+      books: [
+        "Isaiah", "Jeremiah", "Lamentations",
+        "Ezekiel", "Daniel", "Hosea",
+        "Joel", "Amos", "Obadiah",
+        "Jonah", "Micah", "Nahum",
+        "Habakkuk", "Zephaniah", "Haggai",
+        "Zechariah", "Malachi"
+      ],
+      approach:
+        "Investigate historical setting, political rulers, manuscript dating, prophetic language, geographical references and reception history.",
+      limitation:
+        "Historical corroboration of a prophetic setting does not establish divine inspiration or settle competing interpretations of fulfillment."
+    },
+    {
+      name: "Gospel Literature",
+      books: [
+        "Matthew", "Mark", "Luke", "John"
+      ],
+      approach:
+        "Examine Second Temple Judaism, Roman administration, historical geography, Gospel relationships, manuscript witnesses and relevant non-Christian sources.",
+      limitation:
+        "Literary dependence must be considered when evaluating multiple accounts. Historical evidence for a person or place does not independently establish a miracle."
+    },
+    {
+      name: "Early Christian History",
+      books: ["Acts"],
+      approach:
+        "Investigate Roman provincial administration, inscriptions, travel geography, ancient cities and early Christian communities.",
+      limitation:
+        "Accurate administrative or geographical details provide contextual support but do not establish every reported speech or supernatural event."
+    },
+    {
+      name: "Pauline Epistles",
+      books: [
+        "Romans", "1 Corinthians", "2 Corinthians",
+        "Galatians", "Ephesians", "Philippians",
+        "Colossians", "1 Thessalonians",
+        "2 Thessalonians", "1 Timothy",
+        "2 Timothy", "Titus", "Philemon"
+      ],
+      approach:
+        "Examine ancient letter-writing conventions, manuscript transmission, authorship, Roman social history and the circumstances of early Christian communities.",
+      limitation:
+        "Authorship, dating and historical circumstances are debated for some letters. Theological arguments require interpretation rather than archaeological verification."
+    },
+    {
+      name: "General Epistles",
+      books: [
+        "Hebrews", "James", "1 Peter", "2 Peter",
+        "1 John", "2 John", "3 John", "Jude"
+      ],
+      approach:
+        "Examine manuscript evidence, authorship traditions, literary relationships, Jewish background and early Christian reception.",
+      limitation:
+        "Traditional authorship and historical-critical authorship conclusions should be distinguished where scholarly disagreement exists."
+    },
+    {
+      name: "Apocalyptic Literature",
+      books: ["Revelation"],
+      approach:
+        "Examine Roman imperial history, the seven churches of Asia, Jewish apocalyptic traditions, symbolism and manuscript transmission.",
+      limitation:
+        "Historical background does not independently establish a particular interpretation of future events or apocalyptic imagery."
+    }
+  ];
+
+  const group = bookGroups.find(item =>
+    item.books.some(name =>
+      normalize(name) === normalize(book)
+    )
+  );
+
+  const isOldTestament = bookGroups
+    .slice(0, 4)
+    .some(item =>
+      item.books.some(name =>
+        normalize(name) === normalize(book)
+      )
+    );
+
+  // =========================================
+  // CLAIM-SPECIFIC EVIDENCE CATALOGUE
+  // =========================================
+
+  const evidence = [
+
+    {
+      title: "Merneptah Stele",
+      passages: [
+        ["Joshua", 1, 1, 18],
+        ["Judges", 1, 1, 36]
+      ],
+      date: "Approximately 1208 BCE",
+      type: "Egyptian royal inscription",
+      strength: "Independent historical context",
+      claim: "The existence of a population identified as Israel in Canaan.",
+      finding:
+        "The inscription identifies Israel among groups associated with an Egyptian military campaign.",
+      limitation:
+        "It does not identify the biblical Exodus, Joshua or the precise circumstances of Israelite settlement.",
+      disagreement:
+        "The origins and settlement patterns of early Israel remain debated.",
+      source: "University of Arizona - Bible and Interpretation",
+      url: "https://bibleinterp.arizona.edu/sites/bibleinterp.arizona.edu/files/images/CP%206-%2007%20Hjelm.pdf"
+    },
+
+    {
+      title: "Tel Dan Stele",
+      passages: [
+        ["2 Samuel", 5, 1, 5],
+        ["2 Samuel", 7, 8, 16],
+        ["2 Kings", 8, 25, 29],
+        ["2 Kings", 9, 14, 29],
+        ["1 Chronicles", 11, 1, 9]
+      ],
+      date: "Ninth century BCE",
+      type: "Aramaic royal inscription",
+      strength: "Independent dynastic corroboration",
+      claim:
+        "The existence of a Judahite royal dynasty associated with David.",
+      finding:
+        "The inscription contains an expression widely interpreted as House of David.",
+      limitation:
+        "It does not establish the territorial extent of David's kingdom or individual events in his biography.",
+      disagreement:
+        "Reconstruction of damaged portions and aspects of the inscription's interpretation remain subjects of research.",
+      source: "The Jewish Museum - Tel Dan Stele",
+      url: "https://thejewishmuseum.org/wp-content/uploads/2025/07/JM_Collection_Tel_Dan_Section_Text_FINAL-2.pdf"
+    },
+
+    {
+      title: "Tel Dan Stele - Competing Historical Accounts",
+      passages: [
+        ["2 Kings", 9, 21, 29]
+      ],
+      date: "Ninth century BCE",
+      type: "Independent royal account",
+      strength: "Related evidence with narrative tension",
+      claim:
+        "The deaths of the kings of Israel and Judah.",
+      finding:
+        "The reconstructed inscription attributes victories over the two kings to an Aramaean ruler, whereas Kings attributes their deaths to Jehu's rebellion.",
+      limitation:
+        "The damaged inscription and conventions of royal victory claims complicate reconstruction.",
+      disagreement:
+        "Whether the accounts describe indirect responsibility, competing claims or different historical traditions requires further analysis.",
+      source: "Michael Langlois - Israel Exploration Journal 74/2",
+      url: "https://ngsba.org/wp-content/uploads/2025/03/Langlois-2024-Tel-Dan-Inscription-IEJ-74-2.pdf"
+    },
+
+    {
+      title: "Cyrus Cylinder",
+      passages: [
+        ["Ezra", 1, 1, 11],
+        ["Ezra", 6, 1, 5],
+        ["2 Chronicles", 36, 22, 23],
+        ["Isaiah", 44, 28, 28],
+        ["Isaiah", 45, 1, 7]
+      ],
+      date: "Following the conquest of Babylon in 539 BCE",
+      type: "Persian royal inscription",
+      strength: "Independent contextual corroboration",
+      claim:
+        "Persian restoration policies associated with Cyrus.",
+      finding:
+        "The inscription describes Cyrus's conquest and policies involving restored sanctuaries and displaced populations.",
+      limitation:
+        "It does not specifically mention Jerusalem, Judah or reproduce the decree recorded in Ezra.",
+      disagreement:
+        "The relationship between Persian imperial policy and the particular biblical decrees requires separate historical examination.",
+      source: "British Museum - Cyrus Cylinder",
+      url: "https://artsandculture.google.com/asset/cyrus-cylinder/4wHjbQnYhZgzVQ?hl=en"
+    },
+
+    {
+      title: "Nabonidus Chronicle",
+      passages: [
+        ["Daniel", 5, 1, 31],
+        ["Isaiah", 45, 1, 3],
+        ["Jeremiah", 51, 11, 11],
+        ["Jeremiah", 51, 28, 28]
+      ],
+      date: "Records sixth-century BCE events",
+      type: "Babylonian historical chronicle",
+      strength: "Independent corroboration of historical setting",
+      claim:
+        "The transition from Babylonian to Persian rule.",
+      finding:
+        "The chronicle documents events associated with Nabonidus and the Persian conquest of Babylon in 539 BCE.",
+      limitation:
+        "It does not establish the banquet, handwriting on the wall or every event described in Daniel 5.",
+      disagreement:
+        "The identity of Darius the Mede and aspects of Daniel's historical chronology remain debated.",
+      source: "University of Oxford - Nabonidus Chronicle",
+      url: "https://www.cabinet.ox.ac.uk/nabonidus-chronicle-bm-1"
+    },
+
+    {
+      title: "Babylonian Records and Belshazzar",
+      passages: [
+        ["Daniel", 5, 1, 2],
+        ["Daniel", 5, 7, 7],
+        ["Daniel", 5, 16, 16],
+        ["Daniel", 5, 29, 30]
+      ],
+      date: "Sixth-century BCE historical setting",
+      type: "Babylonian administrative and royal evidence",
+      strength: "Independent identification of historical person",
+      claim:
+        "Belshazzar was a historical figure exercising authority in Babylonia.",
+      finding:
+        "Babylonian evidence identifies Belshazzar as the son of Nabonidus, entrusted with substantial authority during his father's absence.",
+      limitation:
+        "His formal status differed from that of Nabonidus as reigning king. The evidence does not establish the banquet narrative.",
+      disagreement:
+        "The biblical royal terminology and Belshazzar's relationship to Nebuchadnezzar require interpretation.",
+      source: "Yale Babylonian Collection - Paul-Alain Beaulieu",
+      url: "https://babylonian-collection.yale.edu/sites/default/files/files/YNER%2010%20-%20Beaulieu%20-%20The%20Reign%20of%20Nabonidus%20King%20of%20Babylon%20556-549%20BC%20%281989%29.pdf"
+    },
+
+    {
+      title: "Great Isaiah Scroll",
+      passages: [
+        ["Isaiah", 1, 66]
+      ],
+      date: "Approximately second century BCE",
+      type: "Ancient biblical manuscript",
+      strength: "Direct textual witness",
+      claim:
+        "The ancient transmission of the Book of Isaiah.",
+      finding:
+        "The Great Isaiah Scroll preserves an ancient substantially complete copy of Isaiah, including material traditionally interpreted as prophecy.",
+      limitation:
+        "The manuscript's date does not independently establish the original composition date, authorship or supernatural fulfillment of the text.",
+      disagreement:
+        "Textual variants and questions concerning the composition of Isaiah require separate scholarly investigation.",
+      source: "Israel Museum - Great Isaiah Scroll",
+      url: "https://dss.collections.imj.org.il/isaiah"
+    },
+
+    {
+      title: "Codex Sinaiticus",
+      passages: [
+        ["Matthew", 1, 28],
+        ["Mark", 1, 16],
+        ["Luke", 1, 24],
+        ["John", 1, 21],
+        ["Acts", 1, 28],
+        ["Romans", 1, 16],
+        ["1 Corinthians", 1, 16],
+        ["2 Corinthians", 1, 13],
+        ["Galatians", 1, 6],
+        ["Ephesians", 1, 6],
+        ["Philippians", 1, 4],
+        ["Colossians", 1, 4],
+        ["1 Thessalonians", 1, 5],
+        ["2 Thessalonians", 1, 3],
+        ["1 Timothy", 1, 6],
+        ["2 Timothy", 1, 4],
+        ["Titus", 1, 3],
+        ["Philemon", 1, 1],
+        ["Hebrews", 1, 13],
+        ["James", 1, 5],
+        ["1 Peter", 1, 5],
+        ["2 Peter", 1, 3],
+        ["1 John", 1, 5],
+        ["2 John", 1, 1],
+        ["3 John", 1, 1],
+        ["Jude", 1, 1],
+        ["Revelation", 1, 22]
+      ],
+      date: "Fourth century CE",
+      type: "Greek biblical manuscript",
+      strength: "Book-level manuscript evidence",
+      claim:
+        "The ancient manuscript transmission of New Testament literature.",
+      finding:
+        "Codex Sinaiticus preserves the New Testament collection and provides important evidence for textual criticism.",
+      limitation:
+        "This is a book-level association. The presence, wording and numbering of the selected verse must be individually checked. Some familiar later readings are absent.",
+      disagreement:
+        "Textual critics assess competing readings using multiple manuscript witnesses.",
+      source: "Codex Sinaiticus Digital Project",
+      url: "https://www.codexsinaiticus.org/"
+    },
+
+    {
+      title: "The Longer Ending of Mark",
+      passages: [
+        ["Mark", 16, 9, 20]
+      ],
+      date: "Fourth-century manuscript witnesses",
+      type: "Textual-critical evidence",
+      strength: "Significant textual variation",
+      claim:
+        "Whether Mark 16:9–20 belonged to the earliest recoverable form of Mark.",
+      finding:
+        "The longer ending is absent from Codex Sinaiticus and Codex Vaticanus but is present in numerous other witnesses and was known in early Christianity.",
+      limitation:
+        "Its absence from particular manuscripts does not independently determine whether every tradition contained within it is historically false.",
+      disagreement:
+        "Its textual status, origin and relationship to the original ending of Mark require critical evaluation.",
+      source: "Codex Sinaiticus",
+      url: "https://www.codexsinaiticus.org/"
+    },
+
+    {
+      title: "The Woman Taken in Adultery",
+      passages: [
+        ["John", 7, 53, 53],
+        ["John", 8, 1, 11]
+      ],
+      date: "Multiple periods of manuscript transmission",
+      type: "Textual-critical evidence",
+      strength: "Significant textual variation",
+      claim:
+        "Whether John 7:53–8:11 originally appeared at this location in John's Gospel.",
+      finding:
+        "The passage is absent from several early Greek witnesses and appears at different locations in some later manuscripts.",
+      limitation:
+        "Its disputed textual placement does not by itself establish whether the underlying tradition is historical.",
+      disagreement:
+        "The history of the tradition and its canonical reception are distinct from the reconstruction of John's earliest text.",
+      source: "Codex Sinaiticus",
+      url: "https://www.codexsinaiticus.org/"
+    },
+
+    {
+      title: "The Comma Johanneum",
+      passages: [
+        ["1 John", 5, 7, 8]
+      ],
+      date: "Multiple periods of textual transmission",
+      type: "Textual-critical evidence",
+      strength: "Significant textual variation",
+      claim:
+        "The originality of the expanded heavenly-witness wording found in some translations.",
+      finding:
+        "The expanded wording is absent from early Greek manuscript witnesses and is associated primarily with later textual transmission.",
+      limitation:
+        "The textual status of this reading does not independently resolve the theological doctrine of the Trinity.",
+      disagreement:
+        "Textual history and theological interpretation must be assessed separately.",
+      source: "Center for the Study of New Testament Manuscripts",
+      url: "https://www.csntm.org/"
+    }
+
+  ];
+
+  // =========================================
+  // PASSAGE MATCHING ENGINE
+  // =========================================
+
+  function matchesPassage(range) {
+    if (normalize(range[0]) !== normalize(book)) {
+      return false;
+    }
+
+    if (range.length === 3) {
+      return ch >= Number(range[1]) &&
+             ch <= Number(range[2]);
+    }
+
+    if (range.length === 4) {
+      return ch === Number(range[1]) &&
+             vs >= Number(range[2]) &&
+             vs <= Number(range[3]);
+    }
+
+    return false;
+  }
+
+  const matchedEvidence = evidence.filter(item =>
+    item.passages.some(matchesPassage)
+  );
+
+  // =========================================
+  // MAIN RESEARCH INTERFACE
+  // =========================================
+
+  make(
+    "h3",
+    `Evidence Assessment — ${passageName}`,
+    details
+  );
+
+  make(
+    "p",
+    "A structured evaluation of historical, archaeological, textual and literary evidence associated with the selected scripture.",
+    details
+  );
+
+  // =========================================
+  // 1. PASSAGE CLASSIFICATION
+  // =========================================
+
+  const overview = section(
+    "1. Passage and Research Classification"
+  );
+
+  field(
+    overview,
+    "Selected Scripture",
+    passageName
+  );
+
+  field(
+    overview,
+    "Biblical Testament",
+    group
+      ? isOldTestament
+        ? "Old Testament"
+        : "New Testament"
+      : "Unclassified"
+  );
+
+  field(
+    overview,
+    "Literary Collection",
+    group?.name || "Biblical literature"
+  );
+
+  field(
+    overview,
+    "Recommended Research Approach",
+    group?.approach ||
+      "Evaluate the passage in its literary and historical context."
+  );
+
+  field(
+    overview,
+    "Interpretive Limitations",
+    group?.limitation ||
+      "The specific claims require individual examination."
+  );
+
+  // =========================================
+  // 2. EVIDENCE COVERAGE
+  // =========================================
+
+  const coverage = section(
+    "2. Evidence Coverage and Status"
+  );
+
+  field(
+    coverage,
+    "Associated Assessment Records",
+    String(matchedEvidence.length)
+  );
+
+  field(
+    coverage,
+    "Research Status",
+    matchedEvidence.length
+      ? "Associated records available; individual claims require source review."
+      : "Passage-specific assessment not yet indexed."
+  );
+
+  field(
+    coverage,
+    "Overall Historical Verdict",
+    "Not assigned. Each historical or textual claim must be assessed separately."
+  );
+
+  field(
+    coverage,
+    "Scholarly Consensus",
+    "No universal consensus rating is assigned automatically. Consult the specific publications and competing interpretations."
+  );
+
+  // =========================================
+  // 3. ASSOCIATED EVIDENCE
+  // =========================================
+
+  make(
+    "h3",
+    "3. Associated Evidence and Critical Assessment",
+    details
+  );
+
+  if (!matchedEvidence.length) {
+
+    const empty = section("Research Coverage Notice");
+
+    make(
+      "p",
+      "No individually assessed evidence record is currently indexed for this verse.",
+      empty
+    );
+
+    make(
+      "p",
+      "This does not mean that supporting evidence is absent, that the passage is historically false or that its theological claims have been disproved.",
+      empty
+    );
+
+    make(
+      "p",
+      "Use the manuscript collections, archaeological databases and scholarly research resources below to investigate the passage.",
+      empty
+    );
+
+  } else {
+
+    matchedEvidence.forEach((item, index) => {
+
+      const card = section(
+        `${index + 1}. ${item.title}`
+      );
+
+      field(card, "Classification", item.type);
+
+      field(card, "Historical Date", item.date);
+
+      field(
+        card,
+        "Nature of Evidential Support",
+        item.strength
+      );
+
+      field(
+        card,
+        "Specific Claim Under Assessment",
+        item.claim
+      );
+
+      field(
+        card,
+        "Documented Finding",
+        item.finding
+      );
+
+      field(
+        card,
+        "What This Evidence Cannot Establish",
+        item.limitation
+      );
+
+      field(
+        card,
+        "Scholarly Questions and Disagreements",
+        item.disagreement
+      );
+
+      field(
+        card,
+        "Assessment Responsibility",
+        "DesertBible editorial summary. Consult the cited source before adopting the conclusion."
+      );
+
+      make("h4", "Source Documentation", card);
+
+      addSource(card, item.source, item.url);
+
+      const related = item.passages.map(range => {
+        if (range.length === 3) {
+          return `${range[0]} ${range[1]}–${range[2]}`;
+        }
+
+        return `${range[0]} ${range[1]}:${range[2]}–${range[3]}`;
+      });
+
+      field(
+        card,
+        "Associated Biblical Passages",
+        related.join("; ")
+      );
+
+    });
+
+  }
+
+  // =========================================
+  // 4. EVIDENCE CLASSIFICATION FRAMEWORK
+  // =========================================
+
+  const methodology = section(
+    "4. Evidence Classification Framework"
+  );
+
+  const levels = [
+
+    [
+      "Direct Independent Corroboration",
+      "An independent source identifies the specific person, event or historical claim under examination."
+    ],
+
+    [
+      "Partial Corroboration",
+      "An independent source supports particular elements without establishing the entire account."
+    ],
+
+    [
+      "Contextual Corroboration",
+      "Evidence supports the cultural, political, geographical or historical background."
+    ],
+
+    [
+      "Manuscript Evidence",
+      "Physical or documented textual witnesses establish aspects of textual transmission and variation."
+    ],
+
+    [
+      "Comparative Literary Evidence",
+      "Ancient literature provides parallels, contrasts or possible contexts for biblical composition."
+    ],
+
+    [
+      "Internal Biblical Evidence",
+      "Other biblical passages provide literary or historical connections. Their independence must be evaluated."
+    ],
+
+    [
+      "Disputed Evidence",
+      "The identification, dating, interpretation or historical significance of the evidence is contested."
+    ],
+
+    [
+      "Unassessed Evidence",
+      "The available evidence has not yet received a documented passage-specific evaluation."
+    ],
+
+    [
+      "Contrary Evidence",
+      "Evidence creates tension with a particular historical claim or interpretation and requires explicit examination."
+    ]
+
+  ];
+
+  levels.forEach(([title, content]) =>
+    field(methodology, title, content)
+  );
+
+  // =========================================
+  // 5. TEXTUAL AND MANUSCRIPT EVIDENCE
+  // =========================================
+
+  const textual = section(
+    "5. Manuscript and Textual Reliability"
+  );
+
+  field(
+    textual,
+    "Purpose of Textual Criticism",
+    "Compare surviving manuscript witnesses to investigate the earliest recoverable wording of a text."
+  );
+
+  field(
+    textual,
+    "Transmission and Historicity",
+    "Accurate textual transmission concerns the preservation of a text. Historical accuracy concerns whether the reported events occurred. These are separate questions."
+  );
+
+  field(
+    textual,
+    "Textual Variants",
+    "Differences between manuscripts may involve spelling, word order, omissions, additions or changes affecting interpretation."
+  );
+
+  field(
+    textual,
+    "Dating",
+    "Distinguish the date of an individual manuscript from the proposed date of original composition."
+  );
+
+  if (isOldTestament) {
+
+    addSource(
+      textual,
+      "Leon Levy Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    );
+
+    addSource(
+      textual,
+      "Israel Museum - Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/"
+    );
+
+    addSource(
+      textual,
+      "Codex Sinaiticus - Greek Biblical Tradition",
+      "https://www.codexsinaiticus.org/"
+    );
+
+  } else {
+
+    addSource(
+      textual,
+      "Center for the Study of New Testament Manuscripts",
+      "https://www.csntm.org/"
+    );
+
+    addSource(
+      textual,
+      "Institute for New Testament Textual Research",
+      "https://ntvmr.uni-muenster.de/"
+    );
+
+    addSource(
+      textual,
+      "Codex Sinaiticus",
+      "https://www.codexsinaiticus.org/"
+    );
+
+    addSource(
+      textual,
+      "Biblioteca Apostolica Vaticana - Manuscript Collections",
+      "https://digi.vatlib.it/"
+    );
+
+  }
+
+  make(
+    "p",
+    "These repositories are research resources. Their inclusion does not establish that each collection contains the selected verse.",
+    textual
+  );
+
+  // =========================================
+  // 6. HISTORICAL INVESTIGATION
+  // =========================================
+
+  const historical = section(
+    "6. Historical Reliability Assessment"
+  );
+
+  const historicalCriteria = [
+
+    [
+      "Chronological Proximity",
+      "How close is the source to the event being investigated?"
+    ],
+
+    [
+      "Source Independence",
+      "Does the source provide independent testimony or rely on another surviving account?"
+    ],
+
+    [
+      "Historical Context",
+      "Are the described people, institutions, customs and locations consistent with the available evidence?"
+    ],
+
+    [
+      "Authorial Purpose",
+      "Consider political, religious, rhetorical and literary motivations."
+    ],
+
+    [
+      "Multiple Attestation",
+      "Determine whether separate sources independently support the same specific claim."
+    ],
+
+    [
+      "External Corroboration",
+      "Compare the claim with inscriptions, administrative records, archaeological findings and other ancient testimony."
+    ],
+
+    [
+      "Contrary Evidence",
+      "Identify evidence that challenges the proposed historical reconstruction."
+    ],
+
+    [
+      "Alternative Explanations",
+      "Consider competing explanations and evaluate their evidential foundations."
+    ],
+
+    [
+      "Preservation Bias",
+      "Recognize that many ancient records and material remains have not survived."
+    ]
+
+  ];
+
+  historicalCriteria.forEach(([title, content]) =>
+    field(historical, title, content)
+  );
+
+  // =========================================
+  // 7. ARCHAEOLOGICAL INVESTIGATION
+  // =========================================
+
+  const archaeology = section(
+    "7. Archaeological Research Standards"
+  );
+
+  const archaeologicalCriteria = [
+
+    [
+      "Provenance",
+      "Establish the documented origin and discovery circumstances of the artifact."
+    ],
+
+    [
+      "Archaeological Context",
+      "Evaluate excavation layers, associated objects and the relationship between material remains."
+    ],
+
+    [
+      "Chronology",
+      "Identify the dating method, chronological range and degree of uncertainty."
+    ],
+
+    [
+      "Authenticity",
+      "Distinguish excavated artifacts from unprovenanced objects and disputed inscriptions."
+    ],
+
+    [
+      "Epigraphy",
+      "Examine inscription readings, missing sections, alternative readings and published translations."
+    ],
+
+    [
+      "Independent Publication",
+      "Prioritize excavation reports, museum catalogue entries and relevant academic publications."
+    ],
+
+    [
+      "Interpretive Boundaries",
+      "Distinguish the physical discovery from conclusions drawn about particular biblical events."
+    ]
+
+  ];
+
+  archaeologicalCriteria.forEach(([title, content]) =>
+    field(archaeology, title, content)
+  );
+
+  addSource(
+    archaeology,
+    "British Museum Collection",
+    "https://www.britishmuseum.org/collection"
+  );
+
+  addSource(
+    archaeology,
+    "Louvre Collections",
+    "https://collections.louvre.fr/"
+  );
+
+  addSource(
+    archaeology,
+    "Israel Antiquities Authority",
+    "https://www.antiquities.org.il/"
+  );
+
+  addSource(
+    archaeology,
+    "Cuneiform Digital Library Initiative",
+    "https://cdli.earth/"
+  );
+
+  addSource(
+    archaeology,
+    "Open Richly Annotated Cuneiform Corpus",
+    "https://oracc.museum.upenn.edu/"
+  );
+
+  addSource(
+    archaeology,
+    "American Society of Overseas Research",
+    "https://www.asor.org/"
+  );
+
+  // =========================================
+  // 8. SCHOLARLY CONSENSUS AND DISAGREEMENT
+  // =========================================
+
+  const scholarship = section(
+    "8. Scholarly Consensus and Competing Interpretations"
+  );
+
+  field(
+    scholarship,
+    "Consensus",
+    "A conclusion broadly supported by relevant specialists. Consensus must be documented for the particular claim rather than assumed."
+  );
+
+  field(
+    scholarship,
+    "Majority Interpretation",
+    "A position reported as predominant within relevant scholarship, supported by identifiable publications."
+  );
+
+  field(
+    scholarship,
+    "Minority Interpretation",
+    "A less widely accepted position that should be evaluated according to its arguments and supporting evidence."
+  );
+
+  field(
+    scholarship,
+    "Unresolved Questions",
+    "Issues for which available evidence does not establish a sufficiently secure conclusion."
+  );
+
+  field(
+    scholarship,
+    "Research Integrity",
+    "Neither agreement with a religious tradition nor disagreement with it automatically establishes scholarly reliability."
+  );
+
+  addSource(
+    scholarship,
+    "Google Scholar - Selected Scripture",
+    "https://scholar.google.com/scholar?q=" +
+    encodeURIComponent(
+      `"${passageName}" biblical historical evidence`
+    )
+  );
+
+  addSource(
+    scholarship,
+    "Google Scholar - Textual Criticism",
+    "https://scholar.google.com/scholar?q=" +
+    encodeURIComponent(
+      `"${passageName}" textual criticism`
+    )
+  );
+
+  addSource(
+    scholarship,
+    "Google Scholar - Historical and Literary Context",
+    "https://scholar.google.com/scholar?q=" +
+    encodeURIComponent(
+      `"${book}" historical literary context`
+    )
+  );
+
+  addSource(
+    scholarship,
+    "JSTOR - Biblical Scholarship",
+    "https://www.jstor.org/"
+  );
+
+  addSource(
+    scholarship,
+    "Society of Biblical Literature",
+    "https://www.sbl-site.org/"
+  );
+
+  addSource(
+    scholarship,
+    "Bible Odyssey - Academic Biblical Research",
+    "https://www.bibleodyssey.org/"
+  );
+
+  // =========================================
+  // 9. THEOLOGICAL AND SUPERNATURAL CLAIMS
+  // =========================================
+
+  const theology = section(
+    "9. Historical Evidence and Theological Interpretation"
+  );
+
+  field(
+    theology,
+    "Historical Claims",
+    "Claims concerning people, places, institutions and events may be investigated using historical and material evidence."
+  );
+
+  field(
+    theology,
+    "Theological Claims",
+    "Claims concerning God's nature, divine revelation, salvation and moral teaching involve theological and philosophical interpretation."
+  );
+
+  field(
+    theology,
+    "Miracle Claims",
+    "Historical research can evaluate testimony, documentary transmission and surrounding circumstances. Archaeology alone cannot establish supernatural causation."
+  );
+
+  field(
+    theology,
+    "Prophetic Claims",
+    "Assess manuscript dates, proposed composition dates, the historical event, correspondence between texts and alternative interpretations."
+  );
+
+  field(
+    theology,
+    "Faith and Historical Method",
+    "Historical investigation and theological belief address overlapping but distinct questions. Neither should be misrepresented as the other."
+  );
+
+  // =========================================
+  // 10. INTERACTIVE RESEARCH CHECKLIST
+  // =========================================
+
+  const checklist = section(
+    "10. Individual Research Checklist"
+  );
+
+  make(
+    "p",
+    "Use this checklist to track your investigation. Completing it does not establish historical certainty.",
+    checklist
+  );
+
+  const checks = [
+
+    "Read the selected verse in its complete literary context.",
+
+    "Compare available Bible translations.",
+
+    "Examine the original Hebrew, Aramaic or Greek.",
+
+    "Identify the specific claim being investigated.",
+
+    "Identify relevant manuscript witnesses.",
+
+    "Investigate significant textual variants.",
+
+    "Examine the historical and geographical setting.",
+
+    "Locate independent ancient written sources.",
+
+    "Examine relevant archaeological publications.",
+
+    "Verify artifact authenticity and provenance.",
+
+    "Distinguish direct evidence from contextual evidence.",
+
+    "Investigate scholarly disagreements.",
+
+    "Consider contrary evidence and alternative explanations.",
+
+    "Separate historical conclusions from theological interpretations.",
+
+    "Record source citations and remaining uncertainties."
+
+  ];
+
+  const storageKey =
+    `desertBibleEvidence:${book}:${ch}:${vs}`;
+
+  let saved = {};
+
+  try {
+    saved = JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    );
+
+    if (!saved || typeof saved !== "object") {
+      saved = {};
+    }
+  } catch (error) {
+    saved = {};
+  }
+
+  const progress = make("p", "", checklist);
+
+  const progressBar = make(
+    "progress",
+    null,
+    checklist
+  );
+
+  progressBar.max = checks.length;
+  progressBar.style.width = "100%";
+
+  function updateProgress() {
+
+    const completed = checks.filter(
+      (_, index) => saved[index] === true
+    ).length;
+
+    progress.textContent =
+      `${completed} of ${checks.length} research tasks completed.`;
+
+    progressBar.value = completed;
+
+    try {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(saved)
+      );
+    } catch (error) {
+      // Continue without persistent storage.
+    }
+
+  }
+
+  const checkboxElements = [];
+
+  checks.forEach((content, index) => {
+
+    const label = make("label", null, checklist);
+
+    label.style.display = "flex";
+    label.style.gap = "10px";
+    label.style.margin = "12px 0";
+    label.style.alignItems = "flex-start";
+
+    const input = make("input", null, label);
+
+    input.type = "checkbox";
+    input.checked = saved[index] === true;
+
+    make("span", content, label);
+
+    checkboxElements.push(input);
+
+    input.addEventListener("change", () => {
+      saved[index] = input.checked;
+      updateProgress();
+    });
+
+  });
+
+  const reset = make(
+    "button",
+    "Reset Research Checklist",
+    checklist
+  );
+
+  reset.type = "button";
+  reset.className = "category";
+
+  reset.addEventListener("click", () => {
+    saved = {};
+    checkboxElements.forEach(input => {
+      input.checked = false;
+    });
+    updateProgress();
+  });
+
+  updateProgress();
+
+  // =========================================
+  // 11. PERSONAL RESEARCH NOTES
+  // =========================================
+
+  const notes = section(
+    "11. Personal Research Notes"
+  );
+
+  make(
+    "p",
+    "Record relevant findings, manuscript identifiers, scholarly citations, disagreements and unresolved questions.",
+    notes
+  );
+
+  const notesKey = storageKey + ":notes";
+
+  const textarea = make(
+    "textarea",
+    null,
+    notes
+  );
+
+  textarea.rows = 8;
+  textarea.style.width = "100%";
+  textarea.style.boxSizing = "border-box";
+  textarea.style.padding = "12px";
+  textarea.style.resize = "vertical";
+  textarea.placeholder =
+    "Enter your evidence assessment and research findings...";
+
+  try {
+    textarea.value =
+      localStorage.getItem(notesKey) || "";
+  } catch (error) {
+    textarea.value = "";
+  }
+
+  const saveButton = make(
+    "button",
+    "Save Research Notes",
+    notes
+  );
+
+  saveButton.type = "button";
+  saveButton.className = "category";
+
+  const noteStatus = make("p", "", notes);
+
+  noteStatus.setAttribute("role", "status");
+
+  saveButton.addEventListener("click", () => {
+
+    try {
+
+      localStorage.setItem(
+        notesKey,
+        textarea.value
+      );
+
+      noteStatus.textContent =
+        "Research notes saved in this browser.";
+
+    } catch (error) {
+
+      noteStatus.textContent =
+        "Browser storage is unavailable. Copy your notes manually.";
+
+    }
+
+  });
+
+  make(
+    "p",
+    "Notes are stored locally in this browser. They are not uploaded to DesertBible or synchronized between devices.",
+    notes
+  );
+
+  // =========================================
+  // 12. EXPORTABLE RESEARCH REPORT
+  // =========================================
+
+  const report = section(
+    "12. Export Evidence Assessment"
+  );
+
+  const exportButton = make(
+    "button",
+    "Download Evidence Assessment",
+    report
+  );
+
+  exportButton.type = "button";
+  exportButton.className = "category";
+
+  exportButton.addEventListener("click", () => {
+
+    const lines = [
+
+      "DESERTBIBLE",
+      "SCRIPTURE EVIDENCE ASSESSMENT",
+      "",
+      `Scripture: ${passageName}`,
+      `Generated: ${new Date().toISOString()}`,
+      `Literary Collection: ${group?.name || "Unclassified"}`,
+      "",
+      "RESEARCH APPROACH",
+      group?.approach || "",
+      "",
+      "INTERPRETIVE LIMITATIONS",
+      group?.limitation || "",
+      "",
+      "ASSOCIATED EVIDENCE RECORDS",
+      String(matchedEvidence.length),
+      ""
+
+    ];
+
+    matchedEvidence.forEach((item, index) => {
+
+      lines.push(
+
+        `${index + 1}. ${item.title}`,
+        `Classification: ${item.type}`,
+        `Date: ${item.date}`,
+        `Evidence: ${item.strength}`,
+        `Claim: ${item.claim}`,
+        `Finding: ${item.finding}`,
+        `Limitations: ${item.limitation}`,
+        `Disagreements: ${item.disagreement}`,
+        `Source: ${item.source}`,
+        item.url,
+        ""
+
+      );
+
+    });
+
+    if (!matchedEvidence.length) {
+
+      lines.push(
+        "No assessed passage-specific evidence records are currently indexed.",
+        "Absence from this catalogue is not evidence of historical falsehood.",
+        ""
+      );
+
+    }
+
+    lines.push("RESEARCH CHECKLIST", "");
+
+    checks.forEach((content, index) => {
+
+      lines.push(
+        `${saved[index] ? "[x]" : "[ ]"} ${content}`
+      );
+
+    });
+
+    lines.push(
+      "",
+      "PERSONAL RESEARCH NOTES",
+      textarea.value || "No personal notes entered.",
+      "",
+      "RESEARCH INTEGRITY",
+      "Catalogue coverage is incomplete. Evidence must be evaluated claim by claim. This report does not assign an overall historical or theological certainty rating."
+    );
+
+    const blob = new Blob(
+      [lines.join("\n")],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+      "DesertBible-Evidence-" +
+      book.replace(/\s+/g, "-") +
+      `-${ch}-${vs}.txt`;
+
+    document.body.appendChild(a);
+
+    a.click();
+    a.remove();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+
+  });
+
+  // =========================================
+  // 13. RELATED RESEARCH CATEGORIES
+  // =========================================
+
+  const relatedResearch = section(
+    "13. Continue Scripture Research"
+  );
+
+  const categoryLinks = [
+
+    "Original language",
+    "Translation comparison",
+    "Historical context",
+    "Archaeological evidence",
+    "Ancient documents",
+    "Cross-references",
+    "Scholarly commentary"
+
+  ];
+
+  categoryLinks.forEach(categoryName => {
+
+    const b = make(
+      "button",
+      categoryName,
+      relatedResearch
+    );
+
+    b.type = "button";
+    b.className = "category";
+    b.style.margin = "5px";
+
+    b.addEventListener("click", () => {
+
+      const target = Array.from(
+        grid.querySelectorAll("button")
+      ).find(button => {
+
+        const heading = button.querySelector("h3");
+
+        return heading &&
+          heading.textContent.trim().toLowerCase() ===
+          categoryName.toLowerCase();
+
+      });
+
+      if (target) {
+        target.click();
+      }
+
+    });
+
+  });
+
+  // =========================================
+  // 14. EDITORIAL RESEARCH POLICY
+  // =========================================
+
+  const policy = section(
+    "14. DesertBible Research Integrity Policy"
+  );
+
+  const principles = [
+
+    "Do not fabricate artifacts, manuscripts, ancient documents or citations.",
+
+    "Distinguish documented findings from editorial interpretation.",
+
+    "Do not equate manuscript preservation with proof of historical events.",
+
+    "Do not conceal relevant contrary evidence or scholarly disagreement.",
+
+    "Distinguish archaeological discoveries from theological conclusions.",
+
+    "Do not assign unsupported numerical reliability or certainty scores.",
+
+    "Identify uncertain dates, disputed readings and contested historical reconstructions.",
+
+    "Prioritize identifiable primary sources and specialist academic publications.",
+
+    "Do not treat missing catalogue entries as proof that evidence does not exist.",
+
+    "Revise assessments when stronger evidence or corrected interpretations become available."
+
+  ];
+
+  const policyList = make(
+    "ul",
+    null,
+    policy
+  );
+
+  principles.forEach(content =>
+    make("li", content, policyList)
+  );
+
+  field(
+    policy,
+    "Catalogue Status",
+    "Expandable editorial research catalogue. Supports selection throughout the 66-book Bible, but comprehensive claim-level assessment remains an ongoing research requirement."
+  );
+
+  field(
+    policy,
+    "Purpose",
+    "Provide transparent, source-based biblical investigation while clearly identifying the boundaries of historical knowledge and theological interpretation."
+  );
+
+  return;
+}
     if (key === "Cross-references") {
   details.replaceChildren();
 
