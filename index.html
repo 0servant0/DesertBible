@@ -2766,7 +2766,2496 @@ if (key === "Translation comparison") {
     showHistoricalContext();
     return;
   }
+if (key === "Archaeological evidence") {
+  details.replaceChildren();
 
+  const book = reference.book;
+  const ch = Number(reference.chapter);
+  const vs = Number(reference.verse);
+  const passageName = `${book} ${ch}:${vs}`;
+
+  const normalize = value =>
+    String(value).toLowerCase().trim()
+      .replace(/^psalm$/, "psalms")
+      .replace(/^song of songs$/, "song of solomon");
+
+  const addSource = (parent, label, url) => {
+    const p = make("p", null, parent);
+    const a = make("a", label, p);
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.color = "#c9aa70";
+    return a;
+  };
+
+  const field = (parent, label, value) => {
+    make("h4", label, parent);
+    make("p", value, parent);
+  };
+
+  const bm = query =>
+    "https://www.britishmuseum.org/collection/search?keyword=" +
+    encodeURIComponent(query);
+
+  const academic = query =>
+    "https://scholar.google.com/scholar?q=" +
+    encodeURIComponent(query);
+
+  const evidenceTypes = {
+    direct: "Direct historical identification",
+    context: "Historical and archaeological context",
+    comparative: "Comparative material evidence",
+    disputed: "Disputed archaeological association",
+    manuscript: "Physical manuscript evidence",
+    reception: "Later historical reception"
+  };
+
+  make(
+    "h3",
+    `Archaeological Evidence — ${passageName}`,
+    details
+  );
+
+  make(
+    "p",
+    "Investigate physical discoveries associated with Scripture through archaeological excavations, inscriptions, artifacts, architecture, manuscripts and scientific dating.",
+    details
+  );
+
+  // =========================================
+  // ARCHAEOLOGICAL RESEARCH CATALOGUE
+  // =========================================
+
+  const archaeology = [
+    [
+      "Ancient Mesopotamian Flood Tablets",
+      "Second and first millennia BCE",
+      "Mesopotamia",
+      "Cuneiform clay tablets",
+      "comparative",
+      [["Genesis",6,9]],
+      "Excavated tablets preserve Mesopotamian flood traditions, including Atrahasis and the Epic of Gilgamesh.",
+      "Provides archaeological evidence for ancient Near Eastern flood literature.",
+      "The tablets do not establish the geographical extent, date or historicity of Noah's flood.",
+      "British Museum",
+      bm("Gilgamesh flood tablet")
+    ],
+    [
+      "The Ziggurat of Ur",
+      "Originally late third millennium BCE",
+      "Tell el-Muqayyar, Iraq",
+      "Monumental religious architecture",
+      "comparative",
+      [["Genesis",11,11]],
+      "A massive stepped temple platform associated with the Mesopotamian city of Ur.",
+      "Illustrates ancient Mesopotamian monumental construction and the urban environment of Genesis.",
+      "It is not the identified Tower of Babel and does not establish Abraham's residence.",
+      "Penn Museum",
+      "https://www.penn.museum/"
+    ],
+    [
+      "Etemenanki — Babylonian Ziggurat",
+      "Especially first millennium BCE",
+      "Babylon, Iraq",
+      "Temple platform remains and inscriptions",
+      "comparative",
+      [["Genesis",11,11,1,9]],
+      "Archaeological and textual evidence identifies an enormous temple tower dedicated to Marduk.",
+      "Provides architectural context for the Tower of Babel narrative.",
+      "Identification as the actual biblical tower is not established.",
+      "British Museum",
+      bm("Etemenanki")
+    ],
+    [
+      "Royal Cemetery of Ur",
+      "Approximately 2600–2500 BCE",
+      "Ur, Iraq",
+      "Burials and ceremonial artifacts",
+      "context",
+      [["Genesis",11,11,27,32]],
+      "Excavated graves preserve elaborate jewelry, musical instruments, vessels and evidence of social hierarchy.",
+      "Illustrates the long urban history of southern Mesopotamia.",
+      "These burials substantially predate conventional patriarchal chronologies.",
+      "Penn Museum",
+      "https://www.penn.museum/"
+    ],
+    [
+      "Mari Palace and Archives",
+      "Early second millennium BCE",
+      "Tell Hariri, Syria",
+      "Palace architecture and clay tablets",
+      "comparative",
+      [["Genesis",12,36]],
+      "Excavated administrative archives describe royal diplomacy, pastoral groups and regional travel.",
+      "Provides comparative background for the social world reflected in patriarchal narratives.",
+      "No securely identified biblical patriarch appears in the archive.",
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    [
+      "Nuzi Tablets",
+      "Approximately fifteenth–fourteenth centuries BCE",
+      "Yorghan Tepe, Iraq",
+      "Legal and administrative tablets",
+      "comparative",
+      [["Genesis",15,16],["Genesis",29,31]],
+      "Clay tablets document household arrangements, property and inheritance practices.",
+      "Useful for comparative study of ancient family and inheritance customs.",
+      "Older claims that these customs uniquely establish the patriarchal period are disputed.",
+      "Harvard Museum of the Ancient Near East",
+      "https://hmane.harvard.edu/"
+    ],
+    [
+      "Beni Hasan Asiatic Procession",
+      "Approximately nineteenth century BCE",
+      "Beni Hasan, Egypt",
+      "Painted tomb scene",
+      "context",
+      [["Genesis",12,12],["Genesis",42,47]],
+      "A tomb painting depicts a group of people from western Asia entering Egypt.",
+      "Illustrates movement between Egypt and the Levant.",
+      "The people depicted are not identified as Abraham, Joseph or Jacob's family.",
+      "Metropolitan Museum of Art — Egyptian research",
+      "https://www.metmuseum.org/"
+    ],
+    [
+      "Tell el-Daba — Ancient Avaris",
+      "Especially second millennium BCE",
+      "Eastern Nile Delta, Egypt",
+      "Settlement remains and burials",
+      "context",
+      [["Genesis",46,50],["Exodus",1,1]],
+      "Excavations document a major settlement with substantial connections to the Levant.",
+      "Provides evidence for populations of western Asian origin living in the Nile Delta.",
+      "No excavated individual or population has been conclusively identified as the biblical Israelites.",
+      "Austrian Archaeological Institute",
+      "https://www.oeaw.ac.at/oeai/"
+    ],
+    [
+      "Pi-Ramesses",
+      "Especially thirteenth–twelfth centuries BCE",
+      "Qantir, Egypt",
+      "Royal city and industrial remains",
+      "context",
+      [["Exodus",1,1,11,11],["Exodus",12,12,37,37]],
+      "Excavations identify the Ramesside royal capital in the eastern Nile Delta.",
+      "Provides geographical context for the biblical place-name Raamses.",
+      "The site does not independently establish Israelite forced labor or the Exodus chronology.",
+      "Qantir-Pi-Ramesses Archaeological Project",
+      "https://www.qantir.de/"
+    ],
+    [
+      "Egyptian Mudbrick Construction",
+      "Second millennium BCE and later",
+      "Ancient Egypt",
+      "Bricks, architecture and tomb imagery",
+      "comparative",
+      [["Exodus",1,1],["Exodus",5,5]],
+      "Material remains and representations document brick production and organized labor.",
+      "Illustrates technologies and labor practices mentioned in Exodus.",
+      "These remains cannot identify the workers described in Scripture.",
+      "British Museum",
+      bm("Egyptian mud brick")
+    ],
+    [
+      "Merneptah Stele",
+      "Approximately 1208 BCE",
+      "Thebes, Egypt",
+      "Royal victory inscription",
+      "direct",
+      [["Exodus",1,40],["Joshua",1,24],["Judges",1,2]],
+      "The inscription contains the earliest widely accepted extrabiblical reference to Israel.",
+      "Establishes that a people called Israel was known to Egyptian authorities in the late thirteenth century BCE.",
+      "Its broad biblical associations provide chronological background, not confirmation of the Exodus or conquest narratives.",
+      "Egyptian Museum research",
+      academic("Merneptah stele Israel determinative")
+    ],
+    [
+      "Stele of Hammurabi",
+      "Eighteenth century BCE",
+      "Found at Susa, Iran",
+      "Inscribed stone law collection",
+      "comparative",
+      [["Exodus",21,23],["Leviticus",19,24],["Deuteronomy",19,25]],
+      "Preserves an extensive Babylonian collection of legal judgments.",
+      "Provides comparative evidence for ancient Near Eastern legal institutions.",
+      "Legal parallels do not establish direct dependence or identical legal systems.",
+      "Louvre Collections",
+      "https://collections.louvre.fr/en/"
+    ],
+    [
+      "Egyptian and Levantine Covenant Tablets",
+      "Second millennium BCE",
+      "Egypt and Anatolia",
+      "Diplomatic inscriptions and treaty tablets",
+      "comparative",
+      [["Exodus",19,24],["Deuteronomy",1,34],["Joshua",24,24]],
+      "Surviving treaties establish formal obligations between rulers and political communities.",
+      "Provides comparative material for studying biblical covenant structures.",
+      "Similar treaty forms cannot independently determine biblical authorship or dating.",
+      "Hethitologie Portal Mainz",
+      "https://www.hethport.uni-wuerzburg.de/"
+    ],
+    [
+      "Timna Valley Mining and Cultic Remains",
+      "Late Bronze and Iron Ages",
+      "Southern Israel",
+      "Mining installations and cultic remains",
+      "comparative",
+      [["Exodus",25,40],["Numbers",21,21]],
+      "Excavations document copper production and a sanctuary associated with Egyptian and local traditions.",
+      "Illustrates metallurgy and cultic activity in the southern desert regions.",
+      "The sanctuary has not been established as the biblical Tabernacle.",
+      "Tel Aviv University research",
+      academic("Timna mining sanctuary archaeology")
+    ],
+    [
+      "Deir Alla Balaam Inscription",
+      "Approximately eighth century BCE",
+      "Deir Alla, Jordan",
+      "Inscribed plaster fragments",
+      "direct",
+      [["Numbers",22,24]],
+      "The inscription identifies a visionary named Balaam son of Beor.",
+      "Establishes an ancient extrabiblical tradition using the same name and patronymic found in Numbers.",
+      "It does not independently establish Balaam's biblical encounters or speeches.",
+      "Leiden University research",
+      academic("Deir Alla Balaam son of Beor inscription")
+    ],
+    [
+      "Jericho — Tell es-Sultan",
+      "Multiple occupation periods",
+      "Jericho",
+      "Settlement and fortification remains",
+      "disputed",
+      [["Joshua",2,6]],
+      "Excavations reveal an ancient settlement with multiple construction and destruction phases.",
+      "Establishes the antiquity of the settlement associated with Jericho.",
+      "The date and character of destruction layers cannot securely be equated with Joshua's conquest.",
+      "UNESCO — Ancient Jericho",
+      "https://whc.unesco.org/en/list/1687/"
+    ],
+    [
+      "Et-Tell and the Identification of Ai",
+      "Especially Early Bronze Age",
+      "Central highlands",
+      "Settlement and destruction remains",
+      "disputed",
+      [["Joshua",7,8]],
+      "Et-Tell contains substantial Early Bronze Age ruins and later settlement evidence.",
+      "Relevant to proposed geographical identifications of biblical Ai.",
+      "The chronology presents difficulties for traditional conquest identifications. Alternative locations remain debated.",
+      "Academic excavation research",
+      academic("Et Tell Ai archaeology Joshua chronology")
+    ],
+    [
+      "Hazor — Bronze Age Palace",
+      "Second millennium BCE",
+      "Tel Hazor",
+      "Palace remains and destruction layers",
+      "disputed",
+      [["Joshua",11,11],["Judges",4,4]],
+      "Excavations document a major Canaanite urban center and a substantial Late Bronze Age destruction horizon.",
+      "Provides material evidence for the importance and destruction of ancient Hazor.",
+      "The identity of those responsible for the destruction is not conclusively established.",
+      "UNESCO — Biblical Tels",
+      "https://whc.unesco.org/en/list/1108/"
+    ],
+    [
+      "Early Iron Age Highland Settlements",
+      "Approximately twelfth–eleventh centuries BCE",
+      "Central highlands of the southern Levant",
+      "Domestic architecture and ceramics",
+      "context",
+      [["Joshua",13,24],["Judges",1,21]],
+      "Archaeological surveys document expanding settlement in the central highlands.",
+      "Important for studying the emergence of ancient Israel.",
+      "Material culture alone cannot establish the ethnic identity of every settlement.",
+      "Academic settlement research",
+      academic("Iron Age highland settlement emergence Israel")
+    ],
+    [
+      "Ugarit — Ras Shamra",
+      "Especially Late Bronze Age",
+      "Northern Syria",
+      "Temples, palaces and tablets",
+      "comparative",
+      [["Judges",2,3],["1 Kings",16,18],["Hosea",2,2],["Psalms",29,29]],
+      "Excavations reveal a major Late Bronze Age city and its religious archives.",
+      "Provides comparative material for Canaanite religious vocabulary and Baal traditions.",
+      "Ugaritic religion should not be treated as identical to all beliefs in biblical Israel.",
+      "Louvre Collections",
+      "https://collections.louvre.fr/en/"
+    ],
+    [
+      "Philistine Settlement at Ekron",
+      "Iron Age",
+      "Tel Miqne",
+      "Urban architecture, pottery and inscriptions",
+      "context",
+      [["Joshua",13,13],["Judges",13,16],["1 Samuel",5,6]],
+      "Excavations document a major Philistine city with distinctive ceramics and industrial remains.",
+      "Provides historical context for Philistine cities and material culture.",
+      "Does not independently establish the stories of Samson or the Ark.",
+      "Academic excavation research",
+      academic("Tel Miqne Ekron excavations")
+    ],
+    [
+      "Ekron Royal Dedicatory Inscription",
+      "Seventh century BCE",
+      "Tel Miqne",
+      "Stone temple inscription",
+      "direct",
+      [["2 Kings",18,19],["Jeremiah",25,25],["Zephaniah",2,2]],
+      "The inscription identifies Ekron and names its royal dynasty.",
+      "Securely anchors the city's identification and late Iron Age political setting.",
+      "The inscription does not directly confirm every earlier biblical episode involving Ekron.",
+      "Academic inscription research",
+      academic("Ekron royal dedicatory inscription")
+    ],
+    [
+      "Gath — Tell es-Safi",
+      "Bronze and Iron Ages",
+      "Tell es-Safi",
+      "Urban remains and destruction layers",
+      "context",
+      [["1 Samuel",17,17],["1 Samuel",21,21],["2 Kings",12,12],["Amos",6,6]],
+      "Excavations reveal a substantial Philistine urban center and a major ninth-century BCE destruction horizon.",
+      "Provides geographical and historical context for biblical Gath.",
+      "No artifact conclusively establishes the existence or combat of Goliath.",
+      "Tell es-Safi Gath Archaeological Project",
+      "https://gath.wordpress.com/"
+    ],
+    [
+      "Khirbet Qeiyafa",
+      "Late eleventh or early tenth century BCE",
+      "Elah Valley",
+      "Fortifications and settlement remains",
+      "disputed",
+      [["1 Samuel",17,17],["2 Samuel",5,5]],
+      "Excavations uncovered a fortified Iron Age settlement and inscribed material.",
+      "Relevant to discussions of political organization during the early monarchy.",
+      "The site's political affiliation and relationship to David's kingdom remain debated.",
+      "Academic excavation research",
+      academic("Khirbet Qeiyafa radiocarbon political affiliation")
+    ],
+    [
+      "Tel Dan Stele",
+      "Ninth century BCE",
+      "Tel Dan",
+      "Aramaic monumental inscription",
+      "direct",
+      [["2 Samuel",7,7],["1 Kings",12,12],["2 Kings",8,10]],
+      "Fragments of an Aramaic victory inscription contain a reference widely interpreted as the House of David.",
+      "Provides independent evidence for a dynasty associated with David.",
+      "Does not establish the extent of David's kingdom or every event in Samuel.",
+      "Israel Museum research",
+      "https://www.imj.org.il/en"
+    ],
+    [
+      "Jerusalem — Large Stone Structure",
+      "Iron Age; chronology debated",
+      "City of David, Jerusalem",
+      "Monumental architectural remains",
+      "disputed",
+      [["2 Samuel",5,5],["2 Samuel",7,7]],
+      "Excavated walls and associated structures indicate substantial ancient construction.",
+      "Relevant to discussions of Jerusalem's development during the monarchy.",
+      "Identification as David's palace is not established by scholarly consensus.",
+      "Academic architectural research",
+      academic("Jerusalem Large Stone Structure dating David palace debate")
+    ],
+    [
+      "Gezer Fortifications",
+      "Bronze and Iron Ages",
+      "Tel Gezer",
+      "Walls, gates and urban remains",
+      "disputed",
+      [["Joshua",10,10],["1 Kings",9,9]],
+      "Excavations document successive fortified settlements and monumental construction.",
+      "Relevant to the biblical description of Gezer as an important city.",
+      "Attribution of particular building phases to Solomon requires chronological evaluation.",
+      "UNESCO — Biblical Tels",
+      "https://whc.unesco.org/en/list/1108/"
+    ],
+    [
+      "Megiddo — Monumental Buildings",
+      "Bronze and Iron Ages",
+      "Tel Megiddo",
+      "Palaces, gates and infrastructure",
+      "context",
+      [["1 Kings",9,9],["2 Kings",23,23],["Revelation",16,16,16,16]],
+      "Excavations document a strategically located city with extensive monumental architecture.",
+      "Provides geographical and historical context for Megiddo.",
+      "The attribution of individual structures to Solomon remains debated. The site does not establish a future prophetic event.",
+      "UNESCO — Biblical Tels",
+      "https://whc.unesco.org/en/list/1108/"
+    ],
+    [
+      "Shoshenq I — Bubastite Portal",
+      "Tenth century BCE",
+      "Karnak, Egypt",
+      "Royal monumental inscription",
+      "direct",
+      [["1 Kings",14,14,25,28],["2 Chronicles",12,12]],
+      "The monument records an Egyptian campaign involving locations in the southern Levant.",
+      "Provides independent context for the biblical campaign of Shishak.",
+      "Jerusalem is not securely identified in the surviving place-name list.",
+      "University of Chicago ISAC",
+      "https://isac.uchicago.edu/"
+    ],
+    [
+      "Mesha Stele",
+      "Ninth century BCE",
+      "Dhiban, Jordan",
+      "Moabite monumental inscription",
+      "direct",
+      [["2 Kings",3,3]],
+      "The inscription records King Mesha's achievements and conflict involving Israel.",
+      "Provides independent evidence for Mesha and relations between Moab and Israel.",
+      "Its perspective differs from Kings and does not corroborate every narrative detail.",
+      "Louvre Collections",
+      "https://collections.louvre.fr/en/"
+    ],
+    [
+      "Kurkh Monolith",
+      "853 BCE campaign",
+      "Found at Kurkh, Turkey",
+      "Assyrian royal inscription",
+      "direct",
+      [["1 Kings",16,22]],
+      "Shalmaneser III's inscription identifies Ahab of Israel among the forces opposing Assyria.",
+      "Provides independent historical evidence for Ahab's reign and regional military involvement.",
+      "The Battle of Qarqar is not explicitly narrated in Kings.",
+      "British Museum",
+      bm("Kurkh monolith")
+    ],
+    [
+      "Black Obelisk of Shalmaneser III",
+      "Ninth century BCE",
+      "Nimrud, Iraq",
+      "Carved royal monument",
+      "direct",
+      [["2 Kings",9,10]],
+      "The monument records tribute connected with Jehu of Israel.",
+      "Provides an independent Assyrian reference to the Israelite ruler.",
+      "The depicted figure cannot be established with certainty as Jehu personally.",
+      "British Museum",
+      bm("Black Obelisk")
+    ],
+    [
+      "Samaria Ivories",
+      "Iron Age",
+      "Ancient Samaria",
+      "Carved ivory decorative objects",
+      "context",
+      [["1 Kings",22,22,39,39],["Amos",3,3,15,15],["Amos",6,6,4,6]],
+      "Excavations uncovered elaborate ivory decorations associated with elite consumption.",
+      "Provides material context for biblical references to ivory furnishings and wealth.",
+      "Individual objects cannot securely be assigned to specific biblical owners.",
+      "British Museum",
+      bm("Samaria ivory")
+    ],
+    [
+      "Samaria Ostraca",
+      "Eighth century BCE",
+      "Samaria",
+      "Inscribed pottery fragments",
+      "context",
+      [["2 Kings",14,17],["Amos",3,6],["Hosea",4,10]],
+      "Administrative records describe deliveries of agricultural products and preserve personal and geographical names.",
+      "Provides evidence for the northern kingdom's administrative and economic organization.",
+      "Does not independently establish individual prophetic accusations.",
+      "Harvard Museum of the Ancient Near East",
+      "https://hmane.harvard.edu/"
+    ],
+    [
+      "Kuntillet Ajrud",
+      "Late ninth or early eighth century BCE",
+      "Northeastern Sinai",
+      "Inscribed pottery and religious imagery",
+      "context",
+      [["1 Kings",12,12],["2 Kings",17,17],["Hosea",4,4]],
+      "Inscriptions preserve religious expressions involving Yahweh and asherah.",
+      "Important archaeological evidence for religious diversity in the Iron Age.",
+      "Interpretation of the inscriptions and associated imagery remains debated.",
+      "Academic inscription research",
+      academic("Kuntillet Ajrud inscriptions Yahweh asherah")
+    ],
+    [
+      "Tiglath-Pileser III Inscriptions",
+      "745–727 BCE",
+      "Assyria",
+      "Royal inscriptions",
+      "direct",
+      [["2 Kings",15,16],["1 Chronicles",5,5],["Isaiah",7,8]],
+      "Assyrian inscriptions document western campaigns and rulers associated with Israel and Judah.",
+      "Provides independent evidence for Assyrian involvement in the region.",
+      "Royal narratives reflect imperial political interests.",
+      "ORACC — Royal Inscriptions",
+      "https://oracc.museum.upenn.edu/rinap/"
+    ],
+    [
+      "Sargon II Inscriptions",
+      "722–705 BCE",
+      "Khorsabad and other Assyrian sites",
+      "Royal monumental inscriptions",
+      "direct",
+      [["2 Kings",17,17],["Isaiah",20,20],["Micah",1,1,1,7]],
+      "Royal records describe Assyrian campaigns and claims concerning Samaria and Ashdod.",
+      "Provides historical context for the collapse of the northern kingdom and Assyrian expansion.",
+      "The respective roles of Shalmaneser V and Sargon II in Samaria's fall require critical comparison.",
+      "ORACC RINAP",
+      "https://oracc.museum.upenn.edu/rinap/"
+    ],
+    [
+      "Sennacherib's Taylor Prism",
+      "691 BCE; campaign described occurred in 701 BCE",
+      "Nineveh, Iraq",
+      "Inscribed clay prism",
+      "direct",
+      [["2 Kings",18,19],["2 Chronicles",32,32],["Isaiah",36,37],["Micah",1,1]],
+      "Assyrian royal annals describe Sennacherib's campaign against Judah and identify Hezekiah.",
+      "Independently establishes the Assyrian campaign and Hezekiah's involvement.",
+      "The annals do not corroborate every biblical description of Jerusalem's deliverance.",
+      "British Museum",
+      bm("Taylor prism")
+    ],
+    [
+      "Lachish Siege Reliefs",
+      "Early seventh century BCE; depicting 701 BCE",
+      "Nineveh, Iraq",
+      "Carved palace reliefs",
+      "direct",
+      [["2 Kings",18,18],["2 Chronicles",32,32],["Isaiah",36,37],["Micah",1,1,10,16]],
+      "Palace reliefs represent the Assyrian siege and capture of Lachish.",
+      "Can be studied alongside excavated remains at Lachish and written accounts of the campaign.",
+      "The reliefs are Assyrian royal representations and do not independently establish Micah's precise literary chronology.",
+      "British Museum",
+      bm("Lachish relief")
+    ],
+    [
+      "Lachish Level III Destruction",
+      "Associated with the 701 BCE Assyrian campaign",
+      "Tell ed-Duweir",
+      "Fortifications and siege remains",
+      "direct",
+      [["2 Kings",18,18],["2 Chronicles",32,32],["Isaiah",36,36],["Micah",1,1,13,13]],
+      "Excavations document major destruction and siege-related archaeological evidence.",
+      "Material evidence converges with Assyrian records of the campaign against Lachish.",
+      "Individual archaeological deposits require stratigraphic interpretation.",
+      "David Ussishkin — excavation research",
+      academic("David Ussishkin Lachish Level III Assyrian siege")
+    ],
+    [
+      "Siloam Tunnel and Inscription",
+      "Conventionally late eighth century BCE",
+      "Jerusalem",
+      "Water infrastructure and Hebrew inscription",
+      "context",
+      [["2 Kings",20,20,20,20],["2 Chronicles",32,32,30,30],["Isaiah",22,22]],
+      "The tunnel and its inscription document ancient underground water engineering.",
+      "Provides material context for Jerusalem's waterworks described in biblical accounts.",
+      "The inscription itself does not mention Hezekiah.",
+      "Academic archaeological research",
+      academic("Siloam tunnel radiocarbon dating inscription")
+    ],
+    [
+      "Broad Wall of Jerusalem",
+      "Late Iron Age",
+      "Jerusalem",
+      "Massive defensive wall",
+      "context",
+      [["2 Chronicles",32,32],["Isaiah",22,22]],
+      "Excavations uncovered a substantial ancient defensive wall.",
+      "Provides context for the expansion and fortification of Jerusalem during the Iron Age.",
+      "The precise circumstances of construction cannot be established from the wall alone.",
+      "Israel Antiquities Authority",
+      "https://www.antiquities.org.il/"
+    ],
+    [
+      "LMLK Jar Handles",
+      "Late eighth and early seventh centuries BCE",
+      "Judah",
+      "Stamped storage-jar handles",
+      "context",
+      [["2 Kings",18,20],["2 Chronicles",29,32]],
+      "Stamped handles document an organized system of storage-jar production and distribution.",
+      "Provides context for Judah's royal administration and economic organization.",
+      "The precise administrative purpose of the system remains debated.",
+      "British Museum",
+      bm("LMLK jar handle")
+    ],
+    [
+      "Esarhaddon's Royal Inscriptions",
+      "681–669 BCE",
+      "Assyria",
+      "Inscribed royal monuments",
+      "direct",
+      [["2 Kings",19,21],["2 Chronicles",33,33],["Ezra",4,4],["Isaiah",37,37]],
+      "Assyrian records mention subordinate rulers and imperial campaigns, including Manasseh of Judah.",
+      "Provides independent evidence for Judah's position under Assyrian domination.",
+      "Does not establish every detail of Manasseh's captivity or religious activities.",
+      "ORACC RINAP",
+      "https://oracc.museum.upenn.edu/rinap/"
+    ],
+    [
+      "Ashurbanipal's Royal Inscriptions",
+      "Seventh century BCE",
+      "Assyria",
+      "Royal inscriptions and palace reliefs",
+      "context",
+      [["2 Chronicles",33,33],["Nahum",3,3,8,10]],
+      "Assyrian records describe military campaigns including the sack of Thebes.",
+      "Provides historical background for Nahum's reference to No-Amon.",
+      "Imperial accounts require critical comparison with other evidence.",
+      "ORACC RINAP",
+      "https://oracc.museum.upenn.edu/rinap/"
+    ],
+    [
+      "Nineveh Destruction Evidence",
+      "612 BCE",
+      "Nineveh, Iraq",
+      "Urban destruction remains and chronicles",
+      "direct",
+      [["Nahum",1,3],["Zephaniah",2,2,13,15]],
+      "Archaeological and written evidence documents the collapse of the Assyrian capital.",
+      "Establishes the historical destruction of Nineveh.",
+      "Does not independently settle questions about prophetic composition dates.",
+      "British Museum",
+      bm("Fall of Nineveh Chronicle")
+    ],
+    [
+      "Ketef Hinnom Silver Amulets",
+      "Late seventh or early sixth century BCE commonly proposed",
+      "Jerusalem",
+      "Inscribed silver scrolls",
+      "manuscript",
+      [["Numbers",6,6,22,27]],
+      "Two small silver objects preserve blessing formulas closely related to the priestly blessing.",
+      "Provides early physical evidence for language corresponding to Numbers 6.",
+      "Does not establish the date of composition of the entire Pentateuch.",
+      "Academic inscription research",
+      academic("Ketef Hinnom silver amulets Barkay")
+    ],
+    [
+      "Arad Ostraca",
+      "Iron Age, especially late monarchic Judah",
+      "Tel Arad",
+      "Inscribed pottery fragments",
+      "context",
+      [["2 Kings",22,25],["Jeremiah",1,39]],
+      "Administrative letters document supplies, military personnel and written communication.",
+      "Provides evidence for Judah's administrative practices and literacy.",
+      "The letters do not establish the historicity of every associated biblical passage.",
+      "Academic archaeological research",
+      academic("Arad ostraca literacy Judah")
+    ],
+    [
+      "Lachish Letters",
+      "Early sixth century BCE",
+      "Lachish",
+      "Hebrew ostraca",
+      "context",
+      [["2 Kings",24,25],["Jeremiah",34,34],["Jeremiah",37,39]],
+      "Letters preserve correspondence associated with Judah's final years before Babylonian domination.",
+      "Provides contemporary context for military communication and fortified cities.",
+      "Connections between individual letters and biblical incidents require caution.",
+      "British Museum",
+      bm("Lachish letter")
+    ],
+    [
+      "Jerusalem Babylonian Destruction Layers",
+      "Early sixth century BCE",
+      "Jerusalem",
+      "Burned buildings and archaeological deposits",
+      "direct",
+      [["2 Kings",25,25],["2 Chronicles",36,36],["Jeremiah",39,39],["Jeremiah",52,52],["Lamentations",1,5]],
+      "Excavated deposits preserve evidence of major destruction during the end of Iron Age Judah.",
+      "Provides physical evidence for the historical crisis reflected in Kings, Jeremiah and Lamentations.",
+      "Archaeological deposits do not establish every literary detail or theological interpretation.",
+      "Academic destruction-layer research",
+      academic("Jerusalem Babylonian destruction 586 BCE archaeology")
+    ],
+    [
+      "Babylonian Jerusalem Chronicle",
+      "Records events including 597 BCE",
+      "Babylonia",
+      "Cuneiform tablet",
+      "direct",
+      [["2 Kings",24,24],["2 Chronicles",36,36],["Jeremiah",24,24]],
+      "The chronicle records a Babylonian campaign against Jerusalem and the appointment of another king.",
+      "Provides independent evidence for the Babylonian intervention described in Kings.",
+      "It does not provide a complete account of Judah's later destruction.",
+      "British Museum",
+      bm("Jerusalem Chronicle")
+    ],
+    [
+      "Jehoiachin Ration Tablets",
+      "Sixth century BCE",
+      "Babylon",
+      "Administrative clay tablets",
+      "direct",
+      [["2 Kings",24,25],["Jeremiah",52,52]],
+      "Babylonian administrative texts record provisions associated with Jehoiachin and his household.",
+      "Establishes an independent historical reference to the exiled king in Babylon.",
+      "Does not establish every detail of his imprisonment or release.",
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    [
+      "Ishtar Gate",
+      "Sixth century BCE",
+      "Babylon",
+      "Glazed brick monumental architecture",
+      "context",
+      [["Daniel",1,5],["Jeremiah",50,51]],
+      "Excavations document Babylon's monumental architecture during the Neo-Babylonian period.",
+      "Provides architectural context for Babylon in Daniel and Jeremiah.",
+      "The gate does not independently establish Daniel's individual experiences.",
+      "Berlin State Museums",
+      "https://www.smb.museum/en/"
+    ],
+    [
+      "Nabonidus Chronicle",
+      "Records sixth-century BCE events",
+      "Babylonia",
+      "Inscribed clay tablet",
+      "direct",
+      [["Daniel",5,6],["Ezra",1,1]],
+      "The chronicle documents the reign of Nabonidus and the Persian conquest of Babylon.",
+      "Provides evidence for the historical transition from Babylonian to Persian rule.",
+      "Does not independently corroborate Daniel's banquet narrative.",
+      "British Museum",
+      bm("Nabonidus Chronicle")
+    ],
+    [
+      "Nabonidus Cylinders",
+      "Sixth century BCE",
+      "Mesopotamia",
+      "Inscribed clay cylinders",
+      "direct",
+      [["Daniel",5,5],["Daniel",7,8]],
+      "Royal inscriptions include references to Belshazzar, the son of Nabonidus.",
+      "Provides independent historical evidence for Belshazzar.",
+      "Does not establish every detail of his authority or the biblical banquet.",
+      "British Museum",
+      bm("Nabonidus cylinder")
+    ],
+    [
+      "Cyrus Cylinder",
+      "Approximately 539 BCE",
+      "Babylon",
+      "Royal inscription on clay",
+      "context",
+      [["Ezra",1,1],["Ezra",6,6],["2 Chronicles",36,36],["Isaiah",44,45]],
+      "The inscription describes Cyrus's conquest and restoration of selected religious institutions.",
+      "Provides context for Persian imperial restoration policies.",
+      "It does not mention Jerusalem or reproduce the biblical decree concerning Judah.",
+      "British Museum",
+      bm("Cyrus Cylinder")
+    ],
+    [
+      "Behistun Inscription",
+      "Approximately 520 BCE",
+      "Western Iran",
+      "Monumental multilingual inscription",
+      "direct",
+      [["Ezra",4,6],["Haggai",1,2],["Zechariah",1,8]],
+      "The monument identifies Darius I and records his political and military achievements.",
+      "Provides historical evidence for the Persian ruler associated with restoration-period Scripture.",
+      "Does not independently establish the Jerusalem rebuilding narrative.",
+      "UNESCO — Bisotun",
+      "https://whc.unesco.org/en/list/1222/"
+    ],
+    [
+      "Persepolis",
+      "Achaemenid Persian period",
+      "Iran",
+      "Palaces, reliefs and archives",
+      "context",
+      [["Esther",1,10],["Ezra",4,7]],
+      "Monumental remains and administrative archives document Persian court culture and imperial organization.",
+      "Provides material context for the Persian imperial world.",
+      "Esther's court narrative is set in Susa, not Persepolis. The finds do not establish Esther's identity.",
+      "UNESCO — Persepolis",
+      "https://whc.unesco.org/en/list/114/"
+    ],
+    [
+      "Palace of Darius at Susa",
+      "Achaemenid Persian period",
+      "Susa, Iran",
+      "Palatial architectural remains",
+      "context",
+      [["Esther",1,10],["Nehemiah",1,1],["Daniel",8,8,2,2]],
+      "Excavations preserve evidence of Persian royal architecture at Susa.",
+      "Provides geographical context for the biblical setting of Shushan.",
+      "No excavated object conclusively identifies Esther or Mordecai.",
+      "UNESCO — Susa",
+      "https://whc.unesco.org/en/list/1455/"
+    ],
+    [
+      "Elephantine Jewish Community",
+      "Especially fifth century BCE",
+      "Elephantine, Egypt",
+      "Papyri and settlement evidence",
+      "context",
+      [["Ezra",4,7],["Nehemiah",1,13],["Jeremiah",42,44]],
+      "Documents and associated archaeological research establish a Jewish community in Persian-period Egypt.",
+      "Provides comparative evidence for diaspora religious and administrative life.",
+      "Does not establish a direct connection with every biblical diaspora community.",
+      "Elephantine Research Project",
+      "https://elephantine.smb.museum/"
+    ],
+    [
+      "Great Isaiah Scroll",
+      "Approximately second century BCE",
+      "Qumran Cave 1",
+      "Hebrew parchment manuscript",
+      "manuscript",
+      [["Isaiah",1,66]],
+      "The manuscript preserves the complete book of Isaiah.",
+      "Provides a physical textual witness for Isaiah's transmission before the Christian era.",
+      "Individual variant readings require comparison with other textual witnesses.",
+      "Israel Museum — Great Isaiah Scroll",
+      "https://dss.collections.imj.org.il/isaiah"
+    ],
+    [
+      "Habakkuk Pesher",
+      "Approximately first century BCE",
+      "Qumran Cave 1",
+      "Hebrew manuscript",
+      "manuscript",
+      [["Habakkuk",1,2]],
+      "The scroll preserves ancient interpretation and quotations of portions of Habakkuk.",
+      "Provides archaeological evidence for early textual transmission and reception.",
+      "Not every word of the biblical passage is necessarily preserved, and the interpretation reflects a later community.",
+      "Israel Museum",
+      "https://dss.collections.imj.org.il/"
+    ],
+    [
+      "Second Temple-period Qumran",
+      "Especially second century BCE to first century CE",
+      "Khirbet Qumran",
+      "Settlement and manuscript deposits",
+      "context",
+      [["Matthew",3,3],["Mark",1,1],["Luke",3,3],["John",1,1]],
+      "Excavations and nearby manuscript discoveries provide evidence of Second Temple Jewish religious life.",
+      "Useful comparative context for ritual purification, Scripture study and Jewish religious diversity.",
+      "No direct institutional relationship between John the Baptist and Qumran is established.",
+      "Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    ],
+    [
+      "Herodium",
+      "Late first century BCE and later",
+      "Near Bethlehem",
+      "Palace fortress and monumental structures",
+      "context",
+      [["Matthew",2,2]],
+      "Excavations document a major royal construction associated with Herod the Great.",
+      "Provides evidence for the political and architectural setting of Herod's reign.",
+      "Does not independently establish the infancy narrative or the killing of children in Bethlehem.",
+      "Academic excavation research",
+      academic("Herodium Ehud Netzer excavations")
+    ],
+    [
+      "Herodian Jerusalem Temple Platform",
+      "Late first century BCE to first century CE",
+      "Jerusalem",
+      "Retaining walls and monumental architecture",
+      "context",
+      [["Matthew",21,24],["Mark",11,13],["Luke",19,21],["John",2,2],["Acts",2,5],["Acts",21,21]],
+      "Surviving structures document the monumental expansion surrounding the Second Temple complex.",
+      "Provides architectural context for biblical references to the Jerusalem Temple.",
+      "The surviving retaining walls are not the complete sanctuary building.",
+      "Israel Antiquities Authority",
+      "https://www.antiquities.org.il/"
+    ],
+    [
+      "Nazareth Early Roman Settlement",
+      "Early Roman period",
+      "Nazareth",
+      "Domestic remains, pottery and tombs",
+      "context",
+      [["Matthew",2,2],["Luke",1,2],["Luke",4,4],["John",1,1]],
+      "Archaeological discoveries document occupation and domestic activity in Nazareth during the Roman period.",
+      "Provides evidence for the settlement associated with Jesus's upbringing.",
+      "No excavated dwelling has been conclusively identified as Jesus's childhood home.",
+      "Academic excavation research",
+      academic("Early Roman Nazareth archaeological excavation")
+    ],
+    [
+      "Capernaum Synagogue",
+      "Visible monumental synagogue generally late Roman or Byzantine",
+      "Capernaum",
+      "Religious architecture",
+      "context",
+      [["Matthew",4,4],["Matthew",8,8],["Mark",1,2],["Luke",4,4],["Luke",7,7],["John",6,6]],
+      "The site contains synagogue remains and evidence of earlier occupation beneath and around later construction.",
+      "Provides context for Jewish communal life in Capernaum.",
+      "The visible limestone synagogue is later than Jesus's ministry.",
+      "Academic synagogue research",
+      academic("Capernaum synagogue archaeological chronology")
+    ],
+    [
+      "Traditional House of Peter",
+      "Roman domestic remains with later Christian construction",
+      "Capernaum",
+      "Domestic architecture and church remains",
+      "disputed",
+      [["Matthew",8,8,14,15],["Mark",1,1,29,31],["Luke",4,4,38,39]],
+      "Excavations reveal residential remains subsequently associated with Christian veneration.",
+      "Provides evidence for domestic life and later Christian traditions at Capernaum.",
+      "The original owner cannot be conclusively identified as Peter.",
+      "Academic excavation research",
+      academic("Capernaum house of Peter excavation identification")
+    ],
+    [
+      "Ancient Sea of Galilee Boat",
+      "Approximately first century BCE to first century CE",
+      "Near Ginosar, Sea of Galilee",
+      "Wooden boat",
+      "context",
+      [["Matthew",4,4],["Matthew",8,8],["Matthew",14,14],["Mark",4,4],["Luke",5,5],["John",21,21]],
+      "A preserved wooden vessel was discovered in 1986 near the lake.",
+      "Illustrates fishing and transport technologies in the Gospel period.",
+      "No evidence establishes that Jesus or his disciples used this specific boat.",
+      "Yigal Allon Center research",
+      academic("Sea of Galilee ancient boat 1986 radiocarbon")
+    ],
+    [
+      "Magdala Synagogue and Stone",
+      "First century CE",
+      "Magdala",
+      "Synagogue remains and carved stone",
+      "context",
+      [["Matthew",15,15],["Mark",8,8],["Luke",8,8,2,3]],
+      "Excavations document an early Jewish synagogue with a distinctive carved stone.",
+      "Provides material evidence for Galilean Jewish religious practice.",
+      "The stone's symbolism is debated, and Jesus's presence in this particular building is not established.",
+      "Academic synagogue research",
+      academic("Magdala synagogue stone archaeological excavation")
+    ],
+    [
+      "Pool of Bethesda",
+      "Multiple ancient construction phases",
+      "Jerusalem",
+      "Pool complex and architectural remains",
+      "context",
+      [["John",5,5,1,18]],
+      "Archaeological investigation identifies a historic pool complex near the traditional Bethesda location.",
+      "Provides geographical and architectural context for John 5.",
+      "The remains cannot independently establish the healing described in the Gospel.",
+      "Academic archaeological research",
+      academic("Pool Bethesda archaeology Jerusalem John 5")
+    ],
+    [
+      "Second Temple Pool of Siloam",
+      "Late Second Temple period",
+      "Jerusalem",
+      "Stepped pool and associated infrastructure",
+      "context",
+      [["John",9,9]],
+      "Excavations beginning in 2004 revealed monumental steps belonging to an ancient pool.",
+      "Provides material context for the location described in John 9.",
+      "The archaeological remains do not establish the healing event.",
+      "Archaeological site research",
+      "https://biblical-archaeology.org/en/locations/siloam-pool/"
+    ],
+    [
+      "Pontius Pilate Inscription",
+      "26–36 CE",
+      "Caesarea Maritima",
+      "Latin limestone inscription",
+      "direct",
+      [["Matthew",27,27],["Mark",15,15],["Luke",3,3,1,1],["Luke",23,23],["John",18,19],["Acts",4,4,27,27],["1 Timothy",6,6,13,13]],
+      "The inscription names Pontius Pilate and identifies his office as prefect of Judaea.",
+      "Provides contemporary material evidence for the Roman governor named in the New Testament.",
+      "The inscription does not describe Jesus's trial or execution.",
+      "Israel Museum",
+      "https://www.imj.org.il/en"
+    ],
+    [
+      "Caiaphas Ossuary",
+      "First century CE",
+      "Jerusalem",
+      "Inscribed limestone burial box",
+      "disputed",
+      [["Matthew",26,26],["John",11,11,49,53],["John",18,18],["Acts",4,4,6,6]],
+      "An elaborately decorated ossuary bears a name associated with Joseph Caiaphas.",
+      "Potential physical evidence associated with the high-priestly family mentioned in the New Testament.",
+      "The identification with the individual high priest is probable but not absolutely certain.",
+      "Israel Museum",
+      "https://www.imj.org.il/en"
+    ],
+    [
+      "Yehohanan Crucifixion Remains",
+      "First century CE",
+      "Givat ha-Mivtar, Jerusalem",
+      "Human skeletal remains and iron nail",
+      "context",
+      [["Matthew",27,27],["Mark",15,15],["Luke",23,23],["John",19,20]],
+      "A burial preserves physical evidence of a heel bone penetrated by a nail associated with Roman crucifixion.",
+      "Establishes archaeological evidence for crucifixion practices in Roman Judaea.",
+      "The remains belong to another person and cannot establish Jesus's exact execution position.",
+      "Academic osteological research",
+      academic("Yehohanan crucifixion heel bone Zias Sekeles")
+    ],
+    [
+      "Church of the Holy Sepulchre Site",
+      "Ancient quarry and burial remains; church founded in fourth century CE",
+      "Jerusalem",
+      "Rock-cut tombs and later church architecture",
+      "disputed",
+      [["Matthew",27,28],["Mark",15,16],["Luke",23,24],["John",19,20]],
+      "The site contains ancient burial and quarry evidence alongside later Christian monumental construction.",
+      "Relevant to the historical investigation of traditional crucifixion and burial locations.",
+      "Archaeology cannot conclusively identify an individual tomb as Jesus's or establish the resurrection.",
+      "Academic archaeological research",
+      academic("Holy Sepulchre archaeology quarry tomb chronology")
+    ],
+    [
+      "Caesarea Maritima",
+      "Herodian and Roman periods",
+      "Mediterranean coast",
+      "Harbor, theater and administrative architecture",
+      "context",
+      [["Acts",8,8],["Acts",10,10],["Acts",12,12],["Acts",23,26]],
+      "Excavations document a substantial harbor city and Roman administrative center.",
+      "Provides material context for the events in Acts associated with Caesarea.",
+      "Individual rooms and structures cannot securely be assigned to Paul's imprisonment.",
+      "Academic excavation research",
+      academic("Caesarea Maritima Roman harbor excavation")
+    ],
+    [
+      "Jerusalem Temple Warning Inscription",
+      "Second Temple period before 70 CE",
+      "Jerusalem",
+      "Greek stone inscription",
+      "direct",
+      [["Acts",21,21,27,31],["Ephesians",2,2,14,14]],
+      "The inscription records restrictions on entry into a sacred temple enclosure.",
+      "Provides independent material evidence for restrictions reflected in Acts 21.",
+      "Does not independently establish that Paul violated the restriction. Ephesians is a contextual literary association.",
+      "Greek Inscriptions Database",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "Gallio Inscription",
+      "Approximately 52 CE",
+      "Delphi, Greece",
+      "Fragmentary imperial inscription",
+      "direct",
+      [["Acts",18,18,12,17]],
+      "An inscription preserving imperial correspondence identifies Gallio as proconsul.",
+      "Provides an important independent chronological reference for Paul's Corinthian period.",
+      "Does not directly record Paul's hearing.",
+      "Greek epigraphic research",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "Ancient Corinth",
+      "Especially Roman imperial period",
+      "Corinth, Greece",
+      "Urban excavations",
+      "context",
+      [["Acts",18,18],["1 Corinthians",1,16],["2 Corinthians",1,13]],
+      "Excavations document public buildings, inscriptions, trade and religious institutions.",
+      "Provides archaeological background for Corinthian social and religious life.",
+      "Book-wide associations provide city context rather than direct evidence for every verse.",
+      "American School of Classical Studies",
+      "https://www.ascsa.edu.gr/"
+    ],
+    [
+      "Corinthian Bema",
+      "Roman period",
+      "Ancient Corinth",
+      "Public architectural platform",
+      "context",
+      [["Acts",18,18,12,17]],
+      "An excavated public platform illustrates Roman civic architecture.",
+      "Provides context for the judgment-seat terminology used in Acts.",
+      "Identification as the exact location of Paul's hearing cannot be demonstrated conclusively.",
+      "American School of Classical Studies",
+      "https://www.ascsa.edu.gr/"
+    ],
+    [
+      "Erastus Pavement Inscription",
+      "Roman imperial period; precise date debated",
+      "Corinth",
+      "Latin pavement inscription",
+      "disputed",
+      [["Romans",16,16,23,23]],
+      "The inscription names an Erastus associated with a civic office.",
+      "Provides material evidence relevant to civic administration and Paul's reference to Erastus.",
+      "Identification with the individual in Romans is disputed.",
+      "American School of Classical Studies",
+      "https://www.ascsa.edu.gr/"
+    ],
+    [
+      "Ancient Philippi",
+      "Macedonian and Roman periods",
+      "Philippi, Greece",
+      "Urban architecture and inscriptions",
+      "context",
+      [["Acts",16,16],["Philippians",1,4],["1 Thessalonians",2,2,2,2]],
+      "Excavations document the Roman colonial city and its public institutions.",
+      "Provides background for Paul's ministry and the civic environment of Philippians.",
+      "A particular excavated chamber cannot securely be identified as Paul's prison.",
+      "UNESCO — Philippi",
+      "https://whc.unesco.org/en/list/1517/"
+    ],
+    [
+      "Thessalonian Politarch Inscriptions",
+      "Roman imperial period",
+      "Thessalonica, Greece",
+      "Greek civic inscriptions",
+      "context",
+      [["Acts",17,17,1,9],["1 Thessalonians",1,5],["2 Thessalonians",1,3]],
+      "Inscriptions attest a civic office known as politarch.",
+      "Provides independent evidence for administrative terminology found in Acts 17.",
+      "Does not establish the particular legal incident described in Acts.",
+      "British Museum",
+      bm("Politarch")
+    ],
+    [
+      "Athenian Agora and Areopagus",
+      "Classical, Hellenistic and Roman periods",
+      "Athens, Greece",
+      "Urban architecture and inscriptions",
+      "context",
+      [["Acts",17,17,16,34]],
+      "Archaeological remains document Athenian civic and religious institutions.",
+      "Provides geographical and cultural context for Paul's discussion in Athens.",
+      "No excavated object conclusively establishes Paul's exact speaking location.",
+      "American School of Classical Studies",
+      "https://www.ascsa.edu.gr/"
+    ],
+    [
+      "Ephesus — Temple of Artemis",
+      "Multiple construction phases",
+      "Ephesus, Turkey",
+      "Temple remains and associated artifacts",
+      "context",
+      [["Acts",19,19],["Ephesians",1,6]],
+      "Excavations document the sanctuary of Artemis and its significance within the city.",
+      "Provides archaeological context for the religious and economic environment described in Acts.",
+      "Material evidence does not independently establish the specific riot involving Paul.",
+      "British Museum",
+      bm("Ephesus Artemis")
+    ],
+    [
+      "Ephesus — Great Theater",
+      "Hellenistic and Roman periods",
+      "Ephesus, Turkey",
+      "Monumental public theater",
+      "context",
+      [["Acts",19,19,23,41]],
+      "The excavated theater illustrates the large-scale public architecture of ancient Ephesus.",
+      "Provides a geographical setting consistent with the public gathering described in Acts.",
+      "The architectural remains do not independently document the gathering.",
+      "UNESCO — Ephesus",
+      "https://whc.unesco.org/en/list/1018/"
+    ],
+    [
+      "Ephesian Customs Law",
+      "Inscription dated 62 CE",
+      "Ephesus",
+      "Roman administrative inscription",
+      "context",
+      [["Acts",19,19],["Ephesians",1,6]],
+      "The inscription records customs regulations relevant to Roman provincial administration.",
+      "Provides economic context for trade and taxation in Roman Asia.",
+      "Does not directly identify Paul or the Ephesian Christian community.",
+      "Greek Inscriptions Database",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "Priene Calendar Inscription",
+      "9 BCE",
+      "Roman Asia",
+      "Imperial civic inscription",
+      "comparative",
+      [["Mark",1,1,1,1],["Luke",2,2],["Romans",1,1]],
+      "The inscription employs language concerning Augustus and favorable announcements.",
+      "Provides comparative evidence for imperial vocabulary in the New Testament world.",
+      "Similar language does not establish direct borrowing or identical meaning.",
+      "Greek Inscriptions Database",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "Ancient Rome",
+      "Roman imperial period",
+      "Rome, Italy",
+      "Urban monuments and inscriptions",
+      "context",
+      [["Acts",28,28],["Romans",1,16],["Philippians",1,1]],
+      "Urban archaeology documents imperial institutions, housing, civic religion and social organization.",
+      "Provides background for Christianity within the Roman imperial capital.",
+      "Rome's association with the composition of Philippians remains a historical question.",
+      "Academic Roman archaeology",
+      academic("Roman urban archaeology early Christianity")
+    ],
+    [
+      "Arch of Titus",
+      "Approximately 81 CE",
+      "Rome",
+      "Imperial triumphal monument",
+      "direct",
+      [["Matthew",24,24],["Mark",13,13],["Luke",21,21]],
+      "The reliefs represent Roman triumphal imagery including objects associated with the Jerusalem Temple.",
+      "Provides material evidence for Roman commemoration of the Jewish War.",
+      "Does not independently establish prophetic composition dates or theological conclusions.",
+      "Academic Roman monument research",
+      academic("Arch of Titus menorah Jerusalem Temple relief")
+    ],
+    [
+      "Smyrna — Roman Agora",
+      "Roman imperial period",
+      "Izmir, Turkey",
+      "Civic architecture and inscriptions",
+      "context",
+      [["Revelation",2,2,8,11]],
+      "Urban remains document the city's public institutions and Roman-period development.",
+      "Provides geographical context for the church addressed in Revelation.",
+      "Many visible remains postdate Revelation and do not document its particular congregation.",
+      "Academic excavation research",
+      academic("Roman Smyrna agora archaeological excavation")
+    ],
+    [
+      "Pergamon Acropolis",
+      "Hellenistic and Roman periods",
+      "Bergama, Turkey",
+      "Temples and monumental architecture",
+      "context",
+      [["Revelation",2,2,12,17]],
+      "Excavations reveal a significant urban center with major religious monuments.",
+      "Provides context for the religious and civic environment addressed in Revelation.",
+      "Identification of Satan's throne with a particular monument is disputed.",
+      "UNESCO — Pergamon",
+      "https://whc.unesco.org/en/list/1457/"
+    ],
+    [
+      "Thyatira — Ancient Akhisar",
+      "Hellenistic and Roman periods",
+      "Akhisar, Turkey",
+      "Urban remains and inscriptions",
+      "context",
+      [["Acts",16,16,14,15],["Revelation",2,2,18,29]],
+      "Inscriptions and archaeological remains document the city's civic and commercial institutions.",
+      "Provides context for Thyatira and its occupational associations.",
+      "No securely identified artifact establishes the identity of Lydia or Revelation's named individuals.",
+      "Academic epigraphic research",
+      academic("Thyatira Roman inscriptions trade associations")
+    ],
+    [
+      "Sardis",
+      "Lydian, Hellenistic and Roman periods",
+      "Sart, Turkey",
+      "Urban and religious architecture",
+      "context",
+      [["Revelation",3,3,1,6]],
+      "Excavations document a historically important city with monumental structures.",
+      "Provides geographical and social context for the church addressed in Revelation.",
+      "Many excavated monuments belong to periods later than the New Testament.",
+      "Harvard Sardis Expedition",
+      "https://sardisexpedition.org/"
+    ],
+    [
+      "Philadelphia — Ancient Alasehir",
+      "Hellenistic and Roman periods",
+      "Alasehir, Turkey",
+      "Urban and architectural evidence",
+      "context",
+      [["Revelation",3,3,7,13]],
+      "Historical and archaeological research identifies the ancient city and its regional setting.",
+      "Provides geographical context for the congregation addressed in Revelation.",
+      "Later church remains do not establish the location of the first-century congregation.",
+      "Academic archaeological research",
+      academic("Ancient Philadelphia Lydia archaeology")
+    ],
+    [
+      "Laodicea on the Lycus",
+      "Hellenistic and Roman periods",
+      "Denizli, Turkey",
+      "Urban remains and water infrastructure",
+      "context",
+      [["Colossians",4,4,13,16],["Revelation",3,3,14,22]],
+      "Excavations document monumental buildings, streets and water distribution systems.",
+      "Provides material context for Laodicea's civic environment.",
+      "Interpretations linking Revelation's lukewarm imagery directly to a specific water system require caution.",
+      "Academic excavation research",
+      academic("Laodicea Lycus water supply archaeology Revelation")
+    ],
+    [
+      "Colossae",
+      "Ancient settlement with Hellenistic and Roman occupation",
+      "Lycus Valley, Turkey",
+      "Settlement and surface archaeological evidence",
+      "context",
+      [["Colossians",1,4],["Philemon",1,1]],
+      "The ancient settlement provides a geographical setting for the Colossian community.",
+      "Useful for researching regional connections among Colossae, Hierapolis and Laodicea.",
+      "Individual houses and Christian meeting places cannot securely be identified.",
+      "Academic archaeological research",
+      academic("Colossae Lycus Valley archaeology")
+    ],
+    [
+      "Hierapolis",
+      "Hellenistic and Roman periods",
+      "Pamukkale, Turkey",
+      "Urban ruins and necropolis",
+      "context",
+      [["Colossians",4,4,13,13]],
+      "Extensive remains document an important city in the Lycus Valley.",
+      "Provides geographical context for the community mentioned in Colossians.",
+      "Later Christian monuments cannot independently establish first-century ministry details.",
+      "UNESCO — Hierapolis",
+      "https://whc.unesco.org/en/list/485/"
+    ]
+  ];
+
+  // =========================================
+  // PREPARE STRUCTURED EVIDENCE RECORDS
+  // =========================================
+
+  const records = archaeology.map(([
+    title,
+    date,
+    location,
+    artifact,
+    classification,
+    passages,
+    discovery,
+    relevance,
+    limitations,
+    source,
+    url
+  ]) => ({
+    title,
+    date,
+    location,
+    artifact,
+    classification,
+    passages,
+    discovery,
+    relevance,
+    limitations,
+    source,
+    url
+  }));
+
+  // =========================================
+  // PASSAGE MATCHING ENGINE
+  // =========================================
+
+  function rangeMatches(range) {
+    const [
+      rangeBook,
+      firstChapter,
+      lastChapter,
+      firstVerse = 1,
+      lastVerse = Infinity
+    ] = range;
+
+    if (
+      normalize(rangeBook) !== normalize(book)
+    ) return false;
+
+    if (
+      ch < firstChapter ||
+      ch > lastChapter
+    ) return false;
+
+    if (
+      ch === firstChapter &&
+      vs < firstVerse
+    ) return false;
+
+    if (
+      ch === lastChapter &&
+      vs > lastVerse
+    ) return false;
+
+    return true;
+  }
+
+  function chapterMatches(range) {
+    return (
+      normalize(range[0]) === normalize(book) &&
+      ch >= range[1] &&
+      ch <= range[2]
+    );
+  }
+
+  const matching = records.filter(record =>
+    record.passages.some(rangeMatches)
+  );
+
+  const remainingChapterRecords =
+    records.filter(record =>
+      !matching.includes(record) &&
+      record.passages.some(chapterMatches)
+    );
+
+  const bookRecords = records.filter(record =>
+    !matching.includes(record) &&
+    !remainingChapterRecords.includes(record) &&
+    record.passages.some(range =>
+      normalize(range[0]) === normalize(book)
+    )
+  );
+
+  // =========================================
+  // RENDER EVIDENCE CARDS
+  // =========================================
+
+  const rank = {
+    direct: 0,
+    manuscript: 1,
+    context: 2,
+    comparative: 3,
+    disputed: 4,
+    reception: 5
+  };
+
+  function renderEvidence(record, parent, scope) {
+    const card = make("section", null, parent);
+
+    card.className = "verse";
+    card.style.padding = "18px";
+    card.style.marginBottom = "18px";
+    card.style.borderLeft = "3px solid #c9aa70";
+
+    make("h3", record.title, card);
+
+    field(card, "Research Scope", scope);
+
+    field(
+      card,
+      "Evidence Classification",
+      evidenceTypes[record.classification]
+    );
+
+    field(
+      card,
+      "Historical Date",
+      record.date
+    );
+
+    field(
+      card,
+      "Discovery Location and Provenance",
+      record.location
+    );
+
+    field(
+      card,
+      "Artifact or Site Type",
+      record.artifact
+    );
+
+    field(
+      card,
+      "Archaeological Findings",
+      record.discovery
+    );
+
+    field(
+      card,
+      "Connection to Scripture",
+      record.relevance
+    );
+
+    field(
+      card,
+      "Evidence Limitations",
+      record.limitations
+    );
+
+    const associated = record.passages.map(range => {
+      const [
+        b,
+        start,
+        end,
+        firstVerse,
+        lastVerse
+      ] = range;
+
+      if (start === end) {
+        if (
+          firstVerse !== undefined &&
+          lastVerse !== undefined
+        ) {
+          return firstVerse === lastVerse
+            ? `${b} ${start}:${firstVerse}`
+            : `${b} ${start}:${firstVerse}-${lastVerse}`;
+        }
+
+        return `${b} ${start}`;
+      }
+
+      return `${b} ${start}-${end}`;
+    });
+
+    field(
+      card,
+      "Associated Biblical Passages",
+      associated.join("; ")
+    );
+
+    field(
+      card,
+      "Research Source",
+      record.source
+    );
+
+    addSource(
+      card,
+      "Open Museum, Site or Research Resource",
+      record.url
+    );
+
+    addSource(
+      card,
+      "Find Excavation Reports and Publications",
+      academic(`${record.title} archaeology excavation`)
+    );
+
+    addSource(
+      card,
+      "Investigate Dating and Scholarly Disagreement",
+      academic(`${record.title} archaeological dating interpretation`)
+    );
+
+    addSource(
+      card,
+      "Find Institutional Artifact Photographs",
+      "https://www.google.com/search?q=" +
+      encodeURIComponent(
+        `${record.title} museum archaeological collection photographs`
+      )
+    );
+
+    make(
+      "p",
+      "Search links provide research leads. Individual images, publications and excavation claims must be checked against their original records.",
+      card
+    );
+  }
+
+  make(
+    "h3",
+    "1. Archaeological Evidence Associated with the Selected Passage",
+    details
+  );
+
+  if (matching.length) {
+    matching.sort((a, b) =>
+      rank[a.classification] -
+      rank[b.classification]
+    );
+
+    matching.forEach(record => {
+      const exactVerseAssociation =
+        record.passages.some(range =>
+          range.length === 5 &&
+          rangeMatches(range)
+        );
+
+      renderEvidence(
+        record,
+        details,
+        exactVerseAssociation
+          ? "Indexed verse or passage association"
+          : "Broader chapter or book context"
+      );
+    });
+  } else {
+    make(
+      "p",
+      "No directly associated archaeological record is currently indexed for this verse. This does not establish that relevant evidence is absent.",
+      details
+    );
+  }
+
+  // =========================================
+  // CHAPTER-LEVEL RESEARCH
+  // =========================================
+
+  if (remainingChapterRecords.length) {
+    const chapterPanel = make(
+      "details",
+      null,
+      details
+    );
+
+    make(
+      "summary",
+      `Additional Archaeology for ${book} ${ch} (${remainingChapterRecords.length})`,
+      chapterPanel
+    );
+
+    remainingChapterRecords.forEach(record =>
+      renderEvidence(
+        record,
+        chapterPanel,
+        "Other passages in the selected chapter"
+      )
+    );
+  }
+
+  // =========================================
+  // BOOK-LEVEL ARCHAEOLOGICAL RESEARCH
+  // =========================================
+
+  make(
+    "h3",
+    "2. Archaeological Background of the Selected Book",
+    details
+  );
+
+  if (bookRecords.length) {
+    const bookPanel = make(
+      "details",
+      null,
+      details
+    );
+
+    make(
+      "summary",
+      `Explore Other Archaeological Records for ${book} (${bookRecords.length})`,
+      bookPanel
+    );
+
+    bookRecords.forEach(record =>
+      renderEvidence(
+        record,
+        bookPanel,
+        "Associated with another passage in this book"
+      )
+    );
+  } else {
+    make(
+      "p",
+      "Consult the historical and geographical research resources below for additional material connected with this biblical book.",
+      details
+    );
+  }
+
+  // =========================================
+  // ALL 66 BOOKS: RESEARCH PROFILES
+  // =========================================
+
+  const bookResearch = {
+    "Genesis": [
+      "Mesopotamian and Egyptian archaeology",
+      "Ancient settlements, family customs, agriculture, migration and comparative literature"
+    ],
+    "Exodus": [
+      "Second millennium BCE Egypt and Sinai",
+      "Eastern Nile Delta settlements, labor practices, metallurgy and covenant traditions"
+    ],
+    "Leviticus": [
+      "Ancient Near Eastern religious material culture",
+      "Sacrificial practices, sanctuaries, ritual vessels and purity traditions"
+    ],
+    "Numbers": [
+      "Southern Levant and Transjordan",
+      "Desert settlement, inscriptions, migration traditions and regional geography"
+    ],
+    "Deuteronomy": [
+      "Ancient Near Eastern legal and covenant traditions",
+      "Treaty inscriptions, land use and religious institutions"
+    ],
+    "Joshua": [
+      "Late Bronze and Early Iron Age southern Levant",
+      "Settlement patterns, fortified cities and disputed destruction horizons"
+    ],
+    "Judges": [
+      "Early Iron Age southern Levant",
+      "Village settlements, Philistine material culture and regional political organization"
+    ],
+    "Ruth": [
+      "Agricultural and domestic life in ancient Judah",
+      "Harvesting practices, food production, rural settlements and family institutions"
+    ],
+    "1 Samuel": [
+      "Early Iron Age Israel and Philistia",
+      "Settlement development, fortified centers and regional conflict"
+    ],
+    "2 Samuel": [
+      "Early monarchy and Iron Age Jerusalem",
+      "Dynastic inscriptions, urban development and debated state formation"
+    ],
+    "1 Kings": [
+      "Iron Age kingdoms of Israel and Judah",
+      "Royal inscriptions, monumental architecture, trade and regional politics"
+    ],
+    "2 Kings": [
+      "Iron Age Israel, Judah, Assyria and Babylonia",
+      "Royal inscriptions, military destruction and administrative artifacts"
+    ],
+    "1 Chronicles": [
+      "Ancient Judah and Israel",
+      "Historical geography, dynasties and religious institutions"
+    ],
+    "2 Chronicles": [
+      "Monarchic Judah and Persian restoration",
+      "Temple settings, inscriptions, royal administration and Babylonian destruction"
+    ],
+    "Ezra": [
+      "Achaemenid Persian Empire",
+      "Administrative documents, imperial policy and restoration-period archaeology"
+    ],
+    "Nehemiah": [
+      "Persian-period Jerusalem and imperial administration",
+      "Fortifications, settlement history and regional archives"
+    ],
+    "Esther": [
+      "Achaemenid Persian court culture",
+      "Susa, palatial architecture, administration and imperial material culture"
+    ],
+    "Job": [
+      "Ancient Near Eastern wisdom and material culture",
+      "Comparative literature, metals, animals, agriculture and household life"
+    ],
+    "Psalms": [
+      "Ancient Israelite religious and poetic traditions",
+      "Temple settings, inscriptions, musical instruments and manuscript witnesses"
+    ],
+    "Proverbs": [
+      "Ancient Near Eastern educational traditions",
+      "Scribal practices, wisdom literature and material culture"
+    ],
+    "Ecclesiastes": [
+      "Ancient wisdom and social history",
+      "Economic institutions, labor, wealth and literary comparisons"
+    ],
+    "Song of Solomon": [
+      "Ancient Near Eastern environments and love poetry",
+      "Agriculture, perfumes, jewelry and comparative literary traditions"
+    ],
+    "Isaiah": [
+      "Iron Age Judah and later textual transmission",
+      "Assyrian campaigns, Jerusalem infrastructure and ancient manuscripts"
+    ],
+    "Jeremiah": [
+      "Late monarchic Judah and Babylonian domination",
+      "Administrative inscriptions, destruction deposits and exile"
+    ],
+    "Lamentations": [
+      "Babylonian destruction of Jerusalem",
+      "Burned buildings, settlement disruption and historical trauma"
+    ],
+    "Ezekiel": [
+      "Babylonia and exilic traditions",
+      "Imperial material culture, religious imagery and diaspora life"
+    ],
+    "Daniel": [
+      "Babylonian, Persian and Hellenistic historical settings",
+      "Royal inscriptions, imperial architecture and manuscript transmission"
+    ],
+    "Hosea": [
+      "Eighth-century BCE northern kingdom",
+      "Religious inscriptions, agriculture and Assyrian expansion"
+    ],
+    "Joel": [
+      "Ancient Judah's agricultural and cultic traditions",
+      "Environmental history, farming and religious institutions"
+    ],
+    "Amos": [
+      "Iron Age northern kingdom and Judah",
+      "Elite material culture, agriculture, trade and imperial expansion"
+    ],
+    "Obadiah": [
+      "Edom and southern Levant",
+      "Regional settlement, political geography and Iron Age trade"
+    ],
+    "Jonah": [
+      "Ancient Assyria and Mediterranean geography",
+      "Nineveh, maritime culture and manuscript transmission"
+    ],
+    "Micah": [
+      "Late eighth-century BCE Judah and Israel",
+      "Samaria, Lachish, Assyrian campaigns and rural settlements"
+    ],
+    "Nahum": [
+      "Neo-Assyrian Empire",
+      "Nineveh, imperial architecture and destruction evidence"
+    ],
+    "Habakkuk": [
+      "Late Iron Age imperial conflict and reception history",
+      "Babylonian expansion and Qumran manuscript evidence"
+    ],
+    "Zephaniah": [
+      "Late Iron Age Judah and surrounding kingdoms",
+      "Assyrian decline, Philistine settlements and religious material culture"
+    ],
+    "Haggai": [
+      "Early Persian-period Judah",
+      "Restoration-period settlement and Persian imperial inscriptions"
+    ],
+    "Zechariah": [
+      "Persian-period Judah and prophetic traditions",
+      "Imperial administration, restoration and manuscript transmission"
+    ],
+    "Malachi": [
+      "Persian-period religious and social institutions",
+      "Temple traditions, agricultural economy and textual witnesses"
+    ],
+    "Matthew": [
+      "Herodian and Roman Judaea and Galilee",
+      "Settlements, royal architecture, religious institutions and inscriptions"
+    ],
+    "Mark": [
+      "Early Roman Galilee and Judaea",
+      "Fishing communities, synagogues, domestic architecture and Roman administration"
+    ],
+    "Luke": [
+      "Roman Judaea and Mediterranean political history",
+      "Imperial administration, settlements, coins and inscriptions"
+    ],
+    "John": [
+      "Second Temple Jerusalem and Roman Galilee",
+      "Pools, temple architecture, settlements and manuscript evidence"
+    ],
+    "Acts": [
+      "First-century eastern Mediterranean and Rome",
+      "Cities, civic inscriptions, harbors and provincial administration"
+    ],
+    "Romans": [
+      "Roman imperial society",
+      "Urban life, civic administration, inscriptions and manuscript evidence"
+    ],
+    "1 Corinthians": [
+      "Roman Corinth",
+      "Religious institutions, trade, public architecture and domestic life"
+    ],
+    "2 Corinthians": [
+      "Roman Corinth and Macedonia",
+      "Urban archaeology, commerce and regional transportation"
+    ],
+    "Galatians": [
+      "Roman Anatolia",
+      "Provincial inscriptions, religious institutions and urban geography"
+    ],
+    "Ephesians": [
+      "Roman Asia and Ephesus",
+      "Temples, civic architecture, commerce and imperial culture"
+    ],
+    "Philippians": [
+      "Roman colonial Macedonia",
+      "Philippi, civic institutions, public architecture and social status"
+    ],
+    "Colossians": [
+      "Lycus Valley of Roman Asia",
+      "Colossae, Laodicea, Hierapolis and regional religious life"
+    ],
+    "1 Thessalonians": [
+      "Roman Macedonia",
+      "Thessalonica, civic inscriptions and religious institutions"
+    ],
+    "2 Thessalonians": [
+      "Roman Macedonia and early Christianity",
+      "Urban material culture, civic organization and manuscript transmission"
+    ],
+    "1 Timothy": [
+      "Roman eastern Mediterranean",
+      "Household organization, civic institutions and early Christian transmission"
+    ],
+    "2 Timothy": [
+      "Roman imperial social history",
+      "Travel, imprisonment contexts and manuscript transmission"
+    ],
+    "Titus": [
+      "Roman Crete",
+      "Urban settlements, inscriptions and Mediterranean social institutions"
+    ],
+    "Philemon": [
+      "Roman household society",
+      "Slavery, domestic institutions, inscriptions and manuscript evidence"
+    ],
+    "Hebrews": [
+      "Second Temple Judaism and early Christianity",
+      "Sacred architecture, ritual traditions and manuscript transmission"
+    ],
+    "James": [
+      "Jewish and Roman-period social history",
+      "Agriculture, commerce, wealth and textual transmission"
+    ],
+    "1 Peter": [
+      "Roman Anatolia and provincial communities",
+      "Inscriptions, household institutions and early Christian manuscripts"
+    ],
+    "2 Peter": [
+      "Early Christian historical context",
+      "Greco-Roman literary culture and manuscript transmission"
+    ],
+    "1 John": [
+      "Early Christian material and textual history",
+      "Greco-Roman communities and manuscript transmission"
+    ],
+    "2 John": [
+      "Early Christian household communities",
+      "Domestic architecture and ancient textual witnesses"
+    ],
+    "3 John": [
+      "Early Christian travel and hospitality",
+      "Household institutions, communication and manuscript witnesses"
+    ],
+    "Jude": [
+      "Second Temple Judaism and early Christianity",
+      "Jewish manuscripts, apocalyptic traditions and textual transmission"
+    ],
+    "Revelation": [
+      "Roman Asia and Mediterranean imperial culture",
+      "Seven churches, civic religion, imperial monuments and manuscripts"
+    ]
+  };
+
+  const profileEntry =
+    Object.entries(bookResearch).find(
+      ([name]) =>
+        normalize(name) === normalize(book)
+    );
+
+  if (profileEntry) {
+    const profile = profileEntry[1];
+
+    field(
+      details,
+      "Relevant Archaeological Environment",
+      profile[0]
+    );
+
+    field(
+      details,
+      "Research Subjects",
+      profile[1]
+    );
+
+    make(
+      "p",
+      "These are book-level research themes, not claims that an archaeological artifact verifies the selected verse.",
+      details
+    );
+
+    addSource(
+      details,
+      `Academic Archaeology of ${book}`,
+      academic(`${book} Bible ${profile[0]} archaeology`)
+    );
+  }
+
+  // =========================================
+  // PHYSICAL MANUSCRIPT EVIDENCE
+  // =========================================
+
+  make(
+    "h3",
+    "3. Archaeological Manuscript Research",
+    details
+  );
+
+  const canonicalBooks = Object.keys(bookResearch);
+
+  const bookIndex = canonicalBooks.findIndex(
+    name =>
+      normalize(name) === normalize(book)
+  );
+
+  const isOldTestament =
+    bookIndex >= 0 && bookIndex < 39;
+
+  if (isOldTestament) {
+    make(
+      "p",
+      "Investigate surviving Hebrew and Aramaic manuscript fragments, ancient Greek translations and later textual witnesses.",
+      details
+    );
+
+    addSource(
+      details,
+      "Leon Levy Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    );
+
+    addSource(
+      details,
+      "Israel Museum — Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/"
+    );
+
+    addSource(
+      details,
+      "Search Excavated Manuscripts of the Selected Book",
+      academic(`${book} Dead Sea Scrolls manuscript fragments`)
+    );
+
+    addSource(
+      details,
+      "Medieval Leningrad Codex — Comparative Text",
+      "https://ebible.org/hebwlc/"
+    );
+
+    make(
+      "p",
+      "The Leningrad Codex is a medieval textual witness, not an excavated ancient manuscript. No biblical book should be assumed to have a surviving Qumran fragment for every verse.",
+      details
+    );
+  } else {
+    const card = make("section", null, details);
+
+    card.className = "verse";
+
+    make(
+      "h4",
+      "Codex Sinaiticus",
+      card
+    );
+
+    field(
+      card,
+      "Date",
+      "Fourth century CE"
+    );
+
+    field(
+      card,
+      "Material Evidence",
+      "Ancient Greek parchment manuscript preserving the New Testament corpus."
+    );
+
+    field(
+      card,
+      "Research Significance",
+      "Provides ancient textual evidence for New Testament books."
+    );
+
+    field(
+      card,
+      "Limitations",
+      "Individual verse readings, corrections and omissions must be examined directly. Manuscript transmission does not independently establish historical events."
+    );
+
+    addSource(
+      card,
+      "View Digitized Codex Sinaiticus",
+      "https://www.codexsinaiticus.org/"
+    );
+
+    addSource(
+      details,
+      "New Testament Virtual Manuscript Room",
+      "https://ntvmr.uni-muenster.de/"
+    );
+
+    addSource(
+      details,
+      "Vatican Library — Digitized Manuscripts",
+      "https://digi.vatlib.it/"
+    );
+
+    addSource(
+      details,
+      "Search Ancient Manuscripts of the Selected Book",
+      academic(`${book} Greek New Testament manuscript papyri`)
+    );
+  }
+
+  // =========================================
+  // GEOGRAPHICAL RESEARCH
+  // =========================================
+
+  make(
+    "h3",
+    "4. Historical Geography and Archaeological Sites",
+    details
+  );
+
+  addSource(
+    details,
+    "Pleiades — Ancient World Gazetteer",
+    "https://pleiades.stoa.org/"
+  );
+
+  addSource(
+    details,
+    "Open Context — Archaeological Research Data",
+    "https://opencontext.org/"
+  );
+
+  addSource(
+    details,
+    "Biblical Archaeological Sites and Findings",
+    "https://biblical-archaeology.org/en/"
+  );
+
+  addSource(
+    details,
+    `Find Sites Associated with ${passageName}`,
+    academic(`"${passageName}" archaeology historical geography`)
+  );
+
+  // =========================================
+  // PRIMARY SOURCES AND MUSEUM COLLECTIONS
+  // =========================================
+
+  make(
+    "h3",
+    "5. Museum Collections and Archaeological Archives",
+    details
+  );
+
+  const museums = [
+    [
+      "British Museum Collection",
+      "https://www.britishmuseum.org/collection"
+    ],
+    [
+      "Louvre Collections",
+      "https://collections.louvre.fr/en/"
+    ],
+    [
+      "Israel Museum",
+      "https://www.imj.org.il/en"
+    ],
+    [
+      "Israel Antiquities Authority",
+      "https://www.antiquities.org.il/"
+    ],
+    [
+      "University of Chicago — Institute for the Study of Ancient Cultures",
+      "https://isac.uchicago.edu/"
+    ],
+    [
+      "Penn Museum",
+      "https://www.penn.museum/"
+    ],
+    [
+      "Metropolitan Museum of Art",
+      "https://www.metmuseum.org/"
+    ],
+    [
+      "Harvard Museum of the Ancient Near East",
+      "https://hmane.harvard.edu/"
+    ],
+    [
+      "Berlin State Museums",
+      "https://www.smb.museum/en/"
+    ],
+    [
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    [
+      "Open Richly Annotated Cuneiform Corpus",
+      "https://oracc.museum.upenn.edu/"
+    ],
+    [
+      "Searchable Greek Inscriptions",
+      "https://epigraphy.packhum.org/"
+    ],
+    [
+      "American School of Classical Studies at Athens",
+      "https://www.ascsa.edu.gr/"
+    ],
+    [
+      "UNESCO World Heritage Centre",
+      "https://whc.unesco.org/"
+    ],
+    [
+      "American Society of Overseas Research",
+      "https://www.asor.org/"
+    ],
+    [
+      "Archaeology Data Service",
+      "https://archaeologydataservice.ac.uk/"
+    ],
+    [
+      "Archaeological Institute of America",
+      "https://www.archaeological.org/"
+    ]
+  ];
+
+  const archivePanel = make(
+    "details",
+    null,
+    details
+  );
+
+  make(
+    "summary",
+    "Open Museum and Archaeological Research Library",
+    archivePanel
+  );
+
+  museums.forEach(([name, url]) =>
+    addSource(archivePanel, name, url)
+  );
+
+  // =========================================
+  // SCHOLARLY RESEARCH DIRECTORY
+  // =========================================
+
+  make(
+    "h3",
+    "6. Archaeologists and Academic Researchers",
+    details
+  );
+
+  const researchers = [
+    ["William F. Albright","History of biblical archaeology"],
+    ["Kathleen Kenyon","Jericho and Jerusalem excavations"],
+    ["Yigael Yadin","Hazor and ancient Israel"],
+    ["Benjamin Mazar","Historical geography and Jerusalem"],
+    ["Amihai Mazar","Iron Age archaeology"],
+    ["Israel Finkelstein","Settlement archaeology and Iron Age chronology"],
+    ["David Ussishkin","Lachish and Iron Age archaeology"],
+    ["Aren Maeir","Philistine archaeology and Gath"],
+    ["Yosef Garfinkel","Iron Age fortified settlements"],
+    ["Eilat Mazar","Jerusalem archaeology"],
+    ["Gabriel Barkay","Jerusalem archaeology and inscriptions"],
+    ["Christopher Rollston","Ancient Northwest Semitic epigraphy"],
+    ["Lawrence Stager","Southern Levant archaeology"],
+    ["William G. Dever","Ancient Israelite archaeology"],
+    ["Thomas E. Levy","Archaeometallurgy and regional archaeology"],
+    ["Manfred Bietak","Egyptian Delta archaeology"],
+    ["Kenneth A. Kitchen","Egyptology and ancient Near Eastern history"],
+    ["Amelie Kuhrt","Achaemenid Persian history"],
+    ["Jodi Magness","Second Temple and Roman-period archaeology"],
+    ["Ehud Netzer","Herodian architecture"],
+    ["Ronny Reich","Jerusalem archaeology"],
+    ["Shimon Gibson","Jerusalem and historical archaeology"],
+    ["Jonathan L. Reed","New Testament archaeology"],
+    ["Mark A. Chancey","Roman Galilee and religious history"],
+    ["James F. Strange","Early Christianity and archaeology"],
+    ["Laura Nasrallah","Archaeology and early Christian studies"],
+    ["Jerome Murphy-O'Connor","Historical geography and Pauline settings"],
+    ["Craig S. Keener","New Testament historical context"]
+  ];
+
+  const scholarsPanel = make(
+    "details",
+    null,
+    details
+  );
+
+  make(
+    "summary",
+    "Open Archaeological Researcher Directory",
+    scholarsPanel
+  );
+
+  make(
+    "p",
+    "Researchers represent differing archaeological and historical approaches. Their inclusion does not imply agreement or commentary on every selected passage.",
+    scholarsPanel
+  );
+
+  researchers.forEach(([name, focus]) => {
+    make("h4", name, scholarsPanel);
+    make("p", focus, scholarsPanel);
+
+    addSource(
+      scholarsPanel,
+      "Find Relevant Academic Publications",
+      academic(`"${name}" ${book} archaeology`)
+    );
+  });
+
+  // =========================================
+  // ARCHAEOLOGICAL DATING METHODS
+  // =========================================
+
+  make(
+    "h3",
+    "7. Scientific Dating and Evidence Evaluation",
+    details
+  );
+
+  const methods = [
+    [
+      "Stratigraphy",
+      "Examines the relationships between archaeological deposits and construction phases. Disturbed layers require careful evaluation."
+    ],
+    [
+      "Radiocarbon Dating",
+      "Estimates the age of suitable organic material through radioactive carbon measurements and calibration. The sample may predate or postdate the event under investigation."
+    ],
+    [
+      "Ceramic Typology",
+      "Uses changes in pottery forms, fabrics and manufacturing traditions to establish relative chronology."
+    ],
+    [
+      "Numismatics",
+      "Studies coins, issuing authorities, circulation and archaeological deposition. A coin can provide an earliest possible date for a secure deposit."
+    ],
+    [
+      "Epigraphy",
+      "Studies inscriptions, languages, scripts, historical terminology and their material contexts."
+    ],
+    [
+      "Paleography",
+      "Examines the development and characteristics of handwriting or scripts to estimate chronology."
+    ],
+    [
+      "Dendrochronology",
+      "Uses annual tree-ring sequences where suitable wood and comparative chronologies survive."
+    ],
+    [
+      "Optically Stimulated Luminescence",
+      "Estimates when suitable mineral grains were last exposed to sufficient light."
+    ],
+    [
+      "Archaeometallurgy",
+      "Investigates metal production, composition, manufacturing techniques and technological history."
+    ],
+    [
+      "Zooarchaeology",
+      "Examines animal remains to investigate diet, economy, ritual and environmental conditions."
+    ],
+    [
+      "Archaeobotany",
+      "Studies plant remains to investigate agriculture, diet, trade and historical environments."
+    ],
+    [
+      "Provenance",
+      "Establishes an object's origin and archaeological history where documentation survives. Unprovenanced artifacts require special caution."
+    ]
+  ];
+
+  const methodPanel = make(
+    "details",
+    null,
+    details
+  );
+
+  make(
+    "summary",
+    "Understand Archaeological Dating and Scientific Methods",
+    methodPanel
+  );
+
+  methods.forEach(([title, description]) =>
+    field(methodPanel, title, description)
+  );
+
+  // =========================================
+  // EVIDENCE CLASSIFICATION GUIDE
+  // =========================================
+
+  make(
+    "h3",
+    "8. Strength and Limitations of Evidence",
+    details
+  );
+
+  const classifications = [
+    [
+      "Direct Historical Identification",
+      "An inscription or securely identified artifact independently establishes a relevant person, place, institution or event. It does not automatically establish every biblical statement associated with that subject."
+    ],
+    [
+      "Historical Context",
+      "Material remains illustrate the environment, architecture or institutions associated with a biblical text."
+    ],
+    [
+      "Comparative Evidence",
+      "Objects or texts from related cultural settings provide background without establishing direct historical connections."
+    ],
+    [
+      "Disputed Identification",
+      "A proposed connection remains the subject of significant scholarly disagreement."
+    ],
+    [
+      "Manuscript Evidence",
+      "Physical manuscripts establish evidence about textual preservation, transmission and historical reception."
+    ],
+    [
+      "Later Reception",
+      "Later religious monuments and artifacts establish traditions of remembrance rather than contemporary evidence for earlier events."
+    ],
+    [
+      "No Indexed Evidence",
+      "Absence from this catalogue indicates a limitation of the current index, not a definitive archaeological conclusion."
+    ]
+  ];
+
+  classifications.forEach(([title, description]) =>
+    field(details, title, description)
+  );
+
+  // =========================================
+  // RESEARCH SUMMARY
+  // =========================================
+
+  make(
+    "h3",
+    "9. Archaeological Research Summary",
+    details
+  );
+
+  field(
+    details,
+    "Selected Scripture",
+    passageName
+  );
+
+  field(
+    details,
+    "Total Local Catalogue Records",
+    String(records.length)
+  );
+
+  field(
+    details,
+    "Indexed Passage and Context Associations",
+    String(matching.length)
+  );
+
+  field(
+    details,
+    "Additional Chapter Associations",
+    String(remainingChapterRecords.length)
+  );
+
+  field(
+    details,
+    "Additional Book Associations",
+    String(bookRecords.length)
+  );
+
+  field(
+    details,
+    "Research Coverage",
+    "All 66 biblical books have archaeological research profiles. Individual artifact coverage varies according to the surviving evidence and catalogue contents."
+  );
+
+  field(
+    details,
+    "Research Status",
+    "Curated archaeological catalogue with institutional resources and academic research leads. Individual object identifiers, excavation citations and disputed associations require continuing editorial verification."
+  );
+
+  field(
+    details,
+    "Image and Publication Policy",
+    "Artifact photographs and modern publications are linked through research resources. Images and copyrighted publications should not be reproduced without appropriate permission."
+  );
+
+  make(
+    "p",
+    "DesertBible Research Standard: archaeological evidence, historical interpretation, manuscript testimony and theological belief must be evaluated distinctly. Evidence must never be exaggerated to establish conclusions beyond what the material record supports.",
+    details
+  );
+
+  return;
+}
+    
     if (key === "Scholarly commentary") {
   details.replaceChildren();
 
