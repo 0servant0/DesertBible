@@ -926,6 +926,156 @@ const historicalContext = {
       `;
     });
   }
+      } else if (category === "Ancient documents") {
+  const verse = Number(String(number).trim().split(":").pop());
+
+  const documents = [
+    {
+      id: "sennacherib",
+      title: "Sennacherib's Royal Inscription — RINAP 3, No. 22",
+      date: "Exemplars dated 691 and 689 BCE",
+      provenance: "Nineveh, Assyria; royal inscription on clay prisms",
+      type: "Primary ancient source",
+      content: "The inscription recounts Sennacherib's military campaigns. In column III, lines 18–25, the king names Hezekiah of Judah, describes capturing fortified cities, and claims to have deported people and livestock. The inscription presents the campaign from the Assyrian king's perspective.",
+      connection: "Micah 1:10–16 names towns in Judah and portrays approaching disaster. The inscription is important background for Assyrian military pressure on Judah, but Micah 1 does not explicitly name Sennacherib or date the oracle to his 701 BCE campaign.",
+      limits: "Royal propaganda is not a neutral account. The inscription does not say Jerusalem was captured, and its claims should be compared with biblical narratives and archaeological evidence. The dates of surviving prism copies are not the date of the campaign itself.",
+      references: [
+        {
+          label: "Read the primary inscription and scholarly translation — ORACC, Sennacherib 022",
+          url: "https://oracc.museum.upenn.edu/rinap/rinap3/Q003496"
+        },
+        {
+          label: "Read the scholarly edition — RINAP 3, Part 1 (PDF)",
+          url: "https://oracc.museum.upenn.edu/rinap/downloads/Grayson_Novotny_RINAP_3_1.pdf"
+        }
+      ],
+      verses: "10-16"
+    },
+    {
+      id: "lachish",
+      title: "The Lachish Reliefs",
+      date: "Created during Sennacherib's reign, approximately 700–681 BCE",
+      provenance: "South-West Palace at Nineveh; now in the British Museum",
+      type: "Primary material and visual source",
+      content: "The palace reliefs depict the Assyrian siege and capture of Lachish during the campaign of 701 BCE. An accompanying inscription identifies the city as Lachish. The reliefs portray siege warfare, captives, and the Assyrian king.",
+      connection: "Micah 1:13 names Lachish in its sequence of warnings concerning Judah's towns. The reliefs provide independent material context for Lachish's importance and its capture by Assyria.",
+      limits: "The reliefs document the siege of Lachish, not the authorship, date, or fulfillment of Micah's oracle. Their royal setting shaped how the victory was represented.",
+      references: [
+        {
+          label: "Read the British Museum's educational resource on the Lachish relief",
+          url: "https://www.britishmuseum.org/sites/default/files/2019-09/Arab_World_Resource_Web.pdf"
+        },
+        {
+          label: "Read the archaeological overview and excavation references",
+          url: "https://biblical-archaeology.org/en/locations/lachish-reliefs/"
+        }
+      ],
+      verses: "13"
+    },
+    {
+      id: "samaria",
+      title: "Assyrian Evidence for Samaria's Fall",
+      date: "Late 8th century BCE; Samaria's fall is conventionally dated around 722/721 BCE",
+      provenance: "Neo-Assyrian royal inscriptions and related historical records",
+      type: "Ancient written sources studied in modern scholarship",
+      content: "Evidence concerning Samaria's fall includes Assyrian royal inscriptions, Babylonian chronographic records, administrative documents, archaeological evidence, and the biblical account. The sources do not all describe the event in the same way.",
+      connection: "Micah 1:1–7 explicitly names Samaria and announces judgment against it. These records provide historical context for the city's fall and Assyrian expansion.",
+      limits: "The sequence of events and the roles of Shalmaneser V and Sargon II remain matters of historical discussion. The fall of Samaria does not, by itself, establish the precise date when Micah delivered this oracle.",
+      references: [
+        {
+          label: "Read the scholarly study: Samaria, Hamath, and Assyria's Conquests in the Levant",
+          url: "https://epub.ub.uni-muenchen.de/58861/1/Radner_Hasegawa_Levin_BZAW_511_2018.pdf"
+        },
+        {
+          label: "Read the historical discussion of the Babylonian Chronicle",
+          url: "https://cojs.org/the_babylonian_chronicle-_722_bce/"
+        }
+      ],
+      verses: "1-7"
+    }
+  ];
+
+  const relevantDocuments = documents.filter(doc => {
+    const [first, last] = doc.verses.split("-").map(Number);
+    return verse >= first && verse <= last;
+  });
+
+  const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+  details.innerHTML = `
+    <section class="research-section">
+      <h3>Ancient Documents — Micah 1:${escapeHTML(verse)}</h3>
+
+      <p>
+        This category examines ancient inscriptions, chronicles,
+        and material records relevant to the historical setting
+        of Micah 1. It distinguishes direct evidence from
+        historical reconstruction and theological interpretation.
+      </p>
+
+      <p>
+        <strong>Selected verse:</strong> Micah 1:${escapeHTML(verse)}
+      </p>
+
+      ${
+        relevantDocuments.length
+          ? relevantDocuments.map(doc => `
+            <article class="research-card">
+              <h4>${escapeHTML(doc.title)}</h4>
+              <p><strong>Date:</strong> ${escapeHTML(doc.date)}</p>
+              <p><strong>Provenance:</strong> ${escapeHTML(doc.provenance)}</p>
+              <p><strong>Evidence type:</strong> ${escapeHTML(doc.type)}</p>
+              <p><strong>What the source records:</strong> ${escapeHTML(doc.content)}</p>
+              <p><strong>Connection to Micah:</strong> ${escapeHTML(doc.connection)}</p>
+              <p><strong>Limitations and uncertainty:</strong> ${escapeHTML(doc.limits)}</p>
+              <h5>Sources</h5>
+              <ul>
+                ${doc.references.map(ref => `
+                  <li>
+                    <a href="${escapeHTML(ref.url)}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                      ${escapeHTML(ref.label)}
+                    </a>
+                  </li>
+                `).join("")}
+              </ul>
+            </article>
+          `).join("")
+          : `
+            <p>
+              No verse-specific ancient document has been assigned
+              to Micah 1:${escapeHTML(verse)} in this initial
+              source set. Do not infer that no relevant evidence
+              exists; further specialist research is required.
+            </p>
+          `
+      }
+
+      <h4>How to evaluate the evidence</h4>
+      <ul>
+        <li><strong>Primary evidence:</strong> What the ancient inscription, artifact, or record actually preserves.</li>
+        <li><strong>Historical reconstruction:</strong> Conclusions drawn by comparing independent sources.</li>
+        <li><strong>Biblical interpretation:</strong> How scholars relate the evidence to Micah's wording and historical setting.</li>
+        <li><strong>Theological interpretation:</strong> Claims about divine judgment or fulfillment, which require separate textual and interpretive argument.</li>
+      </ul>
+
+      <p>
+        <strong>Verification standard:</strong> Confirm the artifact
+        identifier, edition, translation, date, provenance, and
+        relevant lines before citing a source as direct evidence
+        for a specific claim. A general historical parallel is
+        not proof of direct fulfillment.
+      </p>
+    </section>
+  `;
+
       } else {
       
   details.innerHTML =
