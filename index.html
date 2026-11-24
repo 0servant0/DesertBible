@@ -1179,11 +1179,12 @@ document.getElementById("loadBibleChapter")
   .addEventListener("click", loadBibleChapter);
 
 function showBibleVerseResearch(reference) {
-  let research = document.getElementById("verseResearch");
+  const researchId = "verseResearch";
+  let research = document.getElementById(researchId);
 
   if (!research) {
     research = document.createElement("div");
-    research.id = "verseResearch";
+    research.id = researchId;
     research.className = "panel";
     document.getElementById("scripture").appendChild(research);
   }
@@ -1191,21 +1192,71 @@ function showBibleVerseResearch(reference) {
   const passage =
     `${reference.book} ${reference.chapter}:${reference.verse}`;
 
+  const bookIds = {
+    "Genesis":"GEN","Exodus":"EXO","Leviticus":"LEV",
+    "Numbers":"NUM","Deuteronomy":"DEU","Joshua":"JOS",
+    "Judges":"JDG","Ruth":"RUT","1 Samuel":"1SA",
+    "2 Samuel":"2SA","1 Kings":"1KI","2 Kings":"2KI",
+    "1 Chronicles":"1CH","2 Chronicles":"2CH","Ezra":"EZR",
+    "Nehemiah":"NEH","Esther":"EST","Job":"JOB",
+    "Psalms":"PSA","Proverbs":"PRO","Ecclesiastes":"ECC",
+    "Song of Solomon":"SNG","Isaiah":"ISA","Jeremiah":"JER",
+    "Lamentations":"LAM","Ezekiel":"EZK","Daniel":"DAN",
+    "Hosea":"HOS","Joel":"JOL","Amos":"AMO","Obadiah":"OBA",
+    "Jonah":"JON","Micah":"MIC","Nahum":"NAM",
+    "Habakkuk":"HAB","Zephaniah":"ZEP","Haggai":"HAG",
+    "Zechariah":"ZEC","Malachi":"MAL","Matthew":"MAT",
+    "Mark":"MRK","Luke":"LUK","John":"JHN","Acts":"ACT",
+    "Romans":"ROM","1 Corinthians":"1CO","2 Corinthians":"2CO",
+    "Galatians":"GAL","Ephesians":"EPH","Philippians":"PHP",
+    "Colossians":"COL","1 Thessalonians":"1TH",
+    "2 Thessalonians":"2TH","1 Timothy":"1TI","2 Timothy":"2TI",
+    "Titus":"TIT","Philemon":"PHM","Hebrews":"HEB",
+    "James":"JAS","1 Peter":"1PE","2 Peter":"2PE",
+    "1 John":"1JN","2 John":"2JN","3 John":"3JN",
+    "Jude":"JUD","Revelation":"REV"
+  };
+
+  const bookId = bookIds[reference.book];
+  const chapter = Number(reference.chapter);
+  const verseNumber = Number(reference.verse);
+  const apiRoot = "https://bible.helloao.org/api";
+  const interlinearSource =
+    `${apiRoot}/d/bsb-interlinear/${bookId}/${chapter}.json`;
+  const lexiconRoot =
+    `${apiRoot}/d/stepbible-lexicon/lexicon`;
+
+  const make = (tag, text, parent) => {
+    const element = document.createElement(tag);
+    if (text !== undefined && text !== null) {
+      element.textContent = String(text);
+    }
+    if (parent) parent.appendChild(element);
+    return element;
+  };
+
+  const link = (parent, label, url) => {
+    const a = make("a", label, parent);
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    return a;
+  };
+
   research.replaceChildren();
 
-  const eyebrow = document.createElement("div");
+  const eyebrow = make("div", "VERSE RESEARCH WORKSPACE", research);
   eyebrow.className = "eyebrow";
-  eyebrow.textContent = "VERSE RESEARCH WORKSPACE";
 
-  const heading = document.createElement("h2");
-  heading.textContent = passage;
-
-  const description = document.createElement("p");
-  description.textContent =
-    "Choose a category. Research must be specific to this passage and supported by cited sources.";
+  make("h2", passage, research);
+  make(
+    "p",
+    "Select Original Language to inspect the original-language words for this exact verse. Select an individual word to open its lexical entry when available.",
+    research
+  );
 
   const categories = [
-    ["Original language", "Original Hebrew / Aramaic / Greek"],
+    ["Original language", "Hebrew / Aramaic / Greek"],
     ["Translation comparison", "Translation comparison"],
     ["Historical context", "Historical context"],
     ["Archaeological evidence", "Archaeological evidence"],
@@ -1215,56 +1266,306 @@ function showBibleVerseResearch(reference) {
     ["Evidence assessment", "Evidence assessment"]
   ];
 
-  const grid = document.createElement("div");
+  const grid = make("div", undefined, research);
   grid.className = "categories";
 
-  const details = document.createElement("div");
+  const details = make("div", undefined, research);
   details.id = "researchDetails";
   details.className = "research-content";
-  details.innerHTML =
-    "<p>Select a category. Existing Micah-specific research must not be presented as verified research for other books.</p>";
+
+  const status = make(
+    "p",
+    "Choose a research category.",
+    details
+  );
+
+  async function showOriginalLanguage() {
+    details.replaceChildren();
+    make("h3", `Original Language — ${passage}`, details);
+    make(
+      "p",
+      "Loading interlinear text and word-level language data…",
+      details
+    );
+
+    if (!bookId || !Number.isInteger(chapter) ||
+        !Number.isInteger(verseNumber) ||
+        chapter < 1 || verseNumber < 1) {
+      details.replaceChildren();
+      make("h3", "Unable to identify this reference", details);
+      make(
+        "p",
+        "The selected book, chapter, or verse is not valid for this lookup.",
+        details
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(interlinearSource);
+      if (!response.ok) {
+        throw new Error(`Interlinear service returned ${response.status}.`);
+      }
+
+      const data = await response.json();
+      const verseData = data.chapter?.content?.find(
+        item => Number(item.verse) === verseNumber
+      );
+
+      if (!verseData || !Array.isArray(verseData.words) ||
+          verseData.words.length === 0) {
+        throw new Error(
+          "No interlinear word data was returned for this verse."
+        );
+      }
+
+      details.replaceChildren();
+      make("h3", `Original Language — ${passage}`, details);
+
+      make(
+        "p",
+        "The words below follow the original-text order in the published Berean Standard Bible interlinear dataset. English glosses are the dataset’s word-level renderings, not a claim that every word maps neatly to one English word.",
+        details
+      );
+
+      const languages = [...new Set(
+        verseData.words.map(word => word.language).filter(Boolean)
+      )];
+
+      make(
+        "p",
+        `Language identified by the dataset: ${languages.join(", ") || "not specified"}.`,
+        details
+      );
+
+      const wordGrid = make("div", undefined, details);
+      wordGrid.style.display = "grid";
+      wordGrid.style.gridTemplateColumns =
+        "repeat(auto-fit, minmax(145px, 1fr))";
+      wordGrid.style.gap = "10px";
+      wordGrid.style.margin = "16px 0";
+
+      const wordDetails = make("div", undefined, details);
+      wordDetails.className = "verse";
+
+      make(
+        "h4",
+        "Word details",
+        wordDetails
+      );
+      make(
+        "p",
+        "Select a word above to see its available grammatical parsing and lexical information.",
+        wordDetails
+      );
+
+      verseData.words.forEach((word, index) => {
+        const button = make("button", undefined, wordGrid);
+        button.type = "button";
+        button.style.textAlign = "left";
+        button.style.minWidth = "0";
+
+        const original = make(
+          "span",
+          word.text || "Original form unavailable",
+          button
+        );
+        original.style.display = "block";
+        original.style.fontSize = "22px";
+        original.style.fontWeight = "700";
+        original.lang = word.language === "greek"
+          ? "grc"
+          : (word.language === "hebrew" ||
+             word.language === "aramaic" ? "he" : "und");
+        if (word.language === "hebrew" ||
+            word.language === "aramaic") {
+          original.dir = "rtl";
+        }
+
+        const transliteration = make(
+          "span",
+          word.transliteration || "Transliteration unavailable",
+          button
+        );
+        transliteration.style.display = "block";
+        transliteration.className = "small";
+
+        make(
+          "span",
+          word.gloss || "No English gloss supplied",
+          button
+        ).style.display = "block";
+
+        button.addEventListener("click", async () => {
+          wordDetails.replaceChildren();
+          make("h4", `Word ${index + 1} — ${passage}`, wordDetails);
+          make("p", `Original form: ${word.text || "Not supplied"}`, wordDetails);
+          make(
+            "p",
+            `Transliteration: ${word.transliteration || "Not supplied"}`,
+            wordDetails
+          );
+          make(
+            "p",
+            `English gloss: ${word.gloss || "Not supplied"}`,
+            wordDetails
+          );
+          make(
+            "p",
+            `Language: ${word.language || "Not specified"}`,
+            wordDetails
+          );
+          make(
+            "p",
+            `Grammatical parsing: ${word.parsingFull || word.parsing || "Not supplied by this dataset"}`,
+            wordDetails
+          );
+
+          if (!word.strongs) {
+            make(
+              "p",
+              "This interlinear entry has no Strong’s number. No lexicon entry is inferred.",
+              wordDetails
+            );
+            return;
+          }
+
+          make("p", `Strong’s identifier: ${word.strongs}`, wordDetails);
+          const loading = make(
+            "p",
+            "Loading lexicon entry…",
+            wordDetails
+          );
+
+          try {
+            const lexResponse = await fetch(
+              `${lexiconRoot}/${encodeURIComponent(word.strongs)}.json`
+            );
+            if (!lexResponse.ok) {
+              throw new Error("No lexicon entry was returned.");
+            }
+
+            const lexData = await lexResponse.json();
+            loading.remove();
+
+            const senses = lexData.entry?.senses || [];
+            if (!senses.length) {
+              make(
+                "p",
+                "No lexical senses were returned for this identifier.",
+                wordDetails
+              );
+            } else {
+              make("h5", "Lexical senses", wordDetails);
+              senses.forEach((sense, senseIndex) => {
+                const section = make("section", undefined, wordDetails);
+                make(
+                  "h5",
+                  `${senseIndex + 1}. ${sense.lemma || "Lemma not supplied"}`,
+                  section
+                );
+                make(
+                  "p",
+                  `Transliteration: ${sense.transliteration || "Not supplied"}`,
+                  section
+                );
+                make(
+                  "p",
+                  `Part of speech: ${sense.partOfSpeech || "Not supplied"}`,
+                  section
+                );
+                make(
+                  "p",
+                  `Gloss: ${sense.gloss || "Not supplied"}`,
+                  section
+                );
+                make(
+                  "p",
+                  `Definition: ${sense.definition || "No definition supplied"}`,
+                  section
+                );
+              });
+            }
+
+            link(
+              wordDetails,
+              "Open STEPBible lexicon source",
+              `https://www.stepbible.org/?q=strong=${encodeURIComponent(word.strongs)}`
+            );
+          } catch (error) {
+            loading.textContent =
+              "The lexicon lookup failed. The original word and available parsing remain visible; no definition has been guessed.";
+            make(
+              "p",
+              `Lookup detail: ${error.message}`,
+              wordDetails
+            );
+          }
+        });
+      });
+
+      make("h4", "Source and attribution", details);
+      make(
+        "p",
+        "Interlinear text, transliteration, grammatical parsing, Strong’s identifiers, and English glosses are supplied by the Berean Standard Bible Interlinear dataset. Lexical senses and definitions are supplied by the STEPBible Brief Lexicons, credited to STEPBible.org / Tyndale House, Cambridge, under CC BY 4.0. These datasets are research aids; they do not remove the need to examine context, textual variants, and scholarly disagreements.",
+        details
+      );
+
+      link(
+        details,
+        "Verify the interlinear dataset and documentation",
+        "https://bible.helloao.org/docs/reference/datasets/"
+      );
+      make("span", " · ", details);
+      link(
+        details,
+        "Open STEPBible",
+        "https://www.stepbible.org/"
+      );
+
+    } catch (error) {
+      details.replaceChildren();
+      make("h3", `Original Language — ${passage}`, details);
+      make(
+        "p",
+        "The interlinear source could not be loaded. No original-language text or lexical claim has been fabricated.",
+        details
+      );
+      make("p", `Lookup detail: ${error.message}`, details);
+      link(
+        details,
+        "Open the interlinear dataset documentation",
+        "https://bible.helloao.org/docs/reference/datasets/"
+      );
+    }
+  }
 
   categories.forEach(([key, label]) => {
-    const button = document.createElement("button");
+    const button = make("button", undefined, grid);
     button.className = "category";
-    button.textContent = label;
+    button.type = "button";
+    make("h3", key, button);
+    make("p", label, button);
+
     button.addEventListener("click", () => {
-      details.replaceChildren();
-
-      const title = document.createElement("h3");
-      title.textContent = `${label} — ${passage}`;
-
-      const message = document.createElement("p");
-      message.textContent =
-        key === "Original language"
-          ? "Original-language data must be loaded from an identified Hebrew, Aramaic, or Greek source for this exact passage. Existing Micah-only data is not reused for other books."
-          : `The ${label} workspace is selected for ${passage}. Only passage-specific evidence with identifiable sources should be displayed here.`;
-
-      details.append(title, message);
-
       if (key === "Original language") {
-        const source = document.createElement("p");
-        const link = document.createElement("a");
-
-        link.href = reference.book === "Micah"
-          ? "https://ebible.org/hebwlc/MIC01.htm"
-          : "https://ebible.org/";
-
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "Consult the source collection";
-
-        source.appendChild(link);
-        details.appendChild(source);
+        showOriginalLanguage();
+        return;
       }
-    });
 
-    grid.appendChild(button);
+      details.replaceChildren();
+      make("h3", `${key} — ${passage}`, details);
+      make(
+        "p",
+        `This category is not being changed in this step. Its research must be completed separately using passage-specific, identifiable sources.`,
+        details
+      );
+    });
   });
 
-  research.append(eyebrow, heading, description, grid, details);
   research.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
 
 populateChapterOptions();
 loadBibleChapter();</script>
