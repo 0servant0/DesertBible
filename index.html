@@ -1692,7 +1692,19 @@ if (key === "Ancient documents") {
   const ch = Number(reference.chapter);
   const vs = Number(reference.verse);
 
-  make("h3", `Ancient Documents — ${passage}`, details);
+  make("h3", `Ancient Documents — ${book} ${ch}:${vs}`, details);
+
+make(
+  "p",
+  "Full-Bible Ancient Documents Catalogue",
+  details
+);
+
+make(
+  "p",
+  `Researching ${book}, chapter ${ch}, verse ${vs}.`,
+  details
+);
 
   const documents = [
     {
