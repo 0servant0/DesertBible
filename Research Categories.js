@@ -43,6 +43,10 @@ if (item[0] === "Scripture & translations") {
   openScriptureTranslations(workspace);
   return;
 }
+    if (item[0] === "Cross-references") {
+  openCrossReferences(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
@@ -1432,3 +1436,2034 @@ if (item[0] === "Scripture & translations") {
 
   grid.appendChild(button);
 });
+
+function openCrossReferences(workspace) {
+  "use strict";
+
+  const books = [
+    ["Genesis","Gen",50],
+    ["Exodus","Exod",40],
+    ["Leviticus","Lev",27],
+    ["Numbers","Num",36],
+    ["Deuteronomy","Deut",34],
+    ["Joshua","Josh",24],
+    ["Judges","Judg",21],
+    ["Ruth","Ruth",4],
+    ["1 Samuel","1Sam",31],
+    ["2 Samuel","2Sam",24],
+    ["1 Kings","1Kgs",22],
+    ["2 Kings","2Kgs",25],
+    ["1 Chronicles","1Chr",29],
+    ["2 Chronicles","2Chr",36],
+    ["Ezra","Ezra",10],
+    ["Nehemiah","Neh",13],
+    ["Esther","Esth",10],
+    ["Job","Job",42],
+    ["Psalms","Ps",150],
+    ["Proverbs","Prov",31],
+    ["Ecclesiastes","Eccl",12],
+    ["Song of Solomon","Song",8],
+    ["Isaiah","Isa",66],
+    ["Jeremiah","Jer",52],
+    ["Lamentations","Lam",5],
+    ["Ezekiel","Ezek",48],
+    ["Daniel","Dan",12],
+    ["Hosea","Hos",14],
+    ["Joel","Joel",3],
+    ["Amos","Amos",9],
+    ["Obadiah","Obad",1],
+    ["Jonah","Jonah",4],
+    ["Micah","Mic",7],
+    ["Nahum","Nah",3],
+    ["Habakkuk","Hab",3],
+    ["Zephaniah","Zeph",3],
+    ["Haggai","Hag",2],
+    ["Zechariah","Zech",14],
+    ["Malachi","Mal",4],
+    ["Matthew","Matt",28],
+    ["Mark","Mark",16],
+    ["Luke","Luke",24],
+    ["John","John",21],
+    ["Acts","Acts",28],
+    ["Romans","Rom",16],
+    ["1 Corinthians","1Cor",16],
+    ["2 Corinthians","2Cor",13],
+    ["Galatians","Gal",6],
+    ["Ephesians","Eph",6],
+    ["Philippians","Phil",4],
+    ["Colossians","Col",4],
+    ["1 Thessalonians","1Thess",5],
+    ["2 Thessalonians","2Thess",3],
+    ["1 Timothy","1Tim",6],
+    ["2 Timothy","2Tim",4],
+    ["Titus","Titus",3],
+    ["Philemon","Phlm",1],
+    ["Hebrews","Heb",13],
+    ["James","Jas",5],
+    ["1 Peter","1Pet",5],
+    ["2 Peter","2Pet",3],
+    ["1 John","1John",5],
+    ["2 John","2John",1],
+    ["3 John","3John",1],
+    ["Jude","Jude",1],
+    ["Revelation","Rev",22]
+  ];
+
+  const sourceURL =
+    "https://raw.githubusercontent.com/neuu-org/bible-crossrefs-dataset/main/data/00_raw/openbible/cross_references.txt";
+
+  const originalSource =
+    "https://www.openbible.info/labs/cross-references/";
+
+  const repository =
+    "https://github.com/neuu-org/bible-crossrefs-dataset";
+
+  const license =
+    "https://creativecommons.org/licenses/by/4.0/";
+
+  const bibleAPI = "https://bible-api.com/";
+
+  const bookMap = new Map(
+    books.map((book, index) => [
+      book[1], { name: book[0], index }
+    ])
+  );
+
+  const root = document.createElement("div");
+  workspace.replaceChildren(root);
+
+  let records = [];
+  let currentReference = "";
+  let currentText = "";
+  let currentTextSource = "";
+  let selectedCode = "";
+  let page = 0;
+  let generation = 0;
+  let verseGeneration = 0;
+
+  const pageSize = 20;
+  const textCache = new Map();
+
+  root.innerHTML = `
+    <style>
+      .dbxr {
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      .dbxr .xr-panel {
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 16px 0;
+      }
+
+      .dbxr .xr-controls {
+        display: grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(145px,1fr));
+        gap: 12px;
+        margin: 12px 0;
+      }
+
+      .dbxr label {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--muted);
+      }
+
+      .dbxr select,
+      .dbxr input {
+        width: 100%;
+        min-width: 0;
+        padding: 11px;
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font: inherit;
+      }
+
+      .dbxr .xr-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .dbxr .xr-result {
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--gold);
+        border-radius: 9px;
+        padding: 16px;
+        margin: 12px 0;
+        background: var(--panel);
+      }
+
+      .dbxr .xr-score {
+        color: var(--gold);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .dbxr .xr-muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .dbxr .xr-stat {
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 25px;
+      }
+
+      .dbxr .xr-bar {
+        height: 8px;
+        background: var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 8px 0;
+      }
+
+      .dbxr .xr-fill {
+        height: 100%;
+        background: var(--gold);
+      }
+
+      .dbxr blockquote {
+        margin: 12px 0;
+        padding: 14px;
+        border-left: 2px solid var(--gold);
+        background: var(--bg);
+      }
+
+      .dbxr a {
+        color: var(--gold);
+        overflow-wrap: anywhere;
+      }
+
+      .dbxr details {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .dbxr summary {
+        cursor: pointer;
+        color: var(--gold);
+      }
+
+      .dbxr button:disabled {
+        opacity: .45;
+        cursor: not-allowed;
+      }
+
+      @media(max-width:600px) {
+        .dbxr .xr-panel {
+          padding: 12px;
+        }
+      }
+    </style>
+
+    <div class="dbxr">
+
+      <div class="eyebrow">
+        DESERTBIBLE · BIBLICAL CONNECTIONS
+      </div>
+
+      <h2>Cross-References</h2>
+
+      <p>
+        Investigate connections between biblical
+        passages across the Old and New Testaments,
+        comparing Scripture with Scripture.
+      </p>
+
+      <section class="xr-panel">
+        <div class="xr-controls">
+          <div>
+            <div class="xr-stat">66</div>
+            Books supported
+          </div>
+          <div>
+            <div class="xr-stat" id="xrTotal">—</div>
+            Indexed reference records
+          </div>
+          <div>
+            <div class="xr-stat" id="xrCoverage">—</div>
+            Indexed source verses
+          </div>
+        </div>
+
+        <p class="xr-muted">
+          Counts are calculated from the retrieved
+          dataset rather than estimated.
+        </p>
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>01 · Select a Biblical Passage</h3>
+
+        <div class="xr-controls">
+
+          <div>
+            <label for="xrBook">Book</label>
+            <select id="xrBook"></select>
+          </div>
+
+          <div>
+            <label for="xrChapter">Chapter</label>
+            <select id="xrChapter"></select>
+          </div>
+
+          <div>
+            <label for="xrVerse">Verse</label>
+            <select id="xrVerse"></select>
+          </div>
+
+          <div>
+            <label for="xrEdition">Translation</label>
+            <select id="xrEdition">
+              <option value="web">
+                World English Bible
+              </option>
+              <option value="kjv">
+                King James Version
+              </option>
+              <option value="asv">
+                American Standard Version
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="xr-actions">
+          <button type="button" id="xrLoad">
+            Investigate passage
+          </button>
+
+          <button type="button" id="xrPrevious">
+            Previous verse
+          </button>
+
+          <button type="button" id="xrNext">
+            Next verse
+          </button>
+        </div>
+
+        <p id="xrStatus"
+           role="status"
+           aria-live="polite"></p>
+
+        <p id="xrVerseStatus"
+           role="status"></p>
+
+        <div id="xrOriginal"></div>
+
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>02 · Reference Distribution</h3>
+
+        <div id="xrStatistics"></div>
+
+        <h4>Most frequently connected books</h4>
+
+        <div id="xrDistribution"></div>
+
+        <p class="xr-muted">
+          Distribution counts describe dataset
+          connections, not theological importance.
+        </p>
+
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>03 · Cross-Reference Explorer</h3>
+
+        <div class="xr-controls">
+
+          <div>
+            <label for="xrTestament">
+              Testament
+            </label>
+
+            <select id="xrTestament">
+              <option value="all">Entire Bible</option>
+              <option value="ot">Old Testament</option>
+              <option value="nt">New Testament</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="xrTarget">
+              Connected book
+            </label>
+
+            <select id="xrTarget">
+              <option value="">All books</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="xrDirection">
+              Connection direction
+            </label>
+
+            <select id="xrDirection">
+              <option value="both">
+                Incoming and outgoing
+              </option>
+              <option value="outgoing">
+                Outgoing references
+              </option>
+              <option value="incoming">
+                Incoming references
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="xrVotes">
+              Minimum community score
+            </label>
+
+            <select id="xrVotes">
+              <option value="all">All scores</option>
+              <option value="0">0 or higher</option>
+              <option value="5">5 or higher</option>
+              <option value="10">10 or higher</option>
+              <option value="25">25 or higher</option>
+              <option value="50">50 or higher</option>
+              <option value="100">100 or higher</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="xrSort">Sort order</label>
+
+            <select id="xrSort">
+              <option value="votes">
+                Highest community score
+              </option>
+              <option value="canonical">
+                Biblical book order
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="xrSearch">Find passage</label>
+            <input id="xrSearch"
+                   type="search"
+                   placeholder="Example: Isaiah">
+          </div>
+
+        </div>
+
+        <p id="xrSummary"></p>
+
+        <div class="xr-actions">
+          <button type="button" id="xrCopy">
+            Copy research
+          </button>
+
+          <button type="button" id="xrDownload">
+            Download research
+          </button>
+
+          <button type="button" id="xrReset">
+            Reset filters
+          </button>
+        </div>
+
+        <div id="xrResults"></div>
+
+        <div class="xr-actions">
+
+          <button type="button" id="xrPageBack">
+            Previous results
+          </button>
+
+          <button type="button" id="xrPageNext">
+            Next results
+          </button>
+
+        </div>
+
+        <p id="xrPageStatus"></p>
+
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>04 · Understanding Biblical Connections</h3>
+
+        <details open>
+          <summary>Direct quotations</summary>
+          <p>
+            One biblical author may explicitly cite
+            an earlier scriptural passage.
+          </p>
+          <p>
+            Example: Matthew 2:6 draws on Micah 5:2
+            and incorporates language associated with
+            the shepherd-ruler tradition in
+            2 Samuel 5:2.
+          </p>
+          <p>
+            Compare the wording and original contexts
+            rather than assuming identical quotation.
+          </p>
+        </details>
+
+        <details>
+          <summary>Allusions and verbal parallels</summary>
+          <p>
+            Authors may evoke earlier Scripture
+            without expressly identifying a quotation.
+            Shared words alone do not establish
+            deliberate literary dependence.
+          </p>
+          <p>
+            Compare Genesis 1:1 and John 1:1,
+            considering their opening language
+            and theological setting.
+          </p>
+        </details>
+
+        <details>
+          <summary>Parallel historical accounts</summary>
+          <p>
+            Different biblical books may recount
+            related events from distinct perspectives.
+          </p>
+          <p>
+            Compare 2 Kings 18–19 and Isaiah 36–37
+            concerning the Assyrian crisis during
+            Hezekiah's reign.
+          </p>
+          <p>
+            Shared biblical accounts are not necessarily
+            independent historical witnesses.
+          </p>
+        </details>
+
+        <details>
+          <summary>Prophecy and fulfillment</summary>
+          <p>
+            Biblical authors sometimes interpret
+            earlier prophetic passages in relation
+            to subsequent events.
+          </p>
+          <p>
+            Matthew 2:15 cites Hosea 11:1.
+            Hosea's immediate context concerns
+            Israel's past, while Matthew applies
+            the language to Jesus.
+          </p>
+          <p>
+            Distinguish original context, later
+            interpretation and theological conclusions.
+          </p>
+        </details>
+
+        <details>
+          <summary>Thematic relationships</summary>
+          <p>
+            Passages can share theological or ethical
+            themes without directly quoting one another.
+          </p>
+          <p>
+            Compare Micah 6:8 and Matthew 23:23
+            concerning justice and moral responsibility.
+          </p>
+        </details>
+
+        <p class="xr-muted">
+          These examples illustrate research methods.
+          The reference dataset does not classify
+          individual connections into these categories.
+        </p>
+
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>05 · Research Verification Protocol</h3>
+
+        <ol>
+          <li>
+            Read the selected passage in context.
+          </li>
+
+          <li>
+            Read the complete connected passage.
+          </li>
+
+          <li>
+            Establish each passage's literary genre
+            and historical setting.
+          </li>
+
+          <li>
+            Compare Hebrew, Aramaic or Greek wording
+            where relevant.
+          </li>
+
+          <li>
+            Determine whether the relationship is
+            quotation, allusion, parallel account,
+            thematic similarity or another connection.
+          </li>
+
+          <li>
+            Consult critical editions and scholarship
+            before asserting literary dependence.
+          </li>
+
+          <li>
+            Record competing interpretations
+            and remaining uncertainties.
+          </li>
+        </ol>
+
+        <p>
+          <strong>Evidence limitation:</strong>
+          A cross-reference is a proposed relationship
+          between passages. It does not independently
+          prove historical authenticity, prophetic
+          fulfillment or theological agreement.
+        </p>
+
+      </section>
+
+      <section class="xr-panel">
+
+        <h3>06 · Sources &amp; Attribution</h3>
+
+        <h4>Cross-reference data</h4>
+
+        <p>
+          Cross-reference data from OpenBible.info,
+          used under Creative Commons Attribution
+          4.0 International.
+        </p>
+
+        <p>
+          The data draws substantially on the
+          Treasury of Scripture Knowledge and
+          includes community voting.
+        </p>
+
+        <p>
+          <a id="xrOriginalSource"
+             target="_blank"
+             rel="noopener noreferrer">
+            OpenBible.info — original project
+          </a>
+        </p>
+
+        <p>
+          <a id="xrRepository"
+             target="_blank"
+             rel="noopener noreferrer">
+            Dataset repository
+          </a>
+        </p>
+
+        <p>
+          <a id="xrRaw"
+             target="_blank"
+             rel="noopener noreferrer">
+            Inspect retrieved source file
+          </a>
+        </p>
+
+        <p>
+          <a id="xrLicense"
+             target="_blank"
+             rel="noopener noreferrer">
+            Creative Commons Attribution 4.0
+          </a>
+        </p>
+
+        <h4>Scripture texts</h4>
+
+        <p>
+          <a href="https://bible-api.com/"
+             target="_blank"
+             rel="noopener noreferrer">
+            Bible API — digital Scripture retrieval
+          </a>
+        </p>
+
+        <p>
+          <a href="https://ebible.org/"
+             target="_blank"
+             rel="noopener noreferrer">
+            eBible.org — digital Bible editions
+          </a>
+        </p>
+
+        <h4>Manuscript verification resources</h4>
+
+        <p>
+          <a href="https://ntvmr.uni-muenster.de/"
+             target="_blank"
+             rel="noopener noreferrer">
+            New Testament Virtual Manuscript Room
+          </a>
+        </p>
+
+        <p>
+          <a href="https://www.deadseascrolls.org.il/"
+             target="_blank"
+             rel="noopener noreferrer">
+            Leon Levy Dead Sea Scrolls Digital Library
+          </a>
+        </p>
+
+        <p id="xrDataInfo"></p>
+
+        <p class="xr-muted">
+          DesertBible indexes, filters and reorganizes
+          the original cross-reference records.
+          Incoming links are derived from the dataset.
+          Original vote scores are retained.
+          References are aligned by verse numbering;
+          differences between numbering traditions
+          are not independently reconciled here.
+        </p>
+
+      </section>
+
+      <button type="button" id="xrClose">
+        Return to research categories
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag, text, parent) {
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) parent.appendChild(element);
+
+    return element;
+  }
+
+  function link(parent, title, url) {
+    const anchor = make("a", title, parent);
+
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    return anchor;
+  }
+
+  $("xrOriginalSource").href = originalSource;
+  $("xrRepository").href = repository;
+  $("xrRaw").href = sourceURL;
+  $("xrLicense").href = license;
+
+  books.forEach((book, index) => {
+    const option = make(
+      "option", book[0], $("xrBook")
+    );
+
+    option.value = String(index);
+
+    const target = make(
+      "option", book[0], $("xrTarget")
+    );
+
+    target.value = book[1];
+  });
+
+  function parseCode(code) {
+    const match =
+      /^([1-3]?[A-Za-z]+)\.(\d+)\.(\d+)$/
+        .exec(code);
+
+    if (!match) return null;
+
+    const book = bookMap.get(match[1]);
+    const chapter = Number(match[2]);
+    const verse = Number(match[3]);
+
+    if (!book) return null;
+
+    if (
+      chapter < 1 ||
+      chapter > books[book.index][2] ||
+      verse < 1
+    ) return null;
+
+    return {
+      code,
+      book: match[1],
+      name: book.name,
+      index: book.index,
+      chapter,
+      verse
+    };
+  }
+
+  function parseRange(value) {
+    const parts = value.split("-");
+    if (parts.length > 2) return null;
+
+    const start = parseCode(parts[0]);
+    const end = parts.length === 2
+      ? parseCode(parts[1])
+      : start;
+
+    if (!start || !end) return null;
+
+    if (compareCodes(start, end) > 0) {
+      return null;
+    }
+
+    return { start, end, value };
+  }
+
+  function compareCodes(a, b) {
+    return (
+      a.index - b.index ||
+      a.chapter - b.chapter ||
+      a.verse - b.verse
+    );
+  }
+
+  function humanReference(value) {
+    const range = parseRange(value);
+
+    if (!range) return value;
+
+    const a = range.start;
+    const b = range.end;
+
+    const start =
+      a.name + " " + a.chapter + ":" + a.verse;
+
+    if (a.code === b.code) return start;
+
+    if (
+      a.book === b.book &&
+      a.chapter === b.chapter
+    ) {
+      return start + "-" + b.verse;
+    }
+
+    if (a.book === b.book) {
+      return start + "-" + b.chapter + ":" + b.verse;
+    }
+
+    return start + " – " +
+      b.name + " " + b.chapter + ":" + b.verse;
+  }
+
+  function containsVerse(range, selected) {
+    return (
+      compareCodes(range.start, selected) <= 0 &&
+      compareCodes(range.end, selected) >= 0
+    );
+  }
+
+  function fillChapters(preferred = 1) {
+    const book = books[Number($("xrBook").value)];
+
+    $("xrChapter").replaceChildren();
+
+    for (let chapter = 1;
+         chapter <= book[2];
+         chapter++) {
+
+      const option = make(
+        "option",
+        String(chapter),
+        $("xrChapter")
+      );
+
+      option.value = String(chapter);
+    }
+
+    $("xrChapter").value = String(
+      Math.min(
+        Math.max(Number(preferred) || 1, 1),
+        book[2]
+      )
+    );
+  }
+
+  let chapterVerses = [];
+
+  async function retrieveText(reference, edition) {
+    const url =
+      bibleAPI + encodeURIComponent(reference) +
+      "?translation=" + edition;
+
+    if (textCache.has(url)) {
+      return textCache.get(url);
+    }
+
+    const response = await fetch(url);
+
+    if (response.status === 429) {
+      throw new Error(
+        "Scripture source rate limit reached. Retry shortly."
+      );
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        "Scripture source returned HTTP " +
+        response.status
+      );
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.verses) ||
+        !data.verses.length) {
+      throw new Error("No Scripture verses returned.");
+    }
+
+    const result = {
+      url,
+      verses: data.verses,
+      text: data.verses.map(verse =>
+        String(verse.text || "").trim()
+      ).join(" ")
+    };
+
+    textCache.set(url, result);
+
+    return result;
+  }
+
+  function clearResearch() {
+    generation++;
+    records = [];
+    currentReference = "";
+    currentText = "";
+    currentTextSource = "";
+    selectedCode = "";
+    page = 0;
+
+    [
+      "xrOriginal",
+      "xrStatistics",
+      "xrDistribution",
+      "xrResults"
+    ].forEach(id => $(id).replaceChildren());
+
+    $("xrSummary").textContent = "";
+    $("xrPageStatus").textContent = "";
+
+    $("xrCopy").disabled = true;
+    $("xrDownload").disabled = true;
+    $("xrPageBack").disabled = true;
+    $("xrPageNext").disabled = true;
+  }
+
+  async function fillVerses(preferred = 1) {
+    const version = ++verseGeneration;
+    const book = books[Number($("xrBook").value)];
+    const chapter = Number($("xrChapter").value);
+
+    chapterVerses = [];
+
+    $("xrVerse").replaceChildren();
+    $("xrLoad").disabled = true;
+    $("xrPrevious").disabled = true;
+    $("xrNext").disabled = true;
+
+    $("xrVerseStatus").textContent =
+      "Retrieving chapter verse numbers…";
+
+    try {
+      const edition = $("xrEdition").value;
+
+      const result = await retrieveText(
+        book[0] + " " + chapter,
+        edition
+      );
+
+      if (
+        version !== verseGeneration ||
+        !root.isConnected
+      ) return false;
+
+      chapterVerses = [...new Set(
+        result.verses
+          .filter(verse =>
+            Number(verse.chapter) === chapter
+          )
+          .map(verse => Number(verse.verse))
+          .filter(number =>
+            Number.isInteger(number) && number > 0
+          )
+      )].sort((a,b) => a-b);
+
+      if (!chapterVerses.length) {
+        throw new Error("No valid verse numbers returned.");
+      }
+
+      chapterVerses.forEach(number => {
+        const option = make(
+          "option", String(number), $("xrVerse")
+        );
+
+        option.value = String(number);
+      });
+
+      $("xrVerse").value = String(
+        chapterVerses.includes(Number(preferred))
+          ? Number(preferred)
+          : chapterVerses[0]
+      );
+
+      $("xrVerseStatus").textContent = "";
+      $("xrLoad").disabled = false;
+      $("xrPrevious").disabled = false;
+      $("xrNext").disabled = false;
+
+      return true;
+
+    } catch (error) {
+
+      if (
+        version !== verseGeneration ||
+        !root.isConnected
+      ) return false;
+
+      $("xrVerseStatus").textContent =
+        error.message + " Change chapter or translation to retry.";
+
+      return false;
+    }
+  }
+
+  async function loadDataset() {
+
+    if (window.DesertBibleCrossReferenceIndex) {
+      return window.DesertBibleCrossReferenceIndex;
+    }
+
+    if (window.DesertBibleCrossReferenceRequest) {
+      return window.DesertBibleCrossReferenceRequest;
+    }
+
+    window.DesertBibleCrossReferenceRequest =
+      (async () => {
+
+        const response = await fetch(sourceURL);
+
+        if (!response.ok) {
+          throw new Error(
+            "Reference dataset unavailable: HTTP " +
+            response.status
+          );
+        }
+
+        const text = await response.text();
+        const lines = text.split(/\r?\n/);
+
+        const edges = [];
+        const bySource = new Map();
+        const byTargetBook = new Map();
+
+        let excluded = 0;
+
+        for (const line of lines) {
+
+          const clean = line.trim();
+
+          if (
+            !clean ||
+            clean.startsWith("#") ||
+            /^from/i.test(clean)
+          ) continue;
+
+          const fields = clean.split("\t");
+
+          if (fields.length < 3) {
+            excluded++;
+            continue;
+          }
+
+          const from = fields[0].trim();
+          const to = fields[1].trim();
+          const score = Number(fields[2].trim());
+
+          const origin = parseCode(from);
+          const range = parseRange(to);
+
+          if (
+            !origin ||
+            !range ||
+            !fields[2].trim() ||
+            !Number.isFinite(score)
+          ) {
+            excluded++;
+            continue;
+          }
+
+          const edge = {
+            from,
+            to,
+            score,
+            origin,
+            range
+          };
+
+          edges.push(edge);
+
+          if (!bySource.has(from)) {
+            bySource.set(from, []);
+          }
+
+          bySource.get(from).push(edge);
+
+          for (
+            let index = range.start.index;
+            index <= range.end.index;
+            index++
+          ) {
+            const code = books[index][1];
+
+            if (!byTargetBook.has(code)) {
+              byTargetBook.set(code, []);
+            }
+
+            byTargetBook.get(code).push(edge);
+          }
+        }
+
+        if (edges.length < 100000) {
+          throw new Error(
+            "Dataset integrity check failed: unexpected record count."
+          );
+        }
+
+        const index = {
+          edges,
+          bySource,
+          byTargetBook,
+          excluded,
+          retrieved: new Date().toISOString()
+        };
+
+        window.DesertBibleCrossReferenceIndex = index;
+
+        return index;
+
+      })();
+
+    try {
+      return await window.DesertBibleCrossReferenceRequest;
+    } finally {
+      window.DesertBibleCrossReferenceRequest = null;
+    }
+  }
+
+  function collectReferences(index, code) {
+
+    const selected = parseCode(code);
+    const output = [];
+    const seen = new Set();
+
+    function add(edge, direction, target) {
+
+      if (target === code) return;
+
+      const key =
+        edge.from + "|" +
+        edge.to + "|" +
+        direction + "|" +
+        edge.score;
+
+      if (seen.has(key)) return;
+
+      seen.add(key);
+
+      const range = parseRange(target);
+
+      if (!range) return;
+
+      output.push({
+        target,
+        direction,
+        score: edge.score,
+        sourceFrom: edge.from,
+        sourceTo: edge.to,
+        book: range.start.book,
+        bookIndex: range.start.index,
+        chapter: range.start.chapter,
+        verse: range.start.verse
+      });
+    }
+
+    (index.bySource.get(code) || [])
+      .forEach(edge => {
+        add(edge, "outgoing", edge.to);
+      });
+
+    (index.byTargetBook.get(selected.book) || [])
+      .forEach(edge => {
+        if (containsVerse(edge.range, selected)) {
+          add(edge, "incoming", edge.from);
+        }
+      });
+
+    return output;
+  }
+
+  async function investigate() {
+
+    if (!$("xrVerse").value) return;
+
+    clearResearch();
+
+    const version = generation;
+
+    const book = books[Number($("xrBook").value)];
+    const chapter = Number($("xrChapter").value);
+    const verse = Number($("xrVerse").value);
+    const edition = $("xrEdition").value;
+
+    selectedCode =
+      book[1] + "." + chapter + "." + verse;
+
+    currentReference =
+      book[0] + " " + chapter + ":" + verse;
+
+    $("xrStatus").textContent =
+      "Loading reference index and Scripture…";
+
+    make("h3", currentReference, $("xrOriginal"));
+
+    try {
+
+      const outcomes = await Promise.allSettled([
+        loadDataset(),
+        retrieveText(currentReference, edition)
+      ]);
+
+      if (
+        version !== generation ||
+        !root.isConnected
+      ) return;
+
+      const dataResult = outcomes[0];
+      const scriptureResult = outcomes[1];
+
+      if (scriptureResult.status === "fulfilled") {
+
+        currentText = scriptureResult.value.text;
+        currentTextSource = scriptureResult.value.url;
+
+        make(
+          "p",
+          edition.toUpperCase(),
+          $("xrOriginal")
+        );
+
+        make(
+          "blockquote",
+          currentText,
+          $("xrOriginal")
+        );
+
+        link(
+          $("xrOriginal"),
+          "Verify selected Scripture text",
+          currentTextSource
+        );
+
+      } else {
+
+        make(
+          "p",
+          "Scripture retrieval failed: " +
+          scriptureResult.reason.message,
+          $("xrOriginal")
+        );
+      }
+
+      if (dataResult.status !== "fulfilled") {
+        throw dataResult.reason;
+      }
+
+      const index = dataResult.value;
+
+      $("xrTotal").textContent =
+        index.edges.length.toLocaleString();
+
+      $("xrCoverage").textContent =
+        index.bySource.size.toLocaleString();
+
+      $("xrDataInfo").textContent =
+        "Dataset retrieved (UTC): " +
+        index.retrieved +
+        ". Unrecognized or invalid rows excluded: " +
+        index.excluded.toLocaleString() + ".";
+
+      records = collectReferences(
+        index, selectedCode
+      );
+
+      $("xrStatus").textContent =
+        records.length.toLocaleString() +
+        " directed reference records found for " +
+        currentReference + ".";
+
+      $("xrCopy").disabled = false;
+      $("xrDownload").disabled = false;
+
+      renderStatistics();
+      renderResults();
+
+    } catch (error) {
+
+      if (
+        version !== generation ||
+        !root.isConnected
+      ) return;
+
+      $("xrStatus").textContent =
+        error.message +
+        " Select Investigate passage to retry.";
+    }
+  }
+
+  function renderStatistics() {
+
+    $("xrStatistics").replaceChildren();
+    $("xrDistribution").replaceChildren();
+
+    const outgoing = records.filter(
+      item => item.direction === "outgoing"
+    ).length;
+
+    const incoming = records.filter(
+      item => item.direction === "incoming"
+    ).length;
+
+    const ot = records.filter(
+      item => item.bookIndex < 39
+    ).length;
+
+    const nt = records.filter(
+      item => item.bookIndex >= 39
+    ).length;
+
+    const distinct = new Set(
+      records.map(item => item.target)
+    ).size;
+
+    const panel = $("xrStatistics");
+
+    [
+      ["Distinct connected passages", distinct],
+      ["Outgoing records", outgoing],
+      ["Incoming records", incoming],
+      ["Old Testament records", ot],
+      ["New Testament records", nt]
+    ].forEach(([label, count]) => {
+      const p = make("p", undefined, panel);
+
+      make(
+        "strong",
+        count.toLocaleString() + " — ",
+        p
+      );
+
+      p.append(label);
+    });
+
+    const counts = new Map();
+
+    records.forEach(item => {
+      counts.set(
+        item.book,
+        (counts.get(item.book) || 0) + 1
+      );
+    });
+
+    const sorted = [...counts.entries()]
+      .sort((a,b) => b[1] - a[1])
+      .slice(0,10);
+
+    if (!sorted.length) {
+
+      make(
+        "p",
+        "No connections returned for this verse.",
+        $("xrDistribution")
+      );
+
+      return;
+    }
+
+    const maximum = sorted[0][1];
+
+    sorted.forEach(([code, count]) => {
+
+      make(
+        "p",
+        bookMap.get(code).name + " — " + count,
+        $("xrDistribution")
+      );
+
+      const bar = make(
+        "div", undefined, $("xrDistribution")
+      );
+
+      bar.className = "xr-bar";
+
+      const fill = make("div", undefined, bar);
+      fill.className = "xr-fill";
+
+      fill.style.width =
+        (count / maximum * 100) + "%";
+    });
+  }
+
+  function filteredRecords() {
+
+    const testament = $("xrTestament").value;
+    const book = $("xrTarget").value;
+    const direction = $("xrDirection").value;
+    const votes = $("xrVotes").value;
+
+    const query = $("xrSearch").value
+      .trim().toLowerCase();
+
+    const filtered = records.filter(item => {
+
+      if (
+        testament === "ot" &&
+        item.bookIndex >= 39
+      ) return false;
+
+      if (
+        testament === "nt" &&
+        item.bookIndex < 39
+      ) return false;
+
+      if (book && item.book !== book) {
+        return false;
+      }
+
+      if (
+        direction !== "both" &&
+        item.direction !== direction
+      ) return false;
+
+      if (
+        votes !== "all" &&
+        item.score < Number(votes)
+      ) return false;
+
+      if (
+        query &&
+        !humanReference(item.target)
+          .toLowerCase().includes(query)
+      ) return false;
+
+      return true;
+    });
+
+    const canonicalSort = (a,b) =>
+      a.bookIndex - b.bookIndex ||
+      a.chapter - b.chapter ||
+      a.verse - b.verse;
+
+    if ($("xrSort").value === "canonical") {
+      filtered.sort(canonicalSort);
+    } else {
+      filtered.sort(
+        (a,b) => b.score - a.score ||
+          canonicalSort(a,b)
+      );
+    }
+
+    return filtered;
+  }
+
+  function renderResults() {
+
+    const container = $("xrResults");
+    container.replaceChildren();
+
+    const filtered = filteredRecords();
+
+    const pageCount = Math.max(
+      1, Math.ceil(filtered.length / pageSize)
+    );
+
+    page = Math.min(
+      Math.max(page, 0),
+      pageCount - 1
+    );
+
+    const start = page * pageSize;
+    const visible = filtered.slice(
+      start, start + pageSize
+    );
+
+    $("xrSummary").textContent =
+      filtered.length.toLocaleString() +
+      " matching records out of " +
+      records.length.toLocaleString() + ".";
+
+    $("xrPageStatus").textContent =
+      "Page " + (page + 1) + " of " + pageCount;
+
+    $("xrPageBack").disabled = page === 0;
+
+    $("xrPageNext").disabled =
+      page + 1 >= pageCount;
+
+    if (!visible.length) {
+
+      make(
+        "p",
+        "No references match the selected filters.",
+        container
+      );
+
+      return;
+    }
+
+    visible.forEach(item => {
+
+      const card = make(
+        "article", undefined, container
+      );
+
+      card.className = "xr-result";
+
+      const reference = humanReference(item.target);
+
+      make("h3", reference, card);
+
+      make(
+        "p",
+        item.direction === "outgoing"
+          ? "Outgoing · Selected verse points to this passage"
+          : "Incoming · This verse points to the selected passage",
+        card
+      );
+
+      const score = make(
+        "p",
+        "Community vote score: " + item.score,
+        card
+      );
+
+      score.className = "xr-score";
+
+      const source = make(
+        "p",
+        "Original record: " +
+        item.sourceFrom + " → " + item.sourceTo,
+        card
+      );
+
+      source.className = "xr-muted";
+
+      const actions = make(
+        "div", undefined, card
+      );
+
+      actions.className = "xr-actions";
+
+      const preview = make(
+        "button",
+        "Compare Scripture",
+        actions
+      );
+
+      const follow = make(
+        "button",
+        "Investigate connected verse",
+        actions
+      );
+
+      preview.type = "button";
+      follow.type = "button";
+
+      const textPanel = make(
+        "div", undefined, card
+      );
+
+      preview.addEventListener("click", async () => {
+
+        if (textPanel.dataset.loaded === "true") {
+          textPanel.hidden = !textPanel.hidden;
+
+          preview.textContent = textPanel.hidden
+            ? "Compare Scripture"
+            : "Hide comparison";
+
+          return;
+        }
+
+        preview.disabled = true;
+        textPanel.textContent = "Retrieving passage…";
+
+        const range = parseRange(item.target);
+
+        try {
+
+          if (range.start.book !== range.end.book) {
+            throw new Error(
+              "This cross-book range requires separate reading of its endpoints."
+            );
+          }
+
+          const edition = $("xrEdition").value;
+
+          const result = await retrieveText(
+            reference, edition
+          );
+
+          if (!card.isConnected) return;
+
+          textPanel.replaceChildren();
+
+          make(
+            "h4",
+            "Selected passage — " + currentReference,
+            textPanel
+          );
+
+          make(
+            "blockquote",
+            currentText ||
+              "Selected Scripture text unavailable.",
+            textPanel
+          );
+
+          if (currentTextSource) {
+            link(
+              textPanel,
+              "Verify selected passage",
+              currentTextSource
+            );
+          }
+
+          make(
+            "h4",
+            "Connected passage — " + reference,
+            textPanel
+          );
+
+          make(
+            "p",
+            edition.toUpperCase(),
+            textPanel
+          );
+
+          result.verses.forEach(verse => {
+
+            make(
+              "blockquote",
+              verse.chapter + ":" + verse.verse +
+              " — " + String(verse.text).trim(),
+              textPanel
+            );
+          });
+
+          link(
+            textPanel,
+            "Verify connected passage text",
+            result.url
+          );
+
+          make(
+            "p",
+            "Read both passages in context before determining the significance of this connection.",
+            textPanel
+          );
+
+          textPanel.dataset.loaded = "true";
+
+          preview.textContent = "Hide comparison";
+
+        } catch (error) {
+
+          textPanel.textContent = error.message;
+
+        } finally {
+
+          preview.disabled = false;
+        }
+      });
+
+      follow.addEventListener("click", async () => {
+
+        const range = parseRange(item.target);
+
+        clearResearch();
+
+        $("xrBook").value =
+          String(range.start.index);
+
+        fillChapters(range.start.chapter);
+
+        const success = await fillVerses(
+          range.start.verse
+        );
+
+        if (success) {
+          await investigate();
+
+          $("xrOriginal").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+
+      link(
+        card,
+        "Inspect original cross-reference project",
+        originalSource
+      );
+    });
+  }
+
+  async function navigateVerse(direction) {
+
+    const current = Number($("xrVerse").value);
+    const position = chapterVerses.indexOf(current);
+
+    if (position < 0) return;
+
+    const nextPosition = position + direction;
+
+    if (
+      nextPosition >= 0 &&
+      nextPosition < chapterVerses.length
+    ) {
+
+      $("xrVerse").value = String(
+        chapterVerses[nextPosition]
+      );
+
+      await investigate();
+
+      return;
+    }
+
+    let bookIndex = Number($("xrBook").value);
+    let chapter = Number($("xrChapter").value);
+
+    chapter += direction;
+
+    if (chapter > books[bookIndex][2]) {
+
+      if (bookIndex === books.length - 1) {
+        return;
+      }
+
+      bookIndex++;
+      chapter = 1;
+    }
+
+    if (chapter < 1) {
+
+      if (bookIndex === 0) return;
+
+      bookIndex--;
+      chapter = books[bookIndex][2];
+    }
+
+    clearResearch();
+
+    $("xrBook").value = String(bookIndex);
+
+    fillChapters(chapter);
+
+    const success = await fillVerses();
+
+    if (!success) return;
+
+    if (direction < 0) {
+      $("xrVerse").value = String(
+        chapterVerses[chapterVerses.length - 1]
+      );
+    }
+
+    await investigate();
+  }
+
+  function researchExport() {
+
+    const edition = $("xrEdition").value.toUpperCase();
+
+    const lines = [
+      "DESERTBIBLE — CROSS-REFERENCE RESEARCH",
+      "",
+      "Selected passage: " + currentReference,
+      "Translation: " + edition,
+      "Exported (UTC): " + new Date().toISOString(),
+      "",
+      currentText || "Scripture text unavailable.",
+      "Scripture source: " +
+        (currentTextSource || "Unavailable"),
+      "",
+      "FILTERED CROSS-REFERENCE RECORDS",
+      ""
+    ];
+
+    filteredRecords().forEach((item,index) => {
+
+      lines.push(
+        (index+1) + ". " +
+          humanReference(item.target),
+
+        "Direction: " + item.direction,
+
+        "Community score: " + item.score,
+
+        "Original record: " +
+          item.sourceFrom + " -> " +
+          item.sourceTo,
+
+        ""
+      );
+    });
+
+    lines.push(
+      "SOURCE ATTRIBUTION",
+      "Cross-reference data from OpenBible.info.",
+      originalSource,
+      "Dataset distribution: " + repository,
+      "Raw dataset: " + sourceURL,
+      "Creative Commons Attribution 4.0:",
+      license,
+      $("xrDataInfo").textContent,
+      "",
+      "Scripture retrieval: https://bible-api.com/",
+      "Incoming connections were derived from original records.",
+      "Vote scores are not scholarly confidence ratings.",
+      "Cross-references do not independently prove historical or theological claims."
+    );
+
+    return lines.join("\n");
+  }
+
+  $("xrCopy").addEventListener("click", async () => {
+
+    try {
+
+      await navigator.clipboard.writeText(
+        researchExport()
+      );
+
+      $("xrStatus").textContent =
+        "Research records copied.";
+
+    } catch {
+
+      $("xrStatus").textContent =
+        "Clipboard unavailable. Use Download research.";
+    }
+  });
+
+  $("xrDownload").addEventListener("click", () => {
+
+    const blob = new Blob(
+      [researchExport()],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+
+    anchor.download =
+      "DesertBible-CrossReferences-" +
+      currentReference.replace(/[^a-zA-Z0-9]+/g,"-") +
+      ".txt";
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+    anchor.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  });
+
+  const filterIDs = [
+    "xrTestament",
+    "xrTarget",
+    "xrDirection",
+    "xrVotes",
+    "xrSort",
+    "xrSearch"
+  ];
+
+  filterIDs.forEach(id => {
+
+    $(id).addEventListener(
+      id === "xrSearch" ? "input" : "change",
+      () => {
+        page = 0;
+        renderResults();
+      }
+    );
+  });
+
+  $("xrReset").addEventListener("click", () => {
+
+    $("xrTestament").value = "all";
+    $("xrTarget").value = "";
+    $("xrDirection").value = "both";
+    $("xrVotes").value = "all";
+    $("xrSort").value = "votes";
+    $("xrSearch").value = "";
+
+    page = 0;
+
+    renderResults();
+  });
+
+  $("xrPageBack").addEventListener("click", () => {
+
+    page--;
+    renderResults();
+
+    $("xrSummary").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+
+  $("xrPageNext").addEventListener("click", () => {
+
+    page++;
+    renderResults();
+
+    $("xrSummary").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
+
+  $("xrBook").addEventListener("change", async () => {
+
+    clearResearch();
+    fillChapters(1);
+    await fillVerses();
+
+    $("xrStatus").textContent =
+      "Select Investigate passage.";
+  });
+
+  $("xrChapter").addEventListener("change", async () => {
+
+    clearResearch();
+    await fillVerses();
+
+    $("xrStatus").textContent =
+      "Select Investigate passage.";
+  });
+
+  $("xrEdition").addEventListener("change", async () => {
+
+    const preferred = $("xrVerse").value;
+
+    clearResearch();
+
+    const success = await fillVerses(preferred);
+
+    if (success) await investigate();
+  });
+
+  $("xrVerse").addEventListener("change", () => {
+
+    clearResearch();
+
+    $("xrStatus").textContent =
+      "Select Investigate passage.";
+  });
+
+  $("xrLoad").addEventListener(
+    "click", investigate
+  );
+
+  $("xrPrevious").addEventListener(
+    "click", () => navigateVerse(-1)
+  );
+
+  $("xrNext").addEventListener(
+    "click", () => navigateVerse(1)
+  );
+
+  $("xrClose").addEventListener("click", () => {
+
+    generation++;
+    verseGeneration++;
+
+    workspace.remove();
+  });
+
+  const readerBook =
+    document.getElementById("bibleBook")?.value;
+
+  const readerChapter =
+    document.getElementById("bibleChapter")?.value;
+
+  const initialIndex = books.findIndex(
+    book => book[0] === readerBook
+  );
+
+  $("xrBook").value = String(
+    initialIndex >= 0 ? initialIndex : 0
+  );
+
+  fillChapters(readerChapter || 1);
+
+  clearResearch();
+
+  workspace.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+  (async () => {
+
+    const success = await fillVerses();
+
+    if (success) await investigate();
+
+  })();
+}
+
+
+
+
+
