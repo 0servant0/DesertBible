@@ -71,6 +71,11 @@ if (item[0].trim().toLowerCase() === "scholarly commentary") {
   openProphecyFulfillment(workspace);
   return;
 }
+    if (item[0].trim().toLowerCase() === "visual exploration") {
+  openVisualExploration(workspace);
+  return;
+}
+    
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
