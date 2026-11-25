@@ -59,7 +59,11 @@ if (item[0] === "Scripture & translations") {
   openAncientDocuments(workspace);
   return;
 }
-
+if (item[0].trim().toLowerCase() === "scholarly commentary") {
+  openScholarlyCommentary(workspace);
+  return;
+}
+    
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
@@ -11681,7 +11685,2980 @@ function openAncientDocuments(workspace) {
 
 }
 
+function openScholarlyCommentary(workspace) {
+  "use strict";
 
+  const books = [
+    ["Genesis","genesis",50],
+    ["Exodus","exodus",40],
+    ["Leviticus","leviticus",27],
+    ["Numbers","numbers",36],
+    ["Deuteronomy","deuteronomy",34],
+    ["Joshua","joshua",24],
+    ["Judges","judges",21],
+    ["Ruth","ruth",4],
+    ["1 Samuel","1_samuel",31],
+    ["2 Samuel","2_samuel",24],
+    ["1 Kings","1_kings",22],
+    ["2 Kings","2_kings",25],
+    ["1 Chronicles","1_chronicles",29],
+    ["2 Chronicles","2_chronicles",36],
+    ["Ezra","ezra",10],
+    ["Nehemiah","nehemiah",13],
+    ["Esther","esther",10],
+    ["Job","job",42],
+    ["Psalms","psalms",150],
+    ["Proverbs","proverbs",31],
+    ["Ecclesiastes","ecclesiastes",12],
+    ["Song of Solomon","songs",8],
+    ["Isaiah","isaiah",66],
+    ["Jeremiah","jeremiah",52],
+    ["Lamentations","lamentations",5],
+    ["Ezekiel","ezekiel",48],
+    ["Daniel","daniel",12],
+    ["Hosea","hosea",14],
+    ["Joel","joel",3],
+    ["Amos","amos",9],
+    ["Obadiah","obadiah",1],
+    ["Jonah","jonah",4],
+    ["Micah","micah",7],
+    ["Nahum","nahum",3],
+    ["Habakkuk","habakkuk",3],
+    ["Zephaniah","zephaniah",3],
+    ["Haggai","haggai",2],
+    ["Zechariah","zechariah",14],
+    ["Malachi","malachi",4],
+    ["Matthew","matthew",28],
+    ["Mark","mark",16],
+    ["Luke","luke",24],
+    ["John","john",21],
+    ["Acts","acts",28],
+    ["Romans","romans",16],
+    ["1 Corinthians","1_corinthians",16],
+    ["2 Corinthians","2_corinthians",13],
+    ["Galatians","galatians",6],
+    ["Ephesians","ephesians",6],
+    ["Philippians","philippians",4],
+    ["Colossians","colossians",4],
+    ["1 Thessalonians","1_thessalonians",5],
+    ["2 Thessalonians","2_thessalonians",3],
+    ["1 Timothy","1_timothy",6],
+    ["2 Timothy","2_timothy",4],
+    ["Titus","titus",3],
+    ["Philemon","philemon",1],
+    ["Hebrews","hebrews",13],
+    ["James","james",5],
+    ["1 Peter","1_peter",5],
+    ["2 Peter","2_peter",3],
+    ["1 John","1_john",5],
+    ["2 John","2_john",1],
+    ["3 John","3_john",1],
+    ["Jude","jude",1],
+    ["Revelation","revelation",22]
+  ];
+
+  const sources = [
+
+    {
+      id:"cambridge",
+      title:"Cambridge Bible for Schools and Colleges",
+      author:"Multiple scholarly contributors",
+      date:"1878–early twentieth century",
+      group:"Historical and critical",
+      tradition:"British academic; contributor perspectives vary",
+      coverage:"Selected Old and New Testament books",
+      scope:"all",
+      method:"Historical, literary and grammatical analysis.",
+      importance:"Useful for historical background, ancient geography, translation observations and detailed textual exposition.",
+      limitation:"An older academic series predating many modern archaeological and manuscript discoveries."
+    },
+
+    {
+      id:"keil",
+      title:"Biblical Commentary on the Old Testament",
+      author:"Carl Friedrich Keil and Franz Delitzsch",
+      date:"Nineteenth century",
+      group:"Historical and critical",
+      tradition:"Lutheran Protestant",
+      coverage:"Old Testament",
+      scope:"ot",
+      method:"Hebrew philology, grammatical analysis and theological exposition.",
+      importance:"Provides detailed engagement with Hebrew vocabulary, syntax and the literary structure of Old Testament passages.",
+      limitation:"Historical and linguistic conclusions should be compared with modern lexicons and archaeological research."
+    },
+
+    {
+      id:"meyer",
+      title:"Critical and Exegetical Commentary on the New Testament",
+      author:"Heinrich August Wilhelm Meyer and contributors",
+      date:"Nineteenth century",
+      group:"Historical and critical",
+      tradition:"German Protestant scholarship",
+      coverage:"New Testament series",
+      scope:"nt",
+      method:"Greek grammar, textual interpretation and historical exegesis.",
+      importance:"Useful for examining grammatical relationships and the history of scholarly interpretation.",
+      limitation:"Older textual editions and scholarly debates require comparison with current research."
+    },
+
+    {
+      id:"egt",
+      title:"The Expositor's Greek Testament",
+      author:"William Robertson Nicoll, editor",
+      date:"1897–1910",
+      group:"Historical and critical",
+      tradition:"Multiple Protestant contributors",
+      coverage:"New Testament",
+      scope:"nt",
+      method:"Greek exegesis, literary analysis and historical interpretation.",
+      importance:"Useful for detailed investigation of New Testament Greek and argumentative structure.",
+      limitation:"Predates many important twentieth-century papyrus discoveries."
+    },
+
+    {
+      id:"vincent",
+      title:"Word Studies in the New Testament",
+      author:"Marvin R. Vincent",
+      date:"Late nineteenth century",
+      group:"Language and grammar",
+      tradition:"Protestant",
+      coverage:"New Testament",
+      scope:"nt",
+      method:"Greek vocabulary and contextual word usage.",
+      importance:"Useful for investigating historical lexical observations and distinctions obscured in English translation.",
+      limitation:"Individual word studies must be evaluated against syntax, context and modern lexical scholarship."
+    },
+
+    {
+      id:"robertson",
+      title:"Word Pictures in the New Testament",
+      author:"Archibald Thomas Robertson",
+      date:"1930–1933",
+      group:"Language and grammar",
+      tradition:"Baptist Protestant",
+      coverage:"New Testament",
+      scope:"nt",
+      method:"Greek grammar, syntax and verbal forms.",
+      importance:"An influential historical resource for examining Koine Greek grammatical constructions.",
+      limitation:"Some grammatical terminology and conclusions differ from contemporary linguistic approaches."
+    },
+
+    {
+      id:"ellicott",
+      title:"Commentary for English Readers",
+      author:"Charles John Ellicott, editor",
+      date:"Late nineteenth century",
+      group:"Historical and critical",
+      tradition:"Anglican; multiple contributors",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Textual explanation, grammar and historical context.",
+      importance:"Connects English biblical reading with historical and linguistic observations.",
+      limitation:"Reflects nineteenth-century scholarship and theological assumptions."
+    },
+
+    {
+      id:"pulpit",
+      title:"The Pulpit Commentary",
+      author:"H. D. M. Spence and Joseph S. Exell, editors",
+      date:"Late nineteenth and early twentieth centuries",
+      group:"Expository and theological",
+      tradition:"Multiple Christian contributors",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Exposition, theology and homiletical application.",
+      importance:"Allows users to distinguish textual explanation from sermon-oriented application.",
+      limitation:"Homiletical conclusions are not necessarily historical or linguistic findings."
+    },
+
+    {
+      id:"barnes",
+      title:"Notes on the Bible",
+      author:"Albert Barnes",
+      date:"Nineteenth century",
+      group:"Expository and theological",
+      tradition:"Presbyterian",
+      coverage:"New Testament and selected Old Testament books",
+      scope:"partial",
+      method:"Explanatory exposition with historical and linguistic observations.",
+      importance:"Provides accessible discussion of difficult biblical passages.",
+      limitation:"Coverage is not uniform, and interpretations reflect the author's theological setting."
+    },
+
+    {
+      id:"clarke",
+      title:"Commentary and Critical Notes",
+      author:"Adam Clarke",
+      date:"Early nineteenth century",
+      group:"Expository and theological",
+      tradition:"Methodist and Wesleyan",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Language, theology, historical sources and exposition.",
+      importance:"Offers a Wesleyan historical perspective and frequent engagement with original languages.",
+      limitation:"Some linguistic and historical explanations are outdated."
+    },
+
+    {
+      id:"gill",
+      title:"Exposition of the Old and New Testaments",
+      author:"John Gill",
+      date:"Eighteenth century",
+      group:"Expository and theological",
+      tradition:"Particular Baptist and Calvinist",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Doctrinal exposition and engagement with Jewish interpretive literature.",
+      importance:"Useful for examining historical Baptist interpretation and references to rabbinic traditions.",
+      limitation:"Rabbinic citations require verification in their original literary and historical contexts."
+    },
+
+    {
+      id:"jfb",
+      title:"Commentary Critical and Explanatory on the Whole Bible",
+      author:"Robert Jamieson, A. R. Fausset and David Brown",
+      date:"1871",
+      group:"Expository and theological",
+      tradition:"Protestant",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Concise historical, doctrinal and grammatical exposition.",
+      importance:"Provides an accessible historical commentary covering the Protestant biblical canon.",
+      limitation:"Its conclusions should not be substituted for modern specialist research."
+    },
+
+    {
+      id:"poole",
+      title:"Annotations upon the Holy Bible",
+      author:"Matthew Poole and later contributors",
+      date:"Seventeenth century",
+      group:"Reformation and post-Reformation",
+      tradition:"Reformed Protestant",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Concise exegetical and theological annotations.",
+      importance:"Useful for investigating early Protestant approaches to disputed biblical passages.",
+      limitation:"The completed work includes contributions beyond Poole himself."
+    },
+
+    {
+      id:"wesley",
+      title:"Explanatory Notes",
+      author:"John Wesley",
+      date:"Eighteenth century",
+      group:"Reformation and post-Reformation",
+      tradition:"Wesleyan and Methodist",
+      coverage:"Old and New Testament notes",
+      scope:"all",
+      method:"Concise theological explanation and Christian application.",
+      importance:"Provides a historical Wesleyan interpretive perspective.",
+      limitation:"Not a modern technical commentary or independent archaeological source."
+    },
+
+    {
+      id:"matthew",
+      title:"Commentary on the Whole Bible",
+      author:"Matthew Henry and continuators",
+      date:"Early eighteenth century",
+      group:"Devotional and pastoral",
+      tradition:"English Nonconformist and Reformed",
+      coverage:"Old and New Testaments",
+      scope:"all",
+      method:"Devotional, moral and theological exposition.",
+      importance:"Important for the historical reception of Scripture in Protestant devotional literature.",
+      limitation:"The completed commentary includes work by other ministers. Devotional applications must be distinguished from historical findings."
+    },
+
+    {
+      id:"calvin",
+      title:"Commentaries on Scripture",
+      author:"John Calvin",
+      date:"Sixteenth century",
+      group:"Reformation and post-Reformation",
+      tradition:"Reformed Protestant",
+      coverage:"Selected Old and New Testament books",
+      scope:"partial",
+      method:"Literary, grammatical and theological exposition.",
+      importance:"Major primary source for understanding Reformation-era biblical interpretation.",
+      limitation:"Calvin did not write commentaries on every biblical book.",
+      url:"https://www.ccel.org/ccel/calvin"
+    },
+
+    {
+      id:"spurgeon",
+      title:"The Treasury of David",
+      author:"Charles Haddon Spurgeon",
+      date:"Nineteenth century",
+      group:"Devotional and pastoral",
+      tradition:"Baptist and Calvinist",
+      coverage:"Psalms",
+      scope:"psalms",
+      method:"Psalm exposition with quotations from earlier interpreters.",
+      importance:"Provides extensive material on the reception and devotional interpretation of the Psalms.",
+      limitation:"Distinguish Spurgeon's statements from quotations attributed to other authors.",
+      url:"https://www.ccel.org/"
+    },
+
+    {
+      id:"luther",
+      title:"Commentary on Galatians",
+      author:"Martin Luther",
+      date:"1535 edition",
+      group:"Reformation and post-Reformation",
+      tradition:"Lutheran",
+      coverage:"Galatians",
+      scope:"galatians",
+      method:"Theological exposition emphasizing faith, law and justification.",
+      importance:"A major historical witness to Reformation interpretation of Paul's argument.",
+      limitation:"Must be read within its sixteenth-century theological controversies.",
+      url:"https://www.gutenberg.org/ebooks/1549"
+    },
+
+    {
+      id:"haydock",
+      title:"Haydock Catholic Bible Commentary",
+      author:"George Leo Haydock and collected contributors",
+      date:"Nineteenth century",
+      group:"Catholic interpretation",
+      tradition:"Roman Catholic",
+      coverage:"Catholic biblical canon",
+      scope:"all",
+      method:"Traditional Catholic exposition and compilation of earlier interpretations.",
+      importance:"Provides comparison with Catholic biblical interpretation and historical annotations.",
+      limitation:"Older editions use Douay-Rheims conventions, including some differences in numbering.",
+      url:"https://www.studylight.org/commentaries.html"
+    }
+
+  ];
+
+  const academicResources = [
+ {
+      title:"William Lane Craig",
+      institution:"Reasonable Faith",
+      type:"Contemporary Christian Scholarship & Apologetics — Philosophy and Theology",
+      description:"Philosopher and theologian whose work examines the existence of God, the historical evidence for Jesus' resurrection, divine foreknowledge, human freedom, creation, miracles and the relationship between faith and reason. Suggested passages for investigation include Genesis 1, John 20, Acts 17:16–34, Romans 1:18–23 and 1 Corinthians 15. Published resources include Reasonable Faith: Christian Truth and Apologetics (2008, third edition). His philosophical arguments and historical conclusions should be evaluated alongside relevant specialist scholarship.",
+      url:"https://www.reasonablefaith.org/"
+    },
+
+    {
+      title:"Cliffe Knechtle",
+      institution:"Give Me an Answer",
+      type:"Contemporary Christian Scholarship & Apologetics — Pastoral and Public Apologetics",
+      description:"Christian pastor and public apologist whose ministry engages questions about the reliability of Scripture, the identity of Jesus, morality, suffering, forgiveness, salvation and the reasonableness of Christianity. Suggested passages for investigation include Matthew 5–7, John 3:16–21, John 14:6, Romans 3:21–26 and 1 Peter 3:15. His university discussions provide resources for examining objections to Christianity. Public apologetic arguments should be distinguished from peer-reviewed historical and textual research.",
+      url:"https://givemeananswer.org/"
+    },
+
+    {
+      title:"Stuart Knechtle",
+      institution:"Give Me an Answer",
+      type:"Contemporary Christian Scholarship & Apologetics — Pastoral and Public Apologetics",
+      description:"Christian pastor and apologist with graduate training in divinity and mental health. His public ministry addresses objections to Christianity through theological, ethical and pastoral discussion. Suggested passages for investigation include Psalm 22, Matthew 11:28–30, Romans 8:18–39, James 1:2–5 and 1 Peter 3:15. Consult original recordings and identify the precise speaker and timestamp before attributing specific statements.",
+      url:"https://givemeananswer.org/meet-cliffe-stuart/"
+    },
+
+    {
+      title:"Wesley Huff",
+      institution:"Wesley Huff",
+      type:"Contemporary Christian Scholarship & Apologetics — Biblical Manuscripts and Textual Transmission",
+      description:"Christian apologist and researcher whose work addresses biblical manuscripts, ancient languages, textual transmission, biblical reliability and early Christianity. Suggested passages for investigation include Mark 16:9–20, John 7:53–8:11, John 1:1–18, Luke 1:1–4 and 1 John 5:7–8. Compare manuscript-related claims with original manuscript images, critical editions and institutional catalogues such as the New Testament Virtual Manuscript Room. Distinguish manuscript evidence from theological or apologetic conclusions.",
+      url:"https://www.wesleyhuff.com/"
+    },
+
+    {
+      title:"John Lennox",
+      institution:"John Lennox",
+      type:"Contemporary Christian Scholarship & Apologetics — Mathematics, Science and Christianity",
+      description:"Mathematician and Christian author whose work explores the relationship between science, philosophy, Christianity, creation and human existence. Published works include God's Undertaker: Has Science Buried God?, Seven Days That Divide the World and Can Science Explain Everything? Suggested passages for investigation include Genesis 1–2, Psalm 19, John 1:1–3, Acts 17:24–28 and Romans 1:20. Distinguish scientific findings, philosophical arguments and theological interpretations when evaluating his conclusions.",
+      url:"https://www.johnlennox.org/"
+    },
+
+    {
+      title:"Bible Odyssey",
+      institution:"Society of Biblical Literature",
+      type:"Modern academic biblical scholarship",
+      description:"Accessible articles exploring biblical history, literature, people, archaeology and interpretive questions.",
+      url:"https://www.bibleodyssey.org/"
+    },
+
+    {
+      title:"Journal of Biblical Literature",
+      institution:"Society of Biblical Literature",
+      type:"Peer-reviewed research journal",
+      description:"Specialist research in biblical studies, textual criticism, interpretation and ancient contexts. Some articles require access.",
+      url:"https://www.sbl-site.org/"
+    },
+
+    {
+      title:"Yale Open Courses — Hebrew Bible",
+      institution:"Yale University",
+      type:"University lectures",
+      description:"Christine Hayes presents an academic introduction to the Hebrew Bible, ancient Near Eastern contexts and literary interpretation.",
+      url:"https://oyc.yale.edu/religious-studies/rlst-145"
+    },
+
+    {
+      title:"Yale Open Courses — New Testament",
+      institution:"Yale University",
+      type:"University lectures",
+      description:"Dale B. Martin introduces New Testament literature and early Christianity using historical and critical approaches.",
+      url:"https://oyc.yale.edu/religious-studies/rlst-152"
+    },
+
+    {
+      title:"NET Bible",
+      institution:"Biblical Studies Press",
+      type:"Translation and explanatory notes",
+      description:"Translation notes discuss textual variants, grammar and translation decisions. Notes are not equivalent to an exhaustive commentary.",
+      url:"https://netbible.org/"
+    },
+
+    {
+      title:"USCCB Bible",
+      institution:"United States Conference of Catholic Bishops",
+      type:"Catholic biblical introductions and notes",
+      description:"Provides the New American Bible Revised Edition with introductions and explanatory annotations.",
+      url:"https://bible.usccb.org/bible"
+    },
+
+    {
+      title:"STEP Bible",
+      institution:"Tyndale House",
+      type:"Original-language research",
+      description:"Hebrew and Greek textual tools, lexical information and translation comparisons.",
+      url:"https://www.stepbible.org/"
+    },
+
+    {
+      title:"New Testament Virtual Manuscript Room",
+      institution:"Institute for New Testament Textual Research",
+      type:"Manuscript research",
+      description:"Catalogue and research environment for studying New Testament manuscript evidence.",
+      url:"https://ntvmr.uni-muenster.de/"
+    },
+
+    {
+      title:"Digital Dead Sea Scrolls",
+      institution:"Israel Museum",
+      type:"Primary manuscript evidence",
+      description:"Digitized scrolls useful for comparing ancient Hebrew textual witnesses.",
+      url:"https://dss.collections.imj.org.il/"
+    },
+
+    {
+      title:"Open Richly Annotated Cuneiform Corpus",
+      institution:"ORACC project",
+      type:"Ancient Near Eastern primary sources",
+      description:"Annotated editions of ancient cuneiform texts relevant to the historical and cultural world of Scripture.",
+      url:"https://oracc.museum.upenn.edu/"
+    },
+
+    {
+      title:"Biblical Archaeology Society",
+      institution:"Biblical Archaeology Society",
+      type:"Archaeological research and reporting",
+      description:"Articles on biblical archaeology and ancient history. Distinguish specialist research from popular reporting.",
+      url:"https://www.biblicalarchaeology.org/"
+    },
+
+    {
+      title:"Index Theologicus",
+      institution:"University Library of Tübingen",
+      type:"Academic bibliography",
+      description:"Searchable bibliography for locating specialist theological and biblical studies publications.",
+      url:"https://ixtheo.de/"
+    },
+
+    {
+      title:"ATLA Religion Database",
+      institution:"Atla",
+      type:"Academic bibliographic database",
+      description:"Research database for religion and theology. Access commonly requires a subscribing institution.",
+      url:"https://www.atla.com/"
+    },
+
+    {
+      title:"Christian Classics Ethereal Library",
+      institution:"CCEL",
+      type:"Historical Christian literature",
+      description:"Digital editions of historical theological works, biblical commentaries and patristic writings.",
+      url:"https://www.ccel.org/"
+    },
+
+    {
+      title:"Sefaria",
+      institution:"Sefaria",
+      type:"Jewish textual and interpretive traditions",
+      description:"Biblical texts, rabbinic literature and traditional Jewish commentaries useful for reception-history comparisons.",
+      url:"https://www.sefaria.org/texts"
+    }
+
+  ];
+
+  const fathers = [
+
+    [
+      "Irenaeus of Lyon",
+      "Approximately 130–202 CE",
+      "Against Heresies",
+      "Uses Scripture in arguments concerning creation, salvation, Christ and apostolic tradition.",
+      "https://www.newadvent.org/fathers/0103.htm"
+    ],
+
+    [
+      "Origen of Alexandria",
+      "Approximately 185–253 CE",
+      "Commentary on John",
+      "Engages philosophical, grammatical and spiritual interpretation of the Gospel.",
+      "https://www.newadvent.org/fathers/1015.htm"
+    ],
+
+    [
+      "Athanasius of Alexandria",
+      "Approximately 296–373 CE",
+      "On the Incarnation",
+      "Uses biblical texts in theological arguments concerning creation and the incarnation of Christ.",
+      "https://www.newadvent.org/fathers/2802.htm"
+    ],
+
+    [
+      "Basil of Caesarea",
+      "Approximately 330–379 CE",
+      "Hexaemeron",
+      "Homilies examining the creation narrative in Genesis.",
+      "https://www.newadvent.org/fathers/3201.htm"
+    ],
+
+    [
+      "Gregory of Nyssa",
+      "Approximately 335–395 CE",
+      "On the Making of Man",
+      "Provides theological interpretation of creation and human nature.",
+      "https://www.newadvent.org/fathers/2914.htm"
+    ],
+
+    [
+      "John Chrysostom",
+      "Approximately 347–407 CE",
+      "Homilies on Matthew",
+      "Extensive exposition emphasizing biblical interpretation, ethics and pastoral application.",
+      "https://www.newadvent.org/fathers/2001.htm"
+    ],
+
+    [
+      "Augustine of Hippo",
+      "354–430 CE",
+      "Tractates on the Gospel of John",
+      "Offers influential theological interpretation of John's Gospel.",
+      "https://www.newadvent.org/fathers/1701.htm"
+    ],
+
+    [
+      "Jerome",
+      "Approximately 347–420 CE",
+      "Letters and biblical writings",
+      "Important for Latin biblical translation, Hebrew studies and historical scriptural interpretation.",
+      "https://www.newadvent.org/fathers/"
+    ],
+
+    [
+      "Cyril of Alexandria",
+      "Approximately 376–444 CE",
+      "Biblical and theological writings",
+      "Provides important evidence for Alexandrian interpretation and Christological debates.",
+      "https://www.ccel.org/"
+    ],
+
+    [
+      "Theodoret of Cyrus",
+      "Approximately 393–458 CE",
+      "Biblical interpretation and ecclesiastical writings",
+      "Associated with the Antiochene interpretive tradition and late antique theological debates.",
+      "https://www.ccel.org/"
+    ]
+
+  ];
+
+  /*
+    Editorial research guides.
+    These are DesertBible study directions,
+    not quotations or attributed scholar summaries.
+  */
+
+  const guides = {
+
+    "Genesis":[
+      "Creation and ancient Near Eastern cosmology",
+      "Literary structure of Genesis 1–11",
+      "Covenant and patriarchal narratives",
+      "Genealogies, chronology and interpretive approaches"
+    ],
+
+    "Exodus":[
+      "Exodus chronology and historical evidence",
+      "Covenant legislation",
+      "Divine-name terminology",
+      "Tabernacle and priestly symbolism"
+    ],
+
+    "Leviticus":[
+      "Sacrificial terminology",
+      "Ritual purity and holiness",
+      "Priestly institutions",
+      "Ancient Israelite law and worship"
+    ],
+
+    "Numbers":[
+      "Wilderness narrative structure",
+      "Census terminology and numerical interpretation",
+      "Balaam traditions",
+      "Priestly and covenant legislation"
+    ],
+
+    "Deuteronomy":[
+      "Covenant structure",
+      "Ancient treaty comparisons",
+      "Centralization of worship",
+      "Law and theological memory"
+    ],
+
+    "Joshua":[
+      "Conquest narratives and archaeology",
+      "Land allotment",
+      "Ancient warfare rhetoric",
+      "Covenant renewal"
+    ],
+
+    "Judges":[
+      "Narrative cycles",
+      "Tribal organization",
+      "Iron Age historical setting",
+      "Literary and theological portrayals of leadership"
+    ],
+
+    "Ruth":[
+      "Kinship and redemption",
+      "Marriage and inheritance",
+      "Narrative characterization",
+      "Davidic genealogy"
+    ],
+
+    "1 Samuel":[
+      "Israelite monarchy",
+      "Prophetic authority",
+      "Samuel manuscript variants",
+      "Narrative portrayals of Saul and David"
+    ],
+
+    "2 Samuel":[
+      "Davidic covenant",
+      "Monarchical history",
+      "Royal ideology",
+      "Textual variants and narrative structure"
+    ],
+
+    "1 Kings":[
+      "Solomonic monarchy",
+      "Temple and royal administration",
+      "Divided kingdom chronology",
+      "Elijah and prophetic traditions"
+    ],
+
+    "2 Kings":[
+      "Assyrian and Babylonian sources",
+      "Fall of Samaria",
+      "Hezekiah and Sennacherib",
+      "Jerusalem's destruction and exile"
+    ],
+
+    "1 Chronicles":[
+      "Genealogical organization",
+      "Davidic kingship",
+      "Temple institutions",
+      "Comparison with Samuel and Kings"
+    ],
+
+    "2 Chronicles":[
+      "Temple-centered historiography",
+      "Judah's monarchy",
+      "Religious reform",
+      "Comparison with Kings"
+    ],
+
+    "Ezra":[
+      "Persian imperial context",
+      "Temple restoration",
+      "Aramaic documentary sections",
+      "Community identity"
+    ],
+
+    "Nehemiah":[
+      "Persian administration",
+      "Jerusalem's restoration",
+      "Social and economic reforms",
+      "Literary structure of the memoir"
+    ],
+
+    "Esther":[
+      "Persian court setting",
+      "Narrative irony",
+      "Hebrew and Greek textual forms",
+      "Jewish identity and Purim"
+    ],
+
+    "Job":[
+      "Wisdom literature",
+      "Poetic argumentation",
+      "Suffering and divine justice",
+      "Difficult Hebrew vocabulary"
+    ],
+
+    "Psalms":[
+      "Hebrew poetry and parallelism",
+      "Psalm genres",
+      "Royal and messianic interpretation",
+      "Liturgical and manuscript traditions"
+    ],
+
+    "Proverbs":[
+      "Wisdom instruction",
+      "Ancient Egyptian literary parallels",
+      "Poetic structure",
+      "Ethical formation"
+    ],
+
+    "Ecclesiastes":[
+      "Meaning of hebel",
+      "Wisdom and mortality",
+      "Literary voice",
+      "Theological interpretations of human limitation"
+    ],
+
+    "Song of Solomon":[
+      "Hebrew love poetry",
+      "Literary imagery",
+      "Literal and allegorical traditions",
+      "Ancient Near Eastern comparisons"
+    ],
+
+    "Isaiah":[
+      "Assyrian and exilic contexts",
+      "Isaiah manuscript witnesses",
+      "Servant passages",
+      "Historical and messianic interpretation"
+    ],
+
+    "Jeremiah":[
+      "Late Judean monarchy",
+      "Hebrew and Greek textual differences",
+      "Prophetic symbolism",
+      "Exile and covenant renewal"
+    ],
+
+    "Lamentations":[
+      "Jerusalem's destruction",
+      "Acrostic poetry",
+      "Collective suffering",
+      "Lament and theological response"
+    ],
+
+    "Ezekiel":[
+      "Babylonian exile",
+      "Prophetic visions",
+      "Priestly symbolism",
+      "Temple and restoration imagery"
+    ],
+
+    "Daniel":[
+      "Hebrew and Aramaic sections",
+      "Babylonian and Persian settings",
+      "Apocalyptic symbolism",
+      "Composition and dating debates"
+    ],
+
+    "Hosea":[
+      "Northern kingdom history",
+      "Covenant imagery",
+      "Prophetic metaphor",
+      "Assyrian imperial context"
+    ],
+
+    "Joel":[
+      "Locust and judgment imagery",
+      "Day of the Lord",
+      "Composition dating debates",
+      "Reception in Acts 2"
+    ],
+
+    "Amos":[
+      "Eighth-century Israel",
+      "Social justice and prophetic rhetoric",
+      "Judgment oracles",
+      "Restoration traditions"
+    ],
+
+    "Obadiah":[
+      "Edom and Judah",
+      "Historical setting debates",
+      "Prophetic judgment",
+      "Day of the Lord imagery"
+    ],
+
+    "Jonah":[
+      "Narrative genre",
+      "Nineveh and Assyria",
+      "Literary irony",
+      "Divine mercy and prophetic identity"
+    ],
+
+    "Micah":[
+      "Eighth-century Judah and Israel",
+      "Samaria and Jerusalem",
+      "Assyrian imperial expansion",
+      "Prophetic wordplay and judgment",
+      "Restoration and messianic interpretation"
+    ],
+
+    "Nahum":[
+      "Assyrian imperial history",
+      "Nineveh's destruction",
+      "Hebrew poetic imagery",
+      "Judgment rhetoric"
+    ],
+
+    "Habakkuk":[
+      "Babylonian expansion",
+      "Prophetic dialogue",
+      "Hebrew terminology of faithfulness",
+      "Qumran and New Testament reception"
+    ],
+
+    "Zephaniah":[
+      "Josianic historical setting",
+      "Day of the Lord",
+      "Judgment and restoration",
+      "Prophetic poetic structure"
+    ],
+
+    "Haggai":[
+      "Persian period chronology",
+      "Second Temple reconstruction",
+      "Prophetic dating formulas",
+      "Temple theology"
+    ],
+
+    "Zechariah":[
+      "Persian historical context",
+      "Prophetic visions",
+      "Composition and literary structure",
+      "Messianic reception"
+    ],
+
+    "Malachi":[
+      "Postexilic worship",
+      "Prophetic disputation",
+      "Covenant terminology",
+      "Reception in the Gospels"
+    ],
+
+    "Matthew":[
+      "Synoptic Gospel relationships",
+      "Fulfillment citations",
+      "Kingdom of heaven",
+      "Jewish historical and literary context"
+    ],
+
+    "Mark":[
+      "Gospel narrative structure",
+      "Discipleship and Christology",
+      "Synoptic relationships",
+      "Manuscript evidence for Mark's ending"
+    ],
+
+    "Luke":[
+      "Historical and literary prologue",
+      "Relationship with Acts",
+      "Narrative theology",
+      "Social and political context"
+    ],
+
+    "John":[
+      "Logos terminology",
+      "Signs and discourse structure",
+      "Christology",
+      "Early manuscript witnesses"
+    ],
+
+    "Acts":[
+      "Early Christian history",
+      "Roman administrative setting",
+      "Speeches and narrative structure",
+      "Greek manuscript variation"
+    ],
+
+    "Romans":[
+      "Pauline argumentation",
+      "Justification and righteousness",
+      "Law, faith and covenant",
+      "Jewish and Gentile relationships"
+    ],
+
+    "1 Corinthians":[
+      "Roman Corinth",
+      "Church divisions",
+      "Spiritual gifts",
+      "Resurrection and communal ethics"
+    ],
+
+    "2 Corinthians":[
+      "Pauline apostolic authority",
+      "Reconciliation",
+      "Rhetorical structure",
+      "Letter composition debates"
+    ],
+
+    "Galatians":[
+      "Law and promise",
+      "Justification and faith",
+      "Historical destination debates",
+      "Jewish and Gentile identity"
+    ],
+
+    "Ephesians":[
+      "Church and reconciliation",
+      "Greek syntactical structure",
+      "Authorship debates",
+      "Household instructions"
+    ],
+
+    "Philippians":[
+      "Roman Philippi",
+      "Christological language",
+      "Pauline imprisonment",
+      "Humility and communal identity"
+    ],
+
+    "Colossians":[
+      "Christology",
+      "Religious and philosophical context",
+      "Authorship debates",
+      "Household and ethical instruction"
+    ],
+
+    "1 Thessalonians":[
+      "Early Pauline chronology",
+      "Eschatological expectation",
+      "Community ethics",
+      "Historical Thessalonica"
+    ],
+
+    "2 Thessalonians":[
+      "Eschatological terminology",
+      "Day of the Lord",
+      "Authorship and literary relationships",
+      "Community discipline"
+    ],
+
+    "1 Timothy":[
+      "Church organization",
+      "Pastoral instruction",
+      "Historical and authorship questions",
+      "Greek terminology of leadership"
+    ],
+
+    "2 Timothy":[
+      "Pauline reception",
+      "Scripture and teaching",
+      "Pastoral and testamentary language",
+      "Historical and authorship questions"
+    ],
+
+    "Titus":[
+      "Church leadership",
+      "Cretan historical context",
+      "Ethical instruction",
+      "Pastoral Epistle authorship debates"
+    ],
+
+    "Philemon":[
+      "Roman slavery",
+      "Epistolary rhetoric",
+      "Reconciliation",
+      "Social implications of Paul's appeal"
+    ],
+
+    "Hebrews":[
+      "Priesthood and sacrifice",
+      "Use of Greek Jewish Scripture",
+      "Covenant theology",
+      "Authorship and audience debates"
+    ],
+
+    "James":[
+      "Jewish wisdom traditions",
+      "Faith and works",
+      "Ethical exhortation",
+      "Greek literary structure"
+    ],
+
+    "1 Peter":[
+      "Christian suffering",
+      "Diaspora terminology",
+      "Roman provincial context",
+      "Scriptural quotations"
+    ],
+
+    "2 Peter":[
+      "Authorship and dating debates",
+      "Relationship with Jude",
+      "Prophetic interpretation",
+      "Eschatological language"
+    ],
+
+    "1 John":[
+      "Johannine theology",
+      "Community conflict",
+      "Christological confession",
+      "Textual evidence for disputed readings"
+    ],
+
+    "2 John":[
+      "Epistolary structure",
+      "Christian hospitality",
+      "Truth and love",
+      "Community boundaries"
+    ],
+
+    "3 John":[
+      "Early Christian hospitality",
+      "Community leadership",
+      "Epistolary relationships",
+      "Personal names and social setting"
+    ],
+
+    "Jude":[
+      "Jewish apocalyptic literature",
+      "Enochic traditions",
+      "Relationship with 2 Peter",
+      "Judgment imagery"
+    ],
+
+    "Revelation":[
+      "Apocalyptic literary conventions",
+      "Roman imperial context",
+      "Old Testament imagery",
+      "Historical and theological interpretive frameworks"
+    ]
+
+  };
+
+  const root = document.createElement("div");
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+
+      .dbsc {
+        color:var(--text,#ece8df);
+        line-height:1.75;
+      }
+
+      .dbsc .sc-panel {
+        padding:20px;
+        margin:18px 0;
+        border:1px solid var(--line,#383b42);
+        background:var(--panel2,#17191e);
+        border-radius:12px;
+      }
+
+      .dbsc .sc-grid {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(150px,1fr));
+        gap:14px;
+      }
+
+      .dbsc .sc-card {
+        padding:18px;
+        margin:14px 0;
+        border:1px solid var(--line,#383b42);
+        border-radius:10px;
+        background:var(--panel,#14161a);
+      }
+
+      .dbsc .sc-gold {
+        color:var(--gold,#c7a76a);
+      }
+
+      .dbsc .sc-muted {
+        color:var(--muted,#b3b3b3);
+        font-size:13px;
+      }
+
+      .dbsc .sc-note {
+        padding:13px;
+        margin:12px 0;
+        border-left:3px solid var(--gold,#c7a76a);
+        background:var(--bg,#101216);
+      }
+
+      .dbsc input,
+      .dbsc select,
+      .dbsc textarea {
+        box-sizing:border-box;
+        width:100%;
+        background:var(--bg,#101216);
+        color:var(--text,#ece8df);
+        border:1px solid var(--line,#383b42);
+        padding:11px;
+        border-radius:7px;
+        font:inherit;
+      }
+
+      .dbsc textarea {
+        min-height:160px;
+        resize:vertical;
+      }
+
+      .dbsc label {
+        display:block;
+        margin:5px 0;
+        font-size:13px;
+      }
+
+      .dbsc a {
+        color:var(--gold,#c7a76a);
+        overflow-wrap:anywhere;
+      }
+
+      .dbsc .sc-actions {
+        display:flex;
+        flex-wrap:wrap;
+        gap:9px;
+        margin:14px 0;
+      }
+
+      .dbsc .sc-stat {
+        font-weight:700;
+        font-size:28px;
+        color:var(--gold,#c7a76a);
+      }
+
+      .dbsc details {
+        padding:12px 0;
+        border-bottom:
+          1px solid var(--line,#383b42);
+      }
+
+      .dbsc summary {
+        color:var(--gold,#c7a76a);
+        cursor:pointer;
+        font-weight:600;
+      }
+
+      .dbsc dt {
+        color:var(--muted,#b3b3b3);
+        font-size:12px;
+        margin-top:10px;
+      }
+
+      .dbsc dd {
+        margin:0 0 10px;
+      }
+
+      .dbsc blockquote {
+        margin:10px 0;
+        padding:13px;
+        background:var(--bg,#101216);
+        border-left:2px solid var(--gold,#c7a76a);
+      }
+
+      .dbsc .sc-verse {
+        padding:6px 0;
+      }
+
+      @media(max-width:600px) {
+
+        .dbsc .sc-panel,
+        .dbsc .sc-card {
+          padding:13px;
+        }
+
+      }
+
+    </style>
+
+    <div class="dbsc">
+
+      <div class="eyebrow">
+        DESERTBIBLE · EXEGETICAL RESEARCH
+      </div>
+
+      <h2>Scholarly Commentary</h2>
+
+      <p>
+        Investigate Scripture through historical
+        commentary, original-language scholarship,
+        theological traditions and academic research.
+      </p>
+
+      <section class="sc-panel">
+
+        <div class="sc-grid">
+
+          <div>
+            <div class="sc-stat" id="scBookCount"></div>
+            Biblical books
+          </div>
+
+          <div>
+            <div class="sc-stat" id="scChapterCount"></div>
+            Biblical chapters
+          </div>
+
+          <div>
+            <div class="sc-stat" id="scSourceCount"></div>
+            Commentary collections
+          </div>
+
+          <div>
+            <div class="sc-stat" id="scAcademicCount"></div>
+            Academic and research resources
+          </div>
+
+        </div>
+
+        <div class="sc-note">
+
+          <strong>Academic integrity</strong>
+
+          <p>
+            Interpretations are not presented as
+            independently established historical facts.
+            Every commentary must be evaluated
+            according to its evidence, methodology,
+            historical setting and theological assumptions.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>01 · Select Scripture</h3>
+
+        <div class="sc-grid">
+
+          <div>
+
+            <label for="scBook">Biblical book</label>
+
+            <select id="scBook"></select>
+
+          </div>
+
+          <div>
+
+            <label for="scChapter">Chapter</label>
+
+            <select id="scChapter"></select>
+
+          </div>
+
+          <div>
+
+            <label for="scVerse">Verse</label>
+
+            <select id="scVerse">
+
+              <option value="">Entire chapter</option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="scTranslation">Translation</label>
+
+            <select id="scTranslation">
+
+              <option value="web">
+                World English Bible
+              </option>
+
+              <option value="kjv">
+                King James Version
+              </option>
+
+              <option value="asv">
+                American Standard Version
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="sc-actions">
+
+          <button type="button" id="scPrevious">
+            Previous chapter
+          </button>
+
+          <button type="button" id="scNext">
+            Next chapter
+          </button>
+
+          <button type="button" id="scLoad">
+            Reload Scripture
+          </button>
+
+          <button type="button" id="scSave">
+            Bookmark passage
+          </button>
+
+        </div>
+
+        <h3 id="scReference"></h3>
+
+        <p id="scStatus" role="status"
+           aria-live="polite"></p>
+
+        <div id="scScripture"></div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>02 · Commentary Research Library</h3>
+
+        <p>
+          Select an interpretive approach or search
+          by commentator, publication or tradition.
+          Open the published commentary to consult
+          the author's actual words.
+        </p>
+
+        <div class="sc-grid">
+
+          <div>
+
+            <label for="scSearch">
+              Search commentaries
+            </label>
+
+            <input id="scSearch"
+                   type="search"
+                   placeholder="Calvin, Greek, Cambridge...">
+
+          </div>
+
+          <div>
+
+            <label for="scMethod">
+              Interpretive approach
+            </label>
+
+            <select id="scMethod">
+
+              <option value="all">
+                All approaches
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="sc-actions" id="scCompare"></div>
+
+        <p id="scCount"></p>
+
+        <div id="scResults"></div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>03 · Book Research Guide</h3>
+
+        <h4 id="scGuideTitle"></h4>
+
+        <div id="scGuide"></div>
+
+        <p class="sc-muted">
+
+          These are DesertBible editorial research
+          directions. They are not quotations or
+          conclusions attributed to individual scholars.
+
+        </p>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>04 · Early Christian Commentary</h3>
+
+        <p>
+
+          Investigate the history of Christian
+          interpretation through primary patristic
+          writings and historical translations.
+
+        </p>
+
+        <div id="scFathers"></div>
+
+        <p class="sc-muted">
+
+          Patristic authors did not comment on every
+          biblical verse. Their works are presented
+          as reception-history evidence rather
+          than modern academic consensus.
+
+        </p>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>05 · Modern Academic Research</h3>
+
+        <p>
+
+          Compare historical commentary with
+          contemporary scholarly resources,
+          manuscript evidence and specialist research.
+
+        </p>
+
+        <div id="scAcademic"></div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>06 · Interpretation Methodology</h3>
+
+        <div id="scMethodology"></div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>07 · Research Notebook</h3>
+
+        <p id="scNoteReference"></p>
+
+        <label for="scNotes">
+
+          Personal observations and source citations
+
+        </label>
+
+        <textarea id="scNotes"
+          placeholder="Record your research findings, author, work, edition, page, evidence and conclusions."></textarea>
+
+        <div class="sc-actions">
+
+          <button type="button" id="scSaveNotes">
+            Save research notes
+          </button>
+
+          <button type="button" id="scCopy">
+            Copy research report
+          </button>
+
+          <button type="button" id="scDownload">
+            Download research report
+          </button>
+
+        </div>
+
+        <p id="scMessage" role="status"
+           aria-live="polite"></p>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>08 · Bookmarked Passages</h3>
+
+        <div id="scSaved"></div>
+
+      </section>
+
+      <section class="sc-panel">
+
+        <h3>09 · Research Citation Standards</h3>
+
+        <p>
+
+          Identify the commentator, publication title,
+          editor or translator, edition, publication
+          year, biblical passage, page or section,
+          source URL and consultation date.
+
+        </p>
+
+        <div class="sc-note">
+
+          <strong>Distinguish your sources</strong>
+
+          <p>
+            Separate the author's original statement
+            from your own paraphrase, interpretation
+            or theological application.
+          </p>
+
+          <p>
+            A link to a commentary index is not
+            a complete academic citation of a
+            specific scholarly claim.
+          </p>
+
+        </div>
+
+      </section>
+
+      <button type="button" id="scClose">
+
+        Return to research categories
+
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag,text,parent) {
+
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) {
+      parent.appendChild(element);
+    }
+
+    return element;
+
+  }
+
+  function link(parent,title,url) {
+
+    const element = make("a",title,parent);
+
+    element.href = url;
+    element.target = "_blank";
+    element.rel = "noopener noreferrer";
+
+    return element;
+
+  }
+
+  function button(parent,title,action) {
+
+    const element = make("button",title,parent);
+
+    element.type = "button";
+
+    element.addEventListener("click",action);
+
+    return element;
+
+  }
+
+  function option(parent,value,title) {
+
+    const element = make("option",title,parent);
+
+    element.value = value;
+
+    return element;
+
+  }
+
+  function readStorage(key,fallback) {
+
+    try {
+
+      const value = localStorage.getItem(key);
+
+      return value ? JSON.parse(value) : fallback;
+
+    } catch {
+
+      return fallback;
+
+    }
+
+  }
+
+  function writeStorage(key,value) {
+
+    try {
+
+      localStorage.setItem(
+        key,
+        JSON.stringify(value)
+      );
+
+      return true;
+
+    } catch {
+
+      return false;
+
+    }
+
+  }
+
+  const noteKey =
+    "DesertBible.scholarlyCommentary.notes.v1";
+
+  const bookmarkKey =
+    "DesertBible.scholarlyCommentary.bookmarks.v1";
+
+  const selectionKey =
+    "DesertBible.scholarlyCommentary.selection.v1";
+
+  let notebook = readStorage(noteKey,{});
+
+  if (
+    !notebook ||
+    typeof notebook !== "object" ||
+    Array.isArray(notebook)
+  ) notebook = {};
+
+  let bookmarks = readStorage(bookmarkKey,[]);
+
+  if (!Array.isArray(bookmarks)) bookmarks = [];
+
+  const cache = new Map();
+
+  let requestNumber = 0;
+
+  let verses = [];
+
+  let activeNoteReference = "";
+
+  const methods = [
+
+    [
+      "Historical-grammatical interpretation",
+      "Examine grammar, vocabulary, literary structure, historical setting and the communicative function of a passage."
+    ],
+
+    [
+      "Historical-critical research",
+      "Investigate historical circumstances, composition, literary sources, transmission and questions concerning ancient authorship."
+    ],
+
+    [
+      "Textual criticism",
+      "Compare manuscripts and ancient translations to evaluate textual variation. Do not assume the oldest witness is always correct."
+    ],
+
+    [
+      "Literary interpretation",
+      "Examine narrative structure, rhetoric, poetry, characterization, genre and relationships between passages."
+    ],
+
+    [
+      "Canonical interpretation",
+      "Examine how a passage functions within its biblical book and a particular received scriptural canon."
+    ],
+
+    [
+      "Reception history",
+      "Investigate how different communities, scholars and religious traditions interpreted a text across time."
+    ],
+
+    [
+      "Typological interpretation",
+      "Examine perceived correspondences between biblical persons, institutions and events within a theological framework."
+    ],
+
+    [
+      "Allegorical interpretation",
+      "Investigate readings that identify spiritual or symbolic meanings beyond a passage's immediate narrative or literal sense."
+    ],
+
+    [
+      "Theological interpretation",
+      "Consider how a passage contributes to doctrinal reflection. Identify the theological assumptions underlying the interpretation."
+    ],
+
+    [
+      "Archaeological and historical comparison",
+      "Evaluate inscriptions, material remains and external documents independently before relating them to biblical claims."
+    ],
+
+    [
+      "Lexical and grammatical analysis",
+      "Evaluate word meaning through actual usage, syntax and context rather than assuming an English gloss or etymology determines meaning."
+    ],
+
+    [
+      "Evaluating scholarly disagreement",
+      "Identify the precise disputed claim, compare supporting evidence, investigate counterarguments and distinguish consensus from minority positions."
+    ]
+
+  ];
+
+  $("scBookCount").textContent = books.length;
+
+  $("scChapterCount").textContent =
+
+    books.reduce((total,book) => total+book[2],0);
+
+  $("scSourceCount").textContent = sources.length;
+
+  $("scAcademicCount").textContent =
+    academicResources.length;
+
+  books.forEach((book,index) => {
+
+    option($("scBook"),String(index),book[0]);
+
+  });
+
+  [...new Set(sources.map(source => source.group))]
+    .sort()
+    .forEach(group => {
+
+      option($("scMethod"),group,group);
+
+    });
+
+  function currentBook() {
+
+    return books[Number($("scBook").value)] ||
+           books[0];
+
+  }
+
+  function reference() {
+
+    const book = currentBook()[0];
+
+    const chapter = $("scChapter").value || "1";
+
+    const verse = $("scVerse").value;
+
+    return book + " " + chapter +
+      (verse ? ":" + verse : "");
+
+  }
+
+  function chapterReference() {
+
+    return currentBook()[0] + " " +
+      ($("scChapter").value || "1");
+
+  }
+
+  function updateChapters(selected) {
+
+    $("scChapter").replaceChildren();
+
+    for (
+      let chapter = 1;
+      chapter <= currentBook()[2];
+      chapter++
+    ) {
+
+      option(
+        $("scChapter"),
+        String(chapter),
+        "Chapter " + chapter
+      );
+
+    }
+
+    const safeChapter = Math.min(
+
+      currentBook()[2],
+
+      Math.max(1,Number(selected) || 1)
+
+    );
+
+    $("scChapter").value = String(safeChapter);
+
+  }
+
+  function saveSelection() {
+
+    writeStorage(selectionKey,{
+
+      book:Number($("scBook").value),
+
+      chapter:Number($("scChapter").value),
+
+      verse:$("scVerse").value,
+
+      translation:$("scTranslation").value
+
+    });
+
+  }
+
+  function persistNotes() {
+
+    if (activeNoteReference) {
+
+      notebook[activeNoteReference] =
+        $("scNotes").value;
+
+    }
+
+    return writeStorage(noteKey,notebook);
+
+  }
+
+  function updateNotes() {
+
+    persistNotes();
+
+    activeNoteReference = reference();
+
+    $("scNoteReference").textContent =
+      "Research notes for " + activeNoteReference;
+
+    $("scNotes").value =
+      notebook[activeNoteReference] || "";
+
+  }
+
+  function commentaryURL(source) {
+
+    if (source.url) return source.url;
+
+    const book = currentBook()[1];
+
+    const chapter = $("scChapter").value || "1";
+
+    const verse = $("scVerse").value;
+
+    if (!verse) {
+
+      return "https://biblehub.com/commentaries/" +
+        source.id + "/" + book + "/" +
+        chapter + ".htm";
+
+    }
+
+    return "https://biblehub.com/commentaries/" +
+      source.id + "/" + book + "/" +
+      chapter + "-" + verse + ".htm";
+
+  }
+
+  function comprehensiveURL() {
+
+    const book = currentBook()[1];
+
+    const chapter = $("scChapter").value || "1";
+
+    const verse = $("scVerse").value;
+
+    if (!verse) {
+
+      return "https://biblehub.com/commentaries/" +
+        book + "/" + chapter + ".htm";
+
+    }
+
+    return "https://biblehub.com/commentaries/" +
+      book + "/" + chapter + "-" +
+      verse + ".htm";
+
+  }
+
+  function eligible(source) {
+
+    const index = Number($("scBook").value);
+
+    const name = currentBook()[0];
+
+    if (source.scope === "ot") return index < 39;
+
+    if (source.scope === "nt") return index >= 39;
+
+    if (source.scope === "psalms") {
+
+      return name === "Psalms";
+
+    }
+
+    if (source.scope === "galatians") {
+
+      return name === "Galatians";
+
+    }
+
+    return true;
+
+  }
+
+  function filteredSources() {
+
+    const search = $("scSearch").value
+      .toLowerCase()
+      .trim();
+
+    const method = $("scMethod").value;
+
+    return sources.filter(source => {
+
+      if (!eligible(source)) return false;
+
+      if (
+        method !== "all" &&
+        source.group !== method
+      ) return false;
+
+      const searchable = [
+
+        source.title,
+        source.author,
+        source.group,
+        source.tradition,
+        source.method,
+        source.coverage
+
+      ].join(" ").toLowerCase();
+
+      return search.split(/\s+/).every(term =>
+
+        searchable.includes(term)
+
+      );
+
+    });
+
+  }
+
+  function renderSources() {
+
+    $("scCompare").replaceChildren();
+
+    link(
+
+      $("scCompare"),
+
+      "Compare available commentaries for " +
+        reference(),
+
+      comprehensiveURL()
+
+    );
+
+    $("scResults").replaceChildren();
+
+    const visible = filteredSources();
+
+    $("scCount").textContent =
+
+      visible.length +
+      " relevant commentary collections.";
+
+    if (!visible.length) {
+
+      make(
+
+        "p",
+
+        "No catalogue entries match these filters. Try another interpretive approach or search term.",
+
+        $("scResults")
+
+      );
+
+      return;
+
+    }
+
+    visible.forEach(source => {
+
+      const card = make(
+        "article",undefined,$("scResults")
+      );
+
+      card.className = "sc-card";
+
+      make("h3",source.title,card);
+
+      make(
+
+        "p",
+
+        source.author + " · " + source.date,
+
+        card
+
+      ).className = "sc-gold";
+
+      const metadata = make("dl",undefined,card);
+
+      [
+
+        ["Approach",source.group],
+
+        ["Interpretive tradition",source.tradition],
+
+        ["Coverage",source.coverage],
+
+        ["Methodology",source.method]
+
+      ].forEach(([label,value]) => {
+
+        make("dt",label,metadata);
+
+        make("dd",value,metadata);
+
+      });
+
+      const details = make(
+        "details",undefined,card
+      );
+
+      make(
+
+        "summary",
+
+        "Research significance and limitations",
+
+        details
+
+      );
+
+      make("h4","Research significance",details);
+
+      make("p",source.importance,details);
+
+      const limitation = make(
+        "div",undefined,details
+      );
+
+      limitation.className = "sc-note";
+
+      make("strong","Interpretive limitations",limitation);
+
+      make("p",source.limitation,limitation);
+
+      if (source.scope === "partial") {
+
+        make(
+
+          "p",
+
+          "This commentator has incomplete biblical coverage. Consult the publication index for the selected book.",
+
+          card
+
+        ).className = "sc-muted";
+
+      }
+
+      const controls = make(
+        "div",undefined,card
+      );
+
+      controls.className = "sc-actions";
+
+      link(
+
+        controls,
+
+        source.url
+          ? "Open publication or collection"
+          : "Read published commentary",
+
+        commentaryURL(source)
+
+      );
+
+      button(
+
+        controls,
+
+        "Copy source details",
+
+        () => {
+
+          copyText(
+
+            sourceDetails(source),
+
+            "Source details copied."
+
+          );
+
+        }
+
+      );
+
+      button(
+
+        controls,
+
+        "Add source to notebook",
+
+        () => {
+
+          const previous = $("scNotes").value;
+
+          $("scNotes").value =
+
+            previous +
+            (previous ? "\n\n" : "") +
+            sourceDetails(source);
+
+          const saved = persistNotes();
+
+          $("scMessage").textContent = saved
+            ? "Source details added and saved."
+            : "Source details added for this session only.";
+
+        }
+
+      );
+
+    });
+
+  }
+
+  function sourceDetails(source) {
+
+    return [
+
+      "Commentary research source",
+
+      "Passage: " + reference(),
+
+      "Author/editor: " + source.author,
+
+      "Work: " + source.title,
+
+      "Historical period: " + source.date,
+
+      "Interpretive tradition: " + source.tradition,
+
+      "Approach: " + source.group,
+
+      "Resource: " + commentaryURL(source),
+
+      "Record created: " +
+        new Date().toISOString(),
+
+      "Consult the actual publication for " +
+      "the exact edition, page and quoted statement."
+
+    ].join("\n");
+
+  }
+
+  function renderGuide() {
+
+    const name = currentBook()[0];
+
+    $("scGuideTitle").textContent = name;
+
+    $("scGuide").replaceChildren();
+
+    const list = make(
+      "ul",undefined,$("scGuide")
+    );
+
+    (guides[name] || []).forEach(topic => {
+
+      make("li",topic,list);
+
+    });
+
+    const paragraph = make(
+      "p",undefined,$("scGuide")
+    );
+
+    link(
+
+      paragraph,
+
+      "Explore original-language research",
+
+      "https://www.stepbible.org/"
+
+    );
+
+  }
+
+  function renderScripture() {
+
+    $("scScripture").replaceChildren();
+
+    const chosen = $("scVerse").value;
+
+    const visible = chosen
+
+      ? verses.filter(verse =>
+          String(verse.verse) === chosen
+        )
+
+      : verses;
+
+    visible.forEach(verse => {
+
+      const paragraph = make(
+
+        "div",undefined,$("scScripture")
+
+      );
+
+      paragraph.className = "sc-verse";
+
+      const marker = make(
+
+        "strong",
+
+        verse.verse + " ",
+
+        paragraph
+
+      );
+
+      marker.className = "sc-gold";
+
+      paragraph.appendChild(
+
+        document.createTextNode(
+          String(verse.text || "").trim()
+        )
+
+      );
+
+      button(
+
+        paragraph,
+
+        "Study verse",
+
+        () => {
+
+          $("scVerse").value =
+            String(verse.verse);
+
+          updatePassage();
+
+        }
+
+      );
+
+    });
+
+  }
+
+  function updatePassage() {
+
+    $("scReference").textContent = reference();
+
+    updateNotes();
+
+    renderScripture();
+
+    renderSources();
+
+    renderGuide();
+
+    renderBookmarks();
+
+    saveSelection();
+
+  }
+
+  async function loadScripture(selectedVerse) {
+
+    const currentRequest = ++requestNumber;
+
+    const chapter = chapterReference();
+
+    const translation = $("scTranslation").value;
+
+    const url =
+
+      "https://bible-api.com/" +
+
+      encodeURIComponent(chapter) +
+
+      "?translation=" + translation;
+
+    $("scStatus").textContent =
+
+      "Retrieving " + chapter + "…";
+
+    verses = [];
+
+    $("scVerse").replaceChildren();
+
+    option($("scVerse"),"","Entire chapter");
+
+    updatePassage();
+
+    try {
+
+      let result = cache.get(url);
+
+      if (!result) {
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Scripture source returned HTTP " +
+            response.status
+          );
+
+        }
+
+        result = await response.json();
+
+        if (
+          !Array.isArray(result.verses) ||
+          !result.verses.length
+        ) {
+
+          throw new Error(
+            "No Scripture verses returned."
+          );
+
+        }
+
+        cache.set(url,result);
+
+      }
+
+      if (
+        currentRequest !== requestNumber ||
+        !root.isConnected
+      ) return;
+
+      verses = result.verses;
+
+      verses.forEach(verse => {
+
+        option(
+
+          $("scVerse"),
+
+          String(verse.verse),
+
+          "Verse " + verse.verse
+
+        );
+
+      });
+
+      if (verses.some(verse =>
+        String(verse.verse) ===
+        String(selectedVerse)
+      )) {
+
+        $("scVerse").value = String(selectedVerse);
+
+      }
+
+      $("scStatus").replaceChildren();
+
+      make(
+
+        "span",
+
+        "Translation: " +
+
+        (result.translation_name ||
+         translation.toUpperCase()) + " · ",
+
+        $("scStatus")
+
+      );
+
+      link(
+
+        $("scStatus"),
+
+        "Verify Scripture source",
+
+        url
+
+      );
+
+      updatePassage();
+
+    } catch(error) {
+
+      if (
+        currentRequest !== requestNumber ||
+        !root.isConnected
+      ) return;
+
+      $("scStatus").textContent =
+
+        "Scripture preview unavailable. " +
+
+        "The commentary research library remains accessible.";
+
+      const paragraph = make(
+
+        "p",undefined,$("scScripture")
+
+      );
+
+      link(
+
+        paragraph,
+
+        "Read Scripture externally",
+
+        "https://www.stepbible.org/"
+
+      );
+
+    }
+
+  }
+
+  function moveChapter(direction) {
+
+    let index = Number($("scBook").value);
+
+    let chapter =
+
+      Number($("scChapter").value) + direction;
+
+    if (chapter < 1) {
+
+      if (index === 0) return;
+
+      index--;
+
+      chapter = books[index][2];
+
+    }
+
+    if (chapter > books[index][2]) {
+
+      if (index === books.length-1) return;
+
+      index++;
+
+      chapter = 1;
+
+    }
+
+    $("scBook").value = String(index);
+
+    updateChapters(chapter);
+
+    loadScripture();
+
+  }
+
+  function renderFathers() {
+
+    fathers.forEach(author => {
+
+      const item = make(
+        "details",undefined,$("scFathers")
+      );
+
+      make("summary",author[0],item);
+
+      make("p",author[1],item);
+
+      make("h4",author[2],item);
+
+      make("p",author[3],item);
+
+      make(
+
+        "p",
+
+        "Historical Christian interpretation; not a modern verse-by-verse academic commentary.",
+
+        item
+
+      ).className = "sc-muted";
+
+      link(item,"Read historical source",author[4]);
+
+    });
+
+  }
+
+  function renderAcademic() {
+
+    academicResources.forEach(resource => {
+
+      const item = make(
+        "details",undefined,$("scAcademic")
+      );
+
+      make("summary",resource.title,item);
+
+      make("p",resource.institution,item);
+
+      make(
+
+        "p",
+
+        resource.type,
+
+        item
+
+      ).className = "sc-gold";
+
+      make("p",resource.description,item);
+
+      link(item,"Open research resource",resource.url);
+
+    });
+
+  }
+
+  function renderMethodology() {
+
+    methods.forEach(method => {
+
+      const item = make(
+
+        "details",
+
+        undefined,
+
+        $("scMethodology")
+
+      );
+
+      make("summary",method[0],item);
+
+      make("p",method[1],item);
+
+    });
+
+  }
+
+  function renderBookmarks() {
+
+    $("scSaved").replaceChildren();
+
+    const selected = reference();
+
+    const exists = bookmarks.some(
+
+      bookmark => bookmark.reference === selected
+
+    );
+
+    $("scSave").textContent = exists
+
+      ? "Remove passage bookmark"
+
+      : "Bookmark passage";
+
+    if (!bookmarks.length) {
+
+      make(
+
+        "p",
+
+        "No passages bookmarked in this browser.",
+
+        $("scSaved")
+
+      );
+
+      return;
+
+    }
+
+    bookmarks.forEach(bookmark => {
+
+      if (
+        !bookmark ||
+        !books[bookmark.book]
+      ) return;
+
+      const item = make(
+
+        "div",undefined,$("scSaved")
+
+      );
+
+      item.className = "sc-actions";
+
+      button(item,bookmark.reference,() => {
+
+        $("scBook").value =
+          String(bookmark.book);
+
+        updateChapters(bookmark.chapter);
+
+        loadScripture(bookmark.verse);
+
+      });
+
+      button(item,"Remove",() => {
+
+        bookmarks = bookmarks.filter(
+
+          entry =>
+            entry.reference !== bookmark.reference
+
+        );
+
+        writeStorage(bookmarkKey,bookmarks);
+
+        renderBookmarks();
+
+      });
+
+    });
+
+  }
+
+  function toggleBookmark() {
+
+    const selected = reference();
+
+    if (bookmarks.some(
+      bookmark => bookmark.reference === selected
+    )) {
+
+      bookmarks = bookmarks.filter(
+
+        bookmark => bookmark.reference !== selected
+
+      );
+
+    } else {
+
+      bookmarks.push({
+
+        reference:selected,
+
+        book:Number($("scBook").value),
+
+        chapter:Number($("scChapter").value),
+
+        verse:$("scVerse").value
+
+      });
+
+    }
+
+    const saved =
+      writeStorage(bookmarkKey,bookmarks);
+
+    $("scMessage").textContent = saved
+
+      ? "Bookmarks updated."
+
+      : "Bookmarks retained for this session only.";
+
+    renderBookmarks();
+
+  }
+
+  function report() {
+
+    persistNotes();
+
+    const selectedVerse = $("scVerse").value;
+
+    const includedVerses = selectedVerse
+
+      ? verses.filter(verse =>
+
+          String(verse.verse) === selectedVerse
+
+        )
+
+      : verses;
+
+    return [
+
+      "DESERTBIBLE — SCHOLARLY COMMENTARY",
+
+      "Research passage: " + reference(),
+
+      "Exported: " + new Date().toISOString(),
+
+      "",
+
+      "SCRIPTURE",
+
+      "Translation: " +
+        $("scTranslation").value.toUpperCase(),
+
+      ...includedVerses.map(verse =>
+
+        verse.verse + " " +
+        String(verse.text || "").trim()
+
+      ),
+
+      "",
+
+      "EDITORIAL RESEARCH DIRECTIONS",
+
+      ...(guides[currentBook()[0]] || []),
+
+      "",
+
+      "COMMENTARY RESEARCH RESOURCES",
+
+      ...filteredSources().map(source =>
+
+        [
+
+          sourceDetails(source),
+
+          "Research importance: " +
+            source.importance,
+
+          "Limitations: " +
+            source.limitation,
+
+          ""
+
+        ].join("\n")
+
+      ),
+
+      "PERSONAL RESEARCH NOTES",
+
+      $("scNotes").value,
+
+      "",
+
+      "ACADEMIC INTEGRITY",
+
+      "Resource descriptions are editorial " +
+      "research guidance. They are not quotations " +
+      "or substitutes for consulting original publications.",
+
+      "Verify every scholarly claim against " +
+      "the exact publication, edition and passage."
+
+    ].join("\n");
+
+  }
+
+  async function copyText(text,message) {
+
+    try {
+
+      await navigator.clipboard.writeText(text);
+
+      $("scMessage").textContent = message;
+
+    } catch {
+
+      $("scMessage").textContent =
+
+        "Clipboard unavailable. Use Download research report.";
+
+    }
+
+  }
+
+  function downloadReport() {
+
+    const blob = new Blob(
+
+      [report()],
+
+      {type:"text/plain;charset=utf-8"}
+
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+
+    anchor.download =
+
+      "DesertBible-Commentary-" +
+
+      reference()
+        .replace(/[^a-zA-Z0-9]+/g,"-") +
+
+      ".txt";
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    setTimeout(() => {
+
+      URL.revokeObjectURL(url);
+
+    },1000);
+
+    $("scMessage").textContent =
+      "Research report prepared.";
+
+  }
+
+  $("scBook").addEventListener("change",() => {
+
+    updateChapters(1);
+
+    loadScripture();
+
+  });
+
+  $("scChapter").addEventListener("change",() => {
+
+    loadScripture();
+
+  });
+
+  $("scVerse").addEventListener("change",() => {
+
+    updatePassage();
+
+  });
+
+  $("scTranslation").addEventListener("change",() => {
+
+    loadScripture($("scVerse").value);
+
+  });
+
+  $("scPrevious").addEventListener("click",() => {
+
+    moveChapter(-1);
+
+  });
+
+  $("scNext").addEventListener("click",() => {
+
+    moveChapter(1);
+
+  });
+
+  $("scLoad").addEventListener("click",() => {
+
+    loadScripture($("scVerse").value);
+
+  });
+
+  $("scSearch").addEventListener("input",renderSources);
+
+  $("scMethod").addEventListener("change",renderSources);
+
+  $("scSave").addEventListener("click",toggleBookmark);
+
+  $("scNotes").addEventListener("input",persistNotes);
+
+  $("scSaveNotes").addEventListener("click",() => {
+
+    const saved = persistNotes();
+
+    $("scMessage").textContent = saved
+
+      ? "Research notes saved in this browser."
+
+      : "Research notes retained for this session only.";
+
+  });
+
+  $("scCopy").addEventListener("click",() => {
+
+    copyText(report(),"Research report copied.");
+
+  });
+
+  $("scDownload").addEventListener(
+
+    "click",
+
+    downloadReport
+
+  );
+
+  $("scClose").addEventListener("click",() => {
+
+    persistNotes();
+
+    requestNumber++;
+
+    workspace.remove();
+
+  });
+
+  renderFathers();
+
+  renderAcademic();
+
+  renderMethodology();
+
+  const previous = readStorage(selectionKey,{}) || {};
+
+  const selectedBook = Number.isInteger(previous.book)
+
+    && previous.book >= 0
+
+    && previous.book < books.length
+
+      ? previous.book
+
+      : 0;
+
+  $("scBook").value = String(selectedBook);
+
+  if (
+
+    ["web","kjv","asv"].includes(
+      previous.translation
+    )
+
+  ) {
+
+    $("scTranslation").value =
+      previous.translation;
+
+  }
+
+  updateChapters(previous.chapter || 1);
+
+  loadScripture(previous.verse || "");
+
+  workspace.scrollIntoView({
+
+    behavior:"smooth",
+
+    block:"start"
+
+  });
+
+}
 
 
 
