@@ -51,7 +51,10 @@ if (item[0] === "Scripture & translations") {
   openPeopleFigures(workspace);
   return;
 }
-    
+    if (item[0].trim().toLowerCase() === "historical timeline") {
+  openHistoricalTimeline(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
@@ -5602,6 +5605,2758 @@ function openPeopleFigures(workspace) {
   loadDirectory();
 }
 
+function openHistoricalTimeline(workspace) {
+  "use strict";
+
+  const sources = {
+
+    iron: {
+      name:"Metropolitan Museum of Art — Iron Age chronology",
+      url:"https://resources.metmuseum.org/resources/metpublications/pdf/Assyria_to_Iberia_Art_and_Culture_in_the_Iron_Age.pdf"
+    },
+
+    levant: {
+      name:"Metropolitan Museum of Art — Eastern Mediterranean chronology",
+      url:"https://www.metmuseum.org/fr/toah/ht/04/wae.html"
+    },
+
+    mesopotamia: {
+      name:"Metropolitan Museum of Art — Mesopotamian chronology",
+      url:"https://artistproject.metmuseum.org/toah/ht/04/wam.html"
+    },
+
+    israel: {
+      name:"Jewish Museum — Timeline of Ancient Israel",
+      url:"https://s3.amazonaws.com/tjmassets/programs_educator_resources_pdf/JM_Archaeology_CurriculumGuide.pdf"
+    },
+
+    cyrus: {
+      name:"Metropolitan Museum of Art — Cyrus and the Judean Diaspora",
+      url:"https://www.metmuseum.org/de/perspectives/cyrus-and-the-judean-diaspora"
+    },
+
+    second: {
+      name:"Teach Jewish History — Second Temple Period",
+      url:"https://teachjewishhistory.org/supplement-second-temple"
+    },
+
+    roman: {
+      name:"Metropolitan Museum of Art — The World between Empires",
+      url:"https://resources.metmuseum.org/resources/metpublications/pdf/The_World_between_Empires_Art_and_Identity_in_the_Ancient_Middle_East.pdf"
+    },
+
+    josephus: {
+      name:"Josephus — Jewish Antiquities and Jewish War",
+      url:"https://attalus.org/info/josephus.html"
+    },
+
+    assyria: {
+      name:"ORACC — Open Richly Annotated Cuneiform Corpus",
+      url:"https://oracc.museum.upenn.edu/"
+    },
+
+    museum: {
+      name:"British Museum — Collection catalogue",
+      url:"https://www.britishmuseum.org/collection"
+    },
+
+    scrolls: {
+      name:"Leon Levy Dead Sea Scrolls Digital Library",
+      url:"https://www.deadseascrolls.org.il/"
+    },
+
+    sinaiticus: {
+      name:"Codex Sinaiticus manuscript project",
+      url:"https://www.codexsinaiticus.org/"
+    },
+
+    fathers: {
+      name:"Early Christian writings — Patristic texts",
+      url:"https://www.newadvent.org/fathers/"
+    },
+
+    testament: {
+      name:"STEP Bible — Scripture research",
+      url:"https://www.stepbible.org/"
+    },
+
+    ancient: {
+      name:"Historical and Biblical Israel — History, Tradition and Archives",
+      url:"https://www.thetbs.org/study-materials/wp-content/uploads/2023/03/Historical_and_biblical_Israel_the_history_tradition_and_archives.pdf"
+    },
+
+    judea: {
+      name:"Second Temple Period — Historical overview",
+      url:"https://www.gov.il/en/pages/history-the-second-temple-period"
+    }
+
+  };
+
+  const periods = [
+    "Primeval history",
+    "Patriarchal period",
+    "Exodus and settlement",
+    "Judges and monarchy",
+    "Divided kingdoms",
+    "Babylonian exile",
+    "Persian period",
+    "Hellenistic period",
+    "Roman and New Testament period",
+    "Early Christianity"
+  ];
+
+  const statusLabels = {
+    biblical:"Biblical narrative — undated",
+    disputed:"Disputed chronology",
+    approximate:"Approximate historical date",
+    established:"Established historical anchor"
+  };
+
+  /*
+    Record structure:
+    Date label,
+    Start year,
+    End year,
+    Period index,
+    Evidence status,
+    Event title,
+    Location,
+    Scripture references,
+    Description,
+    Evidence limitations,
+    Historical source identifiers.
+
+    Negative years represent BCE.
+    Positive years represent CE.
+    Null years represent undated narratives.
+  */
+
+  const data = [
+
+    [
+      "Undated",null,null,0,"biblical",
+      "Creation",
+      "The created world",
+      ["Genesis 1:1-31","Genesis 2:1-25"],
+      "Genesis introduces God as creator and describes the ordering of the world and humanity's place within creation.",
+      "No independently established calendar date is assigned. Interpretations of the creation accounts and their relationship to natural history differ.",
+      []
+    ],
+
+    [
+      "Undated",null,null,0,"biblical",
+      "Human disobedience and Eden",
+      "Eden — geographical identification uncertain",
+      ["Genesis 3:1-24"],
+      "The narrative describes human disobedience, judgment and expulsion from Eden.",
+      "The geographical location of Eden and a calendar date for the narrative cannot be established from available external evidence.",
+      []
+    ],
+
+    [
+      "Undated",null,null,0,"biblical",
+      "Cain and Abel",
+      "Geographical setting uncertain",
+      ["Genesis 4:1-16"],
+      "Genesis describes the first brothers, their offerings and the death of Abel.",
+      "The narrative has no independently established calendar chronology.",
+      []
+    ],
+
+    [
+      "Undated",null,null,0,"biblical",
+      "Noah and the flood",
+      "Geographical extent disputed",
+      ["Genesis 6:9-22","Genesis 8:1-22","Genesis 9:1-17"],
+      "The flood narrative concerns judgment, preservation and God's covenant with Noah.",
+      "Ancient Near Eastern flood traditions provide comparative literary evidence but do not establish a calendar date for Noah or independently verify a worldwide flood.",
+      ["mesopotamia"]
+    ],
+
+    [
+      "Undated",null,null,0,"biblical",
+      "Babel and the dispersion",
+      "Shinar",
+      ["Genesis 11:1-9"],
+      "Genesis associates Babel with human construction, linguistic division and dispersion.",
+      "Mesopotamian urban traditions provide cultural context. No specific archaeological tower is securely identified as the biblical tower.",
+      ["mesopotamia"]
+    ],
+
+    [
+      "Undated",null,null,1,"biblical",
+      "Abraham's migration",
+      "Mesopotamia and Canaan",
+      ["Genesis 11:27-32","Genesis 12:1-9"],
+      "The narrative follows Abram from his ancestral homeland toward Canaan.",
+      "Ancient Near Eastern cultural parallels cannot securely establish Abraham's individual dates or identify him in contemporary external records.",
+      []
+    ],
+
+    [
+      "Undated",null,null,1,"biblical",
+      "Covenant with Abraham",
+      "Canaan",
+      ["Genesis 15:1-21","Genesis 17:1-27"],
+      "Genesis describes divine promises involving descendants, land and covenant identity.",
+      "The covenant is a biblical and theological claim rather than an independently dated political event.",
+      []
+    ],
+
+    [
+      "Undated",null,null,1,"biblical",
+      "Isaac and Jacob",
+      "Canaan and Mesopotamia",
+      ["Genesis 26:1-33","Genesis 28:10-22","Genesis 32:22-32"],
+      "The patriarchal narratives continue through Isaac and Jacob, whose name Israel becomes associated with the descendants of the patriarchs.",
+      "Secure independent dates for these individuals are unavailable.",
+      []
+    ],
+
+    [
+      "Undated",null,null,1,"biblical",
+      "Joseph in Egypt",
+      "Egypt",
+      ["Genesis 37:1-36","Genesis 41:37-57","Genesis 46:1-7"],
+      "Genesis depicts Joseph's rise in Egypt and the migration of Jacob's household.",
+      "No Egyptian official is securely identified as the biblical Joseph. Proposed dynastic identifications remain speculative.",
+      []
+    ],
+
+    [
+      "Date disputed",null,null,2,"disputed",
+      "Moses and the Exodus",
+      "Egypt and wilderness",
+      ["Exodus 3:1-15","Exodus 12:29-42","1 Kings 6:1"],
+      "Exodus describes Israel's departure from Egyptian bondage under Moses.",
+      "Fifteenth-century and thirteenth-century BCE proposals are among traditional chronological reconstructions. No consensus independently establishes the event's date or scale.",
+      []
+    ],
+
+    [
+      "Date disputed",null,null,2,"disputed",
+      "Sinai covenant and wilderness period",
+      "Sinai and wilderness",
+      ["Exodus 19:1-25","Exodus 20:1-21","Numbers 14:26-35"],
+      "The biblical account connects Israel's wilderness experience with covenant law and national identity.",
+      "The calendar chronology depends on disputed Exodus reconstructions. The identification of Mount Sinai is also uncertain.",
+      []
+    ],
+
+    [
+      "Date disputed",null,null,2,"disputed",
+      "Joshua and settlement in Canaan",
+      "Canaan",
+      ["Joshua 1:1-9","Joshua 6:1-27","Joshua 24:1-28"],
+      "Joshua describes Israelite entry into Canaan, military encounters and covenant renewal.",
+      "Archaeological evidence for settlement and destruction varies by site. No single universally accepted conquest chronology exists.",
+      ["israel"]
+    ],
+
+    [
+      "c. 1208 BCE",-1208,-1208,2,"approximate",
+      "Israel in the Merneptah inscription",
+      "Egypt and Canaan",
+      [],
+      "An Egyptian victory inscription from Merneptah's reign contains an early extra-biblical reference generally understood as Israel.",
+      "The inscription attests a group called Israel in Canaan. It does not establish the Exodus chronology or the group's complete origins.",
+      ["museum","israel"]
+    ],
+
+    [
+      "Date disputed",null,null,3,"disputed",
+      "Period of the Judges",
+      "Israelite settlements",
+      ["Judges 2:6-23","Judges 4:1-24","Judges 6:1-24"],
+      "Judges presents regional leaders and recurring narratives of oppression, deliverance and religious disobedience.",
+      "The durations in Judges cannot automatically be combined into an independently verified consecutive chronology.",
+      []
+    ],
+
+    [
+      "c. 1020 BCE",-1020,-1020,3,"approximate",
+      "Saul and the emergence of monarchy",
+      "Israel",
+      ["1 Samuel 9:15-27","1 Samuel 10:1-24"],
+      "First Samuel describes Saul's appointment as king and the emergence of centralized royal leadership.",
+      "The date is conventional and approximate. Saul's exact reign remains uncertain.",
+      ["israel"]
+    ],
+
+    [
+      "c. 1000–960 BCE",-1000,-960,3,"approximate",
+      "Reign of David",
+      "Judah and Jerusalem",
+      ["2 Samuel 5:1-12","2 Samuel 7:8-16"],
+      "The biblical account associates David with Jerusalem, royal consolidation and the Davidic dynasty.",
+      "The extent and organization of David's kingdom remain debated. The later Tel Dan inscription is relevant to the dynasty.",
+      ["israel"]
+    ],
+
+    [
+      "Tenth century BCE",-999,-900,3,"approximate",
+      "Solomon and the First Temple",
+      "Jerusalem",
+      ["1 Kings 3:5-15","1 Kings 6:1-14","1 Kings 8:1-21"],
+      "Kings attributes the construction of the Jerusalem Temple and major royal projects to Solomon.",
+      "The exact chronology and extent of Solomon's kingdom remain debated; the biblical description is not a surviving architectural survey.",
+      ["israel"]
+    ],
+
+    [
+      "Late tenth century BCE",-930,-920,4,"approximate",
+      "Division of Israel and Judah",
+      "Samaria region and Jerusalem",
+      ["1 Kings 12:1-24"],
+      "The biblical narrative describes the separation of the northern kingdom from the Davidic kingdom of Judah.",
+      "The exact year varies among chronological reconstructions.",
+      ["israel","cyrus"]
+    ],
+
+    [
+      "c. 925 BCE",-925,-925,4,"approximate",
+      "Campaign of Shoshenq I",
+      "Egypt and southern Levant",
+      ["1 Kings 14:25-28","2 Chronicles 12:1-9"],
+      "The Egyptian ruler commonly identified with biblical Shishak conducted a campaign recorded at Karnak.",
+      "The Egyptian inscription and biblical account are not identical descriptions. Their relationship requires comparison.",
+      ["museum","israel"]
+    ],
+
+    [
+      "Ninth century BCE",-899,-800,4,"approximate",
+      "Omri and the northern kingdom",
+      "Samaria",
+      ["1 Kings 16:21-28"],
+      "Omri is associated with the establishment of Samaria as a royal center.",
+      "External inscriptions illuminate the importance of the Omride state without independently confirming every biblical detail.",
+      ["iron","assyria"]
+    ],
+
+    [
+      "853 BCE",-853,-853,4,"established",
+      "Battle of Qarqar",
+      "Syria",
+      [],
+      "The Assyrian account of Shalmaneser III names Ahab of Israel among rulers involved in resistance to Assyria.",
+      "The royal inscription supplies an external historical anchor. The battle is not explicitly narrated in Kings.",
+      ["assyria","iron"]
+    ],
+
+    [
+      "Ninth century BCE",-899,-800,4,"approximate",
+      "Elijah and Elisha",
+      "Israel and surrounding regions",
+      ["1 Kings 17:1-24","1 Kings 18:17-40","2 Kings 2:1-15"],
+      "The biblical narratives place Elijah and Elisha within the political and religious environment of the northern monarchy.",
+      "The approximate period follows the kings associated with their narratives. Individual events lack independently established dates.",
+      ["iron"]
+    ],
+
+    [
+      "841 BCE",-841,-841,4,"established",
+      "Jehu and Assyrian tribute",
+      "Israel and Assyria",
+      ["2 Kings 9:1-13","2 Kings 10:28-36"],
+      "The Black Obelisk of Shalmaneser III records tribute associated with Jehu.",
+      "The inscription does not establish that the depicted tribute bearer is necessarily Jehu himself.",
+      ["assyria","museum"]
+    ],
+
+    [
+      "Ninth century BCE",-899,-800,4,"approximate",
+      "Mesha and the kingdom of Moab",
+      "Moab",
+      ["2 Kings 3:4-27"],
+      "The Mesha inscription provides a Moabite perspective on conflict involving Israel.",
+      "The biblical account and royal inscription differ in perspective and cannot be treated as identical reports.",
+      ["museum","iron"]
+    ],
+
+    [
+      "Ninth century BCE",-899,-800,4,"approximate",
+      "Tel Dan inscription",
+      "Tel Dan",
+      ["2 Samuel 7:11-16"],
+      "The Aramaic inscription contains wording widely interpreted as a reference to the House of David.",
+      "It supports the existence of a recognized dynastic designation. It is not a contemporary biography of David.",
+      ["museum","iron"]
+    ],
+
+    [
+      "Eighth century BCE",-799,-700,4,"approximate",
+      "Amos and Hosea",
+      "Northern kingdom of Israel",
+      ["Amos 1:1","Hosea 1:1"],
+      "These prophetic books identify their messages with rulers of the eighth century BCE.",
+      "The historical settings of prophetic activity should be distinguished from the later collection and editing of prophetic books.",
+      ["iron"]
+    ],
+
+    [
+      "Eighth century BCE",-799,-700,4,"approximate",
+      "Isaiah and Micah",
+      "Judah, Samaria and Jerusalem",
+      ["Isaiah 1:1","Micah 1:1-9"],
+      "The prophetic books associate Isaiah and Micah with Judah's eighth-century political and religious crises.",
+      "Individual oracles cannot all be assigned exact calendar dates from their superscriptions.",
+      ["iron","levant"]
+    ],
+
+    [
+      "734–732 BCE",-734,-732,4,"established",
+      "Syro-Ephraimite crisis",
+      "Judah, Israel and Damascus",
+      ["2 Kings 16:5-9","Isaiah 7:1-17"],
+      "Judah faced pressure from neighboring kingdoms as Assyria expanded under Tiglath-Pileser III.",
+      "Assyrian and biblical sources provide different perspectives on the crisis.",
+      ["iron","assyria"]
+    ],
+
+    [
+      "722/721 BCE",-722,-721,4,"established",
+      "Fall of Samaria",
+      "Samaria",
+      ["2 Kings 17:1-23","2 Kings 18:9-12"],
+      "Assyria conquered the northern kingdom and incorporated its territory into imperial administration.",
+      "Sources differ in details of the final conquest and the respective roles of Shalmaneser V and Sargon II.",
+      ["iron","cyrus"]
+    ],
+
+    [
+      "701 BCE",-701,-701,4,"established",
+      "Sennacherib's campaign against Judah",
+      "Lachish and Jerusalem",
+      ["2 Kings 18:13-37","2 Kings 19:1-37","Isaiah 36:1-22"],
+      "Assyrian royal inscriptions and reliefs document Sennacherib's campaign against Judah during Hezekiah's reign.",
+      "The Assyrian account does not claim the capture of Jerusalem. The sources differ in their explanations of the campaign's outcome.",
+      ["iron","assyria","museum"]
+    ],
+
+    [
+      "c. 622 BCE",-622,-622,4,"approximate",
+      "Josiah's reforms",
+      "Jerusalem and Judah",
+      ["2 Kings 22:1-20","2 Kings 23:1-25"],
+      "Kings connects Josiah's reforms with the discovery of a law book and changes to religious practice.",
+      "The date follows conventional regnal chronology. The scope and literary history of the reforms remain debated.",
+      ["ancient"]
+    ],
+
+    [
+      "612 BCE",-612,-612,4,"established",
+      "Fall of Nineveh",
+      "Assyria",
+      ["Nahum 3:1-19","Zephaniah 2:13-15"],
+      "Babylonian and Median forces captured Nineveh, severely weakening Assyrian imperial power.",
+      "The historical event provides context for prophetic literature but does not independently date every oracle.",
+      ["iron","mesopotamia"]
+    ],
+
+    [
+      "609 BCE",-609,-609,4,"established",
+      "Josiah and the Egyptian intervention",
+      "Megiddo",
+      ["2 Kings 23:29-30","2 Chronicles 35:20-24"],
+      "The biblical accounts place Josiah's death during Pharaoh Necho's northern campaign.",
+      "The narratives differ in detail, and the wider international campaign supplies the historical chronological anchor.",
+      ["ancient","levant"]
+    ],
+
+    [
+      "605 BCE",-605,-605,4,"established",
+      "Battle of Carchemish",
+      "Carchemish",
+      ["Jeremiah 46:1-12"],
+      "Babylon defeated Egyptian forces and extended its dominance over the region.",
+      "The battle provides a secure context for Judah's changing political circumstances.",
+      ["iron","ancient","cyrus"]
+    ],
+
+    [
+      "597 BCE",-597,-597,5,"established",
+      "First major Babylonian capture of Jerusalem",
+      "Jerusalem and Babylon",
+      ["2 Kings 24:8-17"],
+      "Nebuchadnezzar captured Jerusalem and removed King Jehoiachin, installing Zedekiah.",
+      "Babylonian historical records provide external chronological support; the exile involved multiple deportations.",
+      ["ancient","cyrus"]
+    ],
+
+    [
+      "Early sixth century BCE",-599,-570,5,"approximate",
+      "Jeremiah and Ezekiel",
+      "Judah and Babylonia",
+      ["Jeremiah 1:1-3","Ezekiel 1:1-3"],
+      "The books associate prophetic activity with the final years of Judah and the Babylonian exile.",
+      "The indicated period is contextual, not a complete lifespan or a date for the books' final forms.",
+      ["ancient"]
+    ],
+
+    [
+      "587/586 BCE",-587,-586,5,"established",
+      "Destruction of Jerusalem and the First Temple",
+      "Jerusalem",
+      ["2 Kings 25:1-21","Jeremiah 52:12-30"],
+      "Babylon destroyed Jerusalem's royal and religious institutions and deported members of the population.",
+      "The one-year difference in scholarly dates reflects chronological and calendrical reconstruction.",
+      ["levant","mesopotamia","iron"]
+    ],
+
+    [
+      "Sixth century BCE",-599,-500,5,"approximate",
+      "Judean life in Babylonia",
+      "Babylonia",
+      ["Jeremiah 29:1-14","Psalm 137:1-9"],
+      "The exile produced enduring Judean communities outside the homeland.",
+      "Documents relating to Judeans in Babylonia illuminate social and economic life; they do not independently confirm every narrative.",
+      ["ancient"]
+    ],
+
+    [
+      "539 BCE",-539,-539,6,"established",
+      "Cyrus conquers Babylon",
+      "Babylon",
+      ["Isaiah 45:1-7","Daniel 5:25-31"],
+      "The Persian conquest ended Neo-Babylonian imperial rule and initiated a new political order.",
+      "The conquest is externally dated. Particular literary details in Daniel require separate evaluation.",
+      ["iron","mesopotamia","cyrus"]
+    ],
+
+    [
+      "c. 538 BCE",-538,-538,6,"approximate",
+      "Return and restoration under Persian rule",
+      "Judah and Babylonia",
+      ["Ezra 1:1-11","Ezra 2:1-2"],
+      "Ezra associates Cyrus with permission to return and restore the Jerusalem Temple.",
+      "The Cyrus Cylinder documents broader restoration policies, but does not specifically name Jerusalem or reproduce Ezra's decree.",
+      ["cyrus","second"]
+    ],
+
+    [
+      "520 BCE",-520,-520,6,"established",
+      "Haggai and Zechariah",
+      "Jerusalem",
+      ["Haggai 1:1-15","Zechariah 1:1-6"],
+      "These prophetic texts contain regnal dates associated with Darius I and encourage restoration of the Temple.",
+      "The dates apply to specified prophetic settings, not necessarily the final composition of the books.",
+      ["ancient"]
+    ],
+
+    [
+      "c. 516/515 BCE",-516,-515,6,"approximate",
+      "Completion of the Second Temple",
+      "Jerusalem",
+      ["Ezra 6:13-22"],
+      "Ezra places the Temple's completion in the sixth regnal year of Darius I.",
+      "Calendar conventions account for variation in modern year labels.",
+      ["second","ancient"]
+    ],
+
+    [
+      "Fifth century BCE",-499,-400,6,"approximate",
+      "Persian royal setting of Esther",
+      "Susa",
+      ["Esther 1:1-9","Esther 4:10-17"],
+      "Esther places its story within the Persian imperial court of Ahasuerus, commonly identified with Xerxes I.",
+      "The narrative's individual events and figures are not all independently attested.",
+      ["mesopotamia"]
+    ],
+
+    [
+      "Fifth century BCE",-499,-400,6,"approximate",
+      "Ezra and the restoration of communal law",
+      "Jerusalem",
+      ["Ezra 7:1-26","Nehemiah 8:1-12"],
+      "Ezra is associated with instruction in the law and the restoration community.",
+      "The identification of the relevant Artaxerxes and Ezra's exact arrival date are debated.",
+      ["ancient"]
+    ],
+
+    [
+      "c. 445/444 BCE",-445,-444,6,"approximate",
+      "Nehemiah and Jerusalem's walls",
+      "Jerusalem",
+      ["Nehemiah 2:1-20","Nehemiah 6:15-16"],
+      "Nehemiah describes authorization to rebuild Jerusalem's defenses during Persian rule.",
+      "The date follows the conventional identification of Artaxerxes I and his twentieth regnal year.",
+      ["ancient"]
+    ],
+
+    [
+      "332 BCE",-332,-332,7,"established",
+      "Alexander and the southern Levant",
+      "Eastern Mediterranean",
+      [],
+      "Alexander's campaigns brought the region into the emerging Macedonian political order.",
+      "This event supplies context for later Jewish and Christian history rather than a directly dated narrative in the Protestant Old Testament.",
+      ["second","levant"]
+    ],
+
+    [
+      "301 BCE",-301,-301,7,"established",
+      "Ptolemaic control of the region",
+      "Judea and Egypt",
+      [],
+      "The struggles among Alexander's successors resulted in Ptolemaic control of Judea.",
+      "The transition is part of the broader political history of the Hellenistic kingdoms.",
+      ["ancient","josephus"]
+    ],
+
+    [
+      "c. 200–198 BCE",-200,-198,7,"approximate",
+      "Seleucid control of Judea",
+      "Judea",
+      [],
+      "Seleucid expansion displaced Ptolemaic control of the region.",
+      "Military victory and subsequent political consolidation need not share a single date.",
+      ["ancient","josephus"]
+    ],
+
+    [
+      "167–164 BCE",-167,-164,7,"established",
+      "Temple crisis and Maccabean revolt",
+      "Jerusalem and Judea",
+      ["Daniel 11:21-35"],
+      "Policies associated with Antiochus IV provoked resistance and a struggle over Jewish religious institutions.",
+      "First and Second Maccabees are major literary sources. Their canonical status differs among Christian traditions. Daniel's relationship to these events is interpreted differently.",
+      ["second","josephus"]
+    ],
+
+    [
+      "164 BCE",-164,-164,7,"established",
+      "Rededication of the Jerusalem Temple",
+      "Jerusalem",
+      ["John 10:22-23"],
+      "The rededication associated with Judas Maccabeus became the historical background of Hanukkah.",
+      "John refers to the later observance, not the original rededication event. First Maccabees 4 is an important literary source.",
+      ["second","josephus"]
+    ],
+
+    [
+      "Second century BCE onward",-199,-1,7,"approximate",
+      "Hasmonean rule and Jewish textual communities",
+      "Judea",
+      [],
+      "Hasmonean political developments and diverse Jewish religious movements shaped the later Second Temple environment.",
+      "The Dead Sea Scrolls represent diverse manuscripts and compositions; their dates and community associations vary.",
+      ["second","scrolls","josephus"]
+    ],
+
+    [
+      "63 BCE",-63,-63,8,"established",
+      "Pompey captures Jerusalem",
+      "Jerusalem",
+      [],
+      "Roman intervention brought Judea under increasing Roman political control.",
+      "Judea's precise administrative status changed over subsequent decades.",
+      ["roman","second","josephus"]
+    ],
+
+    [
+      "37–4 BCE",-37,-4,8,"established",
+      "Reign of Herod the Great",
+      "Judea",
+      ["Matthew 2:1-18"],
+      "Herod ruled as a Roman-supported king and undertook extensive building projects.",
+      "The conventional date of Herod's death is 4 BCE, although alternative reconstructions exist.",
+      ["roman","judea","josephus"]
+    ],
+
+    [
+      "27 BCE–14 CE",-27,14,8,"established",
+      "Reign of Augustus",
+      "Roman Empire",
+      ["Luke 2:1-7"],
+      "Augustus established the Roman imperial system within which the New Testament narratives begin.",
+      "Augustus's securely dated reign does not itself establish the date or circumstances of Luke's census narrative.",
+      ["roman"]
+    ],
+
+    [
+      "c. 20–18 BCE",-20,-18,8,"approximate",
+      "Herodian Temple reconstruction",
+      "Jerusalem",
+      ["John 2:19-21","Mark 13:1-2"],
+      "Herod initiated major rebuilding and expansion of the Temple complex.",
+      "Construction continued long after Herod. Ancient sources and modern chronological conversions yield slightly different commencement dates.",
+      ["roman","josephus"]
+    ],
+
+    [
+      "c. 6–4 BCE — common reconstruction",-6,-4,8,"disputed",
+      "Birth of Jesus",
+      "Bethlehem and Judea",
+      ["Matthew 1:18-25","Matthew 2:1-12","Luke 2:1-20"],
+      "Matthew and Luke contain infancy narratives concerning Jesus.",
+      "The exact birth year is unknown. Matthew's Herodian setting and Luke's census reference create significant chronological questions.",
+      ["josephus"]
+    ],
+
+    [
+      "6 CE",6,6,8,"established",
+      "Roman provincial administration of Judea",
+      "Judea",
+      ["Luke 2:1-2","Acts 5:37"],
+      "Judea came under direct Roman administration following the removal of Archelaus. Quirinius is associated with a census in this period.",
+      "This externally dated census creates a chronological difficulty when compared with the conventional date of Herod's death.",
+      ["roman","josephus"]
+    ],
+
+    [
+      "14–37 CE",14,37,8,"established",
+      "Reign of Tiberius",
+      "Roman Empire",
+      ["Luke 3:1-2"],
+      "Tiberius succeeded Augustus. Luke uses his reign as a chronological reference for the activity of John the Baptist.",
+      "Conversion of regnal years can depend on the method used to count an emperor's reign.",
+      ["josephus"]
+    ],
+
+    [
+      "26–36 CE",26,36,8,"established",
+      "Administration of Pontius Pilate",
+      "Judea",
+      ["Matthew 27:11-26","John 18:28-40"],
+      "Pilate governed Judea as a Roman prefect during the period associated with Jesus's public activity.",
+      "The Caesarea inscription and ancient literary sources attest Pilate; they do not independently establish every detail of the Gospel trial accounts.",
+      ["josephus"]
+    ],
+
+    [
+      "c. 28–29 CE",28,29,8,"approximate",
+      "John the Baptist",
+      "Jordan region",
+      ["Luke 3:1-22","Mark 1:2-11"],
+      "Luke associates John's activity with the fifteenth year of Tiberius. Josephus also discusses John.",
+      "The exact beginning of John's activity depends on regnal dating conventions.",
+      ["josephus"]
+    ],
+
+    [
+      "Late 20s to early 30s CE",27,33,8,"approximate",
+      "Public ministry of Jesus",
+      "Galilee and Judea",
+      ["Mark 1:14-20","Matthew 5:1-12","Luke 4:16-30"],
+      "The Gospels describe Jesus's teaching, proclamation, healings and movement through Galilee and Judea.",
+      "The exact duration and sequence of all episodes cannot be established independently.",
+      []
+    ],
+
+    [
+      "30 or 33 CE — leading proposals",30,33,8,"disputed",
+      "Crucifixion of Jesus",
+      "Jerusalem",
+      ["Mark 15:21-39","John 19:16-30"],
+      "The Gospel accounts place Jesus's execution under Pontius Pilate in connection with Passover.",
+      "The occurrence of the execution and its precise calendar year are separate historical questions. Thirty and thirty-three CE are leading chronological proposals.",
+      ["josephus"]
+    ],
+
+    [
+      "Following the crucifixion",null,null,8,"biblical",
+      "Resurrection testimony",
+      "Jerusalem and Galilee",
+      ["Matthew 28:1-20","Luke 24:1-49","1 Corinthians 15:3-8"],
+      "The New Testament records the proclamation that Jesus rose from the dead and appeared to followers.",
+      "Historical study can investigate the testimony and its early transmission. Calendar chronology and theological judgments concerning the resurrection must be distinguished.",
+      []
+    ],
+
+    [
+      "Early 30s CE — conventional setting",30,34,8,"approximate",
+      "Pentecost and the Jerusalem church",
+      "Jerusalem",
+      ["Acts 2:1-47"],
+      "Acts describes the emergence of a public Christian community marked by apostolic proclamation and communal life.",
+      "The proposed calendar range depends on reconstructions of the crucifixion and subsequent events.",
+      []
+    ],
+
+    [
+      "30s CE",30,39,8,"approximate",
+      "Paul's conversion",
+      "Damascus region",
+      ["Acts 9:1-22","Galatians 1:11-24"],
+      "Acts and Paul's letters describe his transition from persecutor to apostolic missionary.",
+      "No exact year can be independently established.",
+      []
+    ],
+
+    [
+      "44 CE",44,44,8,"established",
+      "Death of Herod Agrippa I",
+      "Caesarea",
+      ["Acts 12:20-23"],
+      "Acts and Josephus both describe the death of Agrippa I in a public royal setting.",
+      "The narratives differ in their presentation and theological explanations.",
+      ["josephus"]
+    ],
+
+    [
+      "Late 40s CE",46,49,8,"approximate",
+      "Early Pauline missionary activity",
+      "Cyprus and Asia Minor",
+      ["Acts 13:1-52","Acts 14:1-28"],
+      "Acts describes missionary activity involving Paul and Barnabas.",
+      "The assigned dates are conventional reconstructions rather than an independently preserved travel diary.",
+      []
+    ],
+
+    [
+      "c. 48–49 CE",48,49,8,"approximate",
+      "Jerusalem council",
+      "Jerusalem",
+      ["Acts 15:1-29","Galatians 2:1-10"],
+      "Early Christian leaders addressed the relationship between Gentile believers and Jewish law.",
+      "The chronological relationship between Acts 15 and Galatians 2 remains debated.",
+      []
+    ],
+
+    [
+      "Early 50s CE",50,53,8,"approximate",
+      "Paul at Corinth and Gallio",
+      "Corinth",
+      ["Acts 18:1-17"],
+      "Acts associates Paul's Corinthian activity with Gallio, whose proconsulship is illuminated by the Delphi inscription.",
+      "The inscription supports the chronology of Gallio's administration, not every event narrated in Acts.",
+      []
+    ],
+
+    [
+      "50s CE",50,59,8,"approximate",
+      "Major Pauline letter-writing period",
+      "Eastern Roman Empire",
+      ["1 Thessalonians 1:1-10","1 Corinthians 1:1-9","Romans 1:1-17"],
+      "Several surviving letters of Paul are conventionally dated to the middle decades of the first century.",
+      "Individual letter dates and the authorship of disputed Pauline letters require separate assessment.",
+      []
+    ],
+
+    [
+      "Early 60s CE",60,63,8,"approximate",
+      "Paul's Roman imprisonment",
+      "Rome",
+      ["Acts 28:16-31"],
+      "Acts concludes with Paul living under Roman custody while proclaiming his message.",
+      "The exact chronology of his arrival and later career remains reconstructed rather than fully externally documented.",
+      []
+    ],
+
+    [
+      "64 CE",64,64,8,"established",
+      "Great Fire of Rome",
+      "Rome",
+      [],
+      "Tacitus, Annals 15.44, associates the aftermath of the fire with punishment of Christians under Nero.",
+      "Tacitus wrote decades after the event. The passage should be evaluated as Roman literary testimony.",
+      []
+    ],
+
+    [
+      "66–73/74 CE",66,74,8,"established",
+      "First Jewish–Roman War",
+      "Judea",
+      [],
+      "The revolt against Roman authority transformed the political and religious landscape of Judea.",
+      "Josephus is a major literary witness whose political position and retrospective presentation require critical evaluation.",
+      ["roman","josephus"]
+    ],
+
+    [
+      "70 CE",70,70,8,"established",
+      "Destruction of the Second Temple",
+      "Jerusalem",
+      ["Mark 13:1-2","Luke 21:20-24"],
+      "Roman forces captured Jerusalem and destroyed the Temple during the Jewish–Roman War.",
+      "The event is independently well attested. Its relationship to Gospel composition dates, prophecy and theological interpretation requires separate analysis.",
+      ["roman","second","josephus"]
+    ],
+
+    [
+      "First century CE — dating debated",40,100,8,"disputed",
+      "Composition and circulation of New Testament writings",
+      "Eastern Mediterranean",
+      [],
+      "The earliest Christian writings developed and circulated among geographically dispersed communities.",
+      "The dates, authorship and editorial histories of individual books require separate research. The displayed range is not a definitive date for every text.",
+      ["testament"]
+    ],
+
+    [
+      "Late first century CE — commonly proposed",90,100,8,"disputed",
+      "Revelation and the churches of Asia",
+      "Patmos and Asia Minor",
+      ["Revelation 1:1-11","Revelation 2:1-7"],
+      "Revelation addresses seven churches in Roman Asia and presents apocalyptic visions.",
+      "A Domitianic setting is commonly proposed, but earlier dating has also been defended.",
+      []
+    ],
+
+    [
+      "c. 95–100 CE",95,100,9,"approximate",
+      "First Clement",
+      "Rome and Corinth",
+      [],
+      "The letter conventionally called First Clement addresses conflict and communal order in Corinth.",
+      "The traditional late first-century date is approximate; authorship and precise chronology require textual evaluation.",
+      ["fathers"]
+    ],
+
+    [
+      "Early second century CE",100,117,9,"approximate",
+      "Ignatius of Antioch",
+      "Eastern Roman Empire",
+      [],
+      "Letters attributed to Ignatius discuss church leadership, Christian identity and unity.",
+      "The dating and transmission of the Ignatian letter collections are subjects of scholarship.",
+      ["fathers"]
+    ],
+
+    [
+      "c. 112 CE",112,112,9,"approximate",
+      "Pliny's correspondence with Trajan",
+      "Bithynia-Pontus",
+      [],
+      "Pliny's Letters 10.96–97 describe Roman administrative responses to Christians and their religious practices.",
+      "The letters provide evidence for particular communities and official policy rather than universal Christian practice.",
+      []
+    ],
+
+    [
+      "132–135 CE",132,135,9,"established",
+      "Bar Kokhba revolt",
+      "Roman Judea",
+      [],
+      "The revolt marked another major conflict between Jewish resistance and Roman authority.",
+      "Its effects varied across Jewish and Christian communities.",
+      ["second"]
+    ],
+
+    [
+      "Mid-second century CE",140,165,9,"approximate",
+      "Justin Martyr and Christian apologetics",
+      "Roman Empire",
+      [],
+      "Justin's surviving apologetic writings articulate Christian beliefs in dialogue with Roman and Jewish intellectual settings.",
+      "Dates vary among individual works; the writings represent Justin's arguments rather than every Christian community.",
+      ["fathers"]
+    ],
+
+    [
+      "c. 180 CE",180,180,9,"approximate",
+      "Irenaeus and the fourfold Gospel",
+      "Lyon",
+      [],
+      "Irenaeus's Against Heresies explicitly argues for four authoritative Gospels.",
+      "This is evidence of developing Christian textual authority, not a universal formal settlement of the entire New Testament canon.",
+      ["fathers"]
+    ],
+
+    [
+      "313 CE",313,313,9,"established",
+      "Imperial toleration associated with Milan",
+      "Roman Empire",
+      [],
+      "Constantine and Licinius agreed on policies permitting religious practice and restoration of confiscated Christian property.",
+      "Christianity was not thereby established as the empire's sole official religion.",
+      ["fathers"]
+    ],
+
+    [
+      "325 CE",325,325,9,"established",
+      "Council of Nicaea",
+      "Nicaea",
+      [],
+      "The council addressed major theological disputes and issued a creed concerning the relationship of the Son to the Father.",
+      "Nicaea did not select or establish the complete biblical canon.",
+      ["fathers"]
+    ],
+
+    [
+      "Fourth century CE",300,399,9,"approximate",
+      "Codex Sinaiticus",
+      "Eastern Mediterranean — origin debated",
+      [],
+      "This surviving Greek biblical manuscript preserves major portions of the Old Testament and the complete New Testament, alongside other early Christian writings.",
+      "The precise production location remains debated. Its contents illustrate ancient manuscript collections rather than a universal canonical decree.",
+      ["sinaiticus"]
+    ],
+
+    [
+      "367 CE",367,367,9,"established",
+      "Athanasius's Thirty-Ninth Festal Letter",
+      "Alexandria",
+      [],
+      "Athanasius lists the twenty-seven books that constitute the modern New Testament.",
+      "The letter documents an important canonical witness, not the simultaneous creation or universal acceptance of the canon.",
+      ["fathers"]
+    ],
+
+    [
+      "381 CE",381,381,9,"established",
+      "Council of Constantinople",
+      "Constantinople",
+      [],
+      "The council addressed theological disputes following Nicaea and affirmed Nicene theological commitments.",
+      "The textual and historical relationship between the council and the later received Niceno-Constantinopolitan Creed requires specialized study.",
+      ["fathers"]
+    ]
+
+  ].map((row,index) => ({
+
+    id:"HT-" + String(index+1).padStart(3,"0"),
+
+    date:row[0],
+    start:row[1],
+    end:row[2],
+    period:row[3],
+    status:row[4],
+    title:row[5],
+    location:row[6],
+    references:row[7],
+    description:row[8],
+    limitation:row[9],
+    sources:row[10]
+
+  }));
+
+  const root = document.createElement("div");
+
+  workspace.replaceChildren(root);
+
+  let page = 0;
+
+  const pageSize = 15;
+
+  const scriptureCache = new Map();
+
+  const saved = new Set();
+
+  root.innerHTML = `
+    <style>
+
+      .dbht {
+        color:var(--text);
+        line-height:1.75;
+      }
+
+      .dbht .ht-panel {
+        background:var(--panel2);
+        border:1px solid var(--line);
+        border-radius:12px;
+        padding:22px;
+        margin:17px 0;
+      }
+
+      .dbht .ht-controls {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(150px,1fr));
+        gap:12px;
+        margin:14px 0;
+      }
+
+      .dbht input,
+      .dbht select {
+        box-sizing:border-box;
+        width:100%;
+        min-width:0;
+        font:inherit;
+        padding:11px;
+        border:1px solid var(--line);
+        border-radius:8px;
+        background:var(--bg);
+        color:var(--text);
+      }
+
+      .dbht label {
+        display:block;
+        color:var(--muted);
+        margin-bottom:5px;
+      }
+
+      .dbht .ht-actions {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin:13px 0;
+      }
+
+      .dbht .ht-event {
+        position:relative;
+        background:var(--panel);
+        border:1px solid var(--line);
+        border-radius:10px;
+        padding:19px;
+        margin:0 0 20px 24px;
+      }
+
+      .dbht .ht-track {
+        border-left:2px solid var(--gold);
+        margin:20px 5px;
+      }
+
+      .dbht .ht-event::before {
+        content:"";
+        position:absolute;
+        width:12px;
+        height:12px;
+        top:26px;
+        left:-32px;
+        border:2px solid var(--gold);
+        background:var(--bg);
+        border-radius:50%;
+      }
+
+      .dbht .ht-date {
+        color:var(--gold);
+        font-size:20px;
+        font-weight:700;
+      }
+
+      .dbht .ht-stat {
+        color:var(--gold);
+        font-size:28px;
+        font-weight:700;
+      }
+
+      .dbht .ht-muted {
+        font-size:13px;
+        color:var(--muted);
+      }
+
+      .dbht .ht-status {
+        display:inline-block;
+        padding:4px 9px;
+        margin:4px 0;
+        border:1px solid var(--line);
+        border-radius:5px;
+        font-size:12px;
+        font-weight:600;
+      }
+
+      .dbht .ht-established {
+        color:#91c6a4;
+      }
+
+      .dbht .ht-approximate {
+        color:#d9bd79;
+      }
+
+      .dbht .ht-disputed {
+        color:#e1a17a;
+      }
+
+      .dbht .ht-biblical {
+        color:#b5b8c7;
+      }
+
+      .dbht .ht-warning {
+        background:var(--bg);
+        border-left:2px solid var(--gold);
+        padding:14px;
+        margin:14px 0;
+      }
+
+      .dbht blockquote {
+        background:var(--bg);
+        border-left:2px solid var(--gold);
+        padding:14px;
+        margin:12px 0;
+      }
+
+      .dbht a {
+        color:var(--gold);
+        overflow-wrap:anywhere;
+      }
+
+      .dbht details {
+        border-bottom:1px solid var(--line);
+        padding:12px 0;
+      }
+
+      .dbht summary {
+        cursor:pointer;
+        color:var(--gold);
+        font-weight:600;
+      }
+
+      .dbht button:disabled {
+        opacity:.45;
+        cursor:not-allowed;
+      }
+
+      @media(max-width:600px) {
+
+        .dbht .ht-panel {
+          padding:12px;
+        }
+
+        .dbht .ht-event {
+          padding:12px;
+          margin-left:15px;
+        }
+
+        .dbht .ht-event::before {
+          left:-23px;
+        }
+
+      }
+
+    </style>
+
+    <div class="dbht">
+
+      <div class="eyebrow">
+        DESERTBIBLE · CHRONOLOGICAL RESEARCH
+      </div>
+
+      <h2>Historical Timeline</h2>
+
+      <p>
+        Explore the biblical narrative within
+        the wider history of ancient kingdoms,
+        empires, religious communities and
+        early Christianity.
+      </p>
+
+      <section class="ht-panel">
+
+        <div class="ht-controls">
+
+          <div>
+            <div class="ht-stat" id="htCount"></div>
+            Research records
+          </div>
+
+          <div>
+            <div class="ht-stat" id="htPeriodCount"></div>
+            Historical periods
+          </div>
+
+          <div>
+            <div class="ht-stat" id="htAnchorCount"></div>
+            Established historical anchors
+          </div>
+
+          <div>
+            <div class="ht-stat" id="htSourceCount"></div>
+            Reference resources
+          </div>
+
+        </div>
+
+        <div class="ht-warning">
+
+          <strong>Chronological integrity</strong>
+
+          <p>
+            This timeline distinguishes narrative
+            sequence from independently dated
+            history. Undated events are not assigned
+            invented calendar years.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>01 · Historical Period Explorer</h3>
+
+        <div id="htPeriods" class="ht-actions"></div>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>02 · Timeline Research Filters</h3>
+
+        <div class="ht-controls">
+
+          <div>
+
+            <label for="htSearch">
+              Search events, people or Scripture
+            </label>
+
+            <input id="htSearch"
+                   type="search"
+                   placeholder="Assyria, Micah, 701...">
+
+          </div>
+
+          <div>
+
+            <label for="htPeriod">Historical period</label>
+
+            <select id="htPeriod">
+              <option value="all">All periods</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="htStatus">Dating status</label>
+
+            <select id="htStatus">
+
+              <option value="all">All records</option>
+
+              <option value="established">
+                Established historical anchors
+              </option>
+
+              <option value="approximate">
+                Approximate chronology
+              </option>
+
+              <option value="disputed">
+                Disputed chronology
+              </option>
+
+              <option value="biblical">
+                Undated biblical narratives
+              </option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="htEra">Calendar era</label>
+
+            <select id="htEra">
+
+              <option value="all">All eras</option>
+
+              <option value="bce">BCE</option>
+
+              <option value="ce">CE</option>
+
+              <option value="undated">Undated</option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="htYearStart">From year</label>
+
+            <input id="htYearStart"
+                   type="number"
+                   step="1"
+                   placeholder="Example: -800">
+
+          </div>
+
+          <div>
+
+            <label for="htYearEnd">To year</label>
+
+            <input id="htYearEnd"
+                   type="number"
+                   step="1"
+                   placeholder="Example: -600">
+
+          </div>
+
+          <div>
+
+            <label for="htEdition">
+              Scripture translation
+            </label>
+
+            <select id="htEdition">
+
+              <option value="web">WEB</option>
+
+              <option value="kjv">KJV</option>
+
+              <option value="asv">ASV</option>
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="htSort">Display order</label>
+
+            <select id="htSort">
+
+              <option value="narrative">
+                Historical period and narrative
+              </option>
+
+              <option value="oldest">
+                Earliest dated first
+              </option>
+
+              <option value="newest">
+                Latest dated first
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <p class="ht-muted">
+          Enter negative years for BCE and positive
+          years for CE. Example: -701 represents
+          701 BCE. There is no year zero in conventional
+          BCE/CE historical reckoning.
+        </p>
+
+        <div class="ht-actions">
+
+          <button type="button" id="htReset">
+            Reset filters
+          </button>
+
+          <button type="button" id="htSaved">
+            Show bookmarked events
+          </button>
+
+          <button type="button" id="htCopy">
+            Copy timeline
+          </button>
+
+          <button type="button" id="htDownload">
+            Download timeline
+          </button>
+
+        </div>
+
+        <p id="htMessage" role="status"></p>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>03 · Biblical and Historical Timeline</h3>
+
+        <p id="htSummary"></p>
+
+        <div id="htTimeline" class="ht-track"></div>
+
+        <div class="ht-actions">
+
+          <button type="button" id="htPrevious">
+            Previous events
+          </button>
+
+          <button type="button" id="htNext">
+            Next events
+          </button>
+
+        </div>
+
+        <p id="htPage"></p>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>04 · Chronological Research Method</h3>
+
+        <details open>
+
+          <summary>Established historical anchors</summary>
+
+          <p>
+            Events with relatively secure historical
+            chronological frameworks supported by
+            historical documents, inscriptions or
+            widely accepted synchronization.
+          </p>
+
+          <p>
+            An established date does not verify every
+            narrative detail associated with an event.
+            Some established anchors include a narrow
+            range of alternative calendar conversions.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Approximate historical dates</summary>
+
+          <p>
+            Dates reconstructed from regnal years,
+            literary context, archaeology or other
+            historical relationships.
+          </p>
+
+          <p>
+            The abbreviation c. means circa,
+            indicating approximation.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Disputed chronology</summary>
+
+          <p>
+            Events or proposed calendar dates for
+            which substantial chronological or
+            historical questions remain.
+          </p>
+
+          <p>
+            A proposed date is not presented as
+            an established external fact.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Undated biblical narratives</summary>
+
+          <p>
+            These records preserve the biblical
+            narrative sequence without assigning
+            an independently unestablished date.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Regnal years and calendar systems</summary>
+
+          <p>
+            Ancient kingdoms used different calendar
+            systems and conventions for counting
+            the years of rulers.
+          </p>
+
+          <p>
+            Accession-year and non-accession-year
+            systems, overlapping reigns and different
+            beginnings of the calendar year can
+            produce differences in modern dating.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Archaeological dating</summary>
+
+          <p>
+            Stratigraphy, pottery typology,
+            radiocarbon analysis, inscriptions
+            and historical synchronization can
+            establish archaeological chronologies.
+          </p>
+
+          <p>
+            Dating an artifact or destruction layer
+            does not automatically identify the
+            individual or event responsible.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Event date versus composition date</summary>
+
+          <p>
+            The period described by a biblical
+            book is not necessarily the period
+            when the book was written, edited
+            or transmitted.
+          </p>
+
+          <p>
+            Researchers should distinguish historical
+            setting, literary composition, surviving
+            manuscripts and later interpretation.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Prophecy and historical fulfillment</summary>
+
+          <p>
+            Establish the historical setting and
+            wording of a prophetic text before
+            evaluating proposed fulfillment.
+          </p>
+
+          <p>
+            Historical correspondence, literary
+            interpretation and theological conclusions
+            are distinct research questions.
+          </p>
+
+        </details>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>05 · Sources and Research Library</h3>
+
+        <p>
+          Consult the following institutional
+          chronologies, ancient literary sources
+          and manuscript collections.
+        </p>
+
+        <div id="htSources"></div>
+
+        <p class="ht-muted">
+          These resources include primary texts,
+          institutional historical syntheses and
+          broader research collections. A repository
+          link is not equivalent to an exact artifact
+          accession number or a page-specific citation.
+        </p>
+
+      </section>
+
+      <section class="ht-panel">
+
+        <h3>06 · Scope and Evidence Limitations</h3>
+
+        <p>
+          This catalogue is a curated overview of
+          major biblical and related historical
+          developments. It is not an exhaustive
+          chronology of every biblical event.
+        </p>
+
+        <p>
+          Undated events are displayed according
+          to narrative or thematic placement.
+          Their position does not establish an
+          absolute chronological relationship
+          with dated records.
+        </p>
+
+        <p>
+          Sources differ in chronological conventions,
+          historical interpretations and religious
+          assumptions. These differences should
+          remain visible in serious research.
+        </p>
+
+        <p>
+          Biblical passages, ancient documents
+          and archaeological evidence must be
+          interpreted within their respective
+          literary and historical contexts.
+        </p>
+
+      </section>
+
+      <button type="button" id="htClose">
+        Return to research categories
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag,text,parent) {
+
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) parent.appendChild(element);
+
+    return element;
+  }
+
+  function link(parent,title,url) {
+
+    const anchor = make("a",title,parent);
+
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    return anchor;
+  }
+
+  function button(parent,title,action) {
+
+    const control = make("button",title,parent);
+
+    control.type = "button";
+
+    control.addEventListener("click",action);
+
+    return control;
+  }
+
+  function normalize(value) {
+
+    return String(value || "")
+      .normalize("NFKD")
+      .replace(/\p{M}/gu,"")
+      .toLowerCase()
+      .trim();
+  }
+
+  function formatYear(year) {
+
+    if (year === null) return "Undated";
+
+    return Math.abs(year) + (year < 0 ? " BCE" : " CE");
+  }
+
+  const storageKey =
+    "DesertBible.historicalTimeline.bookmarks.v1";
+
+  try {
+
+    const previous = JSON.parse(
+      localStorage.getItem(storageKey) || "[]"
+    );
+
+    if (Array.isArray(previous)) {
+
+      previous.forEach(id => {
+
+        if (data.some(event => event.id === id)) {
+          saved.add(id);
+        }
+
+      });
+    }
+
+  } catch {}
+
+  let savedOnly = false;
+
+  function persistBookmarks() {
+
+    try {
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify([...saved])
+      );
+
+      $("htMessage").textContent =
+        "Bookmarks saved in this browser.";
+
+    } catch {
+
+      $("htMessage").textContent =
+        "Bookmarks retained for this session only.";
+
+    }
+  }
+
+  $("htCount").textContent =
+    data.length.toLocaleString();
+
+  $("htPeriodCount").textContent =
+    periods.length;
+
+  $("htAnchorCount").textContent =
+    data.filter(
+      event => event.status === "established"
+    ).length;
+
+  $("htSourceCount").textContent =
+    Object.keys(sources).length;
+
+  periods.forEach((period,index) => {
+
+    const count = data.filter(
+      record => record.period === index
+    ).length;
+
+    const option = make(
+      "option",
+      period + " (" + count + ")",
+      $("htPeriod")
+    );
+
+    option.value = String(index);
+
+    button(
+      $("htPeriods"),
+      period,
+      () => {
+
+        $("htPeriod").value = String(index);
+
+        page = 0;
+
+        render();
+
+        $("htSummary").scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+      }
+    );
+  });
+
+  Object.values(sources).forEach(source => {
+
+    const paragraph = make(
+      "p",undefined,$("htSources")
+    );
+
+    link(paragraph,source.name,source.url);
+
+  });
+
+  function getFilters() {
+
+    const startRaw = $("htYearStart").value.trim();
+
+    const endRaw = $("htYearEnd").value.trim();
+
+    const start =
+      startRaw === "" ? null : Number(startRaw);
+
+    const end =
+      endRaw === "" ? null : Number(endRaw);
+
+    let error = "";
+
+    if (
+      (start !== null &&
+        (!Number.isInteger(start) || start === 0)) ||
+
+      (end !== null &&
+        (!Number.isInteger(end) || end === 0))
+    ) {
+
+      error =
+        "Enter valid whole-number years other than zero.";
+
+    } else if (
+      start !== null &&
+      end !== null &&
+      start > end
+    ) {
+
+      error =
+        "The beginning year must precede the ending year.";
+    }
+
+    return {
+
+      search:normalize($("htSearch").value),
+
+      period:$("htPeriod").value,
+
+      status:$("htStatus").value,
+
+      era:$("htEra").value,
+
+      sort:$("htSort").value,
+
+      start,
+      end,
+      error
+
+    };
+  }
+
+  function filteredEvents() {
+
+    const filters = getFilters();
+
+    if (filters.error) return [];
+
+    const result = data.filter(event => {
+
+      if (savedOnly && !saved.has(event.id)) {
+        return false;
+      }
+
+      if (
+        filters.period !== "all" &&
+        event.period !== Number(filters.period)
+      ) return false;
+
+      if (
+        filters.status !== "all" &&
+        event.status !== filters.status
+      ) return false;
+
+      const dated =
+        event.start !== null &&
+        event.end !== null;
+
+      if (
+        filters.era === "bce" &&
+        (!dated || event.start >= 0)
+      ) return false;
+
+      if (
+        filters.era === "ce" &&
+        (!dated || event.end <= 0)
+      ) return false;
+
+      if (
+        filters.era === "undated" &&
+        dated
+      ) return false;
+
+      if (
+        filters.start !== null ||
+        filters.end !== null
+      ) {
+
+        if (!dated) return false;
+
+        if (
+          filters.start !== null &&
+          event.end < filters.start
+        ) return false;
+
+        if (
+          filters.end !== null &&
+          event.start > filters.end
+        ) return false;
+
+      }
+
+      if (filters.search) {
+
+        const haystack = normalize([
+
+          event.title,
+
+          event.date,
+
+          event.location,
+
+          event.description,
+
+          event.limitation,
+
+          periods[event.period],
+
+          statusLabels[event.status],
+
+          ...event.references
+
+        ].join(" "));
+
+        const terms = filters.search.split(/\s+/);
+
+        if (!terms.every(term => haystack.includes(term))) {
+
+          return false;
+        }
+
+      }
+
+      return true;
+
+    });
+
+    if (
+      filters.sort === "oldest" ||
+      filters.sort === "newest"
+    ) {
+
+      result.sort((a,b) => {
+
+        if (a.start === null) {
+          return b.start === null ? 0 : 1;
+        }
+
+        if (b.start === null) return -1;
+
+        return filters.sort === "oldest"
+          ? a.start - b.start
+          : b.end - a.end;
+
+      });
+
+    }
+
+    return result;
+  }
+
+  async function fetchScripture(reference,edition) {
+
+    const url =
+      "https://bible-api.com/" +
+      encodeURIComponent(reference) +
+      "?translation=" + edition;
+
+    if (scriptureCache.has(url)) {
+
+      return scriptureCache.get(url);
+
+    }
+
+    const response = await fetch(url);
+
+    if (response.status === 429) {
+
+      throw new Error(
+        "Scripture source rate limit reached. Retry shortly."
+      );
+    }
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Scripture source returned HTTP " +
+        response.status
+      );
+    }
+
+    const result = await response.json();
+
+    if (
+      !Array.isArray(result.verses) ||
+      !result.verses.length
+    ) {
+
+      throw new Error(
+        "No Scripture text was returned."
+      );
+    }
+
+    const record = {
+
+      url,
+
+      text:result.verses.map(verse =>
+        String(verse.text || "").trim()
+      ).join(" ")
+
+    };
+
+    scriptureCache.set(url,record);
+
+    return record;
+  }
+
+  function scripturePreview(parent,reference) {
+
+    const section = make(
+      "div",undefined,parent
+    );
+
+    make("p",reference,section);
+
+    const output = make(
+      "div",undefined,section
+    );
+
+    button(section,"Read Scripture",async control => {
+
+      const clicked = control.currentTarget;
+
+      if (output.dataset.loaded === "true") {
+
+        output.hidden = !output.hidden;
+
+        clicked.textContent = output.hidden
+          ? "Read Scripture"
+          : "Hide Scripture";
+
+        return;
+      }
+
+      clicked.disabled = true;
+
+      output.textContent =
+        "Retrieving Scripture…";
+
+      try {
+
+        const edition = $("htEdition").value;
+
+        const result = await fetchScripture(
+          reference,edition
+        );
+
+        if (!output.isConnected) return;
+
+        output.replaceChildren();
+
+        make(
+          "p",
+          reference + " · " + edition.toUpperCase(),
+          output
+        );
+
+        make(
+          "blockquote",
+          result.text,
+          output
+        );
+
+        link(
+          output,
+          "Verify Scripture source",
+          result.url
+        );
+
+        output.dataset.loaded = "true";
+
+        clicked.textContent = "Hide Scripture";
+
+      } catch (error) {
+
+        output.textContent = error.message;
+
+      } finally {
+
+        clicked.disabled = false;
+
+      }
+
+    });
+
+    const researchLink = make(
+      "p",undefined,section
+    );
+
+    link(
+
+      researchLink,
+
+      "Examine passage in STEP Bible",
+
+      "https://www.stepbible.org/?q=version=KJV|reference=" +
+        encodeURIComponent(reference)
+
+    );
+
+  }
+
+  function renderEvent(event,container) {
+
+    const article = make(
+      "article",undefined,container
+    );
+
+    article.className = "ht-event";
+
+    make(
+      "div",
+      event.date,
+      article
+    ).className = "ht-date";
+
+    make(
+      "p",
+      periods[event.period],
+      article
+    ).className = "ht-muted";
+
+    make("h3",event.title,article);
+
+    make(
+      "div",
+      statusLabels[event.status],
+      article
+    ).className =
+      "ht-status ht-" + event.status;
+
+    make(
+      "p",
+      "Location: " + event.location,
+      article
+    );
+
+    make("p",event.description,article);
+
+    const limitation = make(
+      "div",undefined,article
+    );
+
+    limitation.className = "ht-warning";
+
+    make(
+      "strong",
+      "Historical and evidence limitations",
+      limitation
+    );
+
+    make("p",event.limitation,limitation);
+
+    if (event.references.length) {
+
+      const scripture = make(
+        "details",undefined,article
+      );
+
+      make(
+        "summary",
+        "Biblical passages (" +
+          event.references.length + ")",
+        scripture
+      );
+
+      event.references.forEach(reference => {
+
+        scripturePreview(scripture,reference);
+
+      });
+
+    } else {
+
+      make(
+
+        "p",
+
+        "External historical or literary context; no direct Protestant-canon passage is assigned.",
+
+        article
+
+      ).className = "ht-muted";
+
+    }
+
+    const references = make(
+      "details",undefined,article
+    );
+
+    make(
+      "summary",
+      "Sources and verification",
+      references
+    );
+
+    if (event.sources.length) {
+
+      event.sources.forEach(id => {
+
+        const source = sources[id];
+
+        if (!source) return;
+
+        const paragraph = make(
+          "p",undefined,references
+        );
+
+        link(
+          paragraph,
+          source.name,
+          source.url
+        );
+
+      });
+
+    } else {
+
+      make(
+
+        "p",
+
+        "No event-specific external source is attached to this record. Consult the listed passages and specialized research before making independent historical claims.",
+
+        references
+
+      );
+
+    }
+
+    make(
+      "p",
+      "Research record: " + event.id,
+      references
+    ).className = "ht-muted";
+
+    const actions = make(
+      "div",undefined,article
+    );
+
+    actions.className = "ht-actions";
+
+    const bookmark = button(
+
+      actions,
+
+      saved.has(event.id)
+        ? "Remove bookmark"
+        : "Bookmark event",
+
+      () => {
+
+        if (saved.has(event.id)) {
+
+          saved.delete(event.id);
+
+        } else {
+
+          saved.add(event.id);
+
+        }
+
+        persistBookmarks();
+
+        if (savedOnly) {
+
+          render();
+
+        } else {
+
+          bookmark.textContent = saved.has(event.id)
+            ? "Remove bookmark"
+            : "Bookmark event";
+
+        }
+
+        $("htSaved").textContent = savedOnly
+          ? "Show all events"
+          : "Show bookmarks (" + saved.size + ")";
+
+      }
+
+    );
+
+    button(actions,"Copy event citation",async () => {
+
+      try {
+
+        await navigator.clipboard.writeText(
+
+          eventExport(event).join("\n")
+
+        );
+
+        $("htMessage").textContent =
+          "Event research citation copied.";
+
+      } catch {
+
+        $("htMessage").textContent =
+          "Clipboard unavailable. Use timeline download.";
+
+      }
+
+    });
+
+  }
+
+  function render() {
+
+    const filters = getFilters();
+
+    const events = filteredEvents();
+
+    $("htTimeline").replaceChildren();
+
+    if (filters.error) {
+
+      $("htSummary").textContent = filters.error;
+
+      $("htPage").textContent = "";
+
+      $("htPrevious").disabled = true;
+
+      $("htNext").disabled = true;
+
+      $("htCopy").disabled = true;
+
+      $("htDownload").disabled = true;
+
+      return;
+    }
+
+    const totalPages = Math.max(
+      1,
+      Math.ceil(events.length/pageSize)
+    );
+
+    page = Math.min(
+      Math.max(page,0),
+      totalPages-1
+    );
+
+    $("htSummary").textContent =
+
+      events.length + " matching records out of " +
+
+      data.length + " total records.";
+
+    $("htPage").textContent =
+
+      "Page " + (page+1) +
+
+      " of " + totalPages;
+
+    $("htPrevious").disabled = page === 0;
+
+    $("htNext").disabled =
+      page+1 >= totalPages;
+
+    $("htCopy").disabled = !events.length;
+
+    $("htDownload").disabled = !events.length;
+
+    if (!events.length) {
+
+      make(
+
+        "p",
+
+        "No timeline events match these filters.",
+
+        $("htTimeline")
+
+      );
+
+      return;
+    }
+
+    const visible = events.slice(
+
+      page*pageSize,
+
+      (page+1)*pageSize
+
+    );
+
+    visible.forEach(
+      event => renderEvent(event,$("htTimeline"))
+    );
+
+  }
+
+  function eventExport(event) {
+
+    const lines = [
+
+      event.date + " — " + event.title,
+
+      "Research ID: " + event.id,
+
+      "Historical period: " + periods[event.period],
+
+      "Location: " + event.location,
+
+      "Dating status: " + statusLabels[event.status],
+
+      "",
+
+      event.description,
+
+      "",
+
+      "Evidence limitations: " + event.limitation,
+
+      "",
+
+      "Biblical passages: " +
+
+        (
+          event.references.length
+            ? event.references.join("; ")
+            : "No direct passage assigned"
+        ),
+
+      "Historical resources:"
+
+    ];
+
+    if (event.sources.length) {
+
+      event.sources.forEach(id => {
+
+        const source = sources[id];
+
+        if (source) {
+
+          lines.push(
+
+            source.name,
+
+            source.url
+
+          );
+
+        }
+
+      });
+
+    } else {
+
+      lines.push(
+        "No event-specific external source attached."
+      );
+
+    }
+
+    lines.push("");
+
+    return lines;
+  }
+
+  function exportTimeline() {
+
+    const lines = [
+
+      "DESERTBIBLE — HISTORICAL TIMELINE",
+
+      "Exported UTC: " + new Date().toISOString(),
+
+      "Scope: Current filtered timeline records",
+
+      "Records: " + filteredEvents().length,
+
+      "",
+
+      "Chronological convention: BCE / CE",
+
+      "Undated narratives are not assigned calendar years.",
+
+      ""
+
+    ];
+
+    filteredEvents().forEach(event => {
+
+      lines.push(
+
+        ...eventExport(event),
+
+        "----------------------------------------",
+
+        ""
+
+      );
+
+    });
+
+    lines.push(
+
+      "RESEARCH LIMITATIONS",
+
+      "This is a curated historical overview.",
+
+      "Dates may be approximate or disputed.",
+
+      "External historical anchors do not verify every associated biblical statement.",
+
+      "Repository links may require further artifact-specific or passage-specific research."
+
+    );
+
+    return lines.join("\n");
+  }
+
+  $("htCopy").addEventListener("click",async () => {
+
+    try {
+
+      await navigator.clipboard.writeText(
+        exportTimeline()
+      );
+
+      $("htMessage").textContent =
+        "Filtered timeline copied.";
+
+    } catch {
+
+      $("htMessage").textContent =
+        "Clipboard unavailable. Use Download timeline.";
+
+    }
+
+  });
+
+  $("htDownload").addEventListener("click",() => {
+
+    const blob = new Blob(
+
+      [exportTimeline()],
+
+      {type:"text/plain;charset=utf-8"}
+
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+
+    anchor.download =
+      "DesertBible-Historical-Timeline.txt";
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+
+  });
+
+  const filterIDs = [
+
+    "htSearch",
+
+    "htPeriod",
+
+    "htStatus",
+
+    "htEra",
+
+    "htYearStart",
+
+    "htYearEnd",
+
+    "htSort",
+
+    "htEdition"
+
+  ];
+
+  filterIDs.forEach(id => {
+
+    const element = $(id);
+
+    element.addEventListener(
+
+      element.tagName === "INPUT"
+        ? "input"
+        : "change",
+
+      () => {
+
+        page = 0;
+
+        render();
+
+      }
+
+    );
+
+  });
+
+  $("htReset").addEventListener("click",() => {
+
+    $("htSearch").value = "";
+
+    $("htPeriod").value = "all";
+
+    $("htStatus").value = "all";
+
+    $("htEra").value = "all";
+
+    $("htYearStart").value = "";
+
+    $("htYearEnd").value = "";
+
+    $("htSort").value = "narrative";
+
+    savedOnly = false;
+
+    $("htSaved").textContent =
+      "Show bookmarks (" + saved.size + ")";
+
+    $("htMessage").textContent = "";
+
+    page = 0;
+
+    render();
+
+  });
+
+  $("htSaved").addEventListener("click",() => {
+
+    savedOnly = !savedOnly;
+
+    $("htSaved").textContent = savedOnly
+
+      ? "Show all events"
+
+      : "Show bookmarks (" + saved.size + ")";
+
+    page = 0;
+
+    render();
+
+  });
+
+  $("htPrevious").addEventListener("click",() => {
+
+    page--;
+
+    render();
+
+    $("htSummary").scrollIntoView({
+
+      behavior:"smooth",
+
+      block:"start"
+
+    });
+
+  });
+
+  $("htNext").addEventListener("click",() => {
+
+    page++;
+
+    render();
+
+    $("htSummary").scrollIntoView({
+
+      behavior:"smooth",
+
+      block:"start"
+
+    });
+
+  });
+
+  $("htClose").addEventListener("click",() => {
+
+    workspace.remove();
+
+  });
+
+  $("htSaved").textContent =
+    "Show bookmarks (" + saved.size + ")";
+
+  render();
+
+  workspace.scrollIntoView({
+
+    behavior:"smooth",
+
+    block:"start"
+
+  });
+
+}
 
 
 
