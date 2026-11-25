@@ -5694,4 +5694,2080 @@ function openProphecyFulfillment(workspace) {
 
 }
 
+function openVisualExploration(workspace) {
+  "use strict";
+
+  const sources = {
+    british: {
+      name: "British Museum",
+      url: "https://www.britishmuseum.org/collection"
+    },
+    israel: {
+      name: "Israel Museum",
+      url: "https://www.imj.org.il/en"
+    },
+    louvre: {
+      name: "Louvre Collections",
+      url: "https://collections.louvre.fr/"
+    },
+    dss: {
+      name: "Leon Levy Dead Sea Scrolls Digital Library",
+      url: "https://www.deadseascrolls.org.il/"
+    },
+    scrolls: {
+      name: "Israel Museum Digital Dead Sea Scrolls",
+      url: "https://dss.collections.imj.org.il/"
+    },
+    sinaiticus: {
+      name: "Codex Sinaiticus Project",
+      url: "https://www.codexsinaiticus.org/"
+    },
+    vatican: {
+      name: "Vatican Apostolic Library",
+      url: "https://digi.vatlib.it/"
+    },
+    csntm: {
+      name: "Center for the Study of New Testament Manuscripts",
+      url: "https://www.csntm.org/"
+    },
+    ntvmr: {
+      name: "New Testament Virtual Manuscript Room",
+      url: "https://ntvmr.uni-muenster.de/"
+    },
+    pleiades: {
+      name: "Pleiades Ancient World Gazetteer",
+      url: "https://pleiades.stoa.org/"
+    },
+    unesco: {
+      name: "UNESCO World Heritage Centre",
+      url: "https://whc.unesco.org/en/list/"
+    },
+    oracc: {
+      name: "Open Richly Annotated Cuneiform Corpus",
+      url: "https://oracc.museum.upenn.edu/"
+    },
+    met: {
+      name: "Metropolitan Museum of Art",
+      url: "https://www.metmuseum.org/art/collection"
+    },
+    isac: {
+      name: "Institute for the Study of Ancient Cultures",
+      url: "https://isac.uchicago.edu/"
+    },
+    yale: {
+      name: "Yale University Library — Early Manuscripts",
+      url: "https://guides.library.yale.edu/history_bible/early-manuscripts"
+    },
+    bas: {
+      name: "Biblical Archaeology Society — Virtual Museum Tours",
+      url: "https://www.biblicalarchaeology.org/exhibits-events/virtual-museum-tours/"
+    },
+    chester: {
+      name: "Chester Beatty",
+      url: "https://www.cbl.ie/"
+    },
+    cdli: {
+      name: "Cuneiform Digital Library Initiative",
+      url: "https://cdli.earth/"
+    }
+  };
+
+  const types = [
+    "Ancient cities",
+    "Artifacts",
+    "Inscriptions",
+    "Manuscripts",
+    "Architecture",
+    "Daily life",
+    "Geography",
+    "Reconstructions"
+  ];
+
+  const records = [];
+
+  function add(
+    id, title, type, date, region, scripture,
+    description, significance, limitation,
+    source, lat = null, lon = null, direct = ""
+  ) {
+    records.push({
+      id, title, type, date, region, scripture,
+      description, significance, limitation,
+      source, lat, lon, direct
+    });
+  }
+
+  // ANCIENT CITIES
+
+  add(
+    "VE001", "Jerusalem", "Ancient cities",
+    "Bronze Age to present", "Judah / Judea",
+    "2 Samuel 5; 1 Kings 6; Matthew 21; Acts 2",
+    "A major ancient city with remains from numerous historical periods.",
+    "Central to the biblical monarchy, temple worship, the ministry of Jesus and early Christianity.",
+    "Archaeological remains belong to different periods. Modern Jerusalem cannot be treated as an unchanged ancient city.",
+    "pleiades", 31.778, 35.235
+  );
+
+  add(
+    "VE002", "Samaria", "Ancient cities",
+    "Iron Age onward", "Northern Kingdom of Israel",
+    "1 Kings 16:24; 2 Kings 17; Micah 1:6",
+    "The ancient royal capital established under Omri, located at modern Sebastia.",
+    "Material remains illuminate the political and economic history of the northern kingdom.",
+    "Later Roman remains must be distinguished from the Iron Age capital.",
+    "pleiades", 32.276, 35.190
+  );
+
+  add(
+    "VE003", "Lachish", "Ancient cities",
+    "Bronze and Iron Ages", "Judah",
+    "Joshua 10; 2 Kings 18:14; Micah 1:13",
+    "A fortified settlement identified with Tell ed-Duweir.",
+    "Excavations and Assyrian reliefs provide complementary evidence for the importance of Lachish and the 701 BCE campaign.",
+    "Individual destruction layers require independent dating and interpretation.",
+    "bas", 31.565, 34.848
+  );
+
+  add(
+    "VE004", "Jericho", "Ancient cities",
+    "Neolithic period onward", "Jordan Valley",
+    "Joshua 2–6; Luke 19:1–10",
+    "Tell es-Sultan preserves successive settlement phases and ancient fortifications.",
+    "Important for understanding the long settlement history of the Jordan Valley.",
+    "The chronology and relationship between excavated destruction levels and Joshua remain disputed.",
+    "unesco", 31.871, 35.444,
+    "https://whc.unesco.org/en/list/1687/"
+  );
+
+  add(
+    "VE005", "Megiddo", "Ancient cities",
+    "Bronze and Iron Ages", "Northern Levant",
+    "Judges 5:19; 1 Kings 9:15; 2 Kings 23:29",
+    "A strategic ancient settlement overlooking the Jezreel Valley.",
+    "Provides evidence of urban development, fortifications and regional trade.",
+    "The attribution of particular architectural phases to biblical kings remains debated.",
+    "unesco", 32.585, 35.183,
+    "https://whc.unesco.org/en/list/1108/"
+  );
+
+  add(
+    "VE006", "Hazor", "Ancient cities",
+    "Bronze and Iron Ages", "Upper Galilee",
+    "Joshua 11; Judges 4; 1 Kings 9:15",
+    "A major Canaanite urban center and later Iron Age settlement.",
+    "Its buildings, inscriptions and destruction layers illuminate northern Israel's history.",
+    "Archaeological destruction does not independently identify the responsible individuals.",
+    "unesco", 33.018, 35.568,
+    "https://whc.unesco.org/en/list/1108/"
+  );
+
+  add(
+    "VE007", "Tel Dan", "Ancient cities",
+    "Bronze and Iron Ages", "Upper Jordan Valley",
+    "Judges 18; 1 Kings 12:29",
+    "An archaeological site containing fortifications, settlement remains and a cultic precinct.",
+    "Relevant to northern Israelite religious and political history.",
+    "The precise relationship of individual structures to Jeroboam requires interpretation.",
+    "pleiades", 33.249, 35.652
+  );
+
+  add(
+    "VE008", "Beersheba", "Ancient cities",
+    "Iron Age remains", "Negev",
+    "Genesis 21:31; Genesis 26:33; Amos 5:5",
+    "Tel Beersheba preserves a planned ancient settlement.",
+    "Its streets, storage buildings and water installations illustrate urban organization.",
+    "Iron Age remains do not directly establish the historicity of patriarchal narratives.",
+    "unesco", 31.245, 34.841,
+    "https://whc.unesco.org/en/list/1108/"
+  );
+
+  add(
+    "VE009", "Nineveh", "Ancient cities",
+    "Especially Neo-Assyrian period", "Mesopotamia",
+    "Jonah 1–4; Nahum 1–3; Zephaniah 2:13",
+    "An Assyrian imperial capital near modern Mosul.",
+    "Palace reliefs and cuneiform archives illuminate Assyrian administration and ideology.",
+    "Imperial records express royal perspectives rather than neutral historical reporting.",
+    "british", 36.359, 43.154
+  );
+
+  add(
+    "VE010", "Babylon", "Ancient cities",
+    "Especially first millennium BCE", "Babylonia",
+    "2 Kings 24–25; Daniel 1–5; Jeremiah 50–51",
+    "A major Mesopotamian city with monumental religious and royal architecture.",
+    "Relevant to the Babylonian exile and ancient imperial culture.",
+    "Babylon in Revelation should not automatically be identified with the archaeological city.",
+    "unesco", 32.543, 44.421,
+    "https://whc.unesco.org/en/list/278/"
+  );
+
+  add(
+    "VE011", "Ur", "Ancient cities",
+    "Third and second millennia BCE", "Southern Mesopotamia",
+    "Genesis 11:28–31",
+    "An ancient Mesopotamian city known for its ziggurat and royal cemetery.",
+    "Provides background for ancient Mesopotamian urban and religious life.",
+    "The identification of Abraham's Ur with this particular city is traditional and debated.",
+    "british", 30.963, 46.103
+  );
+
+  add(
+    "VE012", "Susa", "Ancient cities",
+    "Ancient Elam and Persian period", "Iran",
+    "Esther 1:2; Nehemiah 1:1; Daniel 8:2",
+    "A major ancient administrative and royal center.",
+    "Its palace remains illuminate Achaemenid imperial culture.",
+    "Persian palace archaeology does not independently verify every event in Esther.",
+    "unesco", 32.190, 48.257,
+    "https://whc.unesco.org/en/list/1455/"
+  );
+
+  add(
+    "VE013", "Ephesus", "Ancient cities",
+    "Hellenistic and Roman periods", "Asia Minor",
+    "Acts 19; Ephesians; Revelation 2:1–7",
+    "A major ancient city containing theaters, streets and monumental public buildings.",
+    "Provides regional context for early Christian communities and Paul's ministry.",
+    "Some prominent surviving structures postdate Paul's lifetime.",
+    "unesco", 37.941, 27.342,
+    "https://whc.unesco.org/en/list/1018/"
+  );
+
+  add(
+    "VE014", "Corinth", "Ancient cities",
+    "Greek and Roman periods", "Greece",
+    "Acts 18; 1 Corinthians; 2 Corinthians",
+    "An ancient city rebuilt as a Roman colony in 44 BCE.",
+    "Its civic and commercial environment illuminates the Corinthian letters.",
+    "Greek and Roman settlement phases must be distinguished.",
+    "pleiades", 37.906, 22.879
+  );
+
+  add(
+    "VE015", "Athens", "Ancient cities",
+    "Classical to Roman periods", "Greece",
+    "Acts 17:15–34",
+    "An ancient intellectual, civic and religious center.",
+    "Provides background for Paul's engagement with Greek religious and philosophical traditions.",
+    "The surviving monuments represent different historical periods.",
+    "unesco", 37.972, 23.726,
+    "https://whc.unesco.org/en/list/404/"
+  );
+
+  add(
+    "VE016", "Rome", "Ancient cities",
+    "Roman Republic and Empire", "Italy",
+    "Acts 28; Romans; Philippians 4:22",
+    "The political center of the Roman Empire.",
+    "Illuminates the imperial setting of early Christianity.",
+    "Individual monuments cannot all be assigned to the first-century Christian community.",
+    "pleiades", 41.892, 12.486
+  );
+
+  add(
+    "VE017", "Caesarea Maritima", "Ancient cities",
+    "Herodian and Roman periods", "Mediterranean coast",
+    "Acts 10; Acts 23–26",
+    "A harbor city developed under Herod the Great.",
+    "Its theater, harbor and inscriptions illuminate Roman administration in Judea.",
+    "Present remains include Roman, Byzantine and later construction.",
+    "pleiades", 32.501, 34.892
+  );
+
+  add(
+    "VE018", "Capernaum", "Ancient cities",
+    "Roman and Byzantine periods", "Galilee",
+    "Matthew 4:13; Mark 1:21; John 6:59",
+    "An ancient lakeside settlement associated with Jesus' ministry.",
+    "Settlement remains illuminate village life around the Sea of Galilee.",
+    "The visible monumental synagogue is generally dated later than Jesus' lifetime.",
+    "pleiades", 32.881, 35.575
+  );
+
+  add(
+    "VE019", "Qumran", "Ancient cities",
+    "Second Temple period", "Dead Sea region",
+    "Background to Second Temple Judaism",
+    "An archaeological settlement near caves containing ancient Jewish manuscripts.",
+    "Provides context for the religious and literary world of the late Second Temple period.",
+    "The settlement's precise function and relationship to the scrolls remain debated.",
+    "dss", 31.741, 35.459
+  );
+
+  add(
+    "VE020", "Masada", "Ancient cities",
+    "Herodian and Roman periods", "Judean Desert",
+    "Background to first-century Judea",
+    "A fortified desert site containing Herodian palace complexes.",
+    "Important for studying Herodian architecture and the First Jewish Revolt.",
+    "Masada is not directly named in the canonical Bible.",
+    "unesco", 31.315, 35.353,
+    "https://whc.unesco.org/en/list/1040/"
+  );
+
+  // INSCRIPTIONS AND ARTIFACTS
+
+  add(
+    "VE021", "Tel Dan Stele", "Inscriptions",
+    "Ninth century BCE", "Ancient Israel / Aram",
+    "2 Samuel 7; 1 Kings 12; 2 Kings 8–9",
+    "Fragments of an Aramaic royal victory inscription.",
+    "The widely accepted reading 'House of David' provides evidence for a Davidic dynastic designation.",
+    "The fragments do not verify the complete biblical biography of David.",
+    "israel"
+  );
+
+  add(
+    "VE022", "Mesha Stele", "Inscriptions",
+    "Ninth century BCE", "Moab",
+    "2 Kings 3",
+    "A Moabite royal inscription describing Mesha's achievements.",
+    "Provides an independent Moabite perspective on conflict involving Israel.",
+    "Its royal and religious rhetoric must be considered when comparing it with Kings.",
+    "louvre"
+  );
+
+  add(
+    "VE023", "Merneptah Stele", "Inscriptions",
+    "Approximately 1208 BCE", "Egypt / Canaan",
+    "Background to early Israel",
+    "An Egyptian victory inscription containing an early reference to Israel.",
+    "Documents a group designated Israel in late Bronze Age Canaan.",
+    "It does not identify the origins of Israel or establish the Exodus chronology.",
+    "bas"
+  );
+
+  add(
+    "VE024", "Black Obelisk", "Artifacts",
+    "Approximately 825 BCE", "Assyria",
+    "2 Kings 9–10",
+    "A monument of Shalmaneser III depicting tribute from several rulers.",
+    "An inscription identifies tribute associated with Jehu of the House of Omri.",
+    "The depicted individual may be Jehu or his representative.",
+    "british"
+  );
+
+  add(
+    "VE025", "Taylor Prism", "Inscriptions",
+    "Approximately 691 BCE", "Assyria",
+    "2 Kings 18–19; Isaiah 36–37",
+    "A clay prism recording campaigns of Sennacherib.",
+    "Provides Assyrian evidence of the 701 BCE campaign and pressure on Hezekiah.",
+    "It does not claim that Sennacherib captured Jerusalem and does not establish supernatural explanations.",
+    "oracc", null, null,
+    "https://oracc.museum.upenn.edu/rinap/"
+  );
+
+  add(
+    "VE026", "Lachish Reliefs", "Artifacts",
+    "Early seventh century BCE", "Assyria / Judah",
+    "2 Kings 18; Micah 1:13",
+    "Carved palace panels depicting the Assyrian conquest of Lachish.",
+    "Visual evidence of Assyrian military activity and the representation of conquered communities.",
+    "The reliefs were commissioned by the victorious empire and express royal propaganda.",
+    "british", null, null,
+    "https://www.britishmuseum.org/collection/object/W_1856-0909-14_7"
+  );
+
+  add(
+    "VE027", "Siloam Inscription", "Inscriptions",
+    "Late eighth century BCE, conventional dating", "Jerusalem",
+    "2 Kings 20:20; 2 Chronicles 32:30",
+    "A Hebrew inscription describing the meeting of tunnel excavation teams.",
+    "Important evidence for ancient engineering and Hebrew epigraphy.",
+    "The inscription itself does not name Hezekiah.",
+    "bas"
+  );
+
+  add(
+    "VE028", "Ketef Hinnom Silver Amulets", "Inscriptions",
+    "Late seventh or early sixth century BCE", "Jerusalem",
+    "Numbers 6:24–26",
+    "Small rolled silver amulets preserving Hebrew blessing formulas.",
+    "Contain language closely parallel to the priestly blessing.",
+    "The inscriptions do not establish when the complete Pentateuch reached its final form.",
+    "israel"
+  );
+
+  add(
+    "VE029", "Lachish Letters", "Inscriptions",
+    "Early sixth century BCE", "Judah",
+    "Jeremiah 34:7; 2 Kings 24–25",
+    "Hebrew letters written on pottery fragments.",
+    "Illuminate administration and communication during Judah's final years.",
+    "Proposed connections with particular biblical individuals require caution.",
+    "bas"
+  );
+
+  add(
+    "VE030", "Babylonian Chronicle", "Inscriptions",
+    "Early sixth century BCE events", "Babylonia",
+    "2 Kings 24:8–17",
+    "A cuneiform chronicle recording events including Nebuchadnezzar's campaign against Jerusalem.",
+    "Provides independent chronological evidence for the 597 BCE capture of Jerusalem.",
+    "The surviving chronicle does not cover every event of the later destruction.",
+    "british"
+  );
+
+  add(
+    "VE031", "Cyrus Cylinder", "Inscriptions",
+    "539 BCE or shortly afterward", "Persian Empire",
+    "Ezra 1:1–4; Isaiah 45:1",
+    "A Babylonian foundation inscription issued in the name of Cyrus.",
+    "Illustrates Persian royal restoration rhetoric and policies.",
+    "The inscription does not explicitly mention Jerusalem or the Judean exiles.",
+    "british"
+  );
+
+  add(
+    "VE032", "Pilate Inscription", "Inscriptions",
+    "26–36 CE", "Caesarea Maritima",
+    "Matthew 27; Mark 15; Luke 23; John 18–19",
+    "A damaged Latin inscription naming Pontius Pilate.",
+    "Supports the historical existence and prefectural office of Pilate.",
+    "It contains no account of Jesus' trial or crucifixion.",
+    "israel"
+  );
+
+  add(
+    "VE033", "Gallio Inscription", "Inscriptions",
+    "Mid-first century CE", "Delphi, Greece",
+    "Acts 18:12–17",
+    "Fragments of an imperial letter referring to Gallio as proconsul.",
+    "Provides an important chronological anchor for Paul's Corinthian ministry.",
+    "The inscription does not mention Paul.",
+    "pleiades"
+  );
+
+  add(
+    "VE034", "Flood Tablet — Gilgamesh", "Artifacts",
+    "Seventh century BCE surviving tablet", "Mesopotamia",
+    "Genesis 6–9",
+    "A cuneiform tablet preserving a Mesopotamian flood narrative.",
+    "Provides comparative literary evidence for ancient Near Eastern flood traditions.",
+    "Literary parallels do not independently establish a worldwide flood or a particular direction of borrowing.",
+    "british"
+  );
+
+  add(
+    "VE035", "Law Stele of Hammurabi", "Artifacts",
+    "Eighteenth century BCE", "Babylonia",
+    "Exodus 21–23; Deuteronomy",
+    "A royal monument containing ancient Babylonian legal provisions.",
+    "Provides comparative evidence for ancient Near Eastern law.",
+    "Similar legal provisions do not necessarily establish direct literary dependence.",
+    "louvre"
+  );
+
+  add(
+    "VE036", "Amarna Letters", "Inscriptions",
+    "Fourteenth century BCE", "Egypt / Canaan",
+    "Background to Late Bronze Age Canaan",
+    "Diplomatic correspondence written primarily in Akkadian cuneiform.",
+    "Documents relations between Egypt and regional rulers.",
+    "The term Habiru should not automatically be equated with biblical Hebrews.",
+    "cdli"
+  );
+
+  add(
+    "VE037", "Sea of Galilee Ancient Boat", "Artifacts",
+    "Approximately first century BCE to first century CE", "Galilee",
+    "Mark 4:35–41; Luke 5:1–11",
+    "Remains of an ancient wooden vessel recovered near Ginosar.",
+    "Illustrates the type of maritime technology available around the Sea of Galilee.",
+    "There is no evidence that Jesus or his disciples personally used this boat.",
+    "bas"
+  );
+
+  add(
+    "VE038", "Rosetta Stone", "Inscriptions",
+    "196 BCE", "Ptolemaic Egypt",
+    "Background to Hellenistic Egypt",
+    "A priestly decree written using hieroglyphic, Demotic and Greek scripts.",
+    "Important to the decipherment of Egyptian writing.",
+    "It is not direct evidence for a biblical event.",
+    "british"
+  );
+
+  add(
+    "VE039", "Jehoiachin Ration Tablets", "Inscriptions",
+    "Sixth century BCE", "Babylon",
+    "2 Kings 25:27–30",
+    "Babylonian administrative records associated with provisions for Jehoiachin and his household.",
+    "Illuminate the presence of a former Judean king in Babylon.",
+    "They do not directly establish every detail of the biblical release narrative.",
+    "cdli"
+  );
+
+  add(
+    "VE040", "Samaria Ostraca", "Inscriptions",
+    "Eighth century BCE", "Northern Israel",
+    "Amos 6; 1 Kings 16",
+    "Inscribed pottery fragments recording deliveries.",
+    "Illuminate administration, personal names and agricultural production.",
+    "The quantities and institutional functions require specialist interpretation.",
+    "isac"
+  );
+
+  // MANUSCRIPTS
+
+  add(
+    "VE041", "Great Isaiah Scroll — 1QIsaᵃ", "Manuscripts",
+    "Approximately second century BCE", "Qumran",
+    "Isaiah 1–66",
+    "A substantially complete ancient Hebrew manuscript of Isaiah.",
+    "Enables comparison with later Hebrew textual traditions.",
+    "Its antiquity does not mean every reading is necessarily original.",
+    "scrolls", null, null,
+    "https://dss.collections.imj.org.il/isaiah"
+  );
+
+  add(
+    "VE042", "Pesher Habakkuk — 1QpHab", "Manuscripts",
+    "Late Second Temple period", "Qumran",
+    "Habakkuk 1–2",
+    "A manuscript interpreting passages of Habakkuk in relation to the community's circumstances.",
+    "Documents an ancient Jewish practice of prophetic interpretation.",
+    "Its interpretations represent a particular community rather than all ancient Judaism.",
+    "scrolls", null, null,
+    "https://dss.collections.imj.org.il/habakkuk"
+  );
+
+  add(
+    "VE043", "Community Rule — 1QS", "Manuscripts",
+    "Late Second Temple period", "Qumran",
+    "Background to Second Temple Jewish communities",
+    "An ancient Jewish document concerning community organization and discipline.",
+    "Provides evidence of religious organization and covenantal practices.",
+    "It is not a canonical biblical manuscript.",
+    "scrolls"
+  );
+
+  add(
+    "VE044", "Temple Scroll — 11Q19", "Manuscripts",
+    "Late Second Temple period", "Qumran",
+    "Exodus; Leviticus; Deuteronomy",
+    "An extensive ancient Jewish composition concerning temple and legal arrangements.",
+    "Illustrates interpretation and development of biblical legislation.",
+    "Its architectural descriptions should not be mistaken for an excavated temple.",
+    "scrolls"
+  );
+
+  add(
+    "VE045", "Codex Sinaiticus", "Manuscripts",
+    "Fourth century CE", "Eastern Mediterranean",
+    "Greek Old and New Testaments",
+    "An early Greek biblical codex containing the complete New Testament.",
+    "An important witness to early Christian textual transmission.",
+    "The codex contains corrections and textual differences requiring specialist analysis.",
+    "sinaiticus"
+  );
+
+  add(
+    "VE046", "Codex Vaticanus — Vat.gr.1209", "Manuscripts",
+    "Fourth century CE", "Eastern Mediterranean",
+    "Greek Old Testament and most of the New Testament",
+    "An early biblical manuscript preserved in the Vatican Library.",
+    "A major textual witness for biblical scholarship.",
+    "Its surviving contents are incomplete and its readings must be compared with other witnesses.",
+    "vatican", null, null,
+    "https://digi.vatlib.it/view/MSS_Vat.gr.1209"
+  );
+
+  add(
+    "VE047", "Papyrus 52 — P52", "Manuscripts",
+    "Second century CE, approximate and debated", "Egyptian provenance",
+    "John 18:31–33; John 18:37–38",
+    "A small fragment of a Greek manuscript of John.",
+    "Provides early manuscript evidence for the circulation of John's Gospel.",
+    "Palaeographic dating cannot establish an exact year of production.",
+    "ntvmr"
+  );
+
+  add(
+    "VE048", "Papyrus 46 — P46", "Manuscripts",
+    "Approximately 200 CE", "Egyptian provenance",
+    "Pauline letters",
+    "An early manuscript containing a substantial collection of Pauline epistles.",
+    "Important for studying the circulation and transmission of Paul's letters.",
+    "The surviving manuscript is incomplete and its dating is approximate.",
+    "chester"
+  );
+
+  add(
+    "VE049", "Papyrus 66 — P66", "Manuscripts",
+    "Around 200 CE, approximate", "Egyptian provenance",
+    "Gospel of John",
+    "An extensive early Greek manuscript of John's Gospel.",
+    "Provides evidence of early textual readings and scribal corrections.",
+    "The date is estimated and the manuscript contains copying variations.",
+    "ntvmr"
+  );
+
+  add(
+    "VE050", "Papyrus 75 — P75", "Manuscripts",
+    "Late second or third century CE, debated", "Egyptian provenance",
+    "Luke; John",
+    "A papyrus codex containing substantial portions of Luke and John.",
+    "Important for comparing early Gospel textual traditions.",
+    "Textual agreement with another manuscript does not automatically establish originality.",
+    "ntvmr"
+  );
+
+  // ARCHITECTURE
+
+  add(
+    "VE051", "Hezekiah's Tunnel", "Architecture",
+    "Commonly associated with late eighth century BCE", "Jerusalem",
+    "2 Kings 20:20; 2 Chronicles 32:30",
+    "An ancient water channel connecting the Gihon Spring area to the Siloam area.",
+    "Illustrates water engineering in ancient Jerusalem.",
+    "Its precise construction history and royal attribution involve archaeological interpretation.",
+    "bas", 31.772, 35.235
+  );
+
+  add(
+    "VE052", "Pool of Siloam", "Architecture",
+    "Second Temple period installation", "Jerusalem",
+    "John 9:1–11",
+    "A monumental ancient pool with excavated stone steps.",
+    "Provides historical geographical context for John's narrative.",
+    "The structure does not independently verify the healing described in John.",
+    "israel", 31.770, 35.235
+  );
+
+  add(
+    "VE053", "Pool of Bethesda", "Architecture",
+    "Ancient and later construction phases", "Jerusalem",
+    "John 5:1–15",
+    "A reservoir complex near the traditional location of the Sheep Gate.",
+    "Provides archaeological context for the geographical setting of John 5.",
+    "The remains do not independently verify the miracle narrative.",
+    "pleiades", 31.781, 35.236
+  );
+
+  add(
+    "VE054", "Ephesus Great Theatre", "Architecture",
+    "Hellenistic and Roman construction", "Asia Minor",
+    "Acts 19:29–41",
+    "A monumental theater built into the hillside at Ephesus.",
+    "Illustrates the civic setting of the disturbance described in Acts.",
+    "The surviving theater includes construction and enlargement from different periods.",
+    "unesco", 37.941, 27.341,
+    "https://whc.unesco.org/en/list/1018/"
+  );
+
+  add(
+    "VE055", "Arad Sanctuary", "Architecture",
+    "Iron Age", "Judah / Negev",
+    "Deuteronomy 12; 2 Kings 23",
+    "An excavated Judahite sanctuary within a fortress.",
+    "Provides evidence of religious architecture and worship outside Jerusalem.",
+    "Its abandonment and relationship to royal religious reforms remain debated.",
+    "bas", 31.280, 35.125
+  );
+
+  add(
+    "VE056", "Arch of Titus", "Architecture",
+    "Shortly after 81 CE", "Rome",
+    "Historical background to the destruction of Jerusalem in 70 CE",
+    "A Roman triumphal monument depicting spoils from Jerusalem.",
+    "Its relief preserves Roman representations of temple objects including a menorah.",
+    "The monument expresses Roman imperial victory ideology.",
+    "met", 41.890, 12.489
+  );
+
+  add(
+    "VE057", "Western Wall and Temple Platform", "Architecture",
+    "Herodian period and later modifications", "Jerusalem",
+    "Matthew 24:1–2; Mark 13:1–2",
+    "Surviving retaining-wall structures associated with the enlarged temple platform.",
+    "Illustrates monumental construction in the Second Temple period.",
+    "The Western Wall is not a surviving wall of the temple sanctuary itself.",
+    "israel", 31.777, 35.234
+  );
+
+  // GEOGRAPHY
+
+  add(
+    "VE058", "Sea of Galilee", "Geography",
+    "Ancient to modern", "Northern Israel",
+    "Matthew 4:18; Mark 4; John 6",
+    "A freshwater lake central to several Gospel narratives.",
+    "Provides geographic context for fishing, travel and settlement.",
+    "Modern shorelines and water levels vary from ancient conditions.",
+    "pleiades", 32.820, 35.588
+  );
+
+  add(
+    "VE059", "Dead Sea", "Geography",
+    "Ancient to modern", "Jordan Rift Valley",
+    "Genesis 14:3; Ezekiel 47:8",
+    "A hypersaline lake bordered by desert landscapes.",
+    "Important for understanding regional geography and the preservation environment of nearby manuscripts.",
+    "Modern water levels differ substantially from historical conditions.",
+    "pleiades", 31.500, 35.470
+  );
+
+  add(
+    "VE060", "Jordan River", "Geography",
+    "Ancient to modern", "Jordan Valley",
+    "Joshua 3; Matthew 3:13–17",
+    "A river connecting the northern lake region with the Dead Sea.",
+    "Central to multiple biblical geographic and religious traditions.",
+    "The map marks a representative river location, not an exact biblical event location.",
+    "pleiades", 31.840, 35.545
+  );
+
+  add(
+    "VE061", "Mount of Olives", "Geography",
+    "Ancient to modern", "Jerusalem",
+    "Zechariah 14:4; Matthew 24:3; Acts 1:12",
+    "A ridge east of Jerusalem's Old City.",
+    "Provides geographic context for biblical narratives and religious traditions.",
+    "Individual traditional event locations may not be archaeologically demonstrable.",
+    "pleiades", 31.778, 35.245
+  );
+
+  add(
+    "VE062", "Mount Carmel", "Geography",
+    "Ancient to modern", "Northern Israel",
+    "1 Kings 18; Amos 9:3",
+    "A mountain range extending toward the Mediterranean.",
+    "Provides the regional setting for traditions concerning Elijah.",
+    "The exact location of Elijah's confrontation cannot be established archaeologically.",
+    "pleiades", 32.730, 35.050
+  );
+
+  // DAILY LIFE
+
+  add(
+    "VE063", "Ancient Oil Lamps", "Daily life",
+    "Bronze Age through Byzantine period", "Ancient Mediterranean",
+    "Psalm 119:105; Matthew 25:1–13",
+    "Ceramic and other vessels designed to burn oil using a wick.",
+    "Illustrate domestic lighting and biblical lamp imagery.",
+    "Lamp shapes changed considerably across historical periods.",
+    "met"
+  );
+
+  add(
+    "VE064", "Ancient Storage Jars", "Daily life",
+    "Bronze and Iron Ages onward", "Ancient Near East",
+    "1 Kings 17:12–16; Jeremiah 32:14",
+    "Ceramic containers used for storing and transporting provisions.",
+    "Illuminate household economics, agriculture and trade.",
+    "A vessel's exact contents require contextual or residue evidence.",
+    "isac"
+  );
+
+  add(
+    "VE065", "Ancient Seals and Seal Impressions", "Daily life",
+    "Bronze and Iron Ages onward", "Ancient Near East",
+    "Jeremiah 32:10; Esther 8:8",
+    "Engraved objects and impressions used in administrative and personal transactions.",
+    "Illuminate ancient systems of authentication, ownership and authority.",
+    "Objects without secure archaeological provenance require heightened authenticity scrutiny.",
+    "met"
+  );
+
+  add(
+    "VE066", "Roman Coins", "Daily life",
+    "Roman Republic and Empire", "Roman Mediterranean",
+    "Matthew 22:19–21; Mark 12:42",
+    "Coins carrying portraits, inscriptions and official symbols.",
+    "Illustrate ancient monetary systems and imperial political imagery.",
+    "The precise coin used in an individual Gospel narrative is generally unknown.",
+    "british"
+  );
+
+  add(
+    "VE067", "Ancient Agricultural Implements", "Daily life",
+    "Multiple ancient periods", "Ancient Near East",
+    "Isaiah 2:4; Amos 9:13; Matthew 13",
+    "Tools associated with cultivation and harvesting.",
+    "Provide material context for agricultural language and parables.",
+    "Tools should be compared using regional and chronological context.",
+    "isac"
+  );
+
+  add(
+    "VE068", "Ancient Weights and Measures", "Daily life",
+    "Bronze and Iron Ages onward", "Ancient Near East",
+    "Leviticus 19:35–36; Proverbs 11:1; Micah 6:11",
+    "Physical weights used in economic exchanges.",
+    "Provide context for biblical concerns about commercial honesty.",
+    "Weight standards differed by place and historical period.",
+    "british"
+  );
+
+  add(
+    "VE069", "Ancient Writing Materials", "Daily life",
+    "Multiple ancient periods", "Ancient Near East",
+    "Jeremiah 36; Ezekiel 4:1; 2 John 12",
+    "Examples include clay tablets, inscribed pottery, papyrus and parchment.",
+    "Illustrate the technologies that supported ancient literary transmission.",
+    "Survival rates differ substantially between materials and environments.",
+    "cdli"
+  );
+
+  // RECONSTRUCTIONS
+
+  add(
+    "VE070", "Second Temple Jerusalem Model", "Reconstructions",
+    "Modern model representing Jerusalem around 66 CE", "Jerusalem",
+    "Matthew 24; John 2:13–22; Acts 2",
+    "A modern architectural reconstruction presented at the Israel Museum.",
+    "Helps visualize the urban environment of late Second Temple Jerusalem.",
+    "The model incorporates scholarly interpretation and is not an ancient surviving structure.",
+    "israel"
+  );
+
+  add(
+    "VE071", "Reconstructed Arad Sanctuary", "Reconstructions",
+    "Modern museum reconstruction of Iron Age remains", "Judah",
+    "Deuteronomy 12; 2 Kings 23",
+    "A museum presentation illustrating the arrangement of the excavated sanctuary.",
+    "Helps visitors understand the organization of ancient religious space.",
+    "Reconstructed arrangements must be distinguished from surviving original architecture.",
+    "bas"
+  );
+
+  add(
+    "VE072", "Mesopotamian Palace and Temple Galleries", "Reconstructions",
+    "Modern displays of ancient materials", "Mesopotamia",
+    "2 Kings 17–25; Isaiah; Daniel",
+    "Museum presentations of architecture, sculpture and material culture.",
+    "Enable comparison of ancient imperial environments.",
+    "Museum installation choices do not reproduce ancient settings with complete certainty.",
+    "isac"
+  );
+
+  const root = document.createElement("div");
+  root.className = "dbve";
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+      .dbve {
+        color: #f1efe7;
+        line-height: 1.65;
+      }
+
+      .dbve * {
+        box-sizing: border-box;
+      }
+
+      .dbve h2, .dbve h3, .dbve h4 {
+        color: #e0c38a;
+        margin-top: 0;
+      }
+
+      .dbve .veHero {
+        padding: 30px 22px;
+        border: 1px solid #494133;
+        border-radius: 18px;
+        background:
+          radial-gradient(
+            ellipse at top right,
+            #55442b55,
+            transparent 65%
+          ),
+          #171814;
+      }
+
+      .dbve .veEyebrow {
+        color: #c9aa70;
+        font-size: 11px;
+        letter-spacing: 3px;
+      }
+
+      .dbve .veMuted {
+        color: #aaa99e;
+      }
+
+      .dbve .veStats {
+        display: grid;
+        grid-template-columns:
+          repeat(auto-fit, minmax(110px, 1fr));
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .dbve .veStat {
+        padding: 15px;
+        border: 1px solid #34352e;
+        background: #20211d;
+        border-radius: 12px;
+      }
+
+      .dbve .veStat strong {
+        display: block;
+        font-size: 27px;
+        color: #e0c38a;
+      }
+
+      .dbve .vePanel {
+        background: #191a17;
+        border: 1px solid #34352e;
+        border-radius: 14px;
+        padding: 18px;
+        margin-top: 18px;
+      }
+
+      .dbve .veControls {
+        display: grid;
+        grid-template-columns:
+          repeat(auto-fit, minmax(170px, 1fr));
+        gap: 12px;
+      }
+
+      .dbve input,
+      .dbve select,
+      .dbve textarea,
+      .dbve button {
+        background: #24251f;
+        color: #f1efe7;
+        border: 1px solid #45443a;
+        padding: 12px;
+        border-radius: 8px;
+        font: inherit;
+      }
+
+      .dbve input,
+      .dbve select,
+      .dbve textarea {
+        width: 100%;
+      }
+
+      .dbve button {
+        cursor: pointer;
+      }
+
+      .dbve button:hover,
+      .dbve button:focus-visible {
+        border-color: #d9b778;
+        background: #383426;
+      }
+
+      .dbve button:disabled {
+        opacity: .4;
+        cursor: default;
+      }
+
+      .dbve a {
+        color: #e0c38a;
+        overflow-wrap: anywhere;
+      }
+
+      .dbve .veTabs,
+      .dbve .veActions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .dbve .veActive {
+        background: #59482f;
+        border-color: #c9aa70;
+      }
+
+      .dbve .veGrid {
+        display: grid;
+        grid-template-columns:
+          repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .dbve .veCard {
+        padding: 16px;
+        border: 1px solid #393a31;
+        border-radius: 14px;
+        background: #20211d;
+        min-width: 0;
+      }
+
+      .dbve .veVisual {
+        min-height: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background:
+          radial-gradient(
+            ellipse,
+            #524329,
+            #191a17
+          );
+        border: 1px solid #484131;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .dbve .veSymbol {
+        font-size: 54px;
+        line-height: 1.2;
+      }
+
+      .dbve .veTag {
+        display: inline-block;
+        padding: 4px 9px;
+        border: 1px solid #62543b;
+        border-radius: 20px;
+        color: #d7bd89;
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .dbve .veLimit {
+        background: #302b21;
+        border-left: 3px solid #c9aa70;
+        padding: 12px;
+        border-radius: 5px;
+        color: #d8cbb2;
+      }
+
+      .dbve iframe {
+        width: 100%;
+        height: 380px;
+        border: 1px solid #45443a;
+        border-radius: 10px;
+        background: #24251f;
+      }
+
+      .dbve .veSource {
+        padding: 13px 0;
+        border-bottom: 1px solid #34352e;
+      }
+
+      .dbve .veMapLayout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 14px;
+      }
+
+      .dbve textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .dbve .veImage {
+        display: block;
+        width: 100%;
+        max-height: 360px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #111;
+      }
+
+      @media(max-width: 700px) {
+        .dbve .veMapLayout {
+          grid-template-columns: 1fr;
+        }
+
+        .dbve iframe {
+          height: 300px;
+        }
+
+        .dbve .veHero {
+          padding: 20px 14px;
+        }
+
+        .dbve .veGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <section class="veHero">
+      <div class="veEyebrow">
+        DESERTBIBLE • VISUAL RESEARCH
+      </div>
+
+      <h2>Visual Exploration</h2>
+
+      <p>
+        Explore the material world of Scripture
+        through ancient geography, manuscripts,
+        archaeological discoveries, inscriptions,
+        architecture and historical collections.
+      </p>
+
+      <div class="veStats">
+        <div class="veStat">
+          <strong id="veTotal"></strong>
+          Research records
+        </div>
+
+        <div class="veStat">
+          <strong id="veTypes"></strong>
+          Visual categories
+        </div>
+
+        <div class="veStat">
+          <strong id="veSources"></strong>
+          Research resources
+        </div>
+
+        <div class="veStat">
+          <strong id="vePlaces"></strong>
+          Mapped locations
+        </div>
+      </div>
+    </section>
+
+    <section class="vePanel">
+      <h3>Explore the ancient world</h3>
+
+      <div class="veTabs">
+        <button data-view="gallery">
+          Visual gallery
+        </button>
+
+        <button data-view="map">
+          Geographic explorer
+        </button>
+
+        <button data-view="sources">
+          Digital collections
+        </button>
+
+        <button data-view="saved">
+          Saved discoveries
+        </button>
+
+        <button data-view="notes">
+          Research notebook
+        </button>
+      </div>
+
+      <div class="veControls" style="margin-top:18px">
+
+        <label>
+          Search
+          <input id="veSearch"
+            placeholder="Micah, Lachish, Isaiah, Rome...">
+        </label>
+
+        <label>
+          Category
+          <select id="veCategory"></select>
+        </label>
+
+        <label>
+          Biblical reference
+          <input id="veScripture"
+            placeholder="Genesis, John, Micah...">
+        </label>
+
+      </div>
+
+      <div class="veActions">
+
+        <button id="veReset">
+          Reset filters
+        </button>
+
+        <button id="veExport">
+          Download research index
+        </button>
+
+      </div>
+    </section>
+
+    <section class="vePanel" id="veOutput"></section>
+
+    <section class="vePanel">
+
+      <h3>Visual evidence standards</h3>
+
+      <p>
+        Archaeological photographs, manuscript
+        facsimiles, modern maps and historical
+        reconstructions are different forms of
+        evidence and must not be confused.
+      </p>
+
+      <p class="veLimit">
+        A site's existence does not establish every
+        biblical event associated with it.
+        Reconstructions contain interpretation.
+        Modern map markers represent approximate
+        locations rather than ancient boundaries
+        or confirmed event locations.
+      </p>
+
+      <p class="veMuted">
+        Images remain subject to the rights and
+        permitted uses specified by their
+        respective institutions.
+      </p>
+
+      <button id="veClose">
+        Close Visual Exploration
+      </button>
+
+    </section>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  const output = $("veOutput");
+
+  const storageKey =
+    "DesertBible.visualExploration.v1";
+
+  let state = {
+    saved: [],
+    notes: ""
+  };
+
+  try {
+    const existing = JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    );
+
+    state.saved = Array.isArray(existing.saved)
+      ? existing.saved
+      : [];
+
+    state.notes =
+      typeof existing.notes === "string"
+        ? existing.notes
+        : "";
+  } catch (error) {
+    console.warn("Visual exploration storage:", error);
+  }
+
+  let activeView = "gallery";
+  let page = 0;
+  let selectedPlace = null;
+
+  const pageSize = 9;
+
+  const symbols = {
+    "Ancient cities": "🏛",
+    "Artifacts": "🏺",
+    "Inscriptions": "𒀀",
+    "Manuscripts": "📜",
+    "Architecture": "🏛",
+    "Daily life": "⚖",
+    "Geography": "🗺",
+    "Reconstructions": "🏗"
+  };
+
+  function element(tag, text = "", className = "") {
+    const node = document.createElement(tag);
+
+    node.textContent = text;
+
+    if (className) {
+      node.className = className;
+    }
+
+    return node;
+  }
+
+  function link(text, url) {
+    const node = element("a", text);
+
+    node.href = url;
+    node.target = "_blank";
+    node.rel = "noopener noreferrer";
+
+    return node;
+  }
+
+  function button(text, handler) {
+    const node = element("button", text);
+
+    node.type = "button";
+
+    node.addEventListener("click", handler);
+
+    return node;
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(state)
+      );
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function field(parent, title, value) {
+    const p = element("p");
+
+    p.append(
+      element("strong", title + ": "),
+      document.createTextNode(value)
+    );
+
+    parent.appendChild(p);
+  }
+
+  function filtered() {
+    const search =
+      $("veSearch").value.trim().toLowerCase();
+
+    const scripture =
+      $("veScripture").value.trim().toLowerCase();
+
+    const category = $("veCategory").value;
+
+    return records.filter(record => {
+
+      const text = [
+        record.title,
+        record.type,
+        record.region,
+        record.date,
+        record.scripture,
+        record.description,
+        record.significance,
+        record.limitation
+      ].join(" ").toLowerCase();
+
+      return (
+        (!search || text.includes(search)) &&
+        (!scripture ||
+          record.scripture
+            .toLowerCase()
+            .includes(scripture)) &&
+        (!category || record.type === category)
+      );
+    });
+  }
+
+  function mapURL(record) {
+    const delta = 0.05;
+
+    const bounds = [
+      record.lon - delta,
+      record.lat - delta,
+      record.lon + delta,
+      record.lat + delta
+    ].join(",");
+
+    return (
+      "https://www.openstreetmap.org/export/embed.html?" +
+      "bbox=" + encodeURIComponent(bounds) +
+      "&layer=mapnik" +
+      "&marker=" +
+      encodeURIComponent(
+        record.lat + "," + record.lon
+      )
+    );
+  }
+
+  function fullMapURL(record) {
+    return (
+      "https://www.openstreetmap.org/" +
+      "?mlat=" + record.lat +
+      "&mlon=" + record.lon +
+      "#map=13/" +
+      record.lat + "/" + record.lon
+    );
+  }
+
+  function toggleSaved(record) {
+    if (state.saved.includes(record.id)) {
+      state.saved = state.saved.filter(
+        id => id !== record.id
+      );
+    } else {
+      state.saved.push(record.id);
+    }
+
+    if (!saveState()) {
+      alert(
+        "Browser storage is unavailable. " +
+        "This selection is saved only for this session."
+      );
+    }
+
+    render();
+  }
+
+  function makeCitation(record) {
+    const source = sources[record.source];
+
+    return [
+      "DesertBible Visual Exploration",
+      "Record: " + record.id,
+      "Title: " + record.title,
+      "Date: " + record.date,
+      "Region: " + record.region,
+      "Biblical references: " + record.scripture,
+      "Description: " + record.description,
+      "Research significance: " + record.significance,
+      "Evidence limitations: " + record.limitation,
+      "Resource: " + source.name,
+      "URL: " + (record.direct || source.url),
+      "Access date: " +
+        new Date().toISOString().slice(0, 10)
+    ].join("\n");
+  }
+
+  function download(text, filename) {
+    const blob = new Blob(
+      [text],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = filename;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  }
+
+  async function copyCitation(record) {
+    try {
+      await navigator.clipboard.writeText(
+        makeCitation(record)
+      );
+
+      alert("Research record copied.");
+    } catch (error) {
+      download(
+        makeCitation(record),
+        record.id + "-citation.txt"
+      );
+    }
+  }
+
+  function imageSearch(record) {
+    const url =
+      "https://commons.wikimedia.org/w/index.php" +
+      "?search=" +
+      encodeURIComponent(record.title) +
+      "&title=Special:MediaSearch&type=image";
+
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+  function createCard(record) {
+    const card = element("article", "", "veCard");
+
+    const visual =
+      element("div", "", "veVisual");
+
+    visual.append(
+      element(
+        "div",
+        symbols[record.type] || "◈",
+        "veSymbol"
+      ),
+      element(
+        "small",
+        "Category illustration — not an artifact photograph",
+        "veMuted"
+      )
+    );
+
+    card.appendChild(visual);
+
+    card.append(
+      element("span", record.type, "veTag"),
+      element("h3", record.title),
+      element(
+        "p",
+        record.date + " • " + record.region,
+        "veMuted"
+      )
+    );
+
+    field(card, "Scripture", record.scripture);
+
+    card.appendChild(
+      element("p", record.description)
+    );
+
+    const detail = element("details");
+
+    detail.appendChild(
+      element("summary", "Evidence and research significance")
+    );
+
+    field(
+      detail,
+      "Historical significance",
+      record.significance
+    );
+
+    detail.appendChild(
+      element(
+        "p",
+        record.limitation,
+        "veLimit"
+      )
+    );
+
+    field(
+      detail,
+      "Research record",
+      record.id
+    );
+
+    card.appendChild(detail);
+
+    const source = sources[record.source];
+
+    const sourceLine = element("p");
+
+    sourceLine.append(
+      element("strong", "Institution / resource: "),
+      link(
+        source.name,
+        record.direct || source.url
+      )
+    );
+
+    card.appendChild(sourceLine);
+
+    const actions =
+      element("div", "", "veActions");
+
+    actions.append(
+      button(
+        record.direct
+          ? "Open source record"
+          : "Browse collection",
+        () => window.open(
+          record.direct || source.url,
+          "_blank",
+          "noopener,noreferrer"
+        )
+      ),
+
+      button(
+        "Find images",
+        () => imageSearch(record)
+      ),
+
+      button(
+        state.saved.includes(record.id)
+          ? "Remove saved"
+          : "Save discovery",
+        () => toggleSaved(record)
+      ),
+
+      button(
+        "Copy citation",
+        () => copyCitation(record)
+      )
+    );
+
+    if (
+      Number.isFinite(record.lat) &&
+      Number.isFinite(record.lon)
+    ) {
+      actions.appendChild(
+        button("Explore map", () => {
+          selectedPlace = record.id;
+          activeView = "map";
+          render();
+        })
+      );
+    }
+
+    card.appendChild(actions);
+
+    return card;
+  }
+
+  function renderGallery(list, heading) {
+    output.append(
+      element("h3", heading),
+      element(
+        "p",
+        list.length + " matching research records",
+        "veMuted"
+      )
+    );
+
+    if (!list.length) {
+      output.appendChild(
+        element(
+          "p",
+          "No matching records. Adjust your filters."
+        )
+      );
+
+      return;
+    }
+
+    const pages = Math.ceil(
+      list.length / pageSize
+    );
+
+    page = Math.min(
+      Math.max(page, 0),
+      pages - 1
+    );
+
+    const gallery =
+      element("div", "", "veGrid");
+
+    list.slice(
+      page * pageSize,
+      (page + 1) * pageSize
+    ).forEach(record => {
+      gallery.appendChild(createCard(record));
+    });
+
+    output.appendChild(gallery);
+
+    const actions =
+      element("div", "", "veActions");
+
+    const previous = button(
+      "Previous",
+      () => {
+        page--;
+        render();
+        output.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    );
+
+    previous.disabled = page === 0;
+
+    const next = button(
+      "Next",
+      () => {
+        page++;
+        render();
+        output.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    );
+
+    next.disabled = page >= pages - 1;
+
+    actions.append(
+      previous,
+      element(
+        "span",
+        "Page " + (page + 1) + " of " + pages
+      ),
+      next
+    );
+
+    output.appendChild(actions);
+  }
+
+  function renderMap() {
+    output.append(
+      element("h3", "Geographic Explorer"),
+      element(
+        "p",
+        "Select a historical location to explore its modern geographical setting.",
+        "veMuted"
+      )
+    );
+
+    const places = filtered().filter(
+      record =>
+        Number.isFinite(record.lat) &&
+        Number.isFinite(record.lon)
+    );
+
+    if (!places.length) {
+      output.appendChild(
+        element(
+          "p",
+          "No mapped locations match these filters."
+        )
+      );
+
+      return;
+    }
+
+    let current = places.find(
+      record => record.id === selectedPlace
+    );
+
+    if (!current) {
+      current = places[0];
+    }
+
+    selectedPlace = current.id;
+
+    const selector = element("select");
+
+    selector.setAttribute(
+      "aria-label",
+      "Choose historical location"
+    );
+
+    places.forEach(record => {
+      const option = element(
+        "option",
+        record.title + " — " + record.region
+      );
+
+      option.value = record.id;
+
+      selector.appendChild(option);
+    });
+
+    selector.value = current.id;
+
+    selector.addEventListener("change", () => {
+      selectedPlace = selector.value;
+      render();
+    });
+
+    output.appendChild(selector);
+
+    const layout =
+      element("div", "", "veMapLayout");
+
+    layout.style.marginTop = "15px";
+
+    const map = document.createElement("iframe");
+
+    map.src = mapURL(current);
+    map.loading = "lazy";
+    map.title = "Map of " + current.title;
+    map.referrerPolicy = "no-referrer";
+
+    const info = element("div");
+
+    info.append(
+      element("h3", current.title),
+      element("p", current.description)
+    );
+
+    field(info, "Region", current.region);
+    field(info, "Scripture", current.scripture);
+
+    field(
+      info,
+      "Approximate coordinates",
+      current.lat + ", " + current.lon
+    );
+
+    info.append(
+      link(
+        "Open full interactive map",
+        fullMapURL(current)
+      ),
+
+      element("p"),
+
+      link(
+        "Explore ancient geography in Pleiades",
+        sources.pleiades.url
+      )
+    );
+
+    layout.append(map, info);
+
+    output.appendChild(layout);
+
+    output.append(
+      element(
+        "p",
+        "Map data © OpenStreetMap contributors. Modern geography; not reconstructed ancient borders.",
+        "veMuted"
+      ),
+      element(
+        "p",
+        current.limitation,
+        "veLimit"
+      )
+    );
+  }
+
+  function renderSources() {
+    output.append(
+      element("h3", "Digital Collections"),
+      element(
+        "p",
+        "Explore institutional archives, photographs, digitized manuscripts, museum records and archaeological research."
+      )
+    );
+
+    Object.entries(sources).forEach(([key, source]) => {
+
+      const row = element("div", "", "veSource");
+
+      row.append(
+        element("h4", source.name),
+        link("Open digital collection", source.url)
+      );
+
+      const related = records.filter(
+        record => record.source === key
+      );
+
+      if (related.length) {
+        row.appendChild(
+          element(
+            "p",
+            "Related records: " +
+              related.map(record => record.title).join("; "),
+            "veMuted"
+          )
+        );
+      }
+
+      output.appendChild(row);
+    });
+  }
+
+  function renderNotes() {
+    output.append(
+      element("h3", "Research Notebook"),
+      element(
+        "p",
+        "Record observations, manuscript comparisons, questions and evidence assessments."
+      )
+    );
+
+    const textarea =
+      document.createElement("textarea");
+
+    textarea.value = state.notes;
+
+    textarea.placeholder =
+      "Record your visual evidence observations...";
+
+    textarea.setAttribute(
+      "aria-label",
+      "Visual exploration research notes"
+    );
+
+    textarea.addEventListener("input", () => {
+      state.notes = textarea.value;
+    });
+
+    output.appendChild(textarea);
+
+    const status =
+      element("p", "", "veMuted");
+
+    const actions =
+      element("div", "", "veActions");
+
+    actions.append(
+      button("Save notes", () => {
+
+        state.notes = textarea.value;
+
+        status.textContent = saveState()
+          ? "Research notes saved on this device."
+          : "Unable to save in browser storage. Download a copy instead.";
+      }),
+
+      button("Download notes", () => {
+        download(
+          textarea.value,
+          "DesertBible-visual-research-notes.txt"
+        );
+      }),
+
+      button("Download saved discoveries", () => {
+
+        const saved = records.filter(
+          record => state.saved.includes(record.id)
+        );
+
+        download(
+          saved.map(makeCitation).join(
+            "\n\n====================\n\n"
+          ),
+          "DesertBible-saved-discoveries.txt"
+        );
+      })
+    );
+
+    output.append(actions, status);
+
+    output.appendChild(
+      element(
+        "p",
+        "Notes and bookmarks are stored locally in this browser, not synchronized between devices.",
+        "veMuted"
+      )
+    );
+  }
+
+  function render() {
+    output.replaceChildren();
+
+    root.querySelectorAll(
+      "[data-view]"
+    ).forEach(node => {
+      const active =
+        node.dataset.view === activeView;
+
+      node.classList.toggle("veActive", active);
+
+      node.setAttribute(
+        "aria-pressed",
+        String(active)
+      );
+    });
+
+    if (activeView === "map") {
+      renderMap();
+      return;
+    }
+
+    if (activeView === "sources") {
+      renderSources();
+      return;
+    }
+
+    if (activeView === "notes") {
+      renderNotes();
+      return;
+    }
+
+    if (activeView === "saved") {
+      renderGallery(
+        filtered().filter(
+          record => state.saved.includes(record.id)
+        ),
+        "Saved Discoveries"
+      );
+
+      return;
+    }
+
+    renderGallery(
+      filtered(),
+      "Visual Research Gallery"
+    );
+  }
+
+  $("veTotal").textContent = records.length;
+  $("veTypes").textContent = types.length;
+
+  $("veSources").textContent =
+    Object.keys(sources).length;
+
+  $("vePlaces").textContent =
+    records.filter(record =>
+      Number.isFinite(record.lat) &&
+      Number.isFinite(record.lon)
+    ).length;
+
+  const all = element(
+    "option",
+    "All visual categories"
+  );
+
+  all.value = "";
+
+  $("veCategory").appendChild(all);
+
+  types.forEach(type => {
+
+    const option = element("option", type);
+
+    option.value = type;
+
+    $("veCategory").appendChild(option);
+  });
+
+  root.querySelectorAll(
+    "[data-view]"
+  ).forEach(node => {
+
+    node.addEventListener("click", () => {
+
+      activeView = node.dataset.view;
+      page = 0;
+
+      render();
+    });
+  });
+
+  ["veSearch", "veScripture"].forEach(id => {
+
+    $(id).addEventListener("input", () => {
+      page = 0;
+      render();
+    });
+  });
+
+  $("veCategory").addEventListener(
+    "change",
+    () => {
+      page = 0;
+      render();
+    }
+  );
+
+  $("veReset").addEventListener("click", () => {
+
+    $("veSearch").value = "";
+    $("veScripture").value = "";
+    $("veCategory").value = "";
+
+    selectedPlace = null;
+    page = 0;
+
+    render();
+  });
+
+  $("veExport").addEventListener("click", () => {
+
+    download(
+      filtered().map(makeCitation).join(
+        "\n\n====================\n\n"
+      ),
+      "DesertBible-visual-research-index.txt"
+    );
+  });
+
+  $("veClose").addEventListener("click", () => {
+    workspace.remove();
+  });
+
+  render();
+
+  workspace.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
 
