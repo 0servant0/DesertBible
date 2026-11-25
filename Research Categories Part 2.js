@@ -2490,3 +2490,3208 @@ function openCultureDailyLife(workspace) {
 
 }
 
+function openProphecyFulfillment(workspace) {
+  "use strict";
+
+  const sources = {
+    prophets: [
+      "USCCB — Introduction to the Prophetic Books",
+      "https://bible.usccb.org/bible/propheticbooks/0",
+      "Catholic scholarly introduction"
+    ],
+    isaiah7: [
+      "USCCB — Isaiah 7 and textual notes",
+      "https://bible.usccb.org/bible/isaiah/7",
+      "Biblical text and commentary"
+    ],
+    isaiah53: [
+      "USCCB — Isaiah 53 and textual notes",
+      "https://bible.usccb.org/bible/isaiah/53",
+      "Biblical text and commentary"
+    ],
+    yaleMessiah: [
+      "Yale Bible Study — Isaiah 9 and 11: Messianic Prophecy",
+      "https://yalebiblestudy.org/wp-content/uploads/2020/07/Isaiah-Messianic-Prophecy.pdf",
+      "Academic interpretation"
+    ],
+    daniel9: [
+      "USCCB — Daniel 9 and textual notes",
+      "https://bible.usccb.org/bible/daniel/9",
+      "Historical-critical interpretation"
+    ],
+    matthew2: [
+      "USCCB — Matthew 2 and textual notes",
+      "https://bible.usccb.org/bible/matthew/2",
+      "Biblical interpretation and quotations"
+    ],
+    yaleOT: [
+      "Christine Hayes — Introduction to the Old Testament",
+      "https://oyc.yale.edu/religious-studies/rlst-145",
+      "Yale University lecture series"
+    ],
+    yaleNT: [
+      "Dale B. Martin — New Testament History and Literature",
+      "https://oyc.yale.edu/religious-studies/rlst-152",
+      "Yale University lecture series"
+    ],
+    odyssey: [
+      "Society of Biblical Literature — Bible Odyssey",
+      "https://www.bibleodyssey.org/",
+      "Academic research collection"
+    ],
+    step: [
+      "Tyndale House — STEP Bible",
+      "https://www.stepbible.org/",
+      "Hebrew and Greek textual research"
+    ],
+    sefaria: [
+      "Sefaria — Jewish textual library",
+      "https://www.sefaria.org/texts",
+      "Jewish Scripture and interpretive traditions"
+    ],
+    scrolls: [
+      "Israel Museum — Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/",
+      "Ancient manuscript collection"
+    ],
+    greatIsaiah: [
+      "Israel Museum — Great Isaiah Scroll",
+      "https://dss.collections.imj.org.il/isaiah",
+      "Pre-Christian manuscript evidence"
+    ],
+    dss: [
+      "Israel Antiquities Authority — Dead Sea Scrolls",
+      "https://www.deadseascrolls.org.il/",
+      "Manuscript archive"
+    ],
+    oracc: [
+      "ORACC — Royal Inscriptions of the Neo-Assyrian Period",
+      "https://oracc.museum.upenn.edu/rinap/",
+      "Primary Assyrian inscriptions"
+    ],
+    museum: [
+      "British Museum — Collection Online",
+      "https://www.britishmuseum.org/collection",
+      "Primary artifact research catalogue"
+    ],
+    cyrus: [
+      "Muhammad A. Dandamayev — The Cyrus Cylinder",
+      "https://www.iranicaonline.org/articles/cyrus-iv/",
+      "Encyclopaedia Iranica historical study"
+    ],
+    gettyCyrus: [
+      "Getty Museum — The Cyrus Cylinder",
+      "https://www.getty.edu/education/teachers/classroom_resources/curricula/cyrus_cylinder/documents/cyrus_teacher.pdf",
+      "Museum contextual publication"
+    ],
+    cdli: [
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/",
+      "Primary document catalogue"
+    ],
+    perseus: [
+      "Perseus Digital Library",
+      "https://www.perseus.tufts.edu/",
+      "Ancient Greek and Roman literature"
+    ],
+    ntvmr: [
+      "New Testament Virtual Manuscript Room",
+      "https://ntvmr.uni-muenster.de/",
+      "New Testament manuscript research"
+    ],
+    fathers: [
+      "New Advent — Early Church Fathers",
+      "https://www.newadvent.org/fathers/",
+      "Historical Christian interpretation"
+    ],
+    ccel: [
+      "Christian Classics Ethereal Library",
+      "https://www.ccel.org/",
+      "Historical Christian theological literature"
+    ],
+    craig: [
+      "William Lane Craig — Reasonable Faith",
+      "https://www.reasonablefaith.org/",
+      "Christian philosophy and apologetics"
+    ],
+    lennox: [
+      "John Lennox — Official research and publications",
+      "https://www.johnlennox.org/",
+      "Science, philosophy and Christian apologetics"
+    ],
+    huff: [
+      "Wesley Huff — Official resources",
+      "https://www.wesleyhuff.com/",
+      "Biblical manuscripts and apologetics"
+    ],
+    knechtle: [
+      "Cliffe and Stuart Knechtle — Give Me an Answer",
+      "https://givemeananswer.org/",
+      "Public Christian apologetics"
+    ]
+  };
+
+  const classifications = {
+    narrative:
+      "Fulfillment reported within biblical literature",
+    historical:
+      "Historically contextualized fulfillment claim",
+    messianic:
+      "Explicit New Testament messianic application",
+    typology:
+      "Typological or retrospective application",
+    traditional:
+      "Traditional messianic interpretation",
+    conditional:
+      "Conditional prophetic warning",
+    disputed:
+      "Disputed interpretation or chronology",
+    future:
+      "Eschatological or anticipated fulfillment"
+  };
+
+  /*
+    Research record format:
+
+    ID
+    Title
+    Classification
+    Prophetic reference
+    Related passages
+    Original literary context
+    Fulfillment claim
+    Historical or textual evidence
+    Alternative interpretations
+    Evidence limitations
+    Research source IDs
+
+    All descriptions are editorial summaries.
+    No statement is attributed to a named scholar
+    without identifying the relevant publication.
+
+    General collection links are research gateways,
+    not individually verified artifact citations.
+  */
+
+  const records = [
+
+    [
+      "PF001",
+      "The offspring of the woman",
+      "traditional",
+      "Genesis 3:15",
+      ["Romans 16:20","Hebrews 2:14","Revelation 12:9"],
+      "The judgment pronounced against the serpent describes hostility between the serpent and the woman and their offspring.",
+      "Christian tradition often identifies this passage as the protoevangelium, an early anticipation of Christ's victory over evil.",
+      "The later biblical texts develop related imagery of defeating Satan, death and the serpent.",
+      "The immediate narrative concerns the serpent and human descendants. Jewish and historical-critical interpretations need not identify an individual Messiah here.",
+      "Genesis does not explicitly name Jesus or describe crucifixion and resurrection in this verse.",
+      ["yaleOT","sefaria","fathers","step"]
+    ],
+
+    [
+      "PF002",
+      "Blessing through Abraham",
+      "messianic",
+      "Genesis 12:1-3",
+      ["Genesis 22:15-18","Galatians 3:8-16"],
+      "God promises Abraham descendants, blessing and a relationship with the nations.",
+      "Paul interprets the Abrahamic promise through Christ and the inclusion of Gentile believers.",
+      "Galatians explicitly develops the Abrahamic promise in its theological argument.",
+      "Jewish interpretations emphasize Abraham, Israel and the continuing significance of the covenant.",
+      "Paul's interpretation establishes an early Christian reading, not independent proof of supernatural fulfillment.",
+      ["yaleOT","yaleNT","sefaria","step"]
+    ],
+
+    [
+      "PF003",
+      "The promised birth of Isaac",
+      "narrative",
+      "Genesis 18:9-14",
+      ["Genesis 21:1-7","Romans 9:7-9"],
+      "The narrative promises a son to Abraham and Sarah despite their advanced age.",
+      "Genesis describes Isaac's birth as the realization of that promise.",
+      "The fulfillment is presented within the biblical narrative.",
+      "Readers differ regarding the historical reconstruction and literary development of the patriarchal accounts.",
+      "No independent contemporary record securely identifies this specific birth.",
+      ["yaleOT","step","sefaria"]
+    ],
+
+    [
+      "PF004",
+      "The scepter of Judah",
+      "traditional",
+      "Genesis 49:8-12",
+      ["2 Samuel 7:12-16","Hebrews 7:14","Revelation 5:5"],
+      "Jacob's blessing associates Judah with royal authority and leadership.",
+      "Christian interpretation connects Judah's royal imagery with Jesus and Davidic kingship.",
+      "Later biblical writings associate the Messiah with Judah and David.",
+      "The difficult Hebrew wording in Genesis 49:10 permits several translation and historical interpretations.",
+      "The exact Hebrew expression traditionally rendered Shiloh remains debated.",
+      ["step","sefaria","fathers","yaleOT"]
+    ],
+
+    [
+      "PF005",
+      "A star from Jacob",
+      "traditional",
+      "Numbers 24:15-19",
+      ["Matthew 2:1-12","Revelation 22:16"],
+      "Balaam's oracle anticipates a ruler associated with Israel's victory over neighboring peoples.",
+      "Christian reception connects the star and ruler imagery with Jesus.",
+      "Matthew includes star imagery in the infancy narrative, although it does not explicitly quote Numbers 24:17.",
+      "Historical readings associate the oracle with Israelite kingship. Jewish messianic readings also developed.",
+      "The passage does not provide astronomical coordinates or a date for Jesus' birth.",
+      ["matthew2","sefaria","step"]
+    ],
+
+    [
+      "PF006",
+      "A prophet like Moses",
+      "messianic",
+      "Deuteronomy 18:15-19",
+      ["Acts 3:19-26","Acts 7:37","John 6:14"],
+      "Deuteronomy discusses legitimate prophetic authority within Israel.",
+      "Acts explicitly applies the promise of a prophet like Moses to Jesus.",
+      "Acts preserves the Christian application of the Deuteronomic passage.",
+      "The original context can be understood as the continuing institution of prophecy rather than only one distant individual.",
+      "The identification of Jesus as the ultimate prophet is an interpretive and theological conclusion.",
+      ["yaleOT","yaleNT","step","sefaria"]
+    ],
+
+    [
+      "PF007",
+      "Rebuilding Jericho",
+      "narrative",
+      "Joshua 6:26",
+      ["1 Kings 16:34"],
+      "Joshua pronounces a curse concerning rebuilding Jericho.",
+      "Kings associates the rebuilding by Hiel with the fulfillment of Joshua's pronouncement.",
+      "The connection is explicitly made within Kings.",
+      "Interpretation depends on the literary and historical relationship between Joshua and Kings.",
+      "The deaths of Hiel's sons are not independently documented by contemporary evidence.",
+      ["yaleOT","step"]
+    ],
+
+    [
+      "PF008",
+      "The judgment on Eli's household",
+      "narrative",
+      "1 Samuel 2:27-36",
+      ["1 Samuel 4:10-18","1 Kings 2:26-27"],
+      "A prophetic declaration announces judgment upon Eli's priestly household.",
+      "Samuel and Kings connect subsequent losses and priestly changes with this judgment.",
+      "The biblical narrative supplies the fulfillment relationship.",
+      "Historical reconstruction of early Israelite priestly institutions remains incomplete.",
+      "No external document securely verifies the specific prophetic announcement.",
+      ["yaleOT","step"]
+    ],
+
+    [
+      "PF009",
+      "The enduring Davidic dynasty",
+      "messianic",
+      "2 Samuel 7:12-16",
+      ["Psalm 89:19-37","Luke 1:30-33","Acts 13:22-23"],
+      "Nathan's oracle promises continuity for David's royal house.",
+      "Luke identifies Jesus with the enduring Davidic throne.",
+      "The Tel Dan inscription is widely interpreted as referring to the House of David, providing historical context for the dynasty.",
+      "The promise initially concerns David's successors. Jewish and Christian expectations concerning its ultimate realization differ.",
+      "Evidence for the Davidic dynasty does not independently prove Jesus' genealogy or eternal kingship.",
+      ["museum","yaleOT","yaleNT","step"]
+    ],
+
+    [
+      "PF010",
+      "Division of Solomon's kingdom",
+      "narrative",
+      "1 Kings 11:29-39",
+      ["1 Kings 12:15-24"],
+      "Ahijah announces that Jeroboam will receive authority over most of Israel's tribes.",
+      "Kings presents the political division following Solomon as the fulfillment of Ahijah's announcement.",
+      "External historical evidence establishes the later existence of separate kingdoms of Israel and Judah.",
+      "The precise circumstances and chronology of the initial division are debated.",
+      "Later evidence for separate kingdoms does not independently verify Ahijah's speech.",
+      ["yaleOT","oracc","step"]
+    ],
+
+    [
+      "PF011",
+      "Josiah and the altar at Bethel",
+      "narrative",
+      "1 Kings 13:1-3",
+      ["2 Kings 23:15-18"],
+      "An unnamed man of God announces judgment against the altar at Bethel and names Josiah.",
+      "Kings describes Josiah's later destruction of the altar.",
+      "The literary fulfillment is explicit.",
+      "Traditional readings understand this as long-range predictive prophecy. Critical scholarship investigates the editorial history of Kings.",
+      "The date when this prophetic wording was first recorded cannot be established simply from the narrative chronology.",
+      ["yaleOT","step","odyssey"]
+    ],
+
+    [
+      "PF012",
+      "Elijah and the drought",
+      "narrative",
+      "1 Kings 17:1",
+      ["1 Kings 18:41-46","James 5:17-18"],
+      "Elijah announces drought in the reign of Ahab.",
+      "Kings describes the return of rain following Elijah's confrontation with the prophets of Baal.",
+      "The fulfillment relationship is contained in Kings and recalled in James.",
+      "Historical and theological readings assign different significance to the account.",
+      "No securely identified contemporary climate record independently verifies this particular event and its prophetic causation.",
+      ["yaleOT","step"]
+    ],
+
+    [
+      "PF013",
+      "Judgment on Ahab's dynasty",
+      "narrative",
+      "1 Kings 21:17-24",
+      ["1 Kings 22:37-38","2 Kings 9:30-37","2 Kings 10:10-11"],
+      "Elijah announces judgment after the seizure of Naboth's vineyard.",
+      "Kings relates the deaths of Ahab, Jezebel and members of the dynasty to prophetic judgment.",
+      "Assyrian records provide historical context for Ahab and Jehu, although not these specific prophetic details.",
+      "The narrative combines political change with theological interpretation.",
+      "External attestations of rulers do not verify every reported circumstance of death.",
+      ["oracc","museum","yaleOT"]
+    ],
+
+    [
+      "PF014",
+      "Immanuel and the promised child",
+      "messianic",
+      "Isaiah 7:10-17",
+      ["Matthew 1:18-25"],
+      "Isaiah addresses King Ahaz during the Syro-Ephraimite crisis in the eighth century BCE.",
+      "Matthew applies Isaiah 7:14 to Jesus' conception and birth.",
+      "The Hebrew text uses almah, meaning a young woman. The ancient Greek translation uses parthenos, commonly meaning virgin.",
+      "Historical readings emphasize a sign relevant to Ahaz. Christian readings understand Matthew's application as messianic or a fuller realization.",
+      "The ancient wording can be studied independently, but the virginal conception is not independently established by the manuscript evidence.",
+      ["isaiah7","step","greatIsaiah","sefaria"]
+    ],
+
+    [
+      "PF015",
+      "Light in Galilee",
+      "messianic",
+      "Isaiah 9:1-2",
+      ["Matthew 4:12-17"],
+      "Isaiah speaks of northern territories affected by oppression and political upheaval.",
+      "Matthew associates Jesus' Galilean ministry with Isaiah's imagery of light.",
+      "The Gospel explicitly quotes the prophetic passage.",
+      "Historical interpretations emphasize the Assyrian-era circumstances and hopes of the original audience.",
+      "The existence of ancient Galilean settlements does not independently establish the theological fulfillment.",
+      ["yaleMessiah","oracc","step"]
+    ],
+
+    [
+      "PF016",
+      "The royal child and Davidic throne",
+      "traditional",
+      "Isaiah 9:6-7",
+      ["Luke 1:32-33","Luke 2:10-11"],
+      "Isaiah announces a royal child and a reign characterized by justice and peace.",
+      "Christian tradition understands the passage as anticipating Christ's kingship.",
+      "The royal language belongs to ancient Israelite traditions concerning kingship and divine authority.",
+      "Historical readings may associate the oracle with an ancient king or coronation; Christian readings extend it to Jesus.",
+      "The original royal setting and later messianic reception must be distinguished.",
+      ["yaleMessiah","greatIsaiah","sefaria"]
+    ],
+
+    [
+      "PF017",
+      "The shoot from Jesse",
+      "messianic",
+      "Isaiah 11:1-10",
+      ["Romans 15:12","Revelation 22:16"],
+      "Isaiah describes an ideal ruler emerging from Jesse's family.",
+      "Paul explicitly cites the root of Jesse in connection with Gentile hope.",
+      "The passage's royal imagery connects it to Davidic traditions.",
+      "Jewish and Christian traditions differ over the Messiah's identity and the realization of the promised peace.",
+      "The complete realization of the passage's peaceful conditions is interpreted differently.",
+      ["yaleMessiah","greatIsaiah","sefaria","step"]
+    ],
+
+    [
+      "PF018",
+      "Judgment against Babylon",
+      "historical",
+      "Isaiah 13:17-22",
+      ["Isaiah 14:22-23","Daniel 5"],
+      "The oracle depicts judgment against Babylon and names the Medes.",
+      "Interpreters associate the oracle with Babylon's eventual defeat and decline.",
+      "Babylon was captured by Cyrus in 539 BCE. Cuneiform evidence documents the transition to Persian rule.",
+      "The relationship between the oracle's destruction imagery, Persian conquest and Babylon's later decline is debated.",
+      "Babylon continued to be inhabited after 539 BCE; its capture was not the immediate total destruction portrayed by a strictly literal reading.",
+      ["cyrus","cdli","museum","yaleOT"]
+    ],
+
+    [
+      "PF019",
+      "Samaria's judgment",
+      "historical",
+      "Micah 1:5-7",
+      ["2 Kings 17:1-6","Hosea 13:16"],
+      "Micah announces judgment against the northern kingdom's capital.",
+      "The passage is associated with the Assyrian destruction of the northern kingdom in approximately 722–720 BCE.",
+      "Assyrian royal inscriptions and biblical accounts attest to the conquest and incorporation of Samaria.",
+      "The roles of Shalmaneser V and Sargon II in the final stages of the conquest remain subjects of historical discussion.",
+      "Historical confirmation of the conquest does not establish the precise date of every prophetic verse.",
+      ["oracc","museum","yaleOT"]
+    ],
+
+    [
+      "PF020",
+      "Jerusalem and the Assyrian crisis",
+      "historical",
+      "Isaiah 37:33-35",
+      ["2 Kings 19:32-37","2 Chronicles 32:20-23"],
+      "Isaiah promises Jerusalem's preservation during Sennacherib's campaign.",
+      "The biblical narratives describe Jerusalem surviving the Assyrian threat.",
+      "Sennacherib's inscriptions attest to his campaign against Judah in 701 BCE and his confinement of Hezekiah in Jerusalem without claiming Jerusalem's capture.",
+      "Biblical and Assyrian texts interpret the campaign through different theological and political frameworks.",
+      "Assyrian records do not independently establish the biblical explanation of divine intervention.",
+      ["oracc","museum","yaleOT"]
+    ],
+
+    [
+      "PF021",
+      "Cyrus and restoration",
+      "historical",
+      "Isaiah 44:24-28",
+      ["Isaiah 45:1-7","Ezra 1:1-4","Ezra 6:3-5"],
+      "Isaiah names Cyrus in connection with restoration and the rebuilding of Jerusalem.",
+      "Ezra associates Cyrus with authorization for rebuilding the Jerusalem temple.",
+      "The Cyrus Cylinder, British Museum object 90920, records Cyrus' conquest of Babylon and restoration policies.",
+      "Traditional interpretation emphasizes advance prediction by Isaiah. Much modern scholarship places Isaiah 40–55 in the sixth-century exilic setting.",
+      "The Cyrus Cylinder does not explicitly mention Judah, Jerusalem or Ezra's decree. Authorship and dating affect the predictive argument.",
+      ["cyrus","gettyCyrus","greatIsaiah","yaleOT"]
+    ],
+
+    [
+      "PF022",
+      "The voice preparing the way",
+      "messianic",
+      "Isaiah 40:3-5",
+      ["Matthew 3:1-3","Mark 1:2-4","Luke 3:3-6","John 1:23"],
+      "The opening of Isaiah 40 announces consolation and a way associated with God's coming and restoration.",
+      "The Gospels apply the prophetic voice to John the Baptist.",
+      "The connection is explicit in the Gospel texts.",
+      "Historical readings emphasize restoration from exile; Christian readings understand John as preparing for Jesus.",
+      "The Gospel application is distinct from the original historical setting.",
+      ["greatIsaiah","step","yaleOT","yaleNT"]
+    ],
+
+    [
+      "PF023",
+      "The servant and the nations",
+      "messianic",
+      "Isaiah 42:1-4",
+      ["Matthew 12:15-21"],
+      "Isaiah describes God's servant bringing justice to the nations.",
+      "Matthew quotes the servant passage in connection with Jesus' ministry.",
+      "The textual relationship is explicit.",
+      "Interpretations identify the servant variously with Israel, an individual representative or a messianic figure.",
+      "The text's original servant identity cannot be settled solely by citing its later Christian application.",
+      ["greatIsaiah","sefaria","step"]
+    ],
+
+    [
+      "PF024",
+      "The suffering servant",
+      "messianic",
+      "Isaiah 52:13-15",
+      ["Isaiah 53","Matthew 8:17","Luke 22:37","Acts 8:26-35","1 Peter 2:21-25"],
+      "The servant poem describes suffering, humiliation, vindication and the bearing of others' wrongdoing.",
+      "New Testament writers identify aspects of Jesus' suffering and death with this servant imagery.",
+      "The Great Isaiah Scroll preserves the passage in a manuscript dating to the pre-Christian period.",
+      "Christian readings identify the servant with Christ. Jewish interpretations often identify the servant with Israel or a righteous representative.",
+      "Pre-Christian manuscript evidence establishes the passage's prior existence, not independently the identity of the servant or divine fulfillment.",
+      ["isaiah53","greatIsaiah","sefaria","step","fathers"]
+    ],
+
+    [
+      "PF025",
+      "Good news to the poor",
+      "messianic",
+      "Isaiah 61:1-2",
+      ["Luke 4:16-21"],
+      "The prophetic speaker announces good news, release and restoration for afflicted people.",
+      "Luke portrays Jesus reading this passage and declaring its fulfillment.",
+      "Luke explicitly connects the passage to Jesus' mission.",
+      "Historical readings emphasize restoration and communal renewal. Christian interpretations emphasize Jesus' redemptive ministry.",
+      "The report establishes Luke's presentation of Jesus, not an independent transcript of the synagogue event.",
+      ["greatIsaiah","step","yaleNT"]
+    ],
+
+    [
+      "PF026",
+      "The seventy years of Babylon",
+      "historical",
+      "Jeremiah 25:8-12",
+      ["Jeremiah 29:10","2 Chronicles 36:20-23","Daniel 9:2"],
+      "Jeremiah announces an extended period of Babylonian domination.",
+      "Later biblical texts associate the seventy years with exile, restoration and the end of Babylonian power.",
+      "Babylon fell in 539 BCE. Jerusalem's temple was destroyed in 587 or 586 BCE and the rebuilt temple was completed around 516 or 515 BCE.",
+      "Different starting and ending points produce different chronological calculations; seventy may represent a rounded period.",
+      "There is no universally agreed exact seventy-year interval applicable to every version of the claim.",
+      ["daniel9","cdli","cyrus","yaleOT"]
+    ],
+
+    [
+      "PF027",
+      "Jerusalem's destruction",
+      "historical",
+      "Jeremiah 21:3-10",
+      ["2 Kings 25:1-21","Jeremiah 39:1-10","Jeremiah 52"],
+      "Jeremiah warns Jerusalem of judgment through Babylonian conquest.",
+      "The biblical accounts connect the city's destruction with these warnings.",
+      "Babylonian sources establish regional campaigns, including Jerusalem's capture in 597 BCE. Archaeological evidence supports the later destruction of the city.",
+      "The historical event and the biblical explanation of its causes are separate levels of analysis.",
+      "The Babylonian Chronicle's account of 597 BCE should not be misidentified as a direct account of the final destruction in 587 or 586 BCE.",
+      ["cdli","museum","yaleOT"]
+    ],
+
+    [
+      "PF028",
+      "Rachel weeping for her children",
+      "typology",
+      "Jeremiah 31:15-17",
+      ["Matthew 2:16-18"],
+      "Jeremiah depicts Rachel mourning in the context of exile and anticipated restoration.",
+      "Matthew applies the lament to the killing of children in Bethlehem.",
+      "The literary relationship is explicit in Matthew.",
+      "The original passage concerns Israel's suffering and contains a promise of return.",
+      "No surviving independent contemporary account securely corroborates Matthew's Bethlehem incident.",
+      ["matthew2","step","yaleOT"]
+    ],
+
+    [
+      "PF029",
+      "The new covenant",
+      "messianic",
+      "Jeremiah 31:31-34",
+      ["Luke 22:20","1 Corinthians 11:25","Hebrews 8:6-13","Hebrews 10:15-18"],
+      "Jeremiah promises a renewed covenant with Israel and Judah, emphasizing internalized instruction and forgiveness.",
+      "Christian texts associate the new covenant with Jesus' death and priestly work.",
+      "Hebrews explicitly quotes the covenant passage.",
+      "Jewish and Christian interpretations differ concerning the covenant's relationship to Torah, Israel and the Messiah.",
+      "The identification of an ultimate covenant fulfillment is primarily theological.",
+      ["sefaria","step","yaleOT","yaleNT"]
+    ],
+
+    [
+      "PF030",
+      "The downfall of Tyre",
+      "disputed",
+      "Ezekiel 26:1-21",
+      ["Ezekiel 29:17-20"],
+      "Ezekiel announces judgment against Tyre and names Nebuchadnezzar in the oracle.",
+      "Interpreters relate the passage to Babylonian pressure on Tyre, Alexander's conquest in 332 BCE and subsequent historical changes.",
+      "Tyre's lengthy history includes sieges, political transitions and repeated rebuilding.",
+      "Some readings distinguish multiple attackers and historical stages. Others emphasize tensions between the oracle's details and the city's continued existence.",
+      "Ezekiel 29 acknowledges the lack of expected spoil from Nebuchadnezzar's campaign. Tyre was not permanently eliminated as an inhabited city.",
+      ["perseus","museum","yaleOT","step"]
+    ],
+
+    [
+      "PF031",
+      "The valley of dry bones",
+      "future",
+      "Ezekiel 37:1-14",
+      ["Ezekiel 37:15-28","Romans 11:25-27"],
+      "Ezekiel interprets the bones as the house of Israel and describes restoration from national despair.",
+      "Interpretations include restoration from exile, spiritual renewal, national restoration and broader resurrection imagery.",
+      "The passage itself explains the vision in relation to Israel's condition.",
+      "Some modern Christians connect it to the establishment of Israel in 1948; other readers emphasize ancient restoration or future theological expectations.",
+      "Modern political events cannot be identified as definitive fulfillment without defending the interpretive assumptions involved.",
+      ["yaleOT","sefaria","step"]
+    ],
+
+    [
+      "PF032",
+      "The four kingdoms",
+      "disputed",
+      "Daniel 2:31-45",
+      ["Daniel 7:1-14"],
+      "Daniel interprets successive kingdoms through the image of a statue and its destruction.",
+      "Different traditions associate the kingdoms with ancient empires and God's ultimate kingdom.",
+      "Babylonian, Persian, Hellenistic and Roman imperial histories provide historical comparison.",
+      "A common historical-critical sequence distinguishes Babylon, Media, Persia and Greece. A traditional Christian sequence identifies Babylon, Medo-Persia, Greece and Rome.",
+      "The final kingdom sequence depends on interpretive and compositional assumptions.",
+      ["yaleOT","step","sefaria"]
+    ],
+
+    [
+      "PF033",
+      "The Son of Man",
+      "messianic",
+      "Daniel 7:13-14",
+      ["Daniel 7:18-27","Mark 14:61-62","Matthew 26:63-64"],
+      "Daniel's vision depicts a humanlike figure receiving dominion following the judgment of oppressive kingdoms.",
+      "Jesus' trial sayings invoke language associated with Daniel's figure.",
+      "The relationship between Daniel and the Gospel imagery is textually recognizable.",
+      "Interpretations include a collective representation of the holy ones, an angelic figure and an individual messianic figure.",
+      "The figure's identity and the timing of the kingdom's realization remain debated.",
+      ["yaleOT","yaleNT","sefaria","step"]
+    ],
+
+    [
+      "PF034",
+      "The ram and the goat",
+      "historical",
+      "Daniel 8:3-14",
+      ["Daniel 8:20-25"],
+      "Daniel describes symbolic animals and horns representing political powers.",
+      "The interpretation within Daniel identifies the ram with Media and Persia and the goat with Greece.",
+      "Alexander's conquest of Persia and the later Hellenistic kingdoms provide strong historical parallels.",
+      "The smaller horn is commonly identified with Antiochus IV, though some traditions extend the imagery to later figures.",
+      "Historical parallels do not independently settle the date of the vision's composition or whether prediction preceded the events.",
+      ["yaleOT","perseus","step"]
+    ],
+
+    [
+      "PF035",
+      "The seventy weeks of Daniel",
+      "disputed",
+      "Daniel 9:24-27",
+      ["Jeremiah 29:10","Daniel 9:2","Matthew 24:15"],
+      "Daniel expands Jeremiah's restoration framework into seventy periods of seven.",
+      "Interpretations relate the passage to temple restoration, messianic chronology, Jesus' death or future events.",
+      "Persian and Hellenistic chronology supplies relevant historical reference points.",
+      "Historical-critical readings commonly connect the passage to Antiochus IV and Onias III. Christian messianic readings employ different starting decrees and chronological schemes.",
+      "No universally accepted calculation proves a precise date for Jesus' crucifixion or a future end-time event.",
+      ["daniel9","yaleOT","step","sefaria"]
+    ],
+
+    [
+      "PF036",
+      "The kings of north and south",
+      "disputed",
+      "Daniel 11:2-35",
+      ["Daniel 11:36-45","Daniel 12:1-4"],
+      "Daniel describes political conflict, alliances and persecution.",
+      "Many details correspond to conflicts between Hellenistic kingdoms and the reign of Antiochus IV.",
+      "Greek historical sources and Second Temple Jewish literature provide comparative evidence.",
+      "Traditional interpretations may understand the account as earlier supernatural prediction. Historical-critical scholarship commonly places the final composition during the second century BCE.",
+      "Scholars debate the transition between recognizable historical events and the concluding predictions.",
+      ["yaleOT","perseus","sefaria"]
+    ],
+
+    [
+      "PF037",
+      "Out of Egypt I called my son",
+      "typology",
+      "Hosea 11:1-4",
+      ["Matthew 2:13-15"],
+      "Hosea recalls Israel's earlier deliverance from Egypt.",
+      "Matthew applies Israel's exodus pattern to Jesus' return from Egypt.",
+      "The original reference is retrospective, while Matthew presents a renewed application.",
+      "Christian typological interpretation sees Jesus recapitulating Israel's story.",
+      "Hosea 11:1 is not simply a direct future prediction in its original literary context.",
+      ["matthew2","step","sefaria"]
+    ],
+
+    [
+      "PF038",
+      "The outpouring of the Spirit",
+      "messianic",
+      "Joel 2:28-32",
+      ["Acts 2:14-21","Romans 10:13"],
+      "Joel describes God's Spirit being poured out and signs associated with the day of the Lord.",
+      "Peter's Pentecost sermon identifies the experienced events with Joel's prophecy.",
+      "Acts explicitly quotes Joel.",
+      "Some Christians understand the entire prophecy as inaugurated at Pentecost; others anticipate further future realization.",
+      "The theological interpretation of Pentecost and its cosmic imagery cannot be established by archaeology alone.",
+      ["yaleNT","step","fathers"]
+    ],
+
+    [
+      "PF039",
+      "The restoration of David's fallen tent",
+      "messianic",
+      "Amos 9:11-15",
+      ["Acts 15:13-18"],
+      "Amos concludes with imagery of restoration following judgment.",
+      "James cites Amos in connection with Gentile inclusion.",
+      "The wording in Acts is related to the Greek textual tradition of Amos.",
+      "Interpretations differ regarding national restoration, Gentile inclusion and messianic fulfillment.",
+      "Comparison of Hebrew and Greek forms is necessary before drawing conclusions about individual wording.",
+      ["step","sefaria","yaleNT"]
+    ],
+
+    [
+      "PF040",
+      "Nineveh and conditional judgment",
+      "conditional",
+      "Jonah 3:1-10",
+      ["Jonah 4:1-2","Jeremiah 18:7-10"],
+      "Jonah announces impending judgment, but Nineveh responds with repentance.",
+      "The narrative reports that the announced calamity is withheld.",
+      "The passage demonstrates conditionality within the book's prophetic theology.",
+      "Interpretations of Jonah's genre and historical setting differ.",
+      "There is no securely identified Assyrian record corroborating this particular citywide repentance.",
+      ["yaleOT","prophets","step"]
+    ],
+
+    [
+      "PF041",
+      "Bethlehem and the coming ruler",
+      "messianic",
+      "Micah 5:2-5",
+      ["Matthew 2:1-6","John 7:42"],
+      "Micah associates a future ruler with Bethlehem and Israel's deliverance.",
+      "Matthew identifies Jesus' birthplace with the Bethlehem oracle.",
+      "Bethlehem is historically associated with Davidic traditions in biblical literature.",
+      "Jewish and Christian readers differ regarding the ruler's identity and the implications of his ancient origins.",
+      "The Hebrew and English verse numbering differ in some editions. Matthew's claim does not independently verify Jesus' birthplace.",
+      ["matthew2","step","sefaria"]
+    ],
+
+    [
+      "PF042",
+      "Jerusalem becoming a ruin",
+      "historical",
+      "Micah 3:9-12",
+      ["Jeremiah 26:17-19","2 Kings 25:8-10"],
+      "Micah condemns corrupt leadership and warns of Jerusalem's destruction.",
+      "Jeremiah recalls Micah's warning in connection with Hezekiah, while the later Babylonian destruction provides a historical comparison.",
+      "Jerusalem was destroyed by Babylon in 587 or 586 BCE.",
+      "Jeremiah's account emphasizes that repentance can affect prophetic judgment.",
+      "The passage should not be treated as an uncomplicated prediction of one precisely dated event.",
+      ["yaleOT","museum","prophets"]
+    ],
+
+    [
+      "PF043",
+      "The fall of Nineveh",
+      "historical",
+      "Nahum 2",
+      ["Nahum 3","Zephaniah 2:13-15"],
+      "Nahum celebrates the anticipated overthrow of the Assyrian capital.",
+      "Nineveh's fall in 612 BCE is associated with the oracle.",
+      "The Babylonian Fall of Nineveh Chronicle, British Museum object 21901, records the defeat of Nineveh.",
+      "The oracle's political, poetic and theological dimensions require separate evaluation.",
+      "The historical event is well attested, but the precise date of each poetic unit is not independently established.",
+      ["museum","cdli","prophets"]
+    ],
+
+    [
+      "PF044",
+      "The righteous shall live by faith",
+      "typology",
+      "Habakkuk 2:2-4",
+      ["Romans 1:17","Galatians 3:11","Hebrews 10:37-38"],
+      "Habakkuk contrasts an arrogant figure with the endurance or faithfulness of the righteous amid judgment.",
+      "New Testament authors employ the passage in theological discussions of faith and endurance.",
+      "The Habakkuk Pesher from Qumran demonstrates another ancient interpretive application.",
+      "Translation and theological emphasis vary across Hebrew, Greek and later interpretations.",
+      "This is reception of a prophetic statement rather than straightforward prediction of a single historical event.",
+      ["scrolls","step","yaleNT"]
+    ],
+
+    [
+      "PF045",
+      "The glory of the restored temple",
+      "disputed",
+      "Haggai 2:6-9",
+      ["Ezra 6:14-15","Hebrews 12:26-27"],
+      "Haggai encourages the rebuilding community with promises concerning the temple's future glory.",
+      "Interpretations associate the passage with the Second Temple, later messianic expectations and an ultimate divine kingdom.",
+      "The rebuilt temple belongs to the Persian-period restoration.",
+      "The Hebrew wording concerning the treasures or desired things of the nations has received diverse translations.",
+      "The traditional translation desire of all nations should not automatically be treated as an unambiguous personal messianic title.",
+      ["step","yaleOT","sefaria"]
+    ],
+
+    [
+      "PF046",
+      "The humble king on a donkey",
+      "messianic",
+      "Zechariah 9:9-10",
+      ["Matthew 21:1-11","John 12:12-16"],
+      "Zechariah describes a humble king and a reign associated with peace.",
+      "The Gospels explicitly associate Jesus' entry into Jerusalem with this oracle.",
+      "The Gospel accounts establish the literary application.",
+      "The surrounding promises of international peace receive differing present and future interpretations.",
+      "An action can intentionally evoke an existing prophecy; correspondence alone does not establish supernatural prediction.",
+      ["step","sefaria","yaleNT"]
+    ],
+
+    [
+      "PF047",
+      "The thirty pieces of silver",
+      "typology",
+      "Zechariah 11:12-13",
+      ["Matthew 26:14-16","Matthew 27:3-10"],
+      "Zechariah describes a symbolic shepherding episode and a payment of thirty pieces of silver.",
+      "Matthew connects Judas' payment and the subsequent field purchase with prophetic language.",
+      "Matthew's account resembles Zechariah while attributing the fulfillment citation to Jeremiah.",
+      "Explanations include combined prophetic themes, literary allusion and differing citation conventions.",
+      "The textual attribution and exact relationship require investigation rather than being silently harmonized.",
+      ["step","yaleNT","sefaria"]
+    ],
+
+    [
+      "PF048",
+      "The pierced one",
+      "messianic",
+      "Zechariah 12:10",
+      ["John 19:34-37","Revelation 1:7"],
+      "Zechariah portrays mourning in Jerusalem associated with a pierced figure.",
+      "John applies piercing imagery to Jesus' death.",
+      "John explicitly invokes Scripture in describing the event.",
+      "Hebrew pronouns, textual witnesses and the original identity of the figure are debated.",
+      "Independent evidence for crucifixion does not establish every specific narrative detail.",
+      ["step","ntvmr","sefaria"]
+    ],
+
+    [
+      "PF049",
+      "Strike the shepherd",
+      "messianic",
+      "Zechariah 13:7",
+      ["Matthew 26:31","Mark 14:27"],
+      "Zechariah describes the striking of a shepherd and the scattering of sheep.",
+      "Jesus applies this imagery to the disciples' impending desertion.",
+      "The Gospel texts explicitly cite the prophetic passage.",
+      "Interpretations differ concerning the shepherd's role in Zechariah's original context.",
+      "The documented literary connection is not independent historical corroboration of every associated event.",
+      ["step","yaleNT","sefaria"]
+    ],
+
+    [
+      "PF050",
+      "The messenger preparing the way",
+      "messianic",
+      "Malachi 3:1-3",
+      ["Matthew 11:7-10","Mark 1:2-4","Luke 7:27"],
+      "Malachi announces a messenger preceding divine visitation and purification.",
+      "The Gospels associate the preparatory messenger with John the Baptist.",
+      "The Gospel application is explicit.",
+      "Jewish and Christian interpretations differ regarding the visitation and the identities of its figures.",
+      "Identifying the messenger does not establish that every aspect of the oracle has been historically realized.",
+      ["step","sefaria","yaleNT"]
+    ],
+
+    [
+      "PF051",
+      "Elijah before the day of the Lord",
+      "messianic",
+      "Malachi 4:5-6",
+      ["Matthew 11:14","Matthew 17:10-13","Luke 1:17","John 1:21"],
+      "Malachi anticipates Elijah's coming before the day of the Lord.",
+      "Matthew and Luke associate John with Elijah's preparatory role.",
+      "Luke describes continuity in spirit and power, while John denies being Elijah in John 1:21.",
+      "Interpretations distinguish literal return, prophetic role and possible future fulfillment.",
+      "The different Gospel formulations must be examined without assuming they use identical categories.",
+      ["step","sefaria","yaleNT"]
+    ],
+
+    [
+      "PF052",
+      "The rejected stone",
+      "messianic",
+      "Psalm 118:22-23",
+      ["Matthew 21:42","Acts 4:11","1 Peter 2:4-7"],
+      "Psalm 118 expresses thanksgiving and reversal of rejection.",
+      "New Testament authors apply the rejected stone imagery to Jesus.",
+      "Multiple New Testament texts explicitly invoke the psalm.",
+      "The psalm's original setting may involve communal worship or royal thanksgiving.",
+      "Its genre and earlier historical significance differ from a direct predictive oracle.",
+      ["step","sefaria","yaleNT"]
+    ],
+
+    [
+      "PF053",
+      "The suffering righteous figure",
+      "typology",
+      "Psalm 22",
+      ["Matthew 27:35-46","Mark 15:24-34","John 19:23-24"],
+      "The psalm begins as a lament and develops toward thanksgiving and praise.",
+      "The Gospel passion narratives employ several expressions associated with Psalm 22.",
+      "The psalm belongs to the pre-Christian scriptural tradition.",
+      "Christian tradition reads it in relation to Jesus' suffering. Jewish readings generally approach it within the lament tradition.",
+      "Psalm 22:16 has important Hebrew and Greek textual differences; disputed wording must not be presented as uncontested.",
+      ["step","sefaria","dss","ntvmr"]
+    ],
+
+    [
+      "PF054",
+      "The holy one and corruption",
+      "messianic",
+      "Psalm 16:8-11",
+      ["Acts 2:25-32","Acts 13:35-37"],
+      "The psalm expresses confidence in God's preservation from death or the realm of the dead.",
+      "Acts interprets the passage in relation to Jesus' resurrection.",
+      "The speeches explicitly cite the psalm and interpret it beyond David's own death.",
+      "Historical readings emphasize the psalmist's confidence in divine preservation.",
+      "The textual connection does not itself independently establish a supernatural resurrection.",
+      ["step","yaleNT","sefaria"]
+    ],
+
+    [
+      "PF055",
+      "The priest according to Melchizedek",
+      "messianic",
+      "Psalm 110:1-4",
+      ["Mark 12:35-37","Hebrews 5:5-10","Hebrews 7"],
+      "Psalm 110 combines royal authority with priestly language.",
+      "Hebrews develops the passage as a foundation for Christ's priesthood.",
+      "The New Testament explicitly cites the psalm.",
+      "Historical interpretations frequently consider royal institutions and enthronement imagery.",
+      "The theological identification of the eternal priest depends on the interpretive framework.",
+      ["step","sefaria","yaleNT","fathers"]
+    ],
+
+    [
+      "PF056",
+      "The betrayal of Jesus",
+      "narrative",
+      "Mark 14:17-21",
+      ["Mark 14:43-46","John 13:18-30","Psalm 41:9"],
+      "Jesus predicts betrayal during the meal with his disciples.",
+      "The Gospel narratives identify Judas as the immediate betrayer.",
+      "The prediction and reported outcome are preserved in related Gospel traditions.",
+      "The writers also associate betrayal with scriptural patterns.",
+      "The prediction is not preserved in an independently dated document written before the reported event.",
+      ["yaleNT","step","ntvmr"]
+    ],
+
+    [
+      "PF057",
+      "Peter's denial",
+      "narrative",
+      "Mark 14:27-31",
+      ["Mark 14:66-72","Matthew 26:69-75","Luke 22:54-62","John 18:15-27"],
+      "Jesus warns Peter that he will deny association with him.",
+      "The Gospels describe Peter's subsequent denials.",
+      "Related traditions preserve the central account across the four Gospels.",
+      "Differences in narrative details require source-sensitive interpretation.",
+      "The surviving accounts were written after the events they describe.",
+      ["step","yaleNT","ntvmr"]
+    ],
+
+    [
+      "PF058",
+      "Jesus' suffering and resurrection",
+      "narrative",
+      "Mark 8:31",
+      ["Mark 9:31","Mark 10:33-34","Mark 15","Mark 16:1-8","1 Corinthians 15:3-8"],
+      "The Gospel traditions describe Jesus predicting suffering, death and resurrection.",
+      "Christian proclamation identifies his death and resurrection as the realization of these predictions.",
+      "Jesus' crucifixion is widely accepted historically. Paul's letters preserve early testimony to resurrection belief.",
+      "Christian apologetics argues for the resurrection as a historical divine act. Other historical approaches assess the origins of the belief without affirming a supernatural explanation.",
+      "The surviving prediction accounts postdate the crucifixion. Historical evidence for death and resurrection belief must be distinguished from proof of divine resurrection.",
+      ["craig","yaleNT","ntvmr","step"]
+    ],
+
+    [
+      "PF059",
+      "The sign of Jonah",
+      "typology",
+      "Jonah 1:17",
+      ["Matthew 12:38-42","Luke 11:29-32"],
+      "Jonah's story describes deliverance following time in the great fish.",
+      "Matthew connects the sign with the Son of Man's time in the earth.",
+      "Matthew explicitly establishes the typological relationship.",
+      "Luke places a different emphasis on Jonah's role as a sign to Nineveh.",
+      "The accounts should be compared individually before assuming identical chronological implications.",
+      ["step","yaleNT","prophets"]
+    ],
+
+    [
+      "PF060",
+      "The destruction of the Second Temple",
+      "historical",
+      "Mark 13:1-2",
+      ["Matthew 24:1-2","Luke 19:41-44","Luke 21:5-6"],
+      "Jesus announces destruction concerning Jerusalem's temple complex.",
+      "The oracle is associated with the Roman destruction of Jerusalem and the temple in 70 CE.",
+      "Josephus, Jewish War book 6, and archaeological evidence establish the destruction.",
+      "Scholars debate the dates of the Gospel traditions and final compositions relative to 70 CE.",
+      "Historical confirmation of the destruction does not independently establish the exact date when the prediction was first spoken. Surviving retaining walls should be distinguished from the temple buildings.",
+      ["perseus","museum","yaleNT"]
+    ],
+
+    [
+      "PF061",
+      "The famine in the reign of Claudius",
+      "historical",
+      "Acts 11:27-30",
+      ["Acts 12:25"],
+      "Acts reports Agabus predicting a severe famine during Claudius' reign.",
+      "Acts connects the warning with relief provided to Judea.",
+      "Josephus, Antiquities book 20, describes famine in Judea during the mid-first century.",
+      "The extent and precise chronology of regional food shortages remain relevant to interpretation.",
+      "Historical famine evidence does not independently corroborate Agabus' prediction.",
+      ["perseus","yaleNT","step"]
+    ],
+
+    [
+      "PF062",
+      "Agabus and Paul's imprisonment",
+      "narrative",
+      "Acts 21:10-14",
+      ["Acts 21:27-36","Acts 22:24-29"],
+      "Agabus uses a symbolic action to warn Paul of captivity in Jerusalem.",
+      "Acts narrates Paul's seizure and Roman detention.",
+      "Both the warning and the resulting events are recorded within Acts.",
+      "Interpreters examine how the symbolic warning corresponds to the precise roles of Jewish opponents and Roman authorities.",
+      "No independent surviving record verifies this particular prophetic action.",
+      ["yaleNT","step"]
+    ],
+
+    [
+      "PF063",
+      "The coming of the Son of Man",
+      "future",
+      "Matthew 24:29-36",
+      ["Mark 13:24-32","Luke 21:25-28","Acts 1:6-11"],
+      "The discourse includes cosmic imagery, tribulation and the coming of the Son of Man.",
+      "Christian traditions anticipate Christ's return while differing over how much of the discourse concerns first-century events.",
+      "The related Gospel accounts can be compared with Jewish apocalyptic literature.",
+      "Preterist, futurist and mixed interpretations differ concerning Jerusalem, final judgment and the meaning of this generation.",
+      "The passage does not authorize a verified modern calendar date for Christ's return.",
+      ["yaleNT","step","fathers","ccel"]
+    ],
+
+    [
+      "PF064",
+      "The resurrection of the dead",
+      "future",
+      "Daniel 12:1-3",
+      ["John 5:28-29","1 Corinthians 15:50-58","1 Thessalonians 4:13-18"],
+      "Daniel anticipates deliverance and the awakening of the dead.",
+      "Christian teaching connects bodily resurrection with Christ and the anticipated consummation.",
+      "The passages provide textual evidence for developing Jewish and Christian resurrection beliefs.",
+      "Traditions differ concerning the timing, nature and sequence of resurrection and judgment.",
+      "Future resurrection is a theological expectation, not an event presently established through historical investigation.",
+      ["yaleOT","yaleNT","sefaria","step"]
+    ],
+
+    [
+      "PF065",
+      "The man of lawlessness",
+      "future",
+      "2 Thessalonians 2:1-12",
+      ["Daniel 7:25","Daniel 11:36","1 John 2:18"],
+      "The letter discusses rebellion and a lawless figure in relation to the day of the Lord.",
+      "Interpretations associate the passage with historical opponents, institutions or an anticipated end-time figure.",
+      "The text can be situated within Jewish and Christian apocalyptic traditions.",
+      "Futurist, historicist and other readings disagree about the figure's identity and the restraining power.",
+      "No contemporary individual should be declared the definitive fulfillment based on superficial resemblance.",
+      ["yaleNT","step","ccel"]
+    ],
+
+    [
+      "PF066",
+      "The seven churches",
+      "historical",
+      "Revelation 2",
+      ["Revelation 3","Revelation 1:4"],
+      "Revelation addresses seven congregations in Roman Asia with warnings and promises.",
+      "The messages concern historical Christian communities and provide patterns later interpreted by other churches.",
+      "Archaeology and inscriptions document the ancient cities addressed by Revelation.",
+      "Some interpreters also read the churches as successive historical eras, although the text does not explicitly supply such a chronology.",
+      "Present-day conditions at the ancient sites do not independently prove that every warning was realized exactly as proposed.",
+      ["museum","yaleNT","step"]
+    ],
+
+    [
+      "PF067",
+      "The beast and the number 666",
+      "disputed",
+      "Revelation 13:11-18",
+      ["Revelation 17:9-14"],
+      "Revelation presents symbolic imagery concerning oppressive authority, allegiance and a numerical name.",
+      "One prominent historical interpretation connects the number with Nero Caesar through Hebrew letter values.",
+      "Ancient manuscript witnesses include the variant 616, which is relevant to the Nero interpretation.",
+      "Other traditions identify broader imperial systems, recurring opposition or a future individual.",
+      "Numerical coincidences do not establish the identity of a contemporary person, government or technology.",
+      ["ntvmr","yaleNT","step"]
+    ],
+
+    [
+      "PF068",
+      "Babylon the Great",
+      "disputed",
+      "Revelation 17",
+      ["Revelation 18","Revelation 19:1-3"],
+      "Revelation portrays Babylon as a symbolic city associated with wealth, corruption and persecution.",
+      "Many historical readings associate the imagery with imperial Rome.",
+      "Roman political and economic structures provide relevant first-century context.",
+      "Other readings treat Babylon as a recurring oppressive system or a future manifestation.",
+      "The symbol does not provide an uncontested identification with a particular modern city or institution.",
+      ["yaleNT","perseus","step"]
+    ],
+
+    [
+      "PF069",
+      "The thousand-year reign",
+      "future",
+      "Revelation 20:1-10",
+      ["Revelation 19:11-21","Revelation 20:11-15"],
+      "Revelation describes a thousand-year period, restraint of Satan and subsequent conflict.",
+      "Christian traditions understand this passage through several millennial frameworks.",
+      "Early and later Christian writings document substantial diversity in interpretation.",
+      "Premillennial, amillennial and postmillennial positions differ concerning sequence and the meaning of the thousand years.",
+      "The symbolic or literal nature and chronological placement of the millennium remain theological disputes.",
+      ["fathers","ccel","yaleNT"]
+    ],
+
+    [
+      "PF070",
+      "New heavens and new earth",
+      "future",
+      "Isaiah 65:17-25",
+      ["Isaiah 66:22","2 Peter 3:13","Revelation 21:1-5","Revelation 22:1-5"],
+      "Isaiah portrays renewed creation and restored communal life.",
+      "Revelation develops renewed creation imagery into its vision of God's presence and final restoration.",
+      "The textual connections establish continuity between prophetic and apocalyptic imagery.",
+      "Traditions differ concerning earthly restoration, cosmic transformation and symbolic interpretation.",
+      "The ultimate realization remains a theological expectation rather than an independently verified future event.",
+      ["greatIsaiah","yaleNT","step","fathers"]
+    ]
+
+  ].map(([
+    id,title,category,prophecy,related,context,
+    fulfillment,evidence,alternatives,limits,sourceIds
+  ]) => ({
+    id,title,category,prophecy,related,context,
+    fulfillment,evidence,alternatives,limits,sourceIds
+  }));
+
+  const historicalTimeline = [
+    [
+      "Approximately 734–732 BCE",
+      "Syro-Ephraimite crisis",
+      "Isaiah 7",
+      "Historical setting of the sign addressed to Ahaz."
+    ],
+    [
+      "Approximately 722–720 BCE",
+      "Fall of Samaria",
+      "Micah 1:5-7",
+      "Assyrian conquest and absorption of the northern kingdom."
+    ],
+    [
+      "701 BCE",
+      "Sennacherib's campaign against Judah",
+      "Isaiah 37",
+      "Assyrian inscriptions and biblical accounts provide overlapping historical evidence."
+    ],
+    [
+      "612 BCE",
+      "Fall of Nineveh",
+      "Nahum 2–3",
+      "Babylonian chronicle evidence documents the city's defeat."
+    ],
+    [
+      "597 BCE",
+      "Babylonian capture of Jerusalem",
+      "2 Kings 24",
+      "Recorded in Babylonian chronicle evidence."
+    ],
+    [
+      "587 or 586 BCE",
+      "Destruction of Jerusalem and the First Temple",
+      "Jeremiah 21; Micah 3",
+      "Historically established catastrophe, with chronological variation."
+    ],
+    [
+      "539 BCE",
+      "Cyrus captures Babylon",
+      "Isaiah 44–45",
+      "The Cyrus Cylinder and cuneiform evidence document the Persian takeover."
+    ],
+    [
+      "Approximately 516–515 BCE",
+      "Completion of the Second Temple",
+      "Haggai 2; Ezra 6",
+      "Persian-period restoration framework."
+    ],
+    [
+      "332 BCE",
+      "Alexander conquers Tyre",
+      "Ezekiel 26",
+      "Relevant to interpretations of the Tyre oracle."
+    ],
+    [
+      "167–164 BCE",
+      "Desecration and rededication of the temple",
+      "Daniel 8–11",
+      "Central to historical readings of the Antiochene crisis."
+    ],
+    [
+      "Approximately 6–4 BCE",
+      "Commonly proposed range for Jesus' birth",
+      "Matthew 1–2",
+      "Approximate reconstruction; infancy chronology is debated."
+    ],
+    [
+      "Approximately 30 or 33 CE",
+      "Crucifixion of Jesus",
+      "Psalm 22; Isaiah 53; Gospel passion narratives",
+      "The crucifixion is historically accepted; its precise year remains debated."
+    ],
+    [
+      "Mid-first century CE",
+      "Famine in Judea",
+      "Acts 11:27-30",
+      "Josephus provides relevant historical evidence."
+    ],
+    [
+      "70 CE",
+      "Roman destruction of Jerusalem",
+      "Mark 13; Luke 21",
+      "Established historical event with literary and archaeological evidence."
+    ]
+  ];
+
+  const evidenceDocuments = [
+    {
+      title:"Great Isaiah Scroll — 1QIsaᵃ",
+      date:"Approximately second century BCE",
+      type:"Manuscript",
+      detail:"Preserves the book of Isaiah in a pre-Christian manuscript, including passages later interpreted in relation to Jesus.",
+      limit:"Establishes prior textual existence, not the truth of a particular fulfillment interpretation.",
+      source:"greatIsaiah"
+    },
+    {
+      title:"Habakkuk Pesher — 1QpHab",
+      date:"Approximately first century BCE",
+      type:"Manuscript and reception history",
+      detail:"Demonstrates how an ancient Jewish community applied prophetic passages to its own historical circumstances.",
+      limit:"Represents a particular ancient interpretation rather than the only meaning of Habakkuk.",
+      source:"scrolls"
+    },
+    {
+      title:"Sargon II royal inscriptions",
+      date:"Late eighth century BCE",
+      type:"Royal inscriptions",
+      detail:"Provide historical evidence relating to Assyrian conquest and administration, including Samaria.",
+      limit:"Royal inscriptions employ imperial ideology and may present selective accounts.",
+      source:"oracc"
+    },
+    {
+      title:"Sennacherib's Taylor Prism",
+      date:"Seventh century BCE inscription describing the 701 BCE campaign",
+      type:"Royal inscription — British Museum 91032",
+      detail:"Records Sennacherib's campaign against Judah and his treatment of Hezekiah.",
+      limit:"Does not independently verify the biblical account of supernatural intervention.",
+      source:"museum"
+    },
+    {
+      title:"Lachish reliefs",
+      date:"Early seventh century BCE",
+      type:"Assyrian palace reliefs",
+      detail:"Depict Sennacherib's conquest of Lachish and provide material context for the campaign against Judah.",
+      limit:"These are royal representations, not neutral photographic records of the campaign.",
+      source:"museum"
+    },
+    {
+      title:"Fall of Nineveh Chronicle",
+      date:"Late seventh-century BCE events",
+      type:"Cuneiform chronicle — British Museum 21901",
+      detail:"Documents the defeat of Nineveh in 612 BCE.",
+      limit:"Establishes the historical event, not the prior composition date of Nahum.",
+      source:"museum"
+    },
+    {
+      title:"Babylonian Jerusalem Chronicle",
+      date:"Early sixth-century BCE events",
+      type:"Cuneiform chronicle — British Museum 21946",
+      detail:"Records the Babylonian capture of Jerusalem in 597 BCE.",
+      limit:"Does not directly document the final temple destruction of 587 or 586 BCE.",
+      source:"museum"
+    },
+    {
+      title:"Cyrus Cylinder",
+      date:"539–538 BCE context",
+      type:"Royal inscription — British Museum 90920",
+      detail:"Documents Cyrus' rise to power in Babylon and policies associated with restoring sanctuaries and communities.",
+      limit:"Does not explicitly identify Jerusalem, the Jewish exiles or Ezra's recorded decree.",
+      source:"cyrus"
+    },
+    {
+      title:"Josephus — Jewish Antiquities",
+      date:"Approximately 93–94 CE",
+      type:"Ancient historical literature",
+      detail:"Book 20 provides relevant evidence about famine in Judea.",
+      limit:"Josephus wrote decades after the famine and does not independently verify Agabus' prophecy.",
+      source:"perseus"
+    },
+    {
+      title:"Josephus — Jewish War",
+      date:"Approximately 75–79 CE",
+      type:"Ancient historical literature",
+      detail:"Book 6 describes the Roman destruction of Jerusalem and the temple.",
+      limit:"Josephus' account reflects his position, audience and literary purposes.",
+      source:"perseus"
+    },
+    {
+      title:"Papyrus 115",
+      date:"Approximately third or fourth century CE",
+      type:"New Testament manuscript — P.Oxy. 4499",
+      detail:"Preserves a reading of 616 in Revelation 13:18, relevant to interpretations of the beast's number.",
+      limit:"The variant does not uniquely establish one interpretation of Revelation.",
+      source:"ntvmr"
+    }
+  ];
+
+  const frameworks = [
+    [
+      "Direct predictive prophecy",
+      "A declaration understood as anticipating a later event. Evaluation requires examining wording, date, specificity and evidence for the proposed outcome."
+    ],
+    [
+      "Conditional prophecy",
+      "A warning or promise whose realization may depend on repentance or other conditions. Jeremiah 18:7-10 and Jonah 3 are important examples."
+    ],
+    [
+      "Typological fulfillment",
+      "An earlier person, event or institution is understood as a pattern realized in a later context. Matthew's use of Hosea 11:1 illustrates this method."
+    ],
+    [
+      "Messianic interpretation",
+      "A passage is understood in relation to the Messiah. Jewish and Christian traditions can disagree about the identity, role and actions of this figure."
+    ],
+    [
+      "Inaugurated fulfillment",
+      "A theological interpretation in which a promise begins to be realized but awaits further consummation."
+    ],
+    [
+      "Fuller meaning",
+      "An interpretive approach often called sensus plenior, in which a later revelation is understood to disclose significance beyond the earlier author's immediate awareness."
+    ],
+    [
+      "Historical-critical interpretation",
+      "Examines authorship, composition, genre, historical setting, literary development and the original audience before evaluating later applications."
+    ],
+    [
+      "Jewish interpretive traditions",
+      "Examine prophetic passages within the Hebrew Bible, Jewish historical experience and diverse rabbinic or messianic expectations."
+    ],
+    [
+      "Preterism",
+      "Interprets many apocalyptic prophecies in relation to events in the ancient past, particularly the first century. Partial and full preterism differ significantly."
+    ],
+    [
+      "Futurism",
+      "Understands substantial portions of biblical eschatological prophecy as awaiting future realization."
+    ],
+    [
+      "Historicism",
+      "Reads apocalyptic imagery as corresponding to successive periods or institutions in the history of the church and world."
+    ],
+    [
+      "Idealism",
+      "Emphasizes recurring symbolic patterns of divine sovereignty, opposition, judgment and hope rather than a fixed historical sequence."
+    ],
+    [
+      "Premillennialism",
+      "Understands Christ's return as preceding the millennial reign described in Revelation 20."
+    ],
+    [
+      "Amillennialism",
+      "Commonly interprets the millennium symbolically in relation to Christ's present reign rather than a separate future earthly thousand-year kingdom."
+    ],
+    [
+      "Postmillennialism",
+      "Generally anticipates an extended era of gospel influence or righteousness before Christ's return."
+    ]
+  ];
+
+  const verificationQuestions = [
+    "What does the passage actually say in its literary context?",
+    "What historical circumstances confronted its original audience?",
+    "Can the prophetic text be securely dated before the proposed event?",
+    "What Hebrew, Aramaic or Greek textual variants affect interpretation?",
+    "Is the declaration predictive, conditional, symbolic or retrospective?",
+    "How specific is the proposed correspondence?",
+    "Does independent contemporary evidence establish the event?",
+    "Does the fulfillment account explicitly quote the prophetic text?",
+    "Could the later account intentionally imitate the earlier passage?",
+    "Are there unresolved details or competing historical explanations?",
+    "Have alternative Jewish and Christian interpretations been examined?",
+    "Are historical observations clearly distinguished from theological conclusions?"
+  ];
+
+  const books = (
+    "Genesis|Exodus|Leviticus|Numbers|Deuteronomy|" +
+    "Joshua|Judges|Ruth|1 Samuel|2 Samuel|1 Kings|" +
+    "2 Kings|1 Chronicles|2 Chronicles|Ezra|Nehemiah|" +
+    "Esther|Job|Psalms|Proverbs|Ecclesiastes|" +
+    "Song of Solomon|Isaiah|Jeremiah|Lamentations|" +
+    "Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|" +
+    "Micah|Nahum|Habakkuk|Zephaniah|Haggai|" +
+    "Zechariah|Malachi|Matthew|Mark|Luke|John|Acts|" +
+    "Romans|1 Corinthians|2 Corinthians|Galatians|" +
+    "Ephesians|Philippians|Colossians|1 Thessalonians|" +
+    "2 Thessalonians|1 Timothy|2 Timothy|Titus|" +
+    "Philemon|Hebrews|James|1 Peter|2 Peter|" +
+    "1 John|2 John|3 John|Jude|Revelation"
+  ).split("|");
+
+  const root = document.createElement("div");
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+      .dbpf {
+        color:var(--text,#f1efe7);
+        line-height:1.75;
+      }
+
+      .dbpf .pf-panel {
+        padding:20px;
+        margin:18px 0;
+        background:var(--panel2,#20211d);
+        border:1px solid var(--line,#34352e);
+        border-radius:12px;
+      }
+
+      .dbpf .pf-card {
+        padding:16px;
+        margin:12px 0;
+        background:var(--panel,#191a17);
+        border:1px solid var(--line,#34352e);
+        border-radius:9px;
+      }
+
+      .dbpf .pf-grid {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(180px,1fr));
+        gap:12px;
+      }
+
+      .dbpf .pf-gold {
+        color:var(--gold,#c9aa70);
+      }
+
+      .dbpf .pf-muted {
+        color:var(--muted,#aaa99e);
+        font-size:13px;
+      }
+
+      .dbpf .pf-stat {
+        color:var(--gold,#c9aa70);
+        font-size:28px;
+        font-weight:bold;
+      }
+
+      .dbpf .pf-note {
+        padding:14px;
+        margin:12px 0;
+        border-left:3px solid var(--gold,#c9aa70);
+        background:var(--bg,#10110f);
+      }
+
+      .dbpf .pf-actions {
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:8px;
+        margin:12px 0;
+      }
+
+      .dbpf input:not([type="checkbox"]),
+      .dbpf select,
+      .dbpf textarea {
+        box-sizing:border-box;
+        width:100%;
+        padding:11px;
+        border:1px solid var(--line,#34352e);
+        background:var(--bg,#10110f);
+        color:var(--text,#f1efe7);
+        border-radius:7px;
+        font:inherit;
+      }
+
+      .dbpf textarea {
+        min-height:150px;
+        resize:vertical;
+      }
+
+      .dbpf label {
+        display:block;
+        margin:6px 0;
+        font-size:13px;
+      }
+
+      .dbpf .pf-check {
+        display:flex;
+        align-items:flex-start;
+        gap:10px;
+        padding:8px 0;
+        font-size:14px;
+      }
+
+      .dbpf input[type="checkbox"] {
+        width:auto;
+        flex-shrink:0;
+        margin-top:5px;
+        accent-color:var(--gold,#c9aa70);
+      }
+
+      .dbpf summary {
+        cursor:pointer;
+        color:var(--gold,#c9aa70);
+        font-weight:600;
+      }
+
+      .dbpf details {
+        padding:12px 0;
+        border-bottom:1px solid var(--line,#34352e);
+      }
+
+      .dbpf a {
+        color:var(--gold,#c9aa70);
+        overflow-wrap:anywhere;
+      }
+
+      .dbpf .pf-text {
+        padding:15px;
+        margin:12px 0;
+        background:var(--bg,#10110f);
+        border-radius:8px;
+        white-space:pre-wrap;
+        overflow-wrap:anywhere;
+      }
+
+      .dbpf .pf-timeline {
+        border-left:2px solid var(--gold,#c9aa70);
+        padding:12px 16px;
+        margin:12px 0;
+      }
+
+      .dbpf button[aria-pressed="true"] {
+        border-color:var(--gold,#c9aa70);
+        color:var(--gold,#c9aa70);
+      }
+
+      .dbpf [hidden] {
+        display:none !important;
+      }
+
+      @media(max-width:600px) {
+        .dbpf .pf-panel,
+        .dbpf .pf-card {
+          padding:12px;
+        }
+
+        .dbpf .pf-grid {
+          grid-template-columns:1fr;
+        }
+      }
+    </style>
+
+    <div class="dbpf">
+
+      <div class="eyebrow">
+        DESERTBIBLE · PROPHETIC RESEARCH
+      </div>
+
+      <h2>Prophecy &amp; Fulfillment</h2>
+
+      <p>
+        Investigate prophetic declarations,
+        messianic interpretations, historical events,
+        textual evidence and anticipated fulfillment.
+      </p>
+
+      <section class="pf-panel">
+
+        <div class="pf-grid">
+
+          <div>
+            <div class="pf-stat" id="pfTotal"></div>
+            Research studies
+          </div>
+
+          <div>
+            <div class="pf-stat" id="pfTypes"></div>
+            Classification types
+          </div>
+
+          <div>
+            <div class="pf-stat" id="pfSourceTotal"></div>
+            Research resources
+          </div>
+
+          <div>
+            <div class="pf-stat" id="pfDocumentTotal"></div>
+            Evidence profiles
+          </div>
+
+        </div>
+
+        <div class="pf-note">
+
+          <strong>Research integrity</strong>
+
+          <p>
+            Historical confirmation of an event,
+            pre-event existence of a text,
+            literary correspondence and theological
+            fulfillment are distinct claims.
+          </p>
+
+          <p>
+            DesertBible does not assign mathematical
+            probabilities to fulfilled prophecies
+            without defensible statistical evidence.
+            Interpretive disagreements are identified
+            rather than concealed.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>01 · Prophecy Research Explorer</h3>
+
+        <div class="pf-grid">
+
+          <div>
+            <label for="pfSearch">Search studies</label>
+
+            <input id="pfSearch"
+              type="search"
+              placeholder="Messiah, Cyrus, Daniel, Micah...">
+          </div>
+
+          <div>
+            <label for="pfCategory">Classification</label>
+
+            <select id="pfCategory">
+              <option value="all">
+                All classifications
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="pfBook">Biblical book</label>
+
+            <select id="pfBook">
+              <option value="all">
+                All biblical books
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="pfSort">Display order</label>
+
+            <select id="pfSort">
+              <option value="canonical">
+                Biblical source order
+              </option>
+              <option value="az">
+                Alphabetical
+              </option>
+              <option value="category">
+                Classification
+              </option>
+              <option value="saved">
+                Bookmarked studies
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfReset">
+            Reset filters
+          </button>
+
+          <button type="button" id="pfExportAll">
+            Export matching studies
+          </button>
+
+        </div>
+
+        <p id="pfCount" role="status"
+           aria-live="polite"></p>
+
+        <div id="pfResults"></div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfPrev">
+            Previous
+          </button>
+
+          <span id="pfPage"></span>
+
+          <button type="button" id="pfNext">
+            Next
+          </button>
+
+        </div>
+
+      </section>
+
+      <section class="pf-panel" id="pfProfile" hidden>
+
+        <div class="eyebrow">
+          PROPHECY RESEARCH DOSSIER
+        </div>
+
+        <h3 id="pfTitle"></h3>
+
+        <div id="pfDetails"></div>
+
+        <h4>Compare Prophecy and Related Passages</h4>
+
+        <div class="pf-grid">
+
+          <div>
+            <label for="pfOriginal">
+              Original passage
+            </label>
+
+            <select id="pfOriginal"></select>
+          </div>
+
+          <div>
+            <label for="pfRelated">
+              Related or fulfillment passage
+            </label>
+
+            <select id="pfRelated"></select>
+          </div>
+
+          <div>
+            <label for="pfTranslation">
+              Translation
+            </label>
+
+            <select id="pfTranslation">
+              <option value="web">
+                World English Bible
+              </option>
+              <option value="kjv">
+                King James Version
+              </option>
+              <option value="asv">
+                American Standard Version
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfCompare">
+            Compare passages
+          </button>
+
+        </div>
+
+        <div class="pf-grid">
+
+          <div>
+            <h4 id="pfOriginalTitle"></h4>
+
+            <div id="pfOriginalText"
+              class="pf-text"
+              aria-live="polite"></div>
+          </div>
+
+          <div>
+            <h4 id="pfRelatedTitle"></h4>
+
+            <div id="pfRelatedText"
+              class="pf-text"
+              aria-live="polite"></div>
+          </div>
+
+        </div>
+
+        <h4>Evidence Verification Checklist</h4>
+
+        <p class="pf-muted">
+          Checked items record your research progress.
+          They do not represent a probability of
+          prophetic fulfillment.
+        </p>
+
+        <div id="pfChecklist"></div>
+
+        <p id="pfProgress"></p>
+
+        <h4>Research Assessment</h4>
+
+        <select id="pfAssessment">
+          <option value="">
+            Not yet assessed
+          </option>
+          <option value="additional">
+            Additional evidence required
+          </option>
+          <option value="textual">
+            Textual relationship established
+          </option>
+          <option value="historical">
+            Historical event corroborated
+          </option>
+          <option value="theological">
+            Theological interpretation
+          </option>
+          <option value="disputed">
+            Competing interpretations unresolved
+          </option>
+        </select>
+
+        <h4>Personal Research Notes</h4>
+
+        <textarea id="pfNotes"
+          aria-label="Prophecy research notes"
+          placeholder="Record citations, textual variants, arguments, objections and conclusions."></textarea>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfSave">
+            Save research
+          </button>
+
+          <button type="button" id="pfBookmark">
+            Bookmark study
+          </button>
+
+          <button type="button" id="pfCopy">
+            Copy dossier
+          </button>
+
+          <button type="button" id="pfDownload">
+            Download dossier
+          </button>
+
+        </div>
+
+        <p id="pfMessage" role="status"
+           aria-live="polite"></p>
+
+      </section>
+
+      <section class="pf-panel">
+        <h3>02 · Historical Fulfillment Timeline</h3>
+
+        <p>
+          Historical events relevant to selected
+          prophetic interpretations.
+        </p>
+
+        <div id="pfTimeline"></div>
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>03 · Manuscripts and External Evidence</h3>
+
+        <p>
+          Investigate the surviving evidence,
+          its historical significance and limitations.
+        </p>
+
+        <div id="pfEvidence"></div>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>04 · Interpretive Frameworks</h3>
+
+        <div id="pfFrameworks"></div>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>05 · Research Sources and Bibliography</h3>
+
+        <label for="pfSourceSearch">
+          Search research resources
+        </label>
+
+        <input id="pfSourceSearch"
+          type="search"
+          placeholder="Isaiah, manuscripts, Yale...">
+
+        <div id="pfLibrary"></div>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>06 · Christian Scholars and Apologists</h3>
+
+        <p>
+          Explore contemporary Christian arguments,
+          manuscript discussions and theological
+          perspectives. Individual prophetic claims
+          require a specific publication or recording
+          before attribution.
+        </p>
+
+        <div id="pfScholars"></div>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>07 · Saved Prophecy Studies</h3>
+
+        <div id="pfSaved"></div>
+
+      </section>
+
+      <button type="button" id="pfClose">
+        Return to research categories
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag,text,parent) {
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) parent.appendChild(element);
+
+    return element;
+  }
+
+  function link(parent,title,url) {
+    const element = make("a",title,parent);
+
+    element.href = url;
+    element.target = "_blank";
+    element.rel = "noopener noreferrer";
+
+    return element;
+  }
+
+  function button(parent,title,callback) {
+    const element = make("button",title,parent);
+
+    element.type = "button";
+    element.addEventListener("click",callback);
+
+    return element;
+  }
+
+  function option(parent,value,title) {
+    const element = make("option",title,parent);
+
+    element.value = value;
+
+    return element;
+  }
+
+  function section(parent,title,description) {
+    make("h4",title,parent);
+    make("p",description,parent);
+  }
+
+  function readStorage(key,fallback) {
+    try {
+      const value = localStorage.getItem(key);
+
+      return value ? JSON.parse(value) : fallback;
+
+    } catch {
+      return fallback;
+    }
+  }
+
+  function writeStorage(key,value) {
+    try {
+      localStorage.setItem(key,JSON.stringify(value));
+
+      return true;
+
+    } catch {
+      return false;
+    }
+  }
+
+  const storageKey = "DesertBible.prophecy.research.v1";
+  const bookmarkKey = "DesertBible.prophecy.bookmarks.v1";
+
+  let research = readStorage(storageKey,{});
+  let saved = readStorage(bookmarkKey,[]);
+
+  if (!research ||
+      typeof research !== "object" ||
+      Array.isArray(research)) {
+    research = {};
+  }
+
+  if (!Array.isArray(saved)) saved = [];
+
+  let active = null;
+  let page = 0;
+  let requestNumber = 0;
+
+  const pageSize = 8;
+  const cache = new Map();
+
+  $("pfTotal").textContent = records.length;
+
+  $("pfTypes").textContent =
+    Object.keys(classifications).length;
+
+  $("pfSourceTotal").textContent =
+    Object.keys(sources).length;
+
+  $("pfDocumentTotal").textContent =
+    evidenceDocuments.length;
+
+  Object.entries(classifications)
+    .forEach(([id,title]) => {
+      option($("pfCategory"),id,title);
+    });
+
+  books.forEach(book => {
+    option($("pfBook"),book,book);
+  });
+
+  function referenceBook(reference) {
+    const match = reference.match(
+      /^(.+?)\s+\d+(?::|$)/
+    );
+
+    return match ? match[1] : "";
+  }
+
+  function filteredRecords() {
+
+    const query = $("pfSearch").value
+      .toLowerCase().trim();
+
+    const category = $("pfCategory").value;
+    const book = $("pfBook").value;
+    const sort = $("pfSort").value;
+
+    const results = records.filter(record => {
+
+      if (category !== "all" &&
+          record.category !== category) {
+        return false;
+      }
+
+      if (sort === "saved" &&
+          !saved.includes(record.id)) {
+        return false;
+      }
+
+      if (book !== "all") {
+
+        const refs = [
+          record.prophecy,
+          ...record.related
+        ];
+
+        if (!refs.some(ref =>
+          referenceBook(ref) === book
+        )) return false;
+      }
+
+      const text = [
+        record.id,
+        record.title,
+        classifications[record.category],
+        record.prophecy,
+        ...record.related,
+        record.context,
+        record.fulfillment,
+        record.evidence,
+        record.alternatives,
+        record.limits
+      ].join(" ").toLowerCase();
+
+      return query.split(/\s+/)
+        .every(word => text.includes(word));
+
+    });
+
+    if (sort === "az") {
+
+      results.sort((a,b) =>
+        a.title.localeCompare(b.title)
+      );
+
+    } else if (sort === "category") {
+
+      results.sort((a,b) =>
+        classifications[a.category]
+          .localeCompare(classifications[b.category])
+      );
+
+    } else {
+
+      results.sort((a,b) => {
+
+        const difference =
+          books.indexOf(referenceBook(a.prophecy)) -
+          books.indexOf(referenceBook(b.prophecy));
+
+        if (difference) return difference;
+
+        const chapterA = Number(
+          (a.prophecy.match(/\s(\d+)(?::|$)/) || [0,0])[1]
+        );
+
+        const chapterB = Number(
+          (b.prophecy.match(/\s(\d+)(?::|$)/) || [0,0])[1]
+        );
+
+        return chapterA - chapterB ||
+          a.id.localeCompare(b.id);
+      });
+    }
+
+    return results;
+  }
+
+  function renderResults() {
+
+    const results = filteredRecords();
+
+    const pages = Math.max(
+      1,
+      Math.ceil(results.length/pageSize)
+    );
+
+    page = Math.max(0,Math.min(page,pages-1));
+
+    $("pfResults").replaceChildren();
+
+    $("pfCount").textContent =
+      results.length + " matching research studies.";
+
+    $("pfPage").textContent =
+      "Page " + (page+1) + " of " + pages;
+
+    $("pfPrev").disabled = page === 0;
+    $("pfNext").disabled = page >= pages-1;
+
+    if (!results.length) {
+
+      make(
+        "p",
+        "No indexed prophecy study matches this selection. This does not establish the absence of prophetic material in the selected book.",
+        $("pfResults")
+      );
+
+      return;
+    }
+
+    results.slice(
+      page*pageSize,
+      (page+1)*pageSize
+    ).forEach(record => {
+
+      const card = make(
+        "article",
+        undefined,
+        $("pfResults")
+      );
+
+      card.className = "pf-card";
+
+      make(
+        "p",
+        record.id + " · " +
+        classifications[record.category],
+        card
+      ).className = "pf-gold";
+
+      make("h3",record.title,card);
+
+      make("p",record.prophecy,card)
+        .className = "pf-gold";
+
+      make("p",record.fulfillment,card);
+
+      const actions = make("div",undefined,card);
+
+      actions.className = "pf-actions";
+
+      button(actions,"Open research dossier",() => {
+        openRecord(record);
+      });
+
+      if (saved.includes(record.id)) {
+
+        make("span","Bookmarked",actions)
+          .className = "pf-gold";
+      }
+
+    });
+  }
+
+  function sourceEntry(parent,id) {
+
+    const source = sources[id];
+
+    if (!source) return;
+
+    const item = make("details",undefined,parent);
+
+    make("summary",source[0],item);
+
+    make("p",source[2],item)
+      .className = "pf-muted";
+
+    link(item,"Open research resource",source[1]);
+  }
+
+  function persistResearch() {
+
+    if (!active) return true;
+
+    const checks = Array.from(
+      $("pfChecklist")
+        .querySelectorAll('input[type="checkbox"]')
+    ).map(input => input.checked);
+
+    research[active.id] = {
+      notes:$("pfNotes").value,
+      assessment:$("pfAssessment").value,
+      checks
+    };
+
+    $("pfProgress").textContent =
+      checks.filter(Boolean).length + " of " +
+      verificationQuestions.length +
+      " research questions reviewed.";
+
+    return writeStorage(storageKey,research);
+  }
+
+  function renderChecklist(record) {
+
+    $("pfChecklist").replaceChildren();
+
+    const previous = research[record.id] || {};
+
+    verificationQuestions.forEach((question,index) => {
+
+      const label = make(
+        "label",
+        undefined,
+        $("pfChecklist")
+      );
+
+      label.className = "pf-check";
+
+      const input = make("input",undefined,label);
+
+      input.type = "checkbox";
+
+      input.checked = Boolean(
+        Array.isArray(previous.checks) &&
+        previous.checks[index]
+      );
+
+      make("span",question,label);
+
+      input.addEventListener(
+        "change",
+        persistResearch
+      );
+
+    });
+  }
+
+  function openRecord(record) {
+
+    persistResearch();
+
+    active = record;
+
+    $("pfProfile").hidden = false;
+
+    $("pfTitle").textContent =
+      record.id + " — " + record.title;
+
+    const details = $("pfDetails");
+
+    details.replaceChildren();
+
+    make(
+      "p",
+      classifications[record.category],
+      details
+    ).className = "pf-gold";
+
+    section(
+      details,
+      "Prophetic or source passage",
+      record.prophecy
+    );
+
+    section(
+      details,
+      "Original historical and literary context",
+      record.context
+    );
+
+    section(
+      details,
+      "Fulfillment claim or later application",
+      record.fulfillment
+    );
+
+    section(
+      details,
+      "Historical and textual evidence",
+      record.evidence
+    );
+
+    section(
+      details,
+      "Alternative interpretations",
+      record.alternatives
+    );
+
+    const caution = make("div",undefined,details);
+
+    caution.className = "pf-note";
+
+    section(
+      caution,
+      "Evidence limitations",
+      record.limits
+    );
+
+    make(
+      "h4",
+      "Related biblical passages",
+      details
+    );
+
+    record.related.forEach(reference => {
+
+      const p = make("p",undefined,details);
+
+      make("span",reference + " · ",p);
+
+      link(
+        p,
+        "Read passage",
+        "https://bible-api.com/" +
+        encodeURIComponent(reference) +
+        "?translation=web"
+      );
+    });
+
+    make(
+      "h4",
+      "Bibliography and research gateways",
+      details
+    );
+
+    record.sourceIds.forEach(id => {
+      sourceEntry(details,id);
+    });
+
+    $("pfOriginal").replaceChildren();
+    $("pfRelated").replaceChildren();
+
+    option(
+      $("pfOriginal"),
+      record.prophecy,
+      record.prophecy
+    );
+
+    record.related.forEach(reference => {
+
+      option(
+        $("pfRelated"),
+        reference,
+        reference
+      );
+    });
+
+    const previous = research[record.id] || {};
+
+    $("pfNotes").value = previous.notes || "";
+
+    $("pfAssessment").value =
+      previous.assessment || "";
+
+    $("pfMessage").textContent = "";
+
+    renderChecklist(record);
+
+    persistResearch();
+
+    updateBookmarkButton();
+
+    comparePassages();
+
+    $("pfProfile").scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+
+  async function fetchPassage(reference,translation) {
+
+    const url = "https://bible-api.com/" +
+      encodeURIComponent(reference) +
+      "?translation=" + translation;
+
+    if (cache.has(url)) {
+      return cache.get(url);
+    }
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Scripture API HTTP " + response.status
+      );
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.verses) ||
+        !data.verses.length) {
+
+      throw new Error("Passage not returned");
+    }
+
+    const result = {data,url};
+
+    cache.set(url,result);
+
+    return result;
+  }
+
+  async function showPassage(
+    reference,
+    translation,
+    titleId,
+    textId,
+    request
+  ) {
+
+    const title = $(titleId);
+    const target = $(textId);
+
+    title.textContent = reference;
+
+    target.textContent = "Retrieving passage...";
+
+    try {
+
+      const result = await fetchPassage(
+        reference,
+        translation
+      );
+
+      if (request !== requestNumber ||
+          !root.isConnected) return;
+
+      target.replaceChildren();
+
+      make(
+        "p",
+        result.data.translation_name ||
+        translation.toUpperCase(),
+        target
+      ).className = "pf-gold";
+
+      result.data.verses.forEach(verse => {
+
+        const line = make("p",undefined,target);
+
+        make(
+          "strong",
+          verse.chapter + ":" +
+          verse.verse + " ",
+          line
+        ).className = "pf-gold";
+
+        line.appendChild(
+          document.createTextNode(
+            String(verse.text || "").trim()
+          )
+        );
+      });
+
+      link(
+        target,
+        "Verify Scripture text",
+        result.url
+      );
+
+    } catch {
+
+      if (request !== requestNumber ||
+          !root.isConnected) return;
+
+      target.replaceChildren();
+
+      make(
+        "p",
+        "Scripture preview is currently unavailable. The research dossier remains accessible.",
+        target
+      );
+
+      link(
+        target,
+        "Investigate the passage in STEP Bible",
+        sources.step[1]
+      );
+    }
+  }
+
+  async function comparePassages() {
+
+    if (!active) return;
+
+    const request = ++requestNumber;
+
+    const translation =
+      $("pfTranslation").value;
+
+    await Promise.all([
+
+      showPassage(
+        $("pfOriginal").value,
+        translation,
+        "pfOriginalTitle",
+        "pfOriginalText",
+        request
+      ),
+
+      showPassage(
+        $("pfRelated").value,
+        translation,
+        "pfRelatedTitle",
+        "pfRelatedText",
+        request
+      )
+
+    ]);
+  }
+
+  function updateBookmarkButton() {
+
+    if (!active) return;
+
+    const exists = saved.includes(active.id);
+
+    $("pfBookmark").textContent = exists ?
+      "Remove bookmark" :
+      "Bookmark study";
+
+    $("pfBookmark").setAttribute(
+      "aria-pressed",
+      String(exists)
+    );
+  }
+
+  function toggleBookmark() {
+
+    if (!active) return;
+
+    if (saved.includes(active.id)) {
+
+      saved = saved.filter(
+        id => id !== active.id
+      );
+
+    } else {
+
+      saved.push(active.id);
+    }
+
+    const stored = writeStorage(
+      bookmarkKey,
+      saved
+    );
+
+    $("pfMessage").textContent = stored ?
+      "Bookmarks updated." :
+      "Bookmarks updated for this session only.";
+
+    updateBookmarkButton();
+
+    renderSaved();
+
+    renderResults();
+  }
+
+  function renderSaved() {
+
+    $("pfSaved").replaceChildren();
+
+    const matches = records.filter(record =>
+      saved.includes(record.id)
+    );
+
+    if (!matches.length) {
+
+      make(
+        "p",
+        "No prophecy studies bookmarked in this browser.",
+        $("pfSaved")
+      );
+
+      return;
+    }
+
+    matches.forEach(record => {
+
+      const row = make(
+        "div",
+        undefined,
+        $("pfSaved")
+      );
+
+      row.className = "pf-actions";
+
+      button(row,record.title,() => {
+        openRecord(record);
+      });
+
+      button(row,"Remove",() => {
+
+        saved = saved.filter(
+          id => id !== record.id
+        );
+
+        writeStorage(bookmarkKey,saved);
+
+        updateBookmarkButton();
+
+        renderSaved();
+
+        renderResults();
+      });
+
+    });
+  }
+
+  function renderTimeline() {
+
+    historicalTimeline.forEach(([
+      date,title,reference,description
+    ]) => {
+
+      const item = make(
+        "article",
+        undefined,
+        $("pfTimeline")
+      );
+
+      item.className = "pf-timeline";
+
+      make("p",date,item)
+        .className = "pf-gold";
+
+      make("h4",title,item);
+
+      make("p",reference,item)
+        .className = "pf-muted";
+
+      make("p",description,item);
+
+    });
+  }
+
+  function renderEvidence() {
+
+    evidenceDocuments.forEach(document => {
+
+      const item = make(
+        "details",
+        undefined,
+        $("pfEvidence")
+      );
+
+      make("summary",document.title,item);
+
+      make("p",document.date,item)
+        .className = "pf-gold";
+
+      make("p",document.type,item);
+
+      section(
+        item,
+        "Historical significance",
+        document.detail
+      );
+
+      section(
+        item,
+        "Research limitations",
+        document.limit
+      );
+
+      sourceEntry(item,document.source);
+
+    });
+  }
+
+  function renderFrameworks() {
+
+    frameworks.forEach(([title,description]) => {
+
+      const item = make(
+        "details",
+        undefined,
+        $("pfFrameworks")
+      );
+
+      make("summary",title,item);
+
+      make("p",description,item);
+    });
+  }
+
+  function renderLibrary() {
+
+    $("pfLibrary").replaceChildren();
+
+    const query = $("pfSourceSearch").value
+      .toLowerCase().trim();
+
+    const matches = Object.entries(sources)
+      .filter(([id,source]) => {
+
+        const text = source.join(" ")
+          .toLowerCase();
+
+        return query.split(/\s+/)
+          .every(word => text.includes(word));
+
+      });
+
+    if (!matches.length) {
+
+      make(
+        "p",
+        "No matching research resources.",
+        $("pfLibrary")
+      );
+
+      return;
+    }
+
+    matches.forEach(([id]) => {
+
+      sourceEntry($("pfLibrary"),id);
+    });
+  }
+
+  const scholars = [
+    [
+      "William Lane Craig",
+      "Philosophy of religion, historical apologetics and arguments concerning Jesus' resurrection.",
+      "Investigate his published arguments alongside historical scholarship and competing explanations.",
+      "craig"
+    ],
+    [
+      "Cliffe Knechtle",
+      "Public Christian apologetics and discussions concerning biblical reliability and the identity of Jesus.",
+      "Identify specific recorded statements and timestamps before using them as evidence for prophetic claims.",
+      "knechtle"
+    ],
+    [
+      "Stuart Knechtle",
+      "Public Christian apologetics and theological discussions.",
+      "Distinguish his individual statements from those of other speakers in shared ministry recordings.",
+      "knechtle"
+    ],
+    [
+      "Wesley Huff",
+      "Biblical manuscript transmission, ancient texts and Christian apologetics.",
+      "Compare manuscript claims with manuscript images, catalogue entries and relevant critical editions.",
+      "huff"
+    ],
+    [
+      "John Lennox",
+      "Christian philosophy, science and theological interpretation.",
+      "Examine the distinction between scientific observations, philosophical arguments and theological claims.",
+      "lennox"
+    ]
+  ];
+
+  function renderScholars() {
+
+    scholars.forEach(([
+      name,scope,method,source
+    ]) => {
+
+      const item = make(
+        "details",
+        undefined,
+        $("pfScholars")
+      );
+
+      make("summary",name,item);
+
+      section(item,"Research relevance",scope);
+
+      section(item,"Verification standard",method);
+
+      link(
+        item,
+        "Official resource",
+        sources[source][1]
+      );
+
+    });
+  }
+
+  function recordReport(record) {
+
+    const personal = research[record.id] || {};
+
+    const checks = Array.isArray(personal.checks) ?
+      personal.checks : [];
+
+    return [
+
+      "DESERTBIBLE — PROPHECY & FULFILLMENT",
+
+      "",
+
+      "Research ID: " + record.id,
+
+      "Title: " + record.title,
+
+      "Classification: " +
+        classifications[record.category],
+
+      "Export date: " + new Date().toISOString(),
+
+      "",
+
+      "SOURCE PASSAGE",
+
+      record.prophecy,
+
+      "",
+
+      "RELATED PASSAGES",
+
+      ...record.related,
+
+      "",
+
+      "ORIGINAL CONTEXT",
+
+      record.context,
+
+      "",
+
+      "FULFILLMENT CLAIM OR APPLICATION",
+
+      record.fulfillment,
+
+      "",
+
+      "HISTORICAL AND TEXTUAL EVIDENCE",
+
+      record.evidence,
+
+      "",
+
+      "ALTERNATIVE INTERPRETATIONS",
+
+      record.alternatives,
+
+      "",
+
+      "LIMITATIONS",
+
+      record.limits,
+
+      "",
+
+      "BIBLIOGRAPHY AND RESEARCH GATEWAYS",
+
+      ...record.sourceIds.map(id => {
+
+        const source = sources[id];
+
+        return source[0] + "\n" +
+          source[2] + "\n" +
+          source[1] + "\n";
+      }),
+
+      "PERSONAL RESEARCH CHECKLIST",
+
+      ...verificationQuestions.map(
+        (question,index) =>
+          (checks[index] ? "[x] " : "[ ] ") +
+          question
+      ),
+
+      "",
+
+      "PERSONAL ASSESSMENT",
+
+      personal.assessment || "Not yet assessed",
+
+      "",
+
+      "PERSONAL RESEARCH NOTES",
+
+      personal.notes || "",
+
+      "",
+
+      "RESEARCH INTEGRITY",
+
+      "Historical corroboration and theological fulfillment are distinct claims.",
+
+      "The dossier contains editorial summaries rather than individually attributed scholarly quotations.",
+
+      "Research collection links require further investigation of individual records."
+
+    ].join("\n");
+  }
+
+  function downloadText(text,filename) {
+
+    const blob = new Blob(
+      [text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = filename;
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    },1000);
+  }
+
+  function resetFilters() {
+
+    $("pfSearch").value = "";
+
+    $("pfCategory").value = "all";
+
+    $("pfBook").value = "all";
+
+    $("pfSort").value = "canonical";
+
+    page = 0;
+
+    renderResults();
+  }
+
+  $("pfSearch").addEventListener("input",() => {
+
+    page = 0;
+
+    renderResults();
+  });
+
+  ["pfCategory","pfBook","pfSort"]
+    .forEach(id => {
+
+      $(id).addEventListener("change",() => {
+
+        page = 0;
+
+        renderResults();
+      });
+
+    });
+
+  $("pfPrev").addEventListener("click",() => {
+
+    page--;
+
+    renderResults();
+  });
+
+  $("pfNext").addEventListener("click",() => {
+
+    page++;
+
+    renderResults();
+  });
+
+  $("pfReset").addEventListener(
+    "click",
+    resetFilters
+  );
+
+  $("pfCompare").addEventListener(
+    "click",
+    comparePassages
+  );
+
+  ["pfOriginal","pfRelated","pfTranslation"]
+    .forEach(id => {
+
+      $(id).addEventListener(
+        "change",
+        comparePassages
+      );
+
+    });
+
+  $("pfNotes").addEventListener(
+    "input",
+    persistResearch
+  );
+
+  $("pfAssessment").addEventListener(
+    "change",
+    persistResearch
+  );
+
+  $("pfSave").addEventListener("click",() => {
+
+    const stored = persistResearch();
+
+    $("pfMessage").textContent = stored ?
+      "Research saved in this browser." :
+      "Research retained for this session only.";
+
+  });
+
+  $("pfBookmark").addEventListener(
+    "click",
+    toggleBookmark
+  );
+
+  $("pfCopy").addEventListener("click",async () => {
+
+    if (!active) return;
+
+    persistResearch();
+
+    try {
+
+      await navigator.clipboard.writeText(
+        recordReport(active)
+      );
+
+      $("pfMessage").textContent =
+        "Research dossier copied.";
+
+    } catch {
+
+      $("pfMessage").textContent =
+        "Clipboard unavailable. Use Download dossier.";
+    }
+  });
+
+  $("pfDownload").addEventListener("click",() => {
+
+    if (!active) return;
+
+    persistResearch();
+
+    downloadText(
+      recordReport(active),
+      "DesertBible-Prophecy-" +
+      active.id + ".txt"
+    );
+
+    $("pfMessage").textContent =
+      "Research dossier prepared.";
+  });
+
+  $("pfExportAll").addEventListener("click",() => {
+
+    persistResearch();
+
+    const results = filteredRecords();
+
+    if (!results.length) {
+
+      $("pfCount").textContent =
+        "No matching studies to export.";
+
+      return;
+    }
+
+    downloadText(
+
+      results.map(recordReport).join(
+        "\n\n========================================\n\n"
+      ),
+
+      "DesertBible-Prophecy-Research.txt"
+    );
+
+  });
+
+  $("pfSourceSearch").addEventListener(
+    "input",
+    renderLibrary
+  );
+
+  $("pfClose").addEventListener("click",() => {
+
+    persistResearch();
+
+    requestNumber++;
+
+    workspace.remove();
+  });
+
+  renderResults();
+
+  renderTimeline();
+
+  renderEvidence();
+
+  renderFrameworks();
+
+  renderLibrary();
+
+  renderScholars();
+
+  renderSaved();
+
+  workspace.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
+
+
