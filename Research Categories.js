@@ -67,6 +67,10 @@ if (item[0].trim().toLowerCase() === "scholarly commentary") {
   openCultureDailyLife(workspace);
   return;
 }
+    if (item[0].trim().toLowerCase() === "prophecy & fulfillment") {
+  openProphecyFulfillment(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
