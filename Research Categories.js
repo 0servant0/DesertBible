@@ -63,7 +63,10 @@ if (item[0].trim().toLowerCase() === "scholarly commentary") {
   openScholarlyCommentary(workspace);
   return;
 }
- 
+ if (item[0].trim().toLowerCase() === "culture & daily life") {
+  openCultureDailyLife(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
