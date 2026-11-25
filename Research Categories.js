@@ -47,6 +47,11 @@ if (item[0] === "Scripture & translations") {
   openCrossReferences(workspace);
   return;
 }
+    if (item[0].trim().toLowerCase() === "people & figures") {
+  openPeopleFigures(workspace);
+  return;
+}
+    
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
@@ -3462,6 +3467,2141 @@ function openCrossReferences(workspace) {
 
   })();
 }
+
+function openPeopleFigures(workspace) {
+  "use strict";
+
+  const source =
+    "https://github.com/STEPBible/STEPBible-Data";
+
+  const distribution =
+    "https://github.com/BSB-publishing/bsb-data-output";
+
+  const api =
+    "https://bible-api.com/";
+
+  const license =
+    "https://creativecommons.org/licenses/by/4.0/";
+
+  const books = [
+    ["GEN","Genesis"],["EXO","Exodus"],
+    ["LEV","Leviticus"],["NUM","Numbers"],
+    ["DEU","Deuteronomy"],["JOS","Joshua"],
+    ["JDG","Judges"],["RUT","Ruth"],
+    ["1SA","1 Samuel"],["2SA","2 Samuel"],
+    ["1KI","1 Kings"],["2KI","2 Kings"],
+    ["1CH","1 Chronicles"],["2CH","2 Chronicles"],
+    ["EZR","Ezra"],["NEH","Nehemiah"],
+    ["EST","Esther"],["JOB","Job"],
+    ["PSA","Psalms"],["PRO","Proverbs"],
+    ["ECC","Ecclesiastes"],["SNG","Song of Solomon"],
+    ["ISA","Isaiah"],["JER","Jeremiah"],
+    ["LAM","Lamentations"],["EZK","Ezekiel"],
+    ["DAN","Daniel"],["HOS","Hosea"],
+    ["JOL","Joel"],["AMO","Amos"],
+    ["OBA","Obadiah"],["JON","Jonah"],
+    ["MIC","Micah"],["NAM","Nahum"],
+    ["HAB","Habakkuk"],["ZEP","Zephaniah"],
+    ["HAG","Haggai"],["ZEC","Zechariah"],
+    ["MAL","Malachi"],["MAT","Matthew"],
+    ["MRK","Mark"],["LUK","Luke"],
+    ["JHN","John"],["ACT","Acts"],
+    ["ROM","Romans"],["1CO","1 Corinthians"],
+    ["2CO","2 Corinthians"],["GAL","Galatians"],
+    ["EPH","Ephesians"],["PHP","Philippians"],
+    ["COL","Colossians"],["1TH","1 Thessalonians"],
+    ["2TH","2 Thessalonians"],["1TI","1 Timothy"],
+    ["2TI","2 Timothy"],["TIT","Titus"],
+    ["PHM","Philemon"],["HEB","Hebrews"],
+    ["JAS","James"],["1PE","1 Peter"],
+    ["2PE","2 Peter"],["1JN","1 John"],
+    ["2JN","2 John"],["3JN","3 John"],
+    ["JUD","Jude"],["REV","Revelation"]
+  ];
+
+  const bookMap = new Map(books);
+
+  const bookOrder = new Map(
+    books.map((book,index) => [book[0],index])
+  );
+
+  const evidence = [
+    {
+      name: "Hezekiah",
+      period: "Late eighth century BCE",
+      role: "King of Judah",
+      passages: [
+        "2 Kings 18:1-16",
+        "Isaiah 36:1",
+        "2 Chronicles 32:1"
+      ],
+      biblical:
+        "The biblical narratives describe Hezekiah's reign, religious reforms and confrontation with Assyria.",
+      object: "Sennacherib's Prism",
+      date: "691 BCE; describing the campaign of 701 BCE",
+      status: "Direct external attestation",
+      finding:
+        "The Assyrian royal inscription identifies Hezekiah of Judah and describes Sennacherib's campaign against his kingdom.",
+      limitation:
+        "The inscription is an Assyrian royal account. It does not independently confirm every event or theological explanation in the biblical narratives.",
+      institution: "Israel Museum",
+      url:
+        "https://imj.org.il/en/exhibitions/special-display-assyrian-campaign-judah-told-sennacherib-prism"
+    },
+    {
+      name: "Sennacherib",
+      period: "705–681 BCE",
+      role: "King of Assyria",
+      passages: [
+        "2 Kings 18:13",
+        "2 Kings 19:36-37",
+        "Isaiah 36:1"
+      ],
+      biblical:
+        "The biblical accounts describe Sennacherib's invasion of Judah during Hezekiah's reign.",
+      object: "Royal annals of Sennacherib",
+      date: "Early seventh century BCE",
+      status: "Direct external attestation",
+      finding:
+        "Surviving Assyrian royal inscriptions document his reign and campaigns, including his invasion of Judah in 701 BCE.",
+      limitation:
+        "Royal inscriptions emphasize imperial achievements and must be evaluated in light of their political and literary purpose.",
+      institution: "Israel Museum",
+      url:
+        "https://imj.org.il/en/exhibitions/special-display-assyrian-campaign-judah-told-sennacherib-prism"
+    },
+    {
+      name: "Jehu",
+      period: "Ninth century BCE",
+      role: "King of Israel",
+      passages: [
+        "2 Kings 9:1-13",
+        "2 Kings 10:28-36"
+      ],
+      biblical:
+        "Second Kings describes Jehu's accession and overthrow of the ruling dynasty of Israel.",
+      object: "Black Obelisk of Shalmaneser III",
+      date: "Late ninth century BCE",
+      status: "Direct external attestation",
+      finding:
+        "The Assyrian monument records tribute associated with Jehu and identifies him using the dynastic designation of Omri.",
+      limitation:
+        "The Assyrian designation does not establish that Jehu was literally Omri's biological son. Whether the depicted figure is Jehu himself or a representative requires caution.",
+      institution: "Biblical Archaeology — artifact record",
+      url:
+        "https://biblical-archaeology.org/en/?focused_location=17408"
+    }
+  ];
+
+  const root = document.createElement("div");
+
+  workspace.replaceChildren(root);
+
+  let people = [];
+  let peopleMap = new Map();
+  let selected = null;
+  let selectedReferences = [];
+  let page = 0;
+  let refPage = 0;
+  let loadedSource = "";
+  let retrievedAt = "";
+  let profileVersion = 0;
+
+  const pageSize = 24;
+  const referencePageSize = 30;
+
+  const textCache = new Map();
+
+  root.innerHTML = `
+    <style>
+      .dbpf {
+        color:var(--text);
+        line-height:1.75;
+      }
+
+      .dbpf .pf-panel {
+        border:1px solid var(--line);
+        background:var(--panel2);
+        border-radius:12px;
+        padding:20px;
+        margin:16px 0;
+      }
+
+      .dbpf .pf-controls {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(160px,1fr));
+        gap:12px;
+        margin:14px 0;
+      }
+
+      .dbpf .pf-grid {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(190px,1fr));
+        gap:12px;
+      }
+
+      .dbpf .pf-card {
+        background:var(--panel);
+        border:1px solid var(--line);
+        border-left:3px solid var(--gold);
+        border-radius:9px;
+        padding:16px;
+        overflow-wrap:anywhere;
+      }
+
+      .dbpf input,
+      .dbpf select,
+      .dbpf textarea {
+        box-sizing:border-box;
+        width:100%;
+        min-width:0;
+        background:var(--bg);
+        color:var(--text);
+        border:1px solid var(--line);
+        padding:11px;
+        border-radius:8px;
+        font:inherit;
+      }
+
+      .dbpf textarea {
+        resize:vertical;
+        min-height:130px;
+      }
+
+      .dbpf label {
+        display:block;
+        color:var(--muted);
+        margin-bottom:5px;
+      }
+
+      .dbpf .pf-actions {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin:14px 0;
+      }
+
+      .dbpf .pf-stat {
+        color:var(--gold);
+        font-size:25px;
+        font-weight:700;
+      }
+
+      .dbpf .pf-muted {
+        color:var(--muted);
+        font-size:13px;
+      }
+
+      .dbpf .pf-tag {
+        color:var(--gold);
+        font-size:13px;
+      }
+
+      .dbpf .pf-reference {
+        border-bottom:1px solid var(--line);
+        padding:12px 0;
+      }
+
+      .dbpf blockquote {
+        margin:10px 0;
+        padding:14px;
+        background:var(--bg);
+        border-left:2px solid var(--gold);
+      }
+
+      .dbpf a {
+        color:var(--gold);
+        overflow-wrap:anywhere;
+      }
+
+      .dbpf details {
+        border-bottom:1px solid var(--line);
+        padding:12px 0;
+      }
+
+      .dbpf summary {
+        cursor:pointer;
+        color:var(--gold);
+      }
+
+      .dbpf button:disabled {
+        opacity:.45;
+        cursor:not-allowed;
+      }
+
+      @media(max-width:600px) {
+        .dbpf .pf-panel {
+          padding:12px;
+        }
+      }
+    </style>
+
+    <div class="dbpf">
+
+      <div class="eyebrow">
+        DESERTBIBLE · BIBLICAL PROSOPography
+      </div>
+
+      <h2>People &amp; Figures</h2>
+
+      <p>
+        Investigate biblical individuals, their
+        scriptural appearances, family relationships,
+        names and historical evidence.
+      </p>
+
+      <section class="pf-panel">
+
+        <div class="pf-controls">
+
+          <div>
+            <div class="pf-stat" id="pfCount">—</div>
+            Individual records
+          </div>
+
+          <div>
+            <div class="pf-stat">66</div>
+            Canonical books supported
+          </div>
+
+          <div>
+            <div class="pf-stat" id="pfMentions">—</div>
+            Indexed person-verse associations
+          </div>
+
+        </div>
+
+        <p class="pf-muted">
+          Prosopography is the study of people
+          and their relationships through
+          collective historical and textual records.
+        </p>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>01 · Biblical People Directory</h3>
+
+        <div class="pf-controls">
+
+          <div>
+            <label for="pfSearch">
+              Search name or identifier
+            </label>
+            <input id="pfSearch"
+                   type="search"
+                   placeholder="David, Mary, Moses...">
+          </div>
+
+          <div>
+            <label for="pfTestament">
+              Scriptural appearances
+            </label>
+            <select id="pfTestament">
+              <option value="all">Entire Bible</option>
+              <option value="ot">Old Testament</option>
+              <option value="nt">New Testament</option>
+              <option value="both">Both Testaments</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="pfBook">Biblical book</label>
+            <select id="pfBook">
+              <option value="">All books</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="pfChapter">
+              Chapter number
+            </label>
+            <input id="pfChapter"
+                   type="number"
+                   min="1"
+                   max="150"
+                   placeholder="All chapters">
+          </div>
+
+          <div>
+            <label for="pfSort">Sort records</label>
+            <select id="pfSort">
+              <option value="name">
+                Alphabetical
+              </option>
+              <option value="mentions">
+                Most occurrences
+              </option>
+              <option value="scripture">
+                Biblical book order
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfReset">
+            Reset filters
+          </button>
+
+          <button type="button" id="pfReload">
+            Reload directory
+          </button>
+
+        </div>
+
+        <p id="pfStatus"
+           role="status"
+           aria-live="polite"></p>
+
+        <p id="pfSummary"></p>
+
+        <div id="pfDirectory" class="pf-grid"></div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfBack">
+            Previous results
+          </button>
+
+          <button type="button" id="pfNext">
+            Next results
+          </button>
+
+        </div>
+
+        <p id="pfPage"></p>
+
+      </section>
+
+      <section class="pf-panel" id="pfProfilePanel" hidden>
+
+        <div class="eyebrow">
+          INDIVIDUAL RESEARCH RECORD
+        </div>
+
+        <h2 id="pfName"></h2>
+
+        <div id="pfIdentity"></div>
+
+        <h3>02 · Biblical Names &amp; Identity</h3>
+
+        <div id="pfNames"></div>
+
+        <h3>03 · Family &amp; Relationships</h3>
+
+        <div id="pfRelations"></div>
+
+        <p class="pf-muted">
+          Relationships follow the source dataset.
+          Ancient genealogies may omit generations,
+          employ broader kinship terminology or
+          contain disputed identifications.
+        </p>
+
+        <h3>04 · Scripture Occurrences</h3>
+
+        <div class="pf-controls">
+
+          <div>
+            <label for="pfRefBook">
+              Filter references
+            </label>
+            <select id="pfRefBook">
+              <option value="">All books</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="pfEdition">
+              Scripture translation
+            </label>
+            <select id="pfEdition">
+              <option value="web">WEB</option>
+              <option value="kjv">KJV</option>
+              <option value="asv">ASV</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div id="pfReferences"></div>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfRefBack">
+            Previous references
+          </button>
+
+          <button type="button" id="pfRefNext">
+            Next references
+          </button>
+
+        </div>
+
+        <p id="pfRefPage"></p>
+
+        <h3>05 · Research Notes</h3>
+
+        <label for="pfNotes">
+          Personal observations and citations
+        </label>
+
+        <textarea id="pfNotes"
+          placeholder="Record observations, questions and sources..."></textarea>
+
+        <div class="pf-actions">
+
+          <button type="button" id="pfSave">
+            Save notes locally
+          </button>
+
+          <button type="button" id="pfCopy">
+            Copy profile
+          </button>
+
+          <button type="button" id="pfDownload">
+            Download profile
+          </button>
+
+        </div>
+
+        <p id="pfNoteStatus" role="status"></p>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>06 · Historical &amp; Archaeological Evidence</h3>
+
+        <p>
+          Selected case studies connecting biblical
+          figures with surviving external documents.
+        </p>
+
+        <div id="pfEvidence"></div>
+
+        <p class="pf-muted">
+          This is a selected evidence catalogue,
+          not an exhaustive inventory of every
+          externally attested biblical figure.
+          Absence from this catalogue does not establish
+          absence of historical evidence.
+        </p>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>07 · Evaluating Biblical Figures</h3>
+
+        <details open>
+
+          <summary>Biblical testimony</summary>
+
+          <p>
+            Biblical passages establish what the
+            surviving scriptural texts communicate
+            about an individual. Literary context,
+            genre and textual transmission remain
+            relevant to interpretation.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Direct external attestation</summary>
+
+          <p>
+            An inscription, document or other
+            external record may identify an
+            individual by name, title and historical
+            circumstances.
+          </p>
+
+          <p>
+            Identification requires more than
+            similarity of names.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Indirect and contextual evidence</summary>
+
+          <p>
+            Archaeological evidence can illuminate
+            a person's geographical setting,
+            political environment or cultural
+            background without establishing that
+            individual's historical existence.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Chronological uncertainty</summary>
+
+          <p>
+            Exact birth dates, death dates and
+            genealogical chronologies cannot be
+            established for many biblical figures.
+            This directory does not assign invented
+            dates to fill those gaps.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Individuals sharing a name</summary>
+
+          <p>
+            Biblical individuals frequently share
+            names. Identification must account for
+            their family, geographical setting,
+            chronological setting and literary
+            context.
+          </p>
+
+          <p>
+            Distinct dataset identifiers are retained
+            to avoid merging different individuals.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Scripture and theological interpretation</summary>
+
+          <p>
+            Historical identification does not by
+            itself establish every theological claim
+            associated with a figure. Distinguish
+            historical investigation from matters of
+            religious interpretation and belief.
+          </p>
+
+        </details>
+
+      </section>
+
+      <section class="pf-panel">
+
+        <h3>08 · Research Sources</h3>
+
+        <p>
+          Structured proper-name data created for
+          STEP Bible, based on work at Tyndale
+          House, Cambridge.
+        </p>
+
+        <p>
+          <a href="https://www.stepbible.org/"
+             target="_blank" rel="noopener noreferrer">
+            STEP Bible — biblical research platform
+          </a>
+        </p>
+
+        <p>
+          <a href="https://github.com/STEPBible/STEPBible-Data"
+             target="_blank" rel="noopener noreferrer">
+            TIPNR — original dataset and documentation
+          </a>
+        </p>
+
+        <p>
+          <a href="https://github.com/BSB-publishing/bsb-data"
+             target="_blank" rel="noopener noreferrer">
+            BSB data — structured conversion documentation
+          </a>
+        </p>
+
+        <p>
+          <a href="https://creativecommons.org/licenses/by/4.0/"
+             target="_blank" rel="noopener noreferrer">
+            Creative Commons Attribution 4.0
+          </a>
+        </p>
+
+        <p>
+          <a href="https://oracc.museum.upenn.edu/"
+             target="_blank" rel="noopener noreferrer">
+            ORACC — ancient cuneiform research
+          </a>
+        </p>
+
+        <p>
+          <a href="https://www.britishmuseum.org/collection"
+             target="_blank" rel="noopener noreferrer">
+            British Museum — collection catalogue
+          </a>
+        </p>
+
+        <p>
+          <a href="https://www.tyndalebulletin.org/"
+             target="_blank" rel="noopener noreferrer">
+            Tyndale Bulletin — biblical scholarship
+          </a>
+        </p>
+
+        <p>
+          <a href="https://bible-api.com/"
+             target="_blank" rel="noopener noreferrer">
+            Bible API — Scripture retrieval
+          </a>
+        </p>
+
+        <div id="pfProvenance"></div>
+
+        <p class="pf-muted">
+          DesertBible filters, indexes and reformats
+          the structured identification data.
+          Extended AI-generated biographical descriptions
+          are not imported. Source identifications
+          are not independently verified person by person.
+          Verse references may follow different
+          numbering or translation traditions.
+        </p>
+
+      </section>
+
+      <button type="button" id="pfClose">
+        Return to research categories
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag,text,parent) {
+
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) parent.appendChild(element);
+
+    return element;
+  }
+
+  function link(parent,title,url) {
+
+    const anchor = make("a",title,parent);
+
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    return anchor;
+  }
+
+  function button(parent,title,action) {
+
+    const element = make("button",title,parent);
+
+    element.type = "button";
+
+    element.addEventListener("click",action);
+
+    return element;
+  }
+
+  function normalize(value) {
+
+    return String(value || "")
+      .normalize("NFKD")
+      .replace(/\p{M}/gu,"")
+      .toLowerCase()
+      .trim();
+  }
+
+  function readableID(value) {
+
+    return String(value || "")
+      .replace(/_/g," ")
+      .replace(/@/g," · ");
+  }
+
+  function parseReference(value) {
+
+    const result =
+      /^([1-3]?[A-Z]+)\.(\d+)\.(\d+)$/
+        .exec(String(value).toUpperCase());
+
+    if (!result) return null;
+
+    const aliases = {
+      EZE:"EZK",
+      SON:"SNG",
+      NAH:"NAM",
+      JOE:"JOL",
+      JUDG:"JDG"
+    };
+
+    const code =
+      aliases[result[1]] || result[1];
+
+    if (!bookMap.has(code)) return null;
+
+    return {
+      code,
+      chapter:Number(result[2]),
+      verse:Number(result[3]),
+      raw:value,
+      label:
+        bookMap.get(code) + " " +
+        result[2] + ":" + result[3]
+    };
+  }
+
+  function sortReferences(a,b) {
+
+    return (
+      bookOrder.get(a.code) -
+      bookOrder.get(b.code) ||
+      a.chapter - b.chapter ||
+      a.verse - b.verse
+    );
+  }
+
+  function getReferences(person) {
+
+    const output = new Map();
+
+    const names = Array.isArray(person.names)
+      ? person.names
+      : [];
+
+    names.forEach(name => {
+
+      if (!Array.isArray(name.verses)) return;
+
+      name.verses.forEach(value => {
+
+        const parsed = parseReference(value);
+
+        if (parsed) {
+          output.set(parsed.label,parsed);
+        }
+      });
+    });
+
+    return [...output.values()].sort(sortReferences);
+  }
+
+  function getName(person) {
+
+    if (person.uniqueName) {
+
+      return String(person.uniqueName)
+        .split("@")[0];
+    }
+
+    if (Array.isArray(person.names)) {
+
+      const entry = person.names.find(
+        item => item.ESV_translation
+      );
+
+      if (entry) return entry.ESV_translation;
+    }
+
+    return readableID(person.id);
+  }
+
+  function nameVariants(person) {
+
+    const variants = new Set();
+
+    if (Array.isArray(person.names)) {
+
+      person.names.forEach(name => {
+
+        Object.entries(name).forEach(([key,value]) => {
+
+          if (
+            typeof value === "string" &&
+            /translation|transliteration|hebrew|greek|lemma/i
+              .test(key)
+          ) {
+            variants.add(value);
+          }
+        });
+      });
+    }
+
+    variants.add(getName(person));
+
+    return [...variants].filter(Boolean);
+  }
+
+  function prepareRecords(records) {
+
+    const unique = new Map();
+
+    records.forEach(record => {
+
+      if (!record || typeof record !== "object") return;
+
+      if (
+        normalize(record.type) !== "person" ||
+        !record.id
+      ) return;
+
+      if (unique.has(record.id)) return;
+
+      const references = getReferences(record);
+
+      const name = getName(record);
+      const variants = nameVariants(record);
+
+      const searchText = normalize(
+        [name,record.id,record.uniqueName,...variants]
+          .filter(Boolean)
+          .join(" ")
+      );
+
+      unique.set(record.id,{
+        raw:record,
+        id:record.id,
+        name,
+        variants,
+        references,
+        searchText,
+        ot:references.some(
+          ref => bookOrder.get(ref.code) < 39
+        ),
+        nt:references.some(
+          ref => bookOrder.get(ref.code) >= 39
+        )
+      });
+    });
+
+    return [...unique.values()];
+  }
+
+  async function fetchJSON(url) {
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+
+      throw new Error("HTTP " + response.status);
+    }
+
+    return response.json();
+  }
+
+  async function retrieveDataset() {
+
+    if (window.DesertBiblePeopleDataset) {
+      return window.DesertBiblePeopleDataset;
+    }
+
+    const folderAPI =
+      "https://api.github.com/repos/BSB-publishing/" +
+      "bsb-data-output/contents/base/proper-names";
+
+    let files;
+
+    try {
+
+      files = await fetchJSON(folderAPI);
+
+    } catch (error) {
+
+      throw new Error(
+        "The structured source directory could not be accessed: " +
+        error.message
+      );
+    }
+
+    if (!Array.isArray(files)) {
+
+      throw new Error(
+        "Unexpected source directory format."
+      );
+    }
+
+    const candidates = files.filter(file =>
+
+      file.type === "file" &&
+      file.download_url &&
+      /\.(json|jsonl)$/i.test(file.name) &&
+      !/schema|metadata|manifest/i.test(file.name)
+
+    ).sort((a,b) => {
+
+      const priority = name =>
+        /people|person|persons/i.test(name)
+          ? 0
+          : /proper|names/i.test(name)
+          ? 1
+          : 2;
+
+      return priority(a.name) - priority(b.name);
+    });
+
+    for (const file of candidates) {
+
+      try {
+
+        const response = await fetch(file.download_url);
+
+        if (!response.ok) continue;
+
+        const raw = await response.text();
+
+        let records;
+
+        if (/\.jsonl$/i.test(file.name)) {
+
+          records = raw.split(/\r?\n/)
+            .filter(line => line.trim())
+            .map(line => JSON.parse(line));
+
+        } else {
+
+          const data = JSON.parse(raw);
+
+          if (Array.isArray(data)) {
+
+            records = data;
+
+          } else if (Array.isArray(data.people)) {
+
+            records = data.people;
+
+          } else if (Array.isArray(data.entries)) {
+
+            records = data.entries;
+
+          } else if (Array.isArray(data.records)) {
+
+            records = data.records;
+
+          } else {
+
+            records = Object.values(data);
+          }
+        }
+
+        const prepared = prepareRecords(records);
+
+        if (prepared.length < 1000) continue;
+
+        const result = {
+
+          people:prepared,
+
+          url:file.download_url,
+
+          retrieved:new Date().toISOString(),
+
+          sha:file.sha || ""
+
+        };
+
+        window.DesertBiblePeopleDataset = result;
+
+        return result;
+
+      } catch {
+
+        continue;
+      }
+    }
+
+    throw new Error(
+      "No compatible full people dataset was found. " +
+      "Inspect the source repository before retrying."
+    );
+  }
+
+  books.forEach(([code,name]) => {
+
+    const option = make("option",name,$("pfBook"));
+
+    option.value = code;
+  });
+
+  async function loadDirectory() {
+
+    $("pfReload").disabled = true;
+
+    $("pfStatus").textContent =
+      "Retrieving and indexing biblical people…";
+
+    try {
+
+      const result = await retrieveDataset();
+
+      if (!root.isConnected) return;
+
+      people = result.people;
+
+      peopleMap = new Map(
+        people.map(person => [person.id,person])
+      );
+
+      loadedSource = result.url;
+      retrievedAt = result.retrieved;
+
+      $("pfCount").textContent =
+        people.length.toLocaleString();
+
+      $("pfMentions").textContent =
+        people.reduce(
+          (sum,person) =>
+            sum + person.references.length,
+          0
+        ).toLocaleString();
+
+      $("pfProvenance").replaceChildren();
+
+      link(
+        $("pfProvenance"),
+        "Inspect exact retrieved data file",
+        loadedSource
+      );
+
+      make(
+        "p",
+        "Retrieved (UTC): " + retrievedAt,
+        $("pfProvenance")
+      );
+
+      if (result.sha) {
+
+        make(
+          "p",
+          "Source file Git blob SHA: " + result.sha,
+          $("pfProvenance")
+        );
+      }
+
+      $("pfStatus").textContent =
+        "Biblical people directory loaded.";
+
+      page = 0;
+
+      renderDirectory();
+
+    } catch (error) {
+
+      $("pfStatus").textContent = error.message;
+
+      $("pfDirectory").replaceChildren();
+
+      link(
+        $("pfDirectory"),
+        "Inspect the external data repository",
+        distribution
+      );
+
+    } finally {
+
+      $("pfReload").disabled = false;
+    }
+  }
+
+  function filteredPeople() {
+
+    const search = normalize($("pfSearch").value);
+
+    const testament = $("pfTestament").value;
+
+    const book = $("pfBook").value;
+
+    const chapter = Number($("pfChapter").value);
+
+    const result = people.filter(person => {
+
+      if (
+        search &&
+        !person.searchText.includes(search)
+      ) return false;
+
+      if (testament === "ot" && !person.ot) {
+        return false;
+      }
+
+      if (testament === "nt" && !person.nt) {
+        return false;
+      }
+
+      if (
+        testament === "both" &&
+        !(person.ot && person.nt)
+      ) return false;
+
+      if (book || chapter) {
+
+        if (!person.references.some(reference =>
+
+          (!book || reference.code === book) &&
+          (!chapter || reference.chapter === chapter)
+
+        )) return false;
+      }
+
+      return true;
+    });
+
+    const order = $("pfSort").value;
+
+    if (order === "mentions") {
+
+      result.sort((a,b) =>
+
+        b.references.length -
+        a.references.length ||
+        a.name.localeCompare(b.name)
+
+      );
+
+    } else if (order === "scripture") {
+
+      result.sort((a,b) => {
+
+        if (!a.references.length) {
+          return b.references.length ? 1 : 0;
+        }
+
+        if (!b.references.length) return -1;
+
+        return sortReferences(
+          a.references[0],
+          b.references[0]
+        );
+      });
+
+    } else {
+
+      result.sort((a,b) =>
+
+        a.name.localeCompare(b.name) ||
+        a.id.localeCompare(b.id)
+
+      );
+    }
+
+    return result;
+  }
+
+  function renderDirectory() {
+
+    const filtered = filteredPeople();
+
+    const pages = Math.max(
+      1,Math.ceil(filtered.length/pageSize)
+    );
+
+    page = Math.min(
+      Math.max(page,0),
+      pages-1
+    );
+
+    $("pfDirectory").replaceChildren();
+
+    $("pfSummary").textContent =
+      filtered.length.toLocaleString() +
+      " matching individual records.";
+
+    $("pfPage").textContent =
+      "Page " + (page+1) + " of " + pages;
+
+    $("pfBack").disabled = page === 0;
+
+    $("pfNext").disabled = page+1 >= pages;
+
+    const visible = filtered.slice(
+      page*pageSize,
+      (page+1)*pageSize
+    );
+
+    if (!visible.length) {
+
+      make(
+        "p",
+        "No matching people found.",
+        $("pfDirectory")
+      );
+
+      return;
+    }
+
+    visible.forEach(person => {
+
+      const card = make(
+        "article",undefined,$("pfDirectory")
+      );
+
+      card.className = "pf-card";
+
+      make("h3",person.name,card);
+
+      const id = make(
+        "p",
+        person.id,
+        card
+      );
+
+      id.className = "pf-muted";
+
+      make(
+        "p",
+        person.references.length +
+        " indexed verse references",
+        card
+      );
+
+      if (person.references.length) {
+
+        make(
+          "p",
+          "First indexed occurrence: " +
+          person.references[0].label,
+          card
+        );
+      }
+
+      make(
+        "p",
+        person.ot && person.nt
+          ? "Old and New Testament appearances"
+          : person.ot
+          ? "Old Testament appearances"
+          : person.nt
+          ? "New Testament appearances"
+          : "No recognized verse references",
+        card
+      );
+
+      button(
+        card,
+        "Open research profile",
+        () => openProfile(person)
+      );
+    });
+  }
+
+  function renderNames(person) {
+
+    $("pfNames").replaceChildren();
+
+    if (!Array.isArray(person.raw.names)) {
+
+      make(
+        "p",
+        "No structured name forms supplied.",
+        $("pfNames")
+      );
+
+      return;
+    }
+
+    person.raw.names.forEach((entry,index) => {
+
+      const details = make(
+        "details",undefined,$("pfNames")
+      );
+
+      make(
+        "summary",
+        entry.ESV_translation ||
+        entry.strongs ||
+        "Name record " + (index+1),
+        details
+      );
+
+      const fields = Object.entries(entry)
+        .filter(([key,value]) =>
+
+          typeof value === "string" &&
+          /translation|transliteration|hebrew|greek|lemma|strong/i
+            .test(key)
+
+        );
+
+      fields.forEach(([key,value]) => {
+
+        const p = make("p",undefined,details);
+
+        make(
+          "strong",
+          key.replace(/_/g," ") + ": ",
+          p
+        );
+
+        p.append(value);
+      });
+
+      if (Array.isArray(entry.verses)) {
+
+        make(
+          "p",
+          entry.verses.length +
+          " source reference entries.",
+          details
+        );
+      }
+    });
+  }
+
+  function renderRelations(person) {
+
+    const panel = $("pfRelations");
+
+    panel.replaceChildren();
+
+    const relations = person.raw.relations;
+
+    if (
+      !relations ||
+      !Object.keys(relations).length
+    ) {
+
+      make(
+        "p",
+        "No family relationship records supplied by this dataset.",
+        panel
+      );
+
+      return;
+    }
+
+    Object.entries(relations).forEach(([role,value]) => {
+
+      const section = make("div",undefined,panel);
+
+      make(
+        "h4",
+        role.replace(/_/g," "),
+        section
+      );
+
+      const entries = Array.isArray(value)
+        ? value
+        : [value];
+
+      entries.forEach(entry => {
+
+        const identifier =
+          typeof entry === "string"
+            ? entry
+            : entry?.id || entry?.name;
+
+        if (!identifier) return;
+
+        const related = peopleMap.get(identifier);
+
+        if (related) {
+
+          const actions = make(
+            "div",undefined,section
+          );
+
+          actions.className = "pf-actions";
+
+          button(
+
+            actions,
+
+            related.name + " · " + related.id,
+
+            () => openProfile(related)
+
+          );
+
+        } else {
+
+          make(
+            "p",
+            readableID(identifier) +
+            " — source relationship identifier",
+            section
+          );
+        }
+      });
+    });
+  }
+
+  function notesKey(person) {
+
+    return "DesertBible.people.notes." + person.id;
+  }
+
+  function openProfile(person) {
+
+    selected = person;
+
+    selectedReferences = person.references;
+
+    profileVersion++;
+
+    $("pfProfilePanel").hidden = false;
+
+    $("pfName").textContent = person.name;
+
+    $("pfIdentity").replaceChildren();
+
+    make(
+      "p",
+      "Individual identifier: " + person.id,
+      $("pfIdentity")
+    );
+
+    make(
+      "p",
+      "Source identity: " +
+        (person.raw.uniqueName || person.id),
+      $("pfIdentity")
+    );
+
+    make(
+      "p",
+      "Recorded name forms: " +
+        person.variants.join(" · "),
+      $("pfIdentity")
+    );
+
+    make(
+      "p",
+      person.references.length +
+        " indexed Scripture occurrences.",
+      $("pfIdentity")
+    );
+
+    if (person.references.length) {
+
+      make(
+        "p",
+        "First indexed biblical occurrence: " +
+          person.references[0].label,
+        $("pfIdentity")
+      );
+
+      make(
+        "p",
+        "Last indexed biblical occurrence: " +
+          person.references[
+            person.references.length-1
+          ].label,
+        $("pfIdentity")
+      );
+    }
+
+    make(
+      "p",
+      "Canonical reference order is not a chronological biography.",
+      $("pfIdentity")
+    ).className = "pf-muted";
+
+    renderNames(person);
+
+    renderRelations(person);
+
+    $("pfRefBook").replaceChildren();
+
+    const all = make(
+      "option","All books",$("pfRefBook")
+    );
+
+    all.value = "";
+
+    const usedBooks = new Set(
+      person.references.map(ref => ref.code)
+    );
+
+    books.forEach(([code,name]) => {
+
+      if (!usedBooks.has(code)) return;
+
+      const option = make(
+        "option",name,$("pfRefBook")
+      );
+
+      option.value = code;
+    });
+
+    $("pfNotes").value = "";
+
+    $("pfNoteStatus").textContent = "";
+
+    try {
+
+      $("pfNotes").value =
+        localStorage.getItem(notesKey(person)) || "";
+
+    } catch {
+
+      $("pfNoteStatus").textContent =
+        "Local note storage is unavailable.";
+    }
+
+    refPage = 0;
+
+    renderReferences();
+
+    $("pfProfilePanel").scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+
+  async function retrieveScripture(reference,edition) {
+
+    const url = api +
+      encodeURIComponent(reference) +
+      "?translation=" + edition;
+
+    if (textCache.has(url)) {
+
+      return textCache.get(url);
+    }
+
+    const response = await fetch(url);
+
+    if (response.status === 429) {
+
+      throw new Error(
+        "Scripture source rate limit reached. Retry shortly."
+      );
+    }
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Scripture source returned HTTP " +
+          response.status
+      );
+    }
+
+    const data = await response.json();
+
+    if (
+      !Array.isArray(data.verses) ||
+      !data.verses.length
+    ) {
+
+      throw new Error(
+        "No Scripture text returned."
+      );
+    }
+
+    const result = {
+      url,
+      verses:data.verses
+    };
+
+    textCache.set(url,result);
+
+    return result;
+  }
+
+  function scripturePreview(parent,reference) {
+
+    const output = make("div",undefined,parent);
+
+    const control = button(
+      parent,
+      "Read Scripture",
+      async () => {
+
+        if (control.dataset.loaded === "true") {
+
+          output.hidden = !output.hidden;
+
+          control.textContent = output.hidden
+            ? "Read Scripture"
+            : "Hide Scripture";
+
+          return;
+        }
+
+        control.disabled = true;
+
+        const edition = $("pfEdition").value;
+
+        output.textContent = "Retrieving Scripture…";
+
+        try {
+
+          const result = await retrieveScripture(
+            reference,edition
+          );
+
+          if (!output.isConnected) return;
+
+          output.replaceChildren();
+
+          make(
+            "p",
+            edition.toUpperCase() +
+              " · " + reference,
+            output
+          );
+
+          result.verses.forEach(verse => {
+
+            make(
+              "blockquote",
+              verse.chapter + ":" +
+                verse.verse + " — " +
+                String(verse.text || "").trim(),
+              output
+            );
+          });
+
+          link(
+            output,
+            "Verify Scripture source",
+            result.url
+          );
+
+          control.dataset.loaded = "true";
+
+          control.textContent = "Hide Scripture";
+
+        } catch (error) {
+
+          output.textContent = error.message;
+
+        } finally {
+
+          control.disabled = false;
+        }
+      }
+    );
+  }
+
+  function renderReferences() {
+
+    $("pfReferences").replaceChildren();
+
+    if (!selected) return;
+
+    const book = $("pfRefBook").value;
+
+    const filtered = selectedReferences.filter(
+      ref => !book || ref.code === book
+    );
+
+    const pages = Math.max(
+
+      1,
+
+      Math.ceil(
+        filtered.length/referencePageSize
+      )
+
+    );
+
+    refPage = Math.min(
+      Math.max(refPage,0),
+      pages-1
+    );
+
+    $("pfRefPage").textContent =
+      filtered.length + " references · Page " +
+      (refPage+1) + " of " + pages;
+
+    $("pfRefBack").disabled = refPage === 0;
+
+    $("pfRefNext").disabled = refPage+1 >= pages;
+
+    const visible = filtered.slice(
+      refPage*referencePageSize,
+      (refPage+1)*referencePageSize
+    );
+
+    if (!visible.length) {
+
+      make(
+        "p",
+        "No recognized reference entries available.",
+        $("pfReferences")
+      );
+    }
+
+    visible.forEach(reference => {
+
+      const row = make(
+        "div",undefined,$("pfReferences")
+      );
+
+      row.className = "pf-reference";
+
+      make("h4",reference.label,row);
+
+      scripturePreview(row,reference.label);
+
+      link(
+
+        row,
+
+        "Examine passage in STEP Bible",
+
+        "https://www.stepbible.org/?q=version=KJV|reference=" +
+          encodeURIComponent(reference.label)
+
+      );
+    });
+  }
+
+  function renderEvidence() {
+
+    evidence.forEach(record => {
+
+      const article = make(
+        "article",undefined,$("pfEvidence")
+      );
+
+      article.className = "pf-card";
+
+      article.style.marginBottom = "14px";
+
+      make("h3",record.name,article);
+
+      make("p",record.role,article);
+
+      make("p",record.period,article);
+
+      make(
+        "p",
+        record.status,
+        article
+      ).className = "pf-tag";
+
+      make("h4","Biblical testimony",article);
+
+      make("p",record.biblical,article);
+
+      record.passages.forEach(reference => {
+
+        const section = make(
+          "div",undefined,article
+        );
+
+        section.className = "pf-reference";
+
+        make("strong",reference,section);
+
+        scripturePreview(section,reference);
+      });
+
+      make("h4","External evidence",article);
+
+      make("p",record.object,article);
+
+      make("p","Date: " + record.date,article);
+
+      make("p",record.finding,article);
+
+      make("h4","Evidence limitations",article);
+
+      make("p",record.limitation,article);
+
+      link(article,record.institution,record.url);
+
+      const actions = make(
+        "div",undefined,article
+      );
+
+      actions.className = "pf-actions";
+
+      button(actions,"Find in people directory",() => {
+
+        $("pfSearch").value = record.name;
+
+        $("pfTestament").value = "all";
+
+        $("pfBook").value = "";
+
+        $("pfChapter").value = "";
+
+        page = 0;
+
+        renderDirectory();
+
+        $("pfSearch").scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+      });
+    });
+  }
+
+  function exportProfile() {
+
+    if (!selected) return "";
+
+    const lines = [
+
+      "DESERTBIBLE — PEOPLE & FIGURES",
+
+      "",
+
+      "Name: " + selected.name,
+
+      "Individual identifier: " + selected.id,
+
+      "Source identity: " +
+        (selected.raw.uniqueName || selected.id),
+
+      "Recorded name forms: " +
+        selected.variants.join("; "),
+
+      "Exported (UTC): " +
+        new Date().toISOString(),
+
+      "",
+
+      "FAMILY RELATIONSHIP DATA",
+
+      JSON.stringify(
+        selected.raw.relations || {},
+        null,
+        2
+      ),
+
+      "",
+
+      "SCRIPTURE OCCURRENCES",
+
+      ...selected.references.map(ref => ref.label),
+
+      "",
+
+      "PERSONAL RESEARCH NOTES",
+
+      $("pfNotes").value || "No notes recorded.",
+
+      "",
+
+      "SOURCE ATTRIBUTION",
+
+      "Data created for STEP Bible.",
+
+      "https://www.stepbible.org/",
+
+      source,
+
+      "Structured conversion: " + distribution,
+
+      "Retrieved file: " + loadedSource,
+
+      "Retrieved (UTC): " + retrievedAt,
+
+      "Licence: CC BY 4.0",
+
+      license,
+
+      "",
+
+      "DesertBible reformats and filters source data.",
+
+      "Individual identifications and relationships require critical verification.",
+
+      "Canonical order does not establish historical chronology."
+
+    ];
+
+    return lines.join("\n");
+  }
+
+  $("pfSave").addEventListener("click",() => {
+
+    if (!selected) return;
+
+    try {
+
+      localStorage.setItem(
+        notesKey(selected),
+        $("pfNotes").value
+      );
+
+      $("pfNoteStatus").textContent =
+        "Notes saved in this browser.";
+
+    } catch {
+
+      $("pfNoteStatus").textContent =
+        "Local storage unavailable. Download the profile instead.";
+    }
+  });
+
+  $("pfCopy").addEventListener("click",async () => {
+
+    if (!selected) return;
+
+    try {
+
+      await navigator.clipboard.writeText(
+        exportProfile()
+      );
+
+      $("pfNoteStatus").textContent =
+        "Research profile copied.";
+
+    } catch {
+
+      $("pfNoteStatus").textContent =
+        "Clipboard unavailable. Use Download profile.";
+    }
+  });
+
+  $("pfDownload").addEventListener("click",() => {
+
+    if (!selected) return;
+
+    const blob = new Blob(
+      [exportProfile()],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+
+    anchor.download =
+      "DesertBible-Person-" +
+      selected.id.replace(/[^a-zA-Z0-9_-]/g,"-") +
+      ".txt";
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  });
+
+  [
+    "pfSearch",
+    "pfTestament",
+    "pfBook",
+    "pfChapter",
+    "pfSort"
+  ].forEach(id => {
+
+    $(id).addEventListener(
+
+      id === "pfSearch" ||
+      id === "pfChapter"
+        ? "input"
+        : "change",
+
+      () => {
+
+        page = 0;
+
+        renderDirectory();
+      }
+    );
+  });
+
+  $("pfReset").addEventListener("click",() => {
+
+    $("pfSearch").value = "";
+
+    $("pfTestament").value = "all";
+
+    $("pfBook").value = "";
+
+    $("pfChapter").value = "";
+
+    $("pfSort").value = "name";
+
+    page = 0;
+
+    renderDirectory();
+  });
+
+  $("pfBack").addEventListener("click",() => {
+
+    page--;
+
+    renderDirectory();
+  });
+
+  $("pfNext").addEventListener("click",() => {
+
+    page++;
+
+    renderDirectory();
+  });
+
+  $("pfRefBook").addEventListener("change",() => {
+
+    refPage = 0;
+
+    renderReferences();
+  });
+
+  $("pfEdition").addEventListener("change",() => {
+
+    renderReferences();
+  });
+
+  $("pfRefBack").addEventListener("click",() => {
+
+    refPage--;
+
+    renderReferences();
+  });
+
+  $("pfRefNext").addEventListener("click",() => {
+
+    refPage++;
+
+    renderReferences();
+  });
+
+  $("pfReload").addEventListener("click",() => {
+
+    delete window.DesertBiblePeopleDataset;
+
+    loadDirectory();
+  });
+
+  $("pfClose").addEventListener("click",() => {
+
+    profileVersion++;
+
+    workspace.remove();
+  });
+
+  renderEvidence();
+
+  workspace.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+  loadDirectory();
+}
+
 
 
 
