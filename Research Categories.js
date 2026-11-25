@@ -55,6 +55,11 @@ if (item[0] === "Scripture & translations") {
   openHistoricalTimeline(workspace);
   return;
 }
+    if (item[0].trim().toLowerCase() === "ancient documents") {
+  openAncientDocuments(workspace);
+  return;
+}
+
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
@@ -8345,6 +8350,3324 @@ function openHistoricalTimeline(workspace) {
 
   $("htSaved").textContent =
     "Show bookmarks (" + saved.size + ")";
+
+  render();
+
+  workspace.scrollIntoView({
+
+    behavior:"smooth",
+
+    block:"start"
+
+  });
+
+}
+
+function openAncientDocuments(workspace) {
+  "use strict";
+
+  const collections = {
+    dss: [
+      "Israel Antiquities Authority — Dead Sea Scrolls",
+      "https://www.deadseascrolls.org.il/explore-the-archive?locale=en_US"
+    ],
+    imj: [
+      "Israel Museum — Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/"
+    ],
+    loc: [
+      "Library of Congress — Dead Sea Scrolls exhibition",
+      "https://www.loc.gov/exhibits/scrolls/"
+    ],
+    sinaiticus: [
+      "Codex Sinaiticus Project",
+      "https://www.codexsinaiticus.org/"
+    ],
+    vatican: [
+      "Vatican Library — Digital manuscripts",
+      "https://digi.vatlib.it/"
+    ],
+    ntvmr: [
+      "Institute for New Testament Textual Research — Virtual Manuscript Room",
+      "https://ntvmr.uni-muenster.de/"
+    ],
+    csntm: [
+      "Center for the Study of New Testament Manuscripts",
+      "https://www.csntm.org/"
+    ],
+    bm: [
+      "British Museum — Collection catalogue",
+      "https://www.britishmuseum.org/collection"
+    ],
+    louvre: [
+      "Louvre — Collections database",
+      "https://collections.louvre.fr/"
+    ],
+    oracc: [
+      "Open Richly Annotated Cuneiform Corpus",
+      "https://oracc.museum.upenn.edu/"
+    ],
+    cdli: [
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    perseus: [
+      "Perseus Digital Library — Classical texts",
+      "https://www.perseus.tufts.edu/"
+    ],
+    fathers: [
+      "New Advent — Early Christian texts",
+      "https://www.newadvent.org/fathers/"
+    ],
+    oxford: [
+      "Oxford — Papyri.info",
+      "https://papyri.info/"
+    ],
+    epigraphy: [
+      "Epigraphic Database Heidelberg",
+      "https://edh.ub.uni-heidelberg.de/"
+    ],
+    aleppo: [
+      "Aleppo Codex Project",
+      "https://www.aleppocodex.org/"
+    ],
+    chester: [
+      "Chester Beatty — Digital collections",
+      "https://www.cbl.ie/"
+    ],
+    bl: [
+      "British Library",
+      "https://www.bl.uk/"
+    ],
+    gallica: [
+      "Bibliothèque nationale de France — Gallica",
+      "https://gallica.bnf.fr/"
+    ],
+    chicago: [
+      "University of Chicago — Biblical primary-source research guide",
+      "https://guides.lib.uchicago.edu/bible/primary"
+    ],
+    yale: [
+      "Yale University — Dead Sea Scroll nomenclature",
+      "https://guides.library.yale.edu/Dead_Sea_Scrolls/nomenclature"
+    ],
+    step: [
+      "STEP Bible — Biblical texts",
+      "https://www.stepbible.org/"
+    ]
+  };
+
+  const categories = [
+    "Hebrew Bible manuscripts",
+    "Dead Sea Scrolls",
+    "Septuagint and ancient versions",
+    "New Testament manuscripts",
+    "Egyptian documents",
+    "Assyrian documents",
+    "Babylonian and Mesopotamian documents",
+    "Persian period documents",
+    "Israelite and neighboring inscriptions",
+    "Ancient Jewish literature",
+    "Greco-Roman historical literature",
+    "Early Christian documents"
+  ];
+
+  const relations = {
+    direct: "Direct biblical textual witness",
+    external: "External historical evidence",
+    context: "Historical and cultural context",
+    comparison: "Comparative literature",
+    reception: "Interpretation and reception history"
+  };
+
+  /*
+    Record fields:
+
+    0  — Document identifier
+    1  — Document title
+    2  — Category index
+    3  — Date or date range
+    4  — Original language
+    5  — Material or document type
+    6  — Origin or discovery context
+    7  — Evidence relationship
+    8  — Related biblical passages
+    9  — Document description
+    10 — Research significance
+    11 — Evidence limitations
+    12 — Collection identifiers
+    13 — Direct resource links
+
+    Dates of manuscripts are distinguished
+    from dates of literary composition.
+  */
+
+  const records = [
+
+    [
+      "AD-001",
+      "Ketef Hinnom Silver Amulets",
+      0,
+      "Late seventh or early sixth century BCE",
+      "Hebrew",
+      "Inscribed silver amulets",
+      "Jerusalem, Ketef Hinnom",
+      "direct",
+      ["Numbers 6:24-26"],
+      "Two small silver scrolls preserve religious inscriptions containing wording closely related to the priestly blessing in Numbers.",
+      "Important early evidence for the circulation of biblical blessing formulas before the Babylonian exile.",
+      "The inscriptions do not preserve the entire book of Numbers or establish the date of its final composition.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-002",
+      "Aleppo Codex",
+      0,
+      "Tenth century CE — manuscript",
+      "Hebrew",
+      "Parchment codex",
+      "Tiberian Masoretic tradition",
+      "direct",
+      ["Deuteronomy","Joshua","Isaiah","Psalms"],
+      "A major witness to the Tiberian Masoretic tradition associated with Aaron ben Asher.",
+      "Preserves significant evidence concerning Hebrew vocalization, accents, consonantal readings and Masoretic annotations.",
+      "Portions of the manuscript are missing. Its medieval date is not the composition date of the biblical books it preserves.",
+      ["aleppo","chicago"],
+      []
+    ],
+
+    [
+      "AD-003",
+      "Leningrad Codex — Firkovich B 19 A",
+      0,
+      "1008/1009 CE — manuscript",
+      "Hebrew",
+      "Parchment codex",
+      "Tiberian textual tradition",
+      "direct",
+      ["Genesis–Malachi"],
+      "A complete medieval manuscript of the Hebrew Bible in the Masoretic tradition.",
+      "Forms the principal manuscript basis of Biblia Hebraica Stuttgartensia and Biblia Hebraica Quinta.",
+      "A critical edition based on this manuscript may contain editorial annotations and readings from other witnesses.",
+      ["chicago","step"],
+      []
+    ],
+
+    [
+      "AD-004",
+      "Samaritan Pentateuch",
+      0,
+      "Ancient textual tradition; surviving manuscripts vary in date",
+      "Hebrew",
+      "Scriptural manuscript tradition",
+      "Samaritan religious communities",
+      "direct",
+      ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy"],
+      "A distinctive textual tradition of the five books of Moses preserved by the Samaritan community.",
+      "Provides evidence of textual diversity, harmonization and traditions concerning Mount Gerizim.",
+      "It is a manuscript tradition rather than one surviving ancient document. Individual manuscript dates must be examined separately.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-005",
+      "Great Isaiah Scroll — 1QIsaᵃ",
+      1,
+      "Approximately 120–100 BCE — manuscript",
+      "Hebrew",
+      "Parchment scroll",
+      "Qumran Cave 1",
+      "direct",
+      ["Isaiah 1–66","Isaiah 7:14","Isaiah 40:3","Isaiah 53"],
+      "A substantially complete ancient manuscript of Isaiah preserving all sixty-six chapters.",
+      "Allows comparison of an ancient Isaiah witness with the medieval Masoretic tradition and other textual witnesses.",
+      "The scroll contains spelling differences, corrections and substantive variants. It is not identical in every detail to the Masoretic Text.",
+      ["imj","dss"],
+      [
+        ["Israel Museum — Great Isaiah Scroll",
+         "https://dss.collections.imj.org.il/isaiah"]
+      ]
+    ],
+
+    [
+      "AD-006",
+      "Second Isaiah Scroll — 1QIsaᵇ",
+      1,
+      "Late Second Temple period — manuscript",
+      "Hebrew",
+      "Fragmentary parchment scroll",
+      "Qumran Cave 1",
+      "direct",
+      ["Isaiah"],
+      "Another ancient Isaiah manuscript recovered from Cave 1.",
+      "Provides an additional witness to the transmission of Isaiah and often reflects readings close to the later Masoretic tradition.",
+      "Its surviving portions are incomplete. Agreement in surviving passages must not be generalized to missing text.",
+      ["dss","imj"],
+      []
+    ],
+
+    [
+      "AD-007",
+      "Habakkuk Commentary — 1QpHab",
+      1,
+      "Approximately 50 BCE — manuscript",
+      "Hebrew",
+      "Parchment commentary scroll",
+      "Qumran Cave 1",
+      "reception",
+      ["Habakkuk 1–2","Habakkuk 2:4"],
+      "A sectarian commentary quoting and interpreting passages from the first two chapters of Habakkuk.",
+      "Provides evidence of Second Temple prophetic interpretation and the application of Scripture to contemporary circumstances.",
+      "Its interpretations reflect a particular ancient community and are not necessarily the original historical meaning of Habakkuk.",
+      ["imj","dss"],
+      [
+        ["Israel Museum — Habakkuk Commentary",
+         "https://dss.collections.imj.org.il/habakkuk"]
+      ]
+    ],
+
+    [
+      "AD-008",
+      "Community Rule — 1QS",
+      1,
+      "Approximately 100–75 BCE — manuscript",
+      "Hebrew",
+      "Parchment scroll",
+      "Qumran Cave 1",
+      "context",
+      ["Deuteronomy 6","Isaiah 40:3"],
+      "A document regulating the religious and communal life of a group identified as the Yahad.",
+      "Illuminates communal discipline, purity, covenant identity and religious interpretation during the Second Temple period.",
+      "The precise relationship between the Qumran community and the Essenes remains a scholarly question. It is not a Christian document.",
+      ["imj","dss","loc"],
+      []
+    ],
+
+    [
+      "AD-009",
+      "War Scroll — 1QM",
+      1,
+      "Late Second Temple period — manuscript",
+      "Hebrew",
+      "Parchment scroll",
+      "Qumran Cave 1",
+      "comparison",
+      ["Daniel 7–12","Revelation 19"],
+      "An ancient Jewish composition describing an anticipated conflict involving opposing forces associated with light and darkness.",
+      "Provides comparative evidence for Jewish apocalyptic expectations and religious warfare imagery.",
+      "Thematic resemblance does not establish direct literary dependence between this scroll and Revelation.",
+      ["imj","dss"],
+      []
+    ],
+
+    [
+      "AD-010",
+      "Temple Scroll — 11Q19",
+      1,
+      "Late Second Temple period — manuscript",
+      "Hebrew",
+      "Parchment scroll",
+      "Qumran Cave 11",
+      "comparison",
+      ["Exodus 25–31","Leviticus","Deuteronomy 12"],
+      "An extensive composition presenting temple regulations, architectural instructions and religious legislation.",
+      "Useful for examining ancient Jewish interpretations and reorganizations of Pentateuchal legislation.",
+      "The described temple is not an archaeological plan proving that this particular structure was constructed.",
+      ["imj","dss"],
+      []
+    ],
+
+    [
+      "AD-011",
+      "Genesis Apocryphon — 1Q20",
+      1,
+      "Approximately 25 BCE–50 CE — manuscript",
+      "Aramaic",
+      "Fragmentary parchment scroll",
+      "Qumran Cave 1",
+      "reception",
+      ["Genesis 6–15"],
+      "An ancient retelling and expansion of selected Genesis narratives involving figures including Noah and Abram.",
+      "Demonstrates interpretive development and rewritten biblical traditions in Second Temple Judaism.",
+      "Its additional narrative material must not be presented as independently verified events.",
+      ["imj","dss"],
+      []
+    ],
+
+    [
+      "AD-012",
+      "Samuel Scroll — 4Q51 / 4QSamᵃ",
+      1,
+      "Late Second Temple period — manuscript",
+      "Hebrew",
+      "Fragmentary parchment manuscript",
+      "Qumran Cave 4",
+      "direct",
+      ["1 Samuel","2 Samuel"],
+      "An important ancient witness preserving portions of Samuel.",
+      "Provides textual evidence relevant to readings differing from the medieval Masoretic Text, including agreements with some ancient versional witnesses.",
+      "The manuscript is fragmentary. Readings must be compared individually rather than treating it as universally superior.",
+      ["dss"],
+      []
+    ],
+
+    [
+      "AD-013",
+      "Great Psalms Scroll — 11Q5 / 11QPsᵃ",
+      1,
+      "First century CE — manuscript",
+      "Hebrew",
+      "Parchment scroll",
+      "Qumran Cave 11",
+      "direct",
+      ["Psalms"],
+      "A substantial collection of psalms with an arrangement differing from the received Masoretic Psalter and including additional compositions.",
+      "Illuminates ancient psalm collections, textual transmission and liturgical traditions.",
+      "Whether it represents a distinct scriptural edition or a specialized collection remains debated.",
+      ["dss"],
+      []
+    ],
+
+    [
+      "AD-014",
+      "4QJerᵇ — 4Q71",
+      1,
+      "Second Temple period — manuscript",
+      "Hebrew",
+      "Fragmentary manuscript",
+      "Qumran Cave 4",
+      "direct",
+      ["Jeremiah"],
+      "A Hebrew Jeremiah witness relevant to the shorter textual form associated with the ancient Greek translation.",
+      "Contributes evidence that differences between Hebrew and Greek Jeremiah may reflect ancient Hebrew textual forms.",
+      "The surviving fragments do not establish that every difference in Greek Jeremiah reflects the same Hebrew exemplar.",
+      ["dss"],
+      []
+    ],
+
+    [
+      "AD-015",
+      "Aramaic Enoch manuscripts",
+      1,
+      "Second Temple period — multiple manuscripts",
+      "Aramaic",
+      "Fragmentary scrolls",
+      "Qumran Cave 4",
+      "reception",
+      ["Genesis 6:1-4","Jude 14-15"],
+      "Fragments of Enochic literature recovered at Qumran preserve ancient Jewish traditions concerning heavenly beings, judgment and revelations.",
+      "Provide manuscript evidence for Enochic literature predating Christianity.",
+      "The fragments do not preserve all of the later Ethiopic collection. Canonical status varies among religious traditions.",
+      ["dss"],
+      []
+    ],
+
+    [
+      "AD-016",
+      "Papyrus Fouad 266",
+      2,
+      "First century BCE — manuscript",
+      "Greek with Hebrew divine-name forms",
+      "Papyrus manuscript",
+      "Egypt",
+      "direct",
+      ["Deuteronomy"],
+      "Fragments of Greek Pentateuchal manuscripts, including Deuteronomy, with Hebrew forms of the divine name in relevant portions.",
+      "Important evidence for early Greek Jewish scriptural transmission and scribal treatment of the divine name.",
+      "The manuscript does not establish how every ancient Greek biblical copy represented the divine name.",
+      ["chicago","oxford"],
+      []
+    ],
+
+    [
+      "AD-017",
+      "Greek Minor Prophets Scroll — 8HevXIIgr",
+      2,
+      "Around the turn of the era — manuscript",
+      "Greek",
+      "Fragmentary leather scroll",
+      "Nahal Hever, Judean Desert",
+      "direct",
+      ["Jonah","Micah","Nahum","Habakkuk","Zephaniah","Zechariah"],
+      "An ancient Greek witness to portions of the Twelve Minor Prophets displaying revision toward a Hebrew textual tradition.",
+      "Especially valuable for research into the Greek text of Micah and other prophetic books.",
+      "Surviving portions are fragmentary and reflect a revisional textual tradition rather than necessarily the earliest Greek translation.",
+      ["dss"],
+      []
+    ],
+
+    [
+      "AD-018",
+      "Codex Vaticanus — Vatican Greek 1209",
+      2,
+      "Fourth century CE — manuscript",
+      "Greek",
+      "Parchment codex",
+      "Production location uncertain",
+      "direct",
+      ["Genesis–Malachi","Matthew–Hebrews"],
+      "A major Greek biblical manuscript preserving much of the Greek Old Testament and New Testament.",
+      "A principal witness in biblical textual criticism, especially for ancient Greek readings.",
+      "Some portions are missing from the surviving original codex. The manuscript is not identical to every other Greek biblical tradition.",
+      ["vatican","ntvmr"],
+      [
+        ["Vatican Library — Vat.gr.1209",
+         "https://digi.vatlib.it/view/MSS_Vat.gr.1209"]
+      ]
+    ],
+
+    [
+      "AD-019",
+      "Codex Sinaiticus — GA 01",
+      3,
+      "Fourth century CE — manuscript",
+      "Greek",
+      "Parchment codex",
+      "Production location uncertain",
+      "direct",
+      ["Matthew–Revelation","Genesis–Malachi"],
+      "A major Greek biblical manuscript preserving the complete New Testament and substantial portions of the Greek Old Testament.",
+      "Allows investigation of ancient readings, scribal corrections and early Christian manuscript collections.",
+      "The codex also preserves the Epistle of Barnabas and Shepherd of Hermas in part. Its contents do not prove universal canonical agreement.",
+      ["sinaiticus","ntvmr"],
+      []
+    ],
+
+    [
+      "AD-020",
+      "Codex Alexandrinus — GA 02",
+      3,
+      "Fifth century CE — manuscript",
+      "Greek",
+      "Parchment codex",
+      "Eastern Mediterranean",
+      "direct",
+      ["Genesis–Malachi","Matthew–Revelation"],
+      "A major Greek biblical codex preserving much of the Old and New Testaments.",
+      "Provides an important textual witness, particularly for Revelation and the history of Greek biblical transmission.",
+      "The manuscript contains lacunae and differing textual characteristics across biblical books.",
+      ["bl","ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-021",
+      "Papyrus 52 — P52 / P.Ryl. III 457",
+      3,
+      "Commonly assigned to the second century CE; dating debated",
+      "Greek",
+      "Papyrus codex fragment",
+      "Egyptian antiquities provenance",
+      "direct",
+      ["John 18:31-33","John 18:37-38"],
+      "A small fragment containing portions of the Gospel of John on both sides.",
+      "Important evidence for the early physical transmission of John's Gospel.",
+      "Palaeographical dating cannot establish an exact year. The fragment neither preserves the entire Gospel nor dates its original composition precisely.",
+      ["ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-022",
+      "Papyrus 46 — P46",
+      3,
+      "Approximately late second or early third century CE",
+      "Greek",
+      "Papyrus codex",
+      "Egypt",
+      "direct",
+      ["Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","Hebrews"],
+      "An early substantial collection of Pauline letters, including Hebrews.",
+      "Important for investigating the collection and transmission of Pauline writings.",
+      "Parts of the manuscript are missing. Its inclusion or omission of surviving books does not by itself settle authorship or canon questions.",
+      ["chester","ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-023",
+      "Papyrus 66 — P66",
+      3,
+      "Commonly dated around 200 CE; precise date debated",
+      "Greek",
+      "Papyrus codex",
+      "Egypt",
+      "direct",
+      ["John"],
+      "An early substantial manuscript of John's Gospel containing numerous scribal corrections.",
+      "Useful for studying ancient variants and the processes involved in copying and correcting Gospel manuscripts.",
+      "The manuscript is not an autograph. Individual corrections and readings require examination.",
+      ["ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-024",
+      "Papyrus 75 — P75",
+      3,
+      "Commonly late second or third century CE; dating debated",
+      "Greek",
+      "Papyrus codex",
+      "Egypt",
+      "direct",
+      ["Luke","John"],
+      "An early manuscript preserving substantial portions of Luke and John.",
+      "Important for comparing Gospel readings with later witnesses, including Codex Vaticanus.",
+      "Textual similarity does not establish that Vaticanus was copied directly from this particular manuscript.",
+      ["vatican","ntvmr"],
+      []
+    ],
+
+    [
+      "AD-025",
+      "Papyrus 45 — P45",
+      3,
+      "Third century CE — manuscript",
+      "Greek",
+      "Papyrus codex",
+      "Egypt",
+      "direct",
+      ["Matthew","Mark","Luke","John","Acts"],
+      "A fragmentary early codex containing portions of the four Gospels and Acts.",
+      "Provides evidence concerning early collections of Christian narrative writings.",
+      "Missing leaves prevent reconstruction of every reading and every original codex feature with certainty.",
+      ["chester","ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-026",
+      "Papyrus 47 — P47",
+      3,
+      "Third century CE — manuscript",
+      "Greek",
+      "Papyrus codex",
+      "Egypt",
+      "direct",
+      ["Revelation 9–17"],
+      "An early fragmentary manuscript of Revelation.",
+      "An important witness to the textual transmission of the Apocalypse.",
+      "Only part of Revelation survives in this manuscript.",
+      ["chester","ntvmr"],
+      []
+    ],
+
+    [
+      "AD-027",
+      "Codex Bezae — GA 05",
+      3,
+      "Approximately fifth century CE — manuscript",
+      "Greek and Latin",
+      "Bilingual parchment codex",
+      "Production location uncertain",
+      "direct",
+      ["Matthew","Mark","Luke","John","Acts"],
+      "A bilingual Gospel and Acts manuscript known for distinctive textual readings.",
+      "Especially valuable for examining textual diversity in Acts and the Gospels.",
+      "Its distinctive readings are not automatically original or automatically secondary; each requires critical assessment.",
+      ["ntvmr","csntm"],
+      []
+    ],
+
+    [
+      "AD-028",
+      "Merneptah Victory Stele",
+      4,
+      "Approximately 1208 BCE",
+      "Egyptian",
+      "Hieroglyphic royal inscription",
+      "Thebes, Egypt",
+      "external",
+      ["Joshua","Judges"],
+      "An Egyptian royal victory inscription containing an early extra-biblical reference widely identified as Israel.",
+      "Establishes that a group called Israel was known in the Canaanite setting by the late thirteenth century BCE.",
+      "It does not identify the Exodus generation, establish the twelve tribes or describe the biblical conquest narrative.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-029",
+      "Shoshenq I — Bubastite Portal inscription",
+      4,
+      "Tenth century BCE",
+      "Egyptian",
+      "Monumental hieroglyphic relief and inscription",
+      "Karnak, Egypt",
+      "external",
+      ["1 Kings 14:25-28","2 Chronicles 12:1-9"],
+      "A monumental record associated with Shoshenq I's campaign into the southern Levant.",
+      "Supplies external historical context for the Egyptian ruler commonly identified with biblical Shishak.",
+      "The list of places does not independently establish every event reported in Kings or Chronicles.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-030",
+      "Amarna Letters",
+      4,
+      "Fourteenth century BCE",
+      "Predominantly Akkadian",
+      "Cuneiform clay tablets",
+      "Amarna, Egypt",
+      "context",
+      ["Joshua","Judges"],
+      "Diplomatic correspondence between Egyptian rulers and foreign authorities, including rulers of Levantine city-states.",
+      "Illuminates Late Bronze Age Canaan, regional politics and diplomatic relationships.",
+      "The groups designated Habiru or Apiru cannot simply be equated with all biblical Hebrews.",
+      ["bm","cdli","oracc"],
+      []
+    ],
+
+    [
+      "AD-031",
+      "Instruction of Amenemope",
+      4,
+      "Late second or early first millennium BCE — composition dating debated",
+      "Egyptian",
+      "Wisdom literature",
+      "Egypt",
+      "comparison",
+      ["Proverbs 22:17–24:22"],
+      "An Egyptian wisdom composition containing ethical instructions and advice concerning behavior.",
+      "Provides significant literary parallels for the study of Proverbs and international wisdom traditions.",
+      "The precise direction, date and mechanism of literary transmission require scholarly evaluation.",
+      ["bm"],
+      []
+    ],
+
+    [
+      "AD-032",
+      "Kurkh Monolith of Shalmaneser III",
+      5,
+      "853 BCE — campaign recorded",
+      "Akkadian",
+      "Royal cuneiform inscription",
+      "Kurkh, southeastern Türkiye",
+      "external",
+      ["1 Kings 16–22"],
+      "A royal record describing campaigns of Shalmaneser III, including the Battle of Qarqar.",
+      "Names Ahab of Israel within a coalition resisting Assyrian expansion.",
+      "Assyrian royal troop figures and victory language require assessment as imperial rhetoric. Qarqar is not explicitly narrated in Kings.",
+      ["bm","oracc"],
+      []
+    ],
+
+    [
+      "AD-033",
+      "Black Obelisk of Shalmaneser III",
+      5,
+      "Ninth century BCE; Jehu tribute associated with 841 BCE",
+      "Akkadian",
+      "Inscribed stone monument with reliefs",
+      "Nimrud",
+      "external",
+      ["2 Kings 9–10"],
+      "An Assyrian monument depicting tributary delegations and recording tribute associated with Jehu.",
+      "An important external chronological and political witness involving the northern kingdom.",
+      "The depicted person need not be Jehu himself. Assyrian dynastic terminology does not establish biological descent from Omri.",
+      ["bm","oracc"],
+      []
+    ],
+
+    [
+      "AD-034",
+      "Tiglath-Pileser III Royal Inscriptions",
+      5,
+      "744–727 BCE — reign",
+      "Akkadian",
+      "Royal cuneiform inscriptions",
+      "Assyrian imperial centers",
+      "external",
+      ["2 Kings 15:19-29","2 Kings 16:7-9"],
+      "Royal texts recording Assyrian campaigns, tribute and imperial expansion into the Levant.",
+      "Provide external context for the reigns of Menahem, Pekah, Hoshea and Ahaz.",
+      "Numerous inscriptions constitute this corpus. Specific claims require citation of the particular inscription and line.",
+      ["oracc","bm"],
+      [
+        ["ORACC — Royal Inscriptions of the Neo-Assyrian Period",
+         "https://oracc.museum.upenn.edu/rinap/"]
+      ]
+    ],
+
+    [
+      "AD-035",
+      "Sargon II Royal Inscriptions",
+      5,
+      "721–705 BCE — reign",
+      "Akkadian",
+      "Royal cuneiform inscriptions",
+      "Assyria, including Dur-Sharrukin",
+      "external",
+      ["2 Kings 17:1-23","Isaiah 20:1"],
+      "Royal accounts describing imperial activities, including claims concerning Samaria and campaigns in the Levant.",
+      "Relevant to the fall of the northern kingdom and Assyrian provincial administration.",
+      "The respective roles of Shalmaneser V and Sargon II in Samaria's conquest must be evaluated across different sources.",
+      ["oracc","bm"],
+      []
+    ],
+
+    [
+      "AD-036",
+      "Sennacherib Prism — Taylor Prism",
+      5,
+      "691 BCE — object; describes 701 BCE campaign",
+      "Akkadian",
+      "Six-sided clay prism",
+      "Nineveh",
+      "external",
+      ["2 Kings 18–19","Isaiah 36–37","2 Chronicles 32","Micah 1"],
+      "An Assyrian royal account describing Sennacherib's campaigns, including his conflict with Hezekiah of Judah.",
+      "A direct external witness to Hezekiah and Assyrian military pressure against Judah.",
+      "The account does not claim Jerusalem was captured and does not independently verify the biblical explanation for Assyria's withdrawal.",
+      ["bm","oracc"],
+      []
+    ],
+
+    [
+      "AD-037",
+      "Lachish Siege Relief Inscriptions",
+      5,
+      "Early seventh century BCE; campaign of 701 BCE",
+      "Akkadian",
+      "Inscribed palace stone reliefs",
+      "Nineveh, Southwest Palace",
+      "external",
+      ["2 Kings 18:13-17","Isaiah 36:1-2","Micah 1:13"],
+      "Palace reliefs and inscriptions representing the Assyrian siege and capture of Lachish.",
+      "Connect the biblical geographical setting of Lachish with a documented Assyrian campaign.",
+      "The reliefs are royal representations, not neutral photographic records. They do not independently identify every event of Micah's prophecy.",
+      ["bm","oracc"],
+      []
+    ],
+
+    [
+      "AD-038",
+      "Esarhaddon Royal Inscriptions",
+      5,
+      "680–669 BCE — reign",
+      "Akkadian",
+      "Royal cuneiform inscriptions",
+      "Assyria",
+      "external",
+      ["2 Kings 19:37","2 Chronicles 33:10-13"],
+      "Assyrian royal records that include references to western tributary kings, among them Manasseh of Judah.",
+      "Provide external attestation of Manasseh within the Assyrian political system.",
+      "These references do not independently verify every narrative concerning Manasseh's imprisonment or repentance.",
+      ["oracc","bm"],
+      []
+    ],
+
+    [
+      "AD-039",
+      "Epic of Gilgamesh — Tablet XI",
+      6,
+      "First millennium BCE surviving Nineveh witnesses; older traditions",
+      "Akkadian",
+      "Cuneiform clay tablet",
+      "Mesopotamia",
+      "comparison",
+      ["Genesis 6–9"],
+      "A literary narrative containing Utnapishtim's account of surviving a devastating flood.",
+      "Provides comparative evidence for ancient Near Eastern flood literature.",
+      "Similarities and differences must be examined without treating the text as independent proof of a worldwide flood or a specific date for Noah.",
+      ["bm","cdli","oracc"],
+      []
+    ],
+
+    [
+      "AD-040",
+      "Atrahasis Epic",
+      6,
+      "Second millennium BCE manuscript tradition",
+      "Akkadian",
+      "Cuneiform literary tablets",
+      "Mesopotamia",
+      "comparison",
+      ["Genesis 1–9"],
+      "An ancient composition concerning humanity's creation, relations with the gods and a flood.",
+      "Provides comparative material for studying creation and flood traditions.",
+      "Conceptual and narrative parallels do not establish that Genesis simply reproduces this composition.",
+      ["bm","cdli"],
+      []
+    ],
+
+    [
+      "AD-041",
+      "Enuma Elish",
+      6,
+      "Composition date debated; first millennium BCE manuscript witnesses",
+      "Akkadian",
+      "Cuneiform creation epic",
+      "Babylonia and Assyria",
+      "comparison",
+      ["Genesis 1"],
+      "A Babylonian literary composition describing divine conflict, cosmic organization and the elevation of Marduk.",
+      "Provides evidence of ancient Mesopotamian creation theology for comparison with Genesis.",
+      "The literary and theological differences are as important as the shared cosmological vocabulary and themes.",
+      ["bm","cdli","oracc"],
+      []
+    ],
+
+    [
+      "AD-042",
+      "Laws of Hammurabi",
+      6,
+      "Eighteenth century BCE",
+      "Akkadian",
+      "Inscribed stone stele",
+      "Babylonia; discovered at Susa",
+      "comparison",
+      ["Exodus 21–23","Leviticus 24:17-22"],
+      "A royal legal collection addressing property, injury, family relationships and social obligations.",
+      "Allows comparison of ancient Near Eastern legal traditions with biblical legislation.",
+      "Legal parallels do not establish an identical legal system or prove direct copying.",
+      ["louvre","cdli"],
+      []
+    ],
+
+    [
+      "AD-043",
+      "Babylonian Chronicle — BM 21946",
+      6,
+      "Early sixth-century BCE events recorded",
+      "Akkadian",
+      "Cuneiform clay tablet",
+      "Babylonia",
+      "external",
+      ["2 Kings 24:8-17","Jeremiah 46:2"],
+      "A chronicle recording events of Babylonian expansion, including Carchemish and the capture of Jerusalem in 597 BCE.",
+      "Provides important chronological anchors for Nebuchadnezzar's reign and Judah's political history.",
+      "The surviving chronicle does not provide a complete record of all later events, including the final destruction of Jerusalem.",
+      ["bm","cdli"],
+      []
+    ],
+
+    [
+      "AD-044",
+      "Jehoiachin Ration Tablets",
+      6,
+      "Sixth century BCE",
+      "Akkadian",
+      "Administrative clay tablets",
+      "Babylon",
+      "external",
+      ["2 Kings 24:12-15","2 Kings 25:27-30"],
+      "Palace administrative documents listing provisions associated with Jehoiachin and members of his household.",
+      "External evidence for the presence of the Judean king and his household in Babylonia.",
+      "The records document provisions rather than the complete events surrounding his later release.",
+      ["cdli","oracc"],
+      []
+    ],
+
+    [
+      "AD-045",
+      "Al-Yahudu Tablets",
+      6,
+      "Sixth–fifth centuries BCE",
+      "Akkadian",
+      "Legal and administrative clay tablets",
+      "Babylonia; precise archaeological findspots uncertain",
+      "context",
+      ["Jeremiah 29:1-14","Ezekiel 1:1-3"],
+      "Documents recording economic and legal activities involving Judean communities in Babylonia.",
+      "Illuminate daily life, names, taxation, family relationships and settlement among Judean exiles and descendants.",
+      "Uncertain archaeological provenance requires careful attention. These records do not narrate every biblical exile event.",
+      ["cdli","oracc"],
+      []
+    ],
+
+    [
+      "AD-046",
+      "Nabonidus Chronicle",
+      6,
+      "Sixth century BCE events; surviving manuscript date requires separate assessment",
+      "Akkadian",
+      "Cuneiform chronicle",
+      "Babylonia",
+      "external",
+      ["Daniel 5","Isaiah 45:1-7"],
+      "A Babylonian chronicle recording events associated with Nabonidus and the Persian conquest of Babylon.",
+      "Provides important evidence for the political transition from Babylonian to Persian rule in 539 BCE.",
+      "It does not reproduce the biblical banquet narrative or independently verify every detail of Daniel 5.",
+      ["bm","cdli"],
+      []
+    ],
+
+    [
+      "AD-047",
+      "Cyrus Cylinder",
+      7,
+      "539 BCE or shortly afterward",
+      "Akkadian",
+      "Cuneiform clay cylinder",
+      "Babylon",
+      "context",
+      ["Ezra 1:1-4","Isaiah 44:28","Isaiah 45:1"],
+      "A royal inscription presenting Cyrus's conquest and restoration measures in Babylonian political and religious terms.",
+      "Provides imperial context for restoration and the return of religious objects and communities.",
+      "The cylinder does not specifically mention Jerusalem, the Judeans or the decree quoted in Ezra.",
+      ["bm","oracc"],
+      []
+    ],
+
+    [
+      "AD-048",
+      "Behistun Inscription",
+      7,
+      "Approximately 520 BCE",
+      "Old Persian, Elamite and Babylonian",
+      "Multilingual monumental rock inscription",
+      "Behistun, Iran",
+      "context",
+      ["Ezra 4–6","Haggai 1:1","Zechariah 1:1"],
+      "Darius I's monumental account of his accession and suppression of rival claimants.",
+      "Illuminates Persian royal ideology, administrative history and multilingual imperial communication.",
+      "It does not independently document the Jerusalem Temple restoration described in Ezra.",
+      ["oracc","cdli"],
+      []
+    ],
+
+    [
+      "AD-049",
+      "Elephantine Papyri",
+      7,
+      "Especially fifth century BCE",
+      "Predominantly Imperial Aramaic",
+      "Letters and legal papyri",
+      "Elephantine, Egypt",
+      "context",
+      ["Ezra","Nehemiah"],
+      "Documents from a community in Persian-period Egypt, including correspondence concerning a temple dedicated to YHW.",
+      "Illuminate Judean diaspora life, marriage, property, religious practice and imperial administration.",
+      "The Elephantine community's practices cannot be assumed to represent every Judean community or all biblical religious norms.",
+      ["oxford","bm"],
+      []
+    ],
+
+    [
+      "AD-050",
+      "Mesha Stele",
+      8,
+      "Ninth century BCE",
+      "Moabite",
+      "Inscribed basalt monument",
+      "Dhiban, Jordan",
+      "external",
+      ["2 Kings 3:4-27"],
+      "A royal inscription of Mesha describing Moabite achievements and relations with Israel.",
+      "Provides a neighboring kingdom's perspective on the political environment associated with the Omride dynasty.",
+      "The biblical and Moabite accounts differ in presentation, and some damaged readings remain disputed.",
+      ["louvre"],
+      []
+    ],
+
+    [
+      "AD-051",
+      "Tel Dan Stele",
+      8,
+      "Ninth century BCE",
+      "Aramaic",
+      "Fragmentary stone inscription",
+      "Tel Dan",
+      "external",
+      ["2 Samuel 7:12-16","2 Kings 8–9"],
+      "An Aramaic royal inscription containing a designation widely interpreted as the House of David.",
+      "Significant external evidence for recognition of a Davidic dynastic designation.",
+      "It does not establish the territorial extent of David's kingdom or provide a contemporary account of his reign.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-052",
+      "Siloam Inscription",
+      8,
+      "Commonly late eighth century BCE",
+      "Hebrew",
+      "Rock-cut inscription",
+      "Jerusalem water tunnel",
+      "context",
+      ["2 Kings 20:20","2 Chronicles 32:30"],
+      "An inscription describing workers meeting during the excavation of a water tunnel.",
+      "Documents ancient engineering and Hebrew writing in Jerusalem.",
+      "The inscription does not name Hezekiah. Its association with his waterworks rests on broader historical and archaeological arguments.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-053",
+      "Lachish Letters",
+      8,
+      "Early sixth century BCE",
+      "Hebrew",
+      "Ink-inscribed pottery sherds",
+      "Lachish",
+      "context",
+      ["Jeremiah 34:6-7","2 Kings 25:1-4"],
+      "Military and administrative correspondence associated with Judah's final years before Babylonian destruction.",
+      "Provides evidence for communications, literacy and regional military conditions.",
+      "The letters do not independently identify every individual or incident discussed by Jeremiah.",
+      ["bm"],
+      []
+    ],
+
+    [
+      "AD-054",
+      "Samaria Ostraca",
+      8,
+      "Eighth century BCE — commonly assigned",
+      "Hebrew",
+      "Administrative pottery inscriptions",
+      "Samaria",
+      "context",
+      ["1 Kings 16:24","Amos 3:15","Amos 6:4-6"],
+      "Administrative records concerning deliveries such as wine and oil, with personal and geographical names.",
+      "Illuminate the economy and administrative organization of the northern kingdom.",
+      "The documents do not independently establish each social accusation made by the prophets.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-055",
+      "Kuntillet Ajrud Inscriptions",
+      8,
+      "Approximately eighth century BCE",
+      "Hebrew and related Northwest Semitic forms",
+      "Inscriptions on pottery and plaster",
+      "Northeastern Sinai",
+      "context",
+      ["Exodus 20:3-6","2 Kings 17:7-23"],
+      "Religious inscriptions containing references to YHWH and expressions involving asherah.",
+      "Important evidence for the diversity of religious language and practices in the Iron Age.",
+      "Whether asherah denotes a goddess, cultic object or another referent in specific inscriptions remains debated.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-056",
+      "Deir Alla Inscription",
+      8,
+      "Approximately eighth century BCE",
+      "Northwest Semitic; linguistic classification debated",
+      "Ink-written plaster inscription",
+      "Deir Alla, Jordan",
+      "comparison",
+      ["Numbers 22–24"],
+      "A fragmentary literary inscription mentioning Balaam son of Beor.",
+      "Provides extra-biblical evidence for a literary tradition concerning a figure also named in Numbers.",
+      "It does not independently establish that the narrated biblical encounter occurred exactly as described.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-057",
+      "1 Enoch",
+      9,
+      "Multiple compositions, principally Second Temple period",
+      "Aramaic, Greek and Ethiopic transmission",
+      "Composite apocalyptic literature",
+      "Ancient Jewish literary tradition",
+      "reception",
+      ["Genesis 6:1-4","Daniel 7","Jude 14-15"],
+      "A collection of ancient Jewish writings concerning heavenly revelations, judgment and other apocalyptic subjects.",
+      "Important for the study of Jude's citation of Enochic material and Second Temple religious concepts.",
+      "Its constituent works have different dates. The Ethiopic Orthodox tradition accords it canonical status, unlike most other Christian traditions.",
+      ["dss","chicago"],
+      []
+    ],
+
+    [
+      "AD-058",
+      "Jubilees",
+      9,
+      "Second century BCE — commonly proposed composition",
+      "Hebrew composition; Ethiopic and other transmission",
+      "Rewritten biblical literature",
+      "Second Temple Jewish tradition",
+      "reception",
+      ["Genesis","Exodus"],
+      "A retelling of early biblical history structured around jubilees and concerned with law, sacred time and covenant identity.",
+      "Ancient Hebrew fragments attest its circulation among Second Temple Jewish readers.",
+      "Its narrative additions are interpretive traditions rather than automatic independent confirmations of biblical events.",
+      ["dss","chicago"],
+      []
+    ],
+
+    [
+      "AD-059",
+      "First Maccabees",
+      9,
+      "Late second or early first century BCE — composition",
+      "Preserved principally in Greek; Hebrew original commonly proposed",
+      "Historical literature",
+      "Judea",
+      "context",
+      ["Daniel 11","John 10:22-23"],
+      "A narrative of the Maccabean revolt and the rise of Hasmonean leadership.",
+      "A major literary source for the Temple crisis, rededication and later Jewish political developments.",
+      "It has a particular political and theological perspective. Its canonical status varies among Christian traditions.",
+      ["chicago","step"],
+      []
+    ],
+
+    [
+      "AD-060",
+      "Second Maccabees",
+      9,
+      "Late second or early first century BCE — composition",
+      "Greek",
+      "Historical and theological literature",
+      "Hellenistic Jewish literary setting",
+      "context",
+      ["Daniel 11","Hebrews 11:35"],
+      "A Greek work presenting selected events surrounding the Temple crisis and Maccabean resistance.",
+      "Illuminates Jewish martyrdom traditions, resurrection beliefs and religious identity.",
+      "It is not simply the chronological continuation of First Maccabees. Its theological and rhetorical aims require consideration.",
+      ["chicago","step"],
+      []
+    ],
+
+    [
+      "AD-061",
+      "Philo of Alexandria — On the Creation",
+      9,
+      "First half of the first century CE — composition",
+      "Greek",
+      "Philosophical biblical exposition",
+      "Alexandria",
+      "reception",
+      ["Genesis 1–3","John 1:1-18"],
+      "A Jewish philosophical interpretation of the creation narrative drawing on Greek intellectual traditions.",
+      "Useful for studying ancient Jewish scriptural interpretation and philosophical concepts.",
+      "Similar vocabulary does not establish that the Gospel of John directly depended on Philo.",
+      ["perseus","chicago"],
+      []
+    ],
+
+    [
+      "AD-062",
+      "Josephus — Jewish Antiquities",
+      10,
+      "93/94 CE — composition",
+      "Greek",
+      "Historical literature",
+      "Rome",
+      "external",
+      ["Daniel","Matthew","Luke","Acts"],
+      "A historical account extending from ancient Jewish traditions into the first century CE.",
+      "Contains important discussions of Herodian rulers, John the Baptist, James and a passage concerning Jesus.",
+      "The wording of the Testimonium Flavianum in Antiquities 18.63–64 shows substantial textual and authenticity questions.",
+      ["perseus"],
+      [
+        ["Josephus — English text, public-domain translation",
+         "https://www.gutenberg.org/ebooks/2848"]
+      ]
+    ],
+
+    [
+      "AD-063",
+      "Josephus — The Jewish War",
+      10,
+      "Approximately 75–79 CE — composition",
+      "Greek",
+      "Historical literature",
+      "Rome",
+      "external",
+      ["Matthew 24","Mark 13","Luke 21"],
+      "An account of Jewish history and the revolt against Roman rule culminating in Jerusalem's destruction.",
+      "A major ancient literary source for the First Jewish–Roman War and the Second Temple's destruction in 70 CE.",
+      "Josephus wrote from a particular political and personal position. His interpretation and numerical claims require critical evaluation.",
+      ["perseus"],
+      [
+        ["Josephus — Jewish War, public-domain translation",
+         "https://www.gutenberg.org/ebooks/2850"]
+      ]
+    ],
+
+    [
+      "AD-064",
+      "Tacitus — Annals 15.44",
+      10,
+      "Early second century CE — composition",
+      "Latin",
+      "Roman historical literature",
+      "Roman Empire",
+      "external",
+      ["Luke 23","John 19"],
+      "A Roman historical passage discussing Christians and the execution of Christus under Pontius Pilate during Tiberius's reign.",
+      "Significant non-Christian literary testimony concerning Jesus's execution and the presence of Christians in Rome.",
+      "Tacitus wrote decades after Jesus's death. His precise information sources are not identified in the passage.",
+      ["perseus"],
+      []
+    ],
+
+    [
+      "AD-065",
+      "Pliny the Younger — Letters 10.96–97",
+      10,
+      "Approximately 112 CE — correspondence",
+      "Latin",
+      "Administrative correspondence",
+      "Bithynia-Pontus and Rome",
+      "external",
+      ["Acts","1 Peter"],
+      "Correspondence between Pliny and Trajan concerning the treatment of individuals accused of being Christians.",
+      "Provides external evidence of Christian worship practices and Roman administrative responses in the early second century.",
+      "The letters describe particular communities and do not provide a comprehensive account of early Christianity.",
+      ["perseus"],
+      []
+    ],
+
+    [
+      "AD-066",
+      "Suetonius — Claudius 25.4",
+      10,
+      "Early second century CE — composition",
+      "Latin",
+      "Imperial biography",
+      "Roman Empire",
+      "external",
+      ["Acts 18:1-2"],
+      "A passage describing disturbances among Jews in Rome and associating them with a figure or name rendered Chrestus.",
+      "Relevant to research into Claudius's actions concerning Jews and the setting of Acts 18.",
+      "Whether Chrestus refers to Christ or another person remains disputed.",
+      ["perseus"],
+      []
+    ],
+
+    [
+      "AD-067",
+      "Pontius Pilate Inscription",
+      10,
+      "26–36 CE — administrative setting",
+      "Latin",
+      "Fragmentary stone dedication",
+      "Caesarea Maritima",
+      "external",
+      ["Matthew 27","Mark 15","Luke 23","John 18–19"],
+      "A dedicatory inscription identifying Pontius Pilate and his title as prefect of Judea.",
+      "Direct epigraphic evidence for Pilate's historical office.",
+      "The inscription does not describe Jesus's trial or execution.",
+      ["epigraphy","chicago"],
+      []
+    ],
+
+    [
+      "AD-068",
+      "Gallio Inscription — Delphi",
+      10,
+      "Approximately 52 CE",
+      "Greek",
+      "Fragmentary imperial inscription",
+      "Delphi, Greece",
+      "external",
+      ["Acts 18:12-17"],
+      "Fragments of a letter from Emperor Claudius referring to Gallio as proconsul.",
+      "Provides an important chronological anchor used in reconstructing Paul's activity at Corinth.",
+      "The inscription does not mention Paul or narrate the hearing described in Acts.",
+      ["perseus"],
+      []
+    ],
+
+    [
+      "AD-069",
+      "Didache",
+      11,
+      "Late first or early second century CE — commonly proposed",
+      "Greek",
+      "Christian instructional literature",
+      "Precise origin uncertain",
+      "reception",
+      ["Matthew 5–7","Matthew 28:19","1 Corinthians 11"],
+      "An early Christian instructional work addressing ethics, baptism, prayer, communal meals and community leadership.",
+      "Provides important comparative evidence for early Christian practice and the reception of teachings associated with Jesus.",
+      "Its composition date and literary relationship to individual New Testament writings remain debated.",
+      ["fathers"],
+      [
+        ["Read the Didache",
+         "https://www.newadvent.org/fathers/0714.htm"]
+      ]
+    ],
+
+    [
+      "AD-070",
+      "First Clement",
+      11,
+      "Approximately 95–100 CE — conventional composition date",
+      "Greek",
+      "Christian communal letter",
+      "Rome to Corinth",
+      "reception",
+      ["1 Corinthians","Hebrews"],
+      "A letter from the Roman Christian community addressing conflict and leadership in Corinth.",
+      "Provides evidence for early Christian communal organization and use of Jewish and Christian scriptural traditions.",
+      "The text does not name Clement as author. Traditional attribution and precise dating require separate assessment.",
+      ["fathers"],
+      [
+        ["Read First Clement",
+         "https://www.newadvent.org/fathers/1010.htm"]
+      ]
+    ],
+
+    [
+      "AD-071",
+      "Letters of Ignatius of Antioch",
+      11,
+      "Early second century CE — conventional dating",
+      "Greek",
+      "Christian letters",
+      "Eastern Roman Empire",
+      "reception",
+      ["Matthew","John","Philippians"],
+      "Letters associated with Ignatius discussing church unity, leadership, Christian identity and Jesus Christ.",
+      "Important witnesses to Christian theological language and church organization after the apostolic period.",
+      "Different recensions survive. The commonly accepted seven-letter middle recension must be distinguished from later expanded forms.",
+      ["fathers"],
+      []
+    ],
+
+    [
+      "AD-072",
+      "Polycarp — Letter to the Philippians",
+      11,
+      "Early to mid-second century CE — composition",
+      "Greek; partial Latin transmission",
+      "Christian letter",
+      "Smyrna and Philippi",
+      "reception",
+      ["Philippians","1 Peter","1 John"],
+      "A letter addressing Christian conduct, perseverance and community concerns.",
+      "Provides evidence for the early reception of Christian writings and ethical traditions.",
+      "Its precise dating and possible compositional history remain subjects of scholarly discussion.",
+      ["fathers"],
+      []
+    ],
+
+    [
+      "AD-073",
+      "Shepherd of Hermas",
+      11,
+      "Second century CE — composition",
+      "Greek",
+      "Christian visionary literature",
+      "Rome",
+      "reception",
+      ["Matthew 13","James","Revelation"],
+      "A Christian work containing visions, mandates and similitudes focused on repentance and moral life.",
+      "Documents early Christian ethical and visionary traditions and appears within the surviving Codex Sinaiticus collection.",
+      "Ancient popularity and manuscript inclusion do not establish universal canonical status.",
+      ["fathers","sinaiticus"],
+      []
+    ],
+
+    [
+      "AD-074",
+      "Epistle of Barnabas",
+      11,
+      "Late first or early second century CE — commonly proposed",
+      "Greek",
+      "Christian theological treatise",
+      "Origin uncertain",
+      "reception",
+      ["Leviticus","Isaiah","Hebrews"],
+      "An early Christian work presenting extensive interpretive arguments about Jewish Scripture and Christian identity.",
+      "Useful for investigating early Christian interpretation and the history of scriptural reception.",
+      "The work is anonymous and should not be assumed to have been written by Paul's companion Barnabas.",
+      ["fathers","sinaiticus"],
+      []
+    ],
+
+    [
+      "AD-075",
+      "Justin Martyr — First Apology",
+      11,
+      "Mid-second century CE — composition",
+      "Greek",
+      "Christian apologetic literature",
+      "Roman Empire",
+      "reception",
+      ["Matthew","Luke","John"],
+      "An apologetic work defending Christianity and describing aspects of Christian belief and worship.",
+      "Important for research into baptism, Eucharistic practice and the use of Gospel traditions.",
+      "Justin's descriptions represent his historical and argumentative setting, not necessarily every contemporary Christian community.",
+      ["fathers"],
+      [
+        ["Read First Apology",
+         "https://www.newadvent.org/fathers/0126.htm"]
+      ]
+    ],
+
+    [
+      "AD-076",
+      "Irenaeus — Against Heresies",
+      11,
+      "Approximately 180 CE — composition",
+      "Greek original; substantial Latin transmission",
+      "Christian theological literature",
+      "Lyon",
+      "reception",
+      ["Matthew","Mark","Luke","John"],
+      "A theological work opposing teachings Irenaeus regarded as erroneous and articulating Christian doctrine.",
+      "Contains an influential defense of the fourfold Gospel and evidence concerning early Christian scriptural interpretation.",
+      "Irenaeus's position does not represent a universal formal decree determining the complete New Testament canon.",
+      ["fathers"],
+      [
+        ["Read Against Heresies, Book III",
+         "https://www.newadvent.org/fathers/0103300.htm"]
+      ]
+    ],
+
+    [
+      "AD-077",
+      "Muratorian Fragment",
+      11,
+      "Late second-century composition traditionally proposed; dating disputed",
+      "Latin surviving text",
+      "Fragmentary canonical list",
+      "Surviving medieval manuscript",
+      "reception",
+      ["Luke","John","Acts","Romans","Revelation"],
+      "A fragmentary discussion of Christian writings and their acceptance or rejection.",
+      "Provides important evidence for historical debates about collections of authoritative Christian literature.",
+      "Its original composition date, original language and provenance remain debated. The surviving manuscript is considerably later.",
+      ["chicago"],
+      []
+    ],
+
+    [
+      "AD-078",
+      "Eusebius — Ecclesiastical History",
+      11,
+      "Early fourth century CE — composition and revisions",
+      "Greek",
+      "Christian historical literature",
+      "Caesarea",
+      "reception",
+      ["Acts","Revelation"],
+      "A historical work recording Christian communities, bishops, persecutions, writers and disputes over religious writings.",
+      "Preserves quotations and reports from earlier works, some of which no longer survive independently.",
+      "Eusebius selected and interpreted material according to his historical and theological purposes.",
+      ["fathers"],
+      [
+        ["Read Ecclesiastical History, Book III",
+         "https://www.newadvent.org/fathers/250103.htm"]
+      ]
+    ],
+
+    [
+      "AD-079",
+      "Athanasius — Thirty-Ninth Festal Letter",
+      11,
+      "367 CE — composition",
+      "Greek original; multiple transmission traditions",
+      "Ecclesiastical letter",
+      "Alexandria",
+      "reception",
+      ["Matthew–Revelation"],
+      "A festal letter containing a list of the twenty-seven books of the New Testament.",
+      "A major historical witness to the development of Christian canonical collections.",
+      "The letter did not create the New Testament or settle all canonical differences among Christian communities.",
+      ["fathers"],
+      [
+        ["Read Festal Letter 39",
+         "https://www.newadvent.org/fathers/2806039.htm"]
+      ]
+    ]
+
+  ].map(row => ({
+    id:row[0],
+    title:row[1],
+    category:row[2],
+    date:row[3],
+    language:row[4],
+    material:row[5],
+    origin:row[6],
+    relation:row[7],
+    passages:row[8],
+    description:row[9],
+    significance:row[10],
+    limitations:row[11],
+    collections:row[12],
+    links:row[13]
+  }));
+
+  const bibleBooks = [
+    "Genesis","Exodus","Leviticus","Numbers",
+    "Deuteronomy","Joshua","Judges","Ruth",
+    "1 Samuel","2 Samuel","1 Kings","2 Kings",
+    "1 Chronicles","2 Chronicles","Ezra",
+    "Nehemiah","Esther","Job","Psalms",
+    "Proverbs","Ecclesiastes","Song of Solomon",
+    "Isaiah","Jeremiah","Lamentations","Ezekiel",
+    "Daniel","Hosea","Joel","Amos","Obadiah",
+    "Jonah","Micah","Nahum","Habakkuk",
+    "Zephaniah","Haggai","Zechariah","Malachi",
+    "Matthew","Mark","Luke","John","Acts",
+    "Romans","1 Corinthians","2 Corinthians",
+    "Galatians","Ephesians","Philippians",
+    "Colossians","1 Thessalonians",
+    "2 Thessalonians","1 Timothy","2 Timothy",
+    "Titus","Philemon","Hebrews","James",
+    "1 Peter","2 Peter","1 John","2 John",
+    "3 John","Jude","Revelation"
+  ];
+
+  const root = document.createElement("div");
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+
+      .dbad {
+        color:var(--text,#ece8df);
+        line-height:1.75;
+      }
+
+      .dbad .ad-panel {
+        background:var(--panel2,#17191e);
+        border:1px solid var(--line,#33363c);
+        border-radius:12px;
+        padding:22px;
+        margin:18px 0;
+      }
+
+      .dbad .ad-grid {
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(160px,1fr));
+        gap:14px;
+      }
+
+      .dbad input,
+      .dbad select {
+        background:var(--bg,#101216);
+        color:var(--text,#ece8df);
+        border:1px solid var(--line,#33363c);
+        border-radius:7px;
+        padding:11px;
+        width:100%;
+        box-sizing:border-box;
+        font:inherit;
+      }
+
+      .dbad label {
+        display:block;
+        font-size:13px;
+        margin-bottom:6px;
+        color:var(--muted,#b3b3b3);
+      }
+
+      .dbad .ad-stat {
+        font-size:28px;
+        font-weight:700;
+        color:var(--gold,#c7a76a);
+      }
+
+      .dbad .ad-actions {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin:14px 0;
+      }
+
+      .dbad .ad-record {
+        background:var(--panel,#14161a);
+        border:1px solid var(--line,#33363c);
+        border-radius:10px;
+        padding:20px;
+        margin:16px 0;
+      }
+
+      .dbad .ad-id {
+        font-size:12px;
+        letter-spacing:1px;
+        color:var(--gold,#c7a76a);
+      }
+
+      .dbad .ad-muted {
+        font-size:13px;
+        color:var(--muted,#b3b3b3);
+      }
+
+      .dbad .ad-note {
+        background:var(--bg,#101216);
+        border-left:2px solid var(--gold,#c7a76a);
+        padding:14px;
+        margin:13px 0;
+      }
+
+      .dbad .ad-label {
+        display:inline-block;
+        border:1px solid var(--line,#33363c);
+        border-radius:5px;
+        padding:4px 9px;
+        font-size:12px;
+        margin:4px 0 12px;
+      }
+
+      .dbad .ad-direct {
+        color:#9bc8ad;
+      }
+
+      .dbad .ad-external {
+        color:#9fc0e2;
+      }
+
+      .dbad .ad-context {
+        color:#d9bd79;
+      }
+
+      .dbad .ad-comparison {
+        color:#c6b1df;
+      }
+
+      .dbad .ad-reception {
+        color:#dfb5a1;
+      }
+
+      .dbad a {
+        color:var(--gold,#c7a76a);
+        overflow-wrap:anywhere;
+      }
+
+      .dbad details {
+        padding:12px 0;
+        border-bottom:1px solid var(--line,#33363c);
+      }
+
+      .dbad summary {
+        cursor:pointer;
+        font-weight:600;
+        color:var(--gold,#c7a76a);
+      }
+
+      .dbad dt {
+        font-size:12px;
+        color:var(--muted,#b3b3b3);
+        margin-top:10px;
+      }
+
+      .dbad dd {
+        margin:0 0 10px;
+        overflow-wrap:anywhere;
+      }
+
+      .dbad blockquote {
+        padding:12px;
+        margin:10px 0;
+        background:var(--bg,#101216);
+        border-left:2px solid var(--gold,#c7a76a);
+      }
+
+      .dbad button:disabled {
+        opacity:.45;
+        cursor:not-allowed;
+      }
+
+      @media(max-width:600px) {
+
+        .dbad .ad-panel,
+        .dbad .ad-record {
+          padding:13px;
+        }
+
+      }
+
+    </style>
+
+    <div class="dbad">
+
+      <div class="eyebrow">
+        DESERTBIBLE · PRIMARY SOURCE RESEARCH
+      </div>
+
+      <h2>Ancient Documents</h2>
+
+      <p>
+        Investigate surviving textual witnesses,
+        inscriptions, historical records and
+        ancient religious literature connected
+        with the biblical world.
+      </p>
+
+      <section class="ad-panel">
+
+        <div class="ad-grid">
+
+          <div>
+            <div class="ad-stat" id="adTotal"></div>
+            Document records
+          </div>
+
+          <div>
+            <div class="ad-stat" id="adCategoryCount"></div>
+            Research collections
+          </div>
+
+          <div>
+            <div class="ad-stat" id="adDirectCount"></div>
+            Biblical textual witnesses
+          </div>
+
+          <div>
+            <div class="ad-stat" id="adSourceCount"></div>
+            Research institutions and resources
+          </div>
+
+        </div>
+
+        <div class="ad-note">
+
+          <strong>Evidence integrity</strong>
+
+          <p>
+            A manuscript preserves a textual reading.
+            An inscription may establish a historical
+            name, place or event. Comparative literature
+            illuminates cultural and intellectual context.
+            These different types of evidence must not
+            be treated as interchangeable.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>01 · Document Collections</h3>
+
+        <div class="ad-actions" id="adCollections"></div>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>02 · Research Catalogue</h3>
+
+        <div class="ad-grid">
+
+          <div>
+
+            <label for="adSearch">
+              Search documents
+            </label>
+
+            <input id="adSearch"
+                   type="search"
+                   placeholder="Micah, Isaiah, P52, Assyria...">
+
+          </div>
+
+          <div>
+
+            <label for="adCategory">
+              Document collection
+            </label>
+
+            <select id="adCategory">
+              <option value="all">All collections</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="adRelation">
+              Evidence relationship
+            </label>
+
+            <select id="adRelation">
+              <option value="all">All evidence types</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="adLanguage">
+              Language
+            </label>
+
+            <select id="adLanguage">
+              <option value="all">All languages</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="adBook">
+              Related biblical book
+            </label>
+
+            <select id="adBook">
+              <option value="all">All biblical books</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="adEdition">
+              Scripture preview translation
+            </label>
+
+            <select id="adEdition">
+              <option value="web">WEB</option>
+              <option value="kjv">KJV</option>
+              <option value="asv">ASV</option>
+            </select>
+
+          </div>
+
+          <div>
+
+            <label for="adSort">
+              Display order
+            </label>
+
+            <select id="adSort">
+              <option value="collection">Collection order</option>
+              <option value="title">Title A–Z</option>
+              <option value="direct">Textual witnesses first</option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="ad-actions">
+
+          <button type="button" id="adReset">
+            Reset filters
+          </button>
+
+          <button type="button" id="adBookmarks">
+            Show bookmarks
+          </button>
+
+          <button type="button" id="adCopy">
+            Copy catalogue
+          </button>
+
+          <button type="button" id="adDownload">
+            Download research
+          </button>
+
+        </div>
+
+        <p id="adMessage" role="status" aria-live="polite"></p>
+
+        <p id="adResultCount"></p>
+
+        <div id="adResults"></div>
+
+        <div class="ad-actions">
+
+          <button type="button" id="adPrevious">
+            Previous documents
+          </button>
+
+          <button type="button" id="adNext">
+            Next documents
+          </button>
+
+        </div>
+
+        <p id="adPage"></p>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>03 · Manuscript Research Methodology</h3>
+
+        <details open>
+
+          <summary>Manuscript versus composition</summary>
+
+          <p>
+            A manuscript is a physical witness to
+            a text. A composition is the literary
+            work transmitted through one or more
+            manuscripts.
+          </p>
+
+          <p>
+            The age of a surviving copy establishes
+            neither the exact age of the original
+            composition nor the originality of
+            every reading it preserves.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Palaeography and radiocarbon dating</summary>
+
+          <p>
+            Palaeography estimates dates by studying
+            handwriting and comparing it with
+            other historical examples.
+          </p>
+
+          <p>
+            Radiocarbon analysis estimates the age
+            of organic material. It does not
+            automatically determine the exact date
+            when a text was written on that material.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Provenance and archaeological context</summary>
+
+          <p>
+            Provenance concerns an object's history,
+            discovery context and ownership.
+          </p>
+
+          <p>
+            Controlled excavations can supply evidence
+            unavailable for objects acquired without
+            a documented archaeological findspot.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Textual criticism</summary>
+
+          <p>
+            Textual criticism compares surviving
+            witnesses to investigate the transmission
+            and earliest recoverable forms of a text.
+          </p>
+
+          <p>
+            Manuscript age, scribal behavior,
+            relationships between witnesses and
+            internal considerations all matter.
+            No single manuscript is automatically
+            correct at every point.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Ancient translations</summary>
+
+          <p>
+            Greek, Latin, Syriac and other ancient
+            versions can preserve evidence of earlier
+            textual forms.
+          </p>
+
+          <p>
+            A difference may reflect a different
+            underlying text, translation technique,
+            interpretation or later transmission.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Royal inscriptions and historical bias</summary>
+
+          <p>
+            Royal monuments frequently present
+            rulers as victorious, legitimate and
+            divinely favored.
+          </p>
+
+          <p>
+            Historically valuable inscriptions must
+            still be compared with other records,
+            archaeological context and the political
+            objectives of their authors.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Canonical status</summary>
+
+          <p>
+            An ancient document may be historically
+            important without belonging to a particular
+            religious canon.
+          </p>
+
+          <p>
+            Jewish, Protestant, Catholic, Eastern
+            Orthodox and Ethiopian Orthodox traditions
+            do not all possess identical scriptural
+            collections.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Manuscript identification systems</summary>
+
+          <p>
+            Dead Sea Scroll identifiers such as 1Q
+            and 4Q refer to discovery locations
+            and manuscript cataloguing systems.
+          </p>
+
+          <p>
+            Gregory–Aland identifiers such as P52
+            and 01 designate New Testament
+            manuscript witnesses.
+          </p>
+
+          <p>
+            Museum accession numbers identify
+            particular catalogued objects.
+          </p>
+
+          <p>
+            Researchers should record manuscript
+            identifiers, fragment numbers, columns,
+            lines and edition details whenever
+            available.
+          </p>
+
+        </details>
+
+        <details>
+
+          <summary>Historical evidence versus theological claims</summary>
+
+          <p>
+            External evidence may establish that
+            a ruler existed, that a city was destroyed
+            or that a religious community circulated
+            a particular text.
+          </p>
+
+          <p>
+            Such evidence does not necessarily establish
+            every associated narrative detail or resolve
+            its theological interpretation.
+          </p>
+
+        </details>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>04 · Documentary Evidence classifications</h3>
+
+        <div id="adDefinitions"></div>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>05 · Digital Archives and Research Institutions</h3>
+
+        <div id="adLibrary"></div>
+
+        <p class="ad-muted">
+          Collection links lead to research repositories.
+          Search using the displayed manuscript title
+          or catalogue identifier. Direct document links
+          are identified separately where supplied.
+        </p>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>06 · Academic Citation Guide</h3>
+
+        <p>
+          A complete documentary citation should
+          identify the document, manuscript or accession
+          number, relevant passage, column or line,
+          publication or editor, and the consulted source.
+        </p>
+
+        <div class="ad-note">
+
+          <strong>Example identification</strong>
+
+          <p>
+            Great Isaiah Scroll (1QIsaᵃ),
+            Isaiah 53, Israel Museum,
+            Digital Dead Sea Scrolls.
+          </p>
+
+          <p>
+            Add the specific column, line and
+            consulted edition when citing an exact reading.
+          </p>
+
+        </div>
+
+        <p>
+          DesertBible's citation export supplies
+          a research record and resource links.
+          It is not a substitute for a complete
+          critical-edition citation.
+        </p>
+
+      </section>
+
+      <section class="ad-panel">
+
+        <h3>07 · Catalogue Scope</h3>
+
+        <p>
+          This curated catalogue covers selected
+          significant documents from the ancient
+          Near East, biblical manuscript traditions,
+          Second Temple Judaism, the Roman world
+          and early Christianity.
+        </p>
+
+        <p>
+          Related passages identify direct textual
+          witnesses, historical relationships or
+          thematic comparisons according to each
+          record's evidence classification.
+        </p>
+
+        <p>
+          A related biblical book does not mean
+          the document preserves the entire book.
+          Consult the surviving manuscript contents
+          and critical editions for exact coverage.
+        </p>
+
+        <p>
+          External archives contain additional
+          documents beyond this catalogue.
+          Some resources require further navigation
+          or institutional access.
+        </p>
+
+      </section>
+
+      <button type="button" id="adClose">
+        Return to research categories
+      </button>
+
+    </div>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  function make(tag,text,parent) {
+
+    const element = document.createElement(tag);
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    if (parent) {
+      parent.appendChild(element);
+    }
+
+    return element;
+  }
+
+  function link(parent,title,url) {
+
+    const anchor = make("a",title,parent);
+
+    anchor.href = url;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+
+    return anchor;
+  }
+
+  function button(parent,title,action) {
+
+    const element = make("button",title,parent);
+
+    element.type = "button";
+
+    element.addEventListener("click",action);
+
+    return element;
+  }
+
+  function option(parent,value,title) {
+
+    const element = make("option",title,parent);
+
+    element.value = value;
+
+    return element;
+  }
+
+  function normalize(value) {
+
+    return String(value || "")
+      .normalize("NFKD")
+      .replace(/\p{M}/gu,"")
+      .toLowerCase()
+      .trim();
+  }
+
+  let page = 0;
+
+  const pageSize = 10;
+
+  let bookmarkedOnly = false;
+
+  const saved = new Set();
+
+  const cache = new Map();
+
+  const storageKey =
+    "DesertBible.ancientDocuments.bookmarks.v1";
+
+  try {
+
+    const previous = JSON.parse(
+      localStorage.getItem(storageKey) || "[]"
+    );
+
+    if (Array.isArray(previous)) {
+
+      previous.forEach(id => {
+
+        if (records.some(record => record.id === id)) {
+          saved.add(id);
+        }
+
+      });
+
+    }
+
+  } catch {}
+
+  function persist() {
+
+    try {
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify([...saved])
+      );
+
+      $("adMessage").textContent =
+        "Research bookmarks saved in this browser.";
+
+    } catch {
+
+      $("adMessage").textContent =
+        "Bookmarks retained for this session only.";
+
+    }
+
+  }
+
+  $("adTotal").textContent = records.length;
+
+  $("adCategoryCount").textContent = categories.length;
+
+  $("adDirectCount").textContent =
+    records.filter(
+      record => record.relation === "direct"
+    ).length;
+
+  $("adSourceCount").textContent =
+    Object.keys(collections).length;
+
+  categories.forEach((category,index) => {
+
+    const count = records.filter(
+      record => record.category === index
+    ).length;
+
+    option(
+      $("adCategory"),
+      String(index),
+      category + " (" + count + ")"
+    );
+
+    button(
+      $("adCollections"),
+      category + " (" + count + ")",
+      () => {
+
+        $("adCategory").value = String(index);
+
+        page = 0;
+
+        render();
+
+        $("adResultCount").scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      }
+    );
+
+  });
+
+  Object.entries(relations).forEach(([key,title]) => {
+
+    option($("adRelation"),key,title);
+
+  });
+
+  const languages = [
+    "Hebrew",
+    "Aramaic",
+    "Greek",
+    "Latin",
+    "Akkadian",
+    "Egyptian",
+    "Moabite",
+    "Old Persian",
+    "Elamite",
+    "Ethiopic"
+  ];
+
+  languages.forEach(language => {
+
+    option($("adLanguage"),language,language);
+
+  });
+
+  bibleBooks.forEach(book => {
+
+    option($("adBook"),book,book);
+
+  });
+
+  const definitions = {
+
+    direct:
+      "A manuscript or ancient witness preserving biblical wording or a closely related scriptural formula.",
+
+    external:
+      "A source outside the biblical text relevant to a historical person, office, event or political setting.",
+
+    context:
+      "A document illuminating the environment, institutions, customs or religious practices associated with biblical history.",
+
+    comparison:
+      "A literary or documentary source relevant to thematic, legal, linguistic or cultural comparison.",
+
+    reception:
+      "Evidence concerning the interpretation, use or transmission of Scripture and related religious traditions."
+
+  };
+
+  Object.entries(relations).forEach(([key,title]) => {
+
+    const section = make(
+      "details",undefined,$("adDefinitions")
+    );
+
+    make("summary",title,section);
+
+    make("p",definitions[key],section);
+
+  });
+
+  Object.values(collections).forEach(source => {
+
+    const paragraph = make(
+      "p",undefined,$("adLibrary")
+    );
+
+    link(paragraph,source[0],source[1]);
+
+  });
+
+  function relatedBooks(reference) {
+
+    const text = String(reference).trim();
+
+    if (text === "Genesis–Malachi") {
+      return bibleBooks.slice(0,39);
+    }
+
+    if (text === "Matthew–Revelation") {
+      return bibleBooks.slice(39);
+    }
+
+    if (text === "Matthew–Hebrews") {
+      return bibleBooks.slice(39,58);
+    }
+
+    const ordered = [...bibleBooks].sort(
+      (a,b) => b.length-a.length
+    );
+
+    const book = ordered.find(name =>
+
+      text === name ||
+      text.startsWith(name + " ")
+
+    );
+
+    return book ? [book] : [];
+
+  }
+
+  function matchesBook(record,book) {
+
+    return record.passages.some(reference =>
+
+      relatedBooks(reference).includes(book)
+
+    );
+
+  }
+
+  function filtered() {
+
+    const query = normalize($("adSearch").value);
+
+    const category = $("adCategory").value;
+
+    const relation = $("adRelation").value;
+
+    const language = $("adLanguage").value;
+
+    const book = $("adBook").value;
+
+    const result = records.filter(record => {
+
+      if (
+        bookmarkedOnly &&
+        !saved.has(record.id)
+      ) return false;
+
+      if (
+        category !== "all" &&
+        record.category !== Number(category)
+      ) return false;
+
+      if (
+        relation !== "all" &&
+        record.relation !== relation
+      ) return false;
+
+      if (
+        language !== "all" &&
+        !normalize(record.language).includes(
+          normalize(language)
+        )
+      ) return false;
+
+      if (
+        book !== "all" &&
+        !matchesBook(record,book)
+      ) return false;
+
+      if (query) {
+
+        const searchable = normalize([
+
+          record.id,
+          record.title,
+          record.date,
+          record.language,
+          record.material,
+          record.origin,
+          record.description,
+          record.significance,
+          record.limitations,
+          categories[record.category],
+          relations[record.relation],
+          ...record.passages
+
+        ].join(" "));
+
+        if (!query.split(/\s+/).every(term =>
+          searchable.includes(term)
+        )) return false;
+
+      }
+
+      return true;
+
+    });
+
+    if ($("adSort").value === "title") {
+
+      result.sort((a,b) =>
+        a.title.localeCompare(b.title)
+      );
+
+    }
+
+    if ($("adSort").value === "direct") {
+
+      result.sort((a,b) =>
+
+        Number(b.relation === "direct") -
+        Number(a.relation === "direct")
+
+      );
+
+    }
+
+    return result;
+  }
+
+  function documentCitation(record) {
+
+    const lines = [
+
+      "DESERTBIBLE — ANCIENT DOCUMENTS",
+
+      record.title,
+
+      "Research identifier: " + record.id,
+
+      "Collection: " + categories[record.category],
+
+      "Date: " + record.date,
+
+      "Language: " + record.language,
+
+      "Document type: " + record.material,
+
+      "Origin or provenance: " + record.origin,
+
+      "Evidence relationship: " +
+        relations[record.relation],
+
+      "",
+
+      "Description:",
+
+      record.description,
+
+      "",
+
+      "Research significance:",
+
+      record.significance,
+
+      "",
+
+      "Evidence limitations:",
+
+      record.limitations,
+
+      "",
+
+      "Related biblical passages:",
+
+      record.passages.join("; "),
+
+      "",
+
+      "Direct resources:"
+
+    ];
+
+    if (record.links.length) {
+
+      record.links.forEach(source => {
+
+        lines.push(source[0],source[1]);
+
+      });
+
+    } else {
+
+      lines.push(
+        "No item-specific digital link attached."
+      );
+
+    }
+
+    lines.push("","Collection and research resources:");
+
+    record.collections.forEach(key => {
+
+      const source = collections[key];
+
+      if (source) {
+        lines.push(source[0],source[1]);
+      }
+
+    });
+
+    lines.push(
+
+      "",
+
+      "Citation limitation: Consult the original " +
+      "manuscript catalogue or critical edition " +
+      "for exact page, column, line or fragment citations.",
+
+      "Exported: " + new Date().toISOString()
+
+    );
+
+    return lines.join("\n");
+
+  }
+
+  function exportCatalogue() {
+
+    return [
+
+      "DESERTBIBLE — ANCIENT DOCUMENTS RESEARCH",
+
+      "Filtered records: " + filtered().length,
+
+      "",
+
+      ...filtered().map(documentCitation)
+
+    ].join("\n\n" + "=".repeat(55) + "\n\n");
+
+  }
+
+  async function copyText(text,message) {
+
+    try {
+
+      await navigator.clipboard.writeText(text);
+
+      $("adMessage").textContent = message;
+
+    } catch {
+
+      $("adMessage").textContent =
+        "Clipboard unavailable. Use Download research.";
+
+    }
+
+  }
+
+  function downloadText(text,filename) {
+
+    const blob = new Blob(
+      [text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = filename;
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    anchor.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url),1000);
+
+  }
+
+  function previewReference(parent,reference) {
+
+    const section = make("div",undefined,parent);
+
+    make("p",reference,section);
+
+    const researchLink = make(
+      "p",undefined,section
+    );
+
+    link(
+
+      researchLink,
+
+      "Open biblical research in STEP Bible",
+
+      "https://www.stepbible.org/?q=version=KJV|reference=" +
+        encodeURIComponent(reference)
+
+    );
+
+    /*
+      Only individual chapter-and-verse references
+      receive inline API previews.
+
+      Whole books and broad ranges remain
+      available through external research links.
+    */
+
+    const match = reference.match(
+      /^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/
+    );
+
+    if (!match) return;
+
+    const first = Number(match[3]);
+
+    const last = match[4]
+      ? Number(match[4])
+      : first;
+
+    if (last-first > 40 || last < first) return;
+
+    const output = make("div",undefined,section);
+
+    button(section,"Read Scripture",async event => {
+
+      const control = event.currentTarget;
+
+      if (output.dataset.loaded === "true") {
+
+        output.hidden = !output.hidden;
+
+        control.textContent = output.hidden
+          ? "Read Scripture"
+          : "Hide Scripture";
+
+        return;
+
+      }
+
+      control.disabled = true;
+
+      output.textContent = "Retrieving Scripture…";
+
+      try {
+
+        const edition = $("adEdition").value;
+
+        const url =
+          "https://bible-api.com/" +
+          encodeURIComponent(reference) +
+          "?translation=" + edition;
+
+        let result = cache.get(url);
+
+        if (!result) {
+
+          const response = await fetch(url);
+
+          if (!response.ok) {
+
+            throw new Error(
+
+              "Scripture source unavailable (HTTP " +
+              response.status + ")."
+
+            );
+
+          }
+
+          const json = await response.json();
+
+          if (
+            !Array.isArray(json.verses) ||
+            !json.verses.length
+          ) {
+
+            throw new Error(
+              "No Scripture text returned."
+            );
+
+          }
+
+          result = json.verses.map(verse =>
+
+            String(verse.text || "").trim()
+
+          ).join(" ");
+
+          cache.set(url,result);
+
+        }
+
+        if (!output.isConnected) return;
+
+        output.replaceChildren();
+
+        make(
+          "p",
+          reference + " · " + edition.toUpperCase(),
+          output
+        );
+
+        make("blockquote",result,output);
+
+        link(output,"Verify biblical text source",url);
+
+        make(
+
+          "p",
+
+          "This is a modern Bible translation preview, not a transcription or translation of the ancient document.",
+
+          output
+
+        ).className = "ad-muted";
+
+        output.dataset.loaded = "true";
+
+        control.textContent = "Hide Scripture";
+
+      } catch (error) {
+
+        output.textContent =
+          error.message + " Use the external research link.";
+
+      } finally {
+
+        control.disabled = false;
+
+      }
+
+    });
+
+  }
+
+  function renderRecord(record,parent) {
+
+    const article = make("article",undefined,parent);
+
+    article.className = "ad-record";
+
+    make(
+
+      "div",
+
+      record.id + " · " + categories[record.category],
+
+      article
+
+    ).className = "ad-id";
+
+    make("h3",record.title,article);
+
+    make(
+
+      "div",
+
+      relations[record.relation],
+
+      article
+
+    ).className =
+      "ad-label ad-" + record.relation;
+
+    const metadata = make("dl",undefined,article);
+
+    [
+
+      ["Date",record.date],
+
+      ["Language",record.language],
+
+      ["Document type",record.material],
+
+      ["Origin or discovery context",record.origin]
+
+    ].forEach(([label,value]) => {
+
+      make("dt",label,metadata);
+
+      make("dd",value,metadata);
+
+    });
+
+    make("h4","Document overview",article);
+
+    make("p",record.description,article);
+
+    make("h4","Research significance",article);
+
+    make("p",record.significance,article);
+
+    const limitation = make("div",undefined,article);
+
+    limitation.className = "ad-note";
+
+    make("strong","Evidence limitations",limitation);
+
+    make("p",record.limitations,limitation);
+
+    const passages = make("details",undefined,article);
+
+    make(
+
+      "summary",
+
+      "Related Scripture (" +
+      record.passages.length + ")",
+
+      passages
+
+    );
+
+    make(
+
+      "p",
+
+      "The relationship between these passages and the document is classified above. Related passages do not necessarily survive within the document.",
+
+      passages
+
+    ).className = "ad-muted";
+
+    record.passages.forEach(reference => {
+
+      previewReference(passages,reference);
+
+    });
+
+    const sources = make("details",undefined,article);
+
+    make("summary","Ancient sources and verification",sources);
+
+    if (record.links.length) {
+
+      make("h4","Document-specific resources",sources);
+
+      record.links.forEach(source => {
+
+        const paragraph = make("p",undefined,sources);
+
+        link(paragraph,source[0],source[1]);
+
+      });
+
+    } else {
+
+      make(
+
+        "p",
+
+        "No direct item-level digital link is attached. Consult the collection resources below using the document title or manuscript identifier.",
+
+        sources
+
+      ).className = "ad-muted";
+
+    }
+
+    make("h4","Collection and research resources",sources);
+
+    record.collections.forEach(key => {
+
+      const source = collections[key];
+
+      if (!source) return;
+
+      const paragraph = make("p",undefined,sources);
+
+      link(paragraph,source[0],source[1]);
+
+    });
+
+    const controls = make("div",undefined,article);
+
+    controls.className = "ad-actions";
+
+    const bookmark = button(
+
+      controls,
+
+      saved.has(record.id)
+        ? "Remove bookmark"
+        : "Bookmark document",
+
+      () => {
+
+        if (saved.has(record.id)) {
+
+          saved.delete(record.id);
+
+        } else {
+
+          saved.add(record.id);
+
+        }
+
+        persist();
+
+        updateBookmarks();
+
+        if (bookmarkedOnly) {
+
+          render();
+
+        } else {
+
+          bookmark.textContent = saved.has(record.id)
+            ? "Remove bookmark"
+            : "Bookmark document";
+
+        }
+
+      }
+
+    );
+
+    button(controls,"Copy research citation",() => {
+
+      copyText(
+
+        documentCitation(record),
+
+        "Document research citation copied."
+
+      );
+
+    });
+
+    button(controls,"Download document record",() => {
+
+      downloadText(
+
+        documentCitation(record),
+
+        "DesertBible-" + record.id + ".txt"
+
+      );
+
+    });
+
+  }
+
+  function updateBookmarks() {
+
+    $("adBookmarks").textContent = bookmarkedOnly
+
+      ? "Show all documents"
+
+      : "Show bookmarks (" + saved.size + ")";
+
+  }
+
+  function render() {
+
+    const results = filtered();
+
+    const totalPages = Math.max(
+      1,
+      Math.ceil(results.length/pageSize)
+    );
+
+    page = Math.min(
+      Math.max(page,0),
+      totalPages-1
+    );
+
+    $("adResults").replaceChildren();
+
+    $("adResultCount").textContent =
+
+      results.length +
+      " matching document records out of " +
+      records.length + ".";
+
+    $("adPage").textContent =
+
+      "Page " + (page+1) + " of " + totalPages;
+
+    $("adPrevious").disabled = page === 0;
+
+    $("adNext").disabled =
+      page+1 >= totalPages;
+
+    $("adCopy").disabled = !results.length;
+
+    $("adDownload").disabled = !results.length;
+
+    if (!results.length) {
+
+      make(
+
+        "p",
+
+        "No documents match the selected filters. This does not establish that no relevant ancient evidence exists.",
+
+        $("adResults")
+
+      );
+
+      return;
+
+    }
+
+    results.slice(
+
+      page*pageSize,
+
+      (page+1)*pageSize
+
+    ).forEach(record => {
+
+      renderRecord(record,$("adResults"));
+
+    });
+
+  }
+
+  [
+
+    "adSearch",
+    "adCategory",
+    "adRelation",
+    "adLanguage",
+    "adBook",
+    "adEdition",
+    "adSort"
+
+  ].forEach(id => {
+
+    const control = $(id);
+
+    control.addEventListener(
+
+      control.tagName === "INPUT"
+        ? "input"
+        : "change",
+
+      () => {
+
+        page = 0;
+
+        render();
+
+      }
+
+    );
+
+  });
+
+  $("adReset").addEventListener("click",() => {
+
+    $("adSearch").value = "";
+
+    $("adCategory").value = "all";
+
+    $("adRelation").value = "all";
+
+    $("adLanguage").value = "all";
+
+    $("adBook").value = "all";
+
+    $("adSort").value = "collection";
+
+    $("adEdition").value = "web";
+
+    bookmarkedOnly = false;
+
+    $("adMessage").textContent = "";
+
+    page = 0;
+
+    updateBookmarks();
+
+    render();
+
+  });
+
+  $("adBookmarks").addEventListener("click",() => {
+
+    bookmarkedOnly = !bookmarkedOnly;
+
+    page = 0;
+
+    updateBookmarks();
+
+    render();
+
+  });
+
+  $("adCopy").addEventListener("click",() => {
+
+    copyText(
+
+      exportCatalogue(),
+
+      "Filtered document catalogue copied."
+
+    );
+
+  });
+
+  $("adDownload").addEventListener("click",() => {
+
+    downloadText(
+
+      exportCatalogue(),
+
+      "DesertBible-Ancient-Documents.txt"
+
+    );
+
+  });
+
+  $("adPrevious").addEventListener("click",() => {
+
+    page--;
+
+    render();
+
+    $("adResultCount").scrollIntoView({
+
+      behavior:"smooth",
+
+      block:"start"
+
+    });
+
+  });
+
+  $("adNext").addEventListener("click",() => {
+
+    page++;
+
+    render();
+
+    $("adResultCount").scrollIntoView({
+
+      behavior:"smooth",
+
+      block:"start"
+
+    });
+
+  });
+
+  $("adClose").addEventListener("click",() => {
+
+    workspace.remove();
+
+  });
+
+  updateBookmarks();
 
   render();
 
