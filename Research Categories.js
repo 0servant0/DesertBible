@@ -79,6 +79,10 @@ if (item[0].trim().toLowerCase() === "scholarly commentary") {
   openOriginalLanguages(workspace);
   return;
 }
+    if (item[0].trim().toLowerCase() === "archaeology") {
+  openArchaeology(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
