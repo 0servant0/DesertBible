@@ -7770,4 +7770,2990 @@ function openVisualExploration(workspace) {
   });
 }
 
+function openOriginalLanguages(workspace) {
+  "use strict";
+
+  const books = [
+    ["Genesis","Gen",50],
+    ["Exodus","Exo",40],
+    ["Leviticus","Lev",27],
+    ["Numbers","Num",36],
+    ["Deuteronomy","Deu",34],
+    ["Joshua","Jos",24],
+    ["Judges","Jdg",21],
+    ["Ruth","Rut",4],
+    ["1 Samuel","1Sa",31],
+    ["2 Samuel","2Sa",24],
+    ["1 Kings","1Ki",22],
+    ["2 Kings","2Ki",25],
+    ["1 Chronicles","1Ch",29],
+    ["2 Chronicles","2Ch",36],
+    ["Ezra","Ezr",10],
+    ["Nehemiah","Neh",13],
+    ["Esther","Est",10],
+    ["Job","Job",42],
+    ["Psalms","Psa",150],
+    ["Proverbs","Pro",31],
+    ["Ecclesiastes","Ecc",12],
+    ["Song of Solomon","Sng",8],
+    ["Isaiah","Isa",66],
+    ["Jeremiah","Jer",52],
+    ["Lamentations","Lam",5],
+    ["Ezekiel","Ezk",48],
+    ["Daniel","Dan",12],
+    ["Hosea","Hos",14],
+    ["Joel","Jol",3],
+    ["Amos","Amo",9],
+    ["Obadiah","Oba",1],
+    ["Jonah","Jon",4],
+    ["Micah","Mic",7],
+    ["Nahum","Nam",3],
+    ["Habakkuk","Hab",3],
+    ["Zephaniah","Zep",3],
+    ["Haggai","Hag",2],
+    ["Zechariah","Zec",14],
+    ["Malachi","Mal",4],
+    ["Matthew","Mat",28],
+    ["Mark","Mrk",16],
+    ["Luke","Luk",24],
+    ["John","Jhn",21],
+    ["Acts","Act",28],
+    ["Romans","Rom",16],
+    ["1 Corinthians","1Co",16],
+    ["2 Corinthians","2Co",13],
+    ["Galatians","Gal",6],
+    ["Ephesians","Eph",6],
+    ["Philippians","Php",4],
+    ["Colossians","Col",4],
+    ["1 Thessalonians","1Th",5],
+    ["2 Thessalonians","2Th",3],
+    ["1 Timothy","1Ti",6],
+    ["2 Timothy","2Ti",4],
+    ["Titus","Tit",3],
+    ["Philemon","Phm",1],
+    ["Hebrews","Heb",13],
+    ["James","Jas",5],
+    ["1 Peter","1Pe",5],
+    ["2 Peter","2Pe",3],
+    ["1 John","1Jn",5],
+    ["2 John","2Jn",1],
+    ["3 John","3Jn",1],
+    ["Jude","Jud",1],
+    ["Revelation","Rev",22]
+  ];
+
+  const resources = [
+    {
+      name:"STEP Bible",
+      type:"Interlinear and lexical research",
+      description:"Original-language Bible study, grammatical analysis, word searches and translation comparison.",
+      url:"https://www.stepbible.org/"
+    },
+    {
+      name:"STEP Bible Data Repository",
+      type:"Research datasets",
+      description:"Tagged biblical texts, expanded morphology definitions, lexicons and versification documentation.",
+      url:"https://github.com/STEPBible/STEPBible-Data"
+    },
+    {
+      name:"Open Scriptures Hebrew Bible",
+      type:"Hebrew text and morphology",
+      description:"Westminster Leningrad Codex text with lexical and morphological annotations.",
+      url:"https://github.com/openscriptures/morphhb"
+    },
+    {
+      name:"MorphGNT",
+      type:"Greek morphology",
+      description:"Digitally tagged Greek New Testament data and grammatical analysis.",
+      url:"https://github.com/morphgnt"
+    },
+    {
+      name:"SBL Greek New Testament",
+      type:"Critical Greek edition",
+      description:"A scholarly Greek New Testament edition edited by Michael W. Holmes.",
+      url:"https://sblgnt.com/"
+    },
+    {
+      name:"New Testament Virtual Manuscript Room",
+      type:"Textual criticism",
+      description:"Manuscript discovery and textual research maintained by the Institute for New Testament Textual Research.",
+      url:"https://ntvmr.uni-muenster.de/"
+    },
+    {
+      name:"Center for the Study of New Testament Manuscripts",
+      type:"Manuscript photography",
+      description:"Digital preservation and study of Greek New Testament manuscripts.",
+      url:"https://www.csntm.org/"
+    },
+    {
+      name:"Codex Sinaiticus Project",
+      type:"Greek manuscript",
+      description:"Digitized manuscript images and transcriptions of Codex Sinaiticus.",
+      url:"https://www.codexsinaiticus.org/"
+    },
+    {
+      name:"Dead Sea Scrolls Digital Library",
+      type:"Hebrew and Aramaic manuscripts",
+      description:"Digital images of ancient Jewish manuscripts and fragments.",
+      url:"https://www.deadseascrolls.org.il/"
+    },
+    {
+      name:"Israel Museum Digital Dead Sea Scrolls",
+      type:"Manuscript facsimiles",
+      description:"Digital access to selected major Dead Sea Scrolls.",
+      url:"https://dss.collections.imj.org.il/"
+    },
+    {
+      name:"Logeion",
+      type:"Greek lexicography",
+      description:"University of Chicago dictionary platform providing access to historical Greek and Latin lexical resources.",
+      url:"https://logeion.uchicago.edu/"
+    },
+    {
+      name:"Perseus Digital Library",
+      type:"Classical language research",
+      description:"Greek and Latin texts, dictionaries and linguistic tools.",
+      url:"https://www.perseus.tufts.edu/"
+    },
+    {
+      name:"Comprehensive Aramaic Lexicon",
+      type:"Aramaic lexicography",
+      description:"Research database for historical Aramaic dialects, texts and vocabulary.",
+      url:"https://cal.huc.edu/"
+    },
+    {
+      name:"Sefaria",
+      type:"Hebrew texts and Jewish interpretation",
+      description:"Hebrew Bible, Jewish textual traditions and related literature.",
+      url:"https://www.sefaria.org/"
+    },
+    {
+      name:"Aleppo Codex",
+      type:"Masoretic textual tradition",
+      description:"Resources concerning the medieval Hebrew manuscript associated with the Ben Asher tradition.",
+      url:"https://www.aleppocodex.org/"
+    },
+    {
+      name:"Vatican Library",
+      type:"Digitized manuscripts",
+      description:"Historical manuscript collections including Codex Vaticanus.",
+      url:"https://digi.vatlib.it/"
+    },
+    {
+      name:"Bible Online Learner",
+      type:"Biblical language education",
+      description:"Exercises and linguistic learning resources for biblical languages.",
+      url:"https://bibleol.3bmoodle.dk/"
+    },
+    {
+      name:"Bible Odyssey",
+      type:"Academic biblical research",
+      description:"Accessible biblical scholarship associated with the Society of Biblical Literature.",
+      url:"https://www.bibleodyssey.org/"
+    }
+  ];
+
+  const grammar = [
+    ["Hebrew","Consonantal roots",
+    "Many Hebrew words are organized around consonantal roots. Related forms may share historical relationships without having identical meanings.",
+    "כתב — associated with writing.",
+    "Do not determine a word's contextual meaning solely from its root."],
+
+    ["Hebrew","Qal",
+    "The basic Hebrew verbal stem, commonly expressing simple actions or states.",
+    "כָּתַב — he wrote.",
+    "Qal verbs may be active, stative or otherwise contextually nuanced."],
+
+    ["Hebrew","Niphal",
+    "A verbal stem frequently expressing passive, middle or reflexive relationships.",
+    "נִכְתַּב — was written.",
+    "Niphal is not automatically passive in every occurrence."],
+
+    ["Hebrew","Piel",
+    "A derived verbal stem that can express factitive, denominative or other lexical functions.",
+    "דִּבֵּר — he spoke.",
+    "Describing Piel simply as intensive is insufficient."],
+
+    ["Hebrew","Pual",
+    "A verbal stem often functioning as the passive counterpart of Piel.",
+    "דֻּבַּר — was spoken.",
+    "The meaning must be established from actual usage."],
+
+    ["Hebrew","Hiphil",
+    "A verbal stem frequently expressing causative or related functions.",
+    "הִכְתִּיב — caused to write.",
+    "Not every Hiphil verb is translated with an explicit causative construction."],
+
+    ["Hebrew","Hophal",
+    "A verbal stem frequently serving as the passive counterpart of Hiphil.",
+    "הֻכְתַּב — was dictated.",
+    "Individual lexical meanings may differ from a mechanically derived translation."],
+
+    ["Hebrew","Hithpael",
+    "A derived stem often expressing reflexive, reciprocal or related meanings.",
+    "הִתְהַלֵּךְ — walked about.",
+    "The stem is not universally reflexive."],
+
+    ["Hebrew","Qatal",
+    "A suffix-conjugation verbal form often associated with completed situations or past reference.",
+    "כָּתַב — he wrote.",
+    "Its interpretation depends on discourse, syntax and context."],
+
+    ["Hebrew","Yiqtol",
+    "A prefix-conjugation verbal form used with several temporal, aspectual and modal functions.",
+    "יִכְתֹּב — he will or may write.",
+    "It should not be treated as an exclusively future tense."],
+
+    ["Hebrew","Wayyiqtol",
+    "A verbal construction frequently used in past narrative sequences.",
+    "וַיֹּאמֶר — and he said.",
+    "Its function is determined by discourse and verbal syntax."],
+
+    ["Hebrew","Construct state",
+    "A nominal construction establishing a close grammatical relationship between nouns.",
+    "בֵּית דָּוִד — house of David.",
+    "The relationship between the nouns must be interpreted contextually."],
+
+    ["Hebrew","Ketiv and Qere",
+    "Masoretic notation distinguishing the written consonantal form from a traditional reading.",
+    "Ketiv: written; Qere: read.",
+    "The written form and reading tradition must not be silently conflated."],
+
+    ["Hebrew","Masoretic accents",
+    "Traditional signs marking accentuation, cantillation and relationships within biblical Hebrew clauses.",
+    "Disjunctive and conjunctive accents.",
+    "The accent system reflects a received reading tradition and does not settle every syntactic dispute."],
+
+    ["Aramaic","Biblical Aramaic",
+    "Aramaic is a Northwest Semitic language related to Hebrew. Substantial biblical passages occur in Ezra and Daniel.",
+    "Ezra 4:8–6:18; 7:12–26; Daniel 2:4b–7:28; Jeremiah 10:11.",
+    "Language identification must follow the actual textual boundaries."],
+
+    ["Aramaic","Nominal states",
+    "Aramaic nouns can occur in absolute, construct and emphatic states.",
+    "מַלְכָּא — king, emphatic state.",
+    "The emphatic state does not always correspond mechanically to English definiteness."],
+
+    ["Aramaic","Verbal stems",
+    "Aramaic has derived verbal stems conventionally designated with forms such as Peal, Pael and Aphel.",
+    "Peal — basic verbal stem.",
+    "Hebrew stem labels should not be imposed directly onto Aramaic morphology."],
+
+    ["Greek","Nominative case",
+    "Frequently marks a grammatical subject or predicate nominative.",
+    "λόγος — word.",
+    "Case functions depend on syntax and construction."],
+
+    ["Greek","Genitive case",
+    "Expresses a range of relationships including possession, source, description and separation.",
+    "λόγου — of a word.",
+    "A genitive must not automatically be translated as possession."],
+
+    ["Greek","Dative case",
+    "Can express recipient, means, location, reference or other relationships.",
+    "λόγῳ — to, by or with a word.",
+    "The appropriate function depends on context."],
+
+    ["Greek","Accusative case",
+    "Frequently marks a direct object, but also has other syntactic functions.",
+    "λόγον — word, accusative singular.",
+    "An accusative is not necessarily a direct object."],
+
+    ["Greek","Vocative case",
+    "Used in direct address.",
+    "κύριε — Lord.",
+    "Grammatical address alone does not determine theological interpretation."],
+
+    ["Greek","Present aspect",
+    "Present-stem forms generally present situations with imperfective aspect.",
+    "γράφω — I write.",
+    "A present form does not automatically indicate continuous or habitual action."],
+
+    ["Greek","Aorist aspect",
+    "The aorist generally presents an event from a perfective viewpoint.",
+    "ἔγραψα — I wrote.",
+    "The aorist does not inherently mean once-for-all action."],
+
+    ["Greek","Perfect forms",
+    "Greek perfect forms frequently involve a resulting state associated with a prior situation.",
+    "γέγραφα — I have written.",
+    "The precise semantic analysis of the Greek perfect is debated."],
+
+    ["Greek","Imperfect",
+    "Frequently expresses imperfective situations within past temporal reference.",
+    "ἔγραφον — I was writing, or I used to write.",
+    "The form does not require an identical English rendering in every context."],
+
+    ["Greek","Indicative mood",
+    "Generally presents an assertion or situation within the grammatical structure of a clause.",
+    "γράφει — he or she writes.",
+    "An indicative form is not independent proof that a historical claim is true."],
+
+    ["Greek","Subjunctive mood",
+    "Used in various constructions involving purpose, possibility, expectation and related functions.",
+    "ἵνα γράψῃ — so that he or she may write.",
+    "The governing construction determines its function."],
+
+    ["Greek","Imperative mood",
+    "Communicates commands, requests, instructions or related functions.",
+    "γράφε — write.",
+    "Verbal aspect alone cannot settle whether an instruction is repeated or singular."],
+
+    ["Greek","Participles",
+    "Verbal adjectives that may function substantivally, adjectivally or adverbially.",
+    "γράφων — writing.",
+    "Participial relationships require syntactic analysis."],
+
+    ["Greek","Infinitives",
+    "Non-finite verbal forms used in several nominal and verbal constructions.",
+    "γράφειν — to write.",
+    "The infinitive's function depends on its governing syntax."],
+
+    ["Greek","Active voice",
+    "A grammatical voice often presenting the subject as performing an action.",
+    "γράφω — I write.",
+    "Grammatical subject and semantic agent are not always equivalent."],
+
+    ["Greek","Middle voice",
+    "A voice commonly expressing particular involvement of the subject in a situation.",
+    "ἔρχομαι — I come or go.",
+    "Middle morphology does not automatically imply reflexive meaning."],
+
+    ["Greek","Passive voice",
+    "Frequently presents the grammatical subject as affected by an action.",
+    "γράφεται — is written.",
+    "Some forms are morphologically shared with the middle voice."],
+
+    ["Greek","Definite article",
+    "A grammatical element with identifying, substantivizing and discourse functions.",
+    "ὁ λόγος — the word.",
+    "The presence or absence of an article cannot alone settle definiteness or theological meaning."]
+  ];
+
+  const hebrewAlphabet = [
+    ["א","Aleph","ʾ"],
+    ["ב","Bet","b"],
+    ["ג","Gimel","g"],
+    ["ד","Dalet","d"],
+    ["ה","He","h"],
+    ["ו","Waw","w"],
+    ["ז","Zayin","z"],
+    ["ח","Het","ḥ"],
+    ["ט","Tet","ṭ"],
+    ["י","Yod","y"],
+    ["כ ך","Kaph","k"],
+    ["ל","Lamed","l"],
+    ["מ ם","Mem","m"],
+    ["נ ן","Nun","n"],
+    ["ס","Samekh","s"],
+    ["ע","Ayin","ʿ"],
+    ["פ ף","Pe","p"],
+    ["צ ץ","Tsade","ṣ"],
+    ["ק","Qoph","q"],
+    ["ר","Resh","r"],
+    ["שׁ שׂ","Shin / Sin","š / ś"],
+    ["ת","Taw","t"]
+  ];
+
+  const greekAlphabet = [
+    ["Α α","Alpha","a"],
+    ["Β β","Beta","b"],
+    ["Γ γ","Gamma","g"],
+    ["Δ δ","Delta","d"],
+    ["Ε ε","Epsilon","e"],
+    ["Ζ ζ","Zeta","z"],
+    ["Η η","Eta","ē"],
+    ["Θ θ","Theta","th"],
+    ["Ι ι","Iota","i"],
+    ["Κ κ","Kappa","k"],
+    ["Λ λ","Lambda","l"],
+    ["Μ μ","Mu","m"],
+    ["Ν ν","Nu","n"],
+    ["Ξ ξ","Xi","x"],
+    ["Ο ο","Omicron","o"],
+    ["Π π","Pi","p"],
+    ["Ρ ρ","Rho","r"],
+    ["Σ σ ς","Sigma","s"],
+    ["Τ τ","Tau","t"],
+    ["Υ υ","Upsilon","y / u"],
+    ["Φ φ","Phi","ph"],
+    ["Χ χ","Chi","ch"],
+    ["Ψ ψ","Psi","ps"],
+    ["Ω ω","Omega","ō"]
+  ];
+
+  const vocabulary = [
+    ["H0430","Hebrew","אֱלֹהִים","ʾĕlōhîm",
+    "God, gods, divine beings depending on context.",
+    "Genesis 1:1; Psalm 82:1",
+    "Plural morphology does not alone establish the intended referent."],
+
+    ["H3068","Hebrew","יהוה","YHWH",
+    "The personal divine name represented by the Tetragrammaton.",
+    "Exodus 3:15",
+    "Its ancient pronunciation is reconstructed rather than directly preserved with certainty."],
+
+    ["H2617","Hebrew","חֶסֶד","ḥesed",
+    "Kindness, loyalty, steadfast love or mercy.",
+    "Exodus 34:6; Micah 6:8",
+    "No single English equivalent captures every contextual use."],
+
+    ["H7965","Hebrew","שָׁלוֹם","šālôm",
+    "Peace, welfare, soundness or well-being.",
+    "Numbers 6:26; Isaiah 9:6",
+    "The meaning may be personal, communal or political."],
+
+    ["H7307","Hebrew","רוּחַ","rûaḥ",
+    "Wind, breath or spirit.",
+    "Genesis 1:2; Ezekiel 37",
+    "The immediate context governs the appropriate sense."],
+
+    ["H5315","Hebrew","נֶפֶשׁ","nefeš",
+    "Life, person, living being, self or appetite.",
+    "Genesis 2:7; Psalm 42:1–2",
+    "It must not automatically be equated with a philosophical concept of an immaterial soul."],
+
+    ["H1285","Hebrew","בְּרִית","bərît",
+    "Covenant or binding agreement.",
+    "Genesis 15:18; Jeremiah 31:31",
+    "Different covenants have different participants and obligations."],
+
+    ["H8451","Hebrew","תּוֹרָה","tôrâ",
+    "Instruction, teaching or law.",
+    "Psalm 1:2; Proverbs 1:8",
+    "The term is not limited to statutory legal material."],
+
+    ["H4941","Hebrew","מִשְׁפָּט","mišpāṭ",
+    "Judgment, justice, legal decision or ordinance.",
+    "Micah 6:8; Exodus 21:1",
+    "Legal, ethical and administrative senses must be distinguished."],
+
+    ["H6666","Hebrew","צְדָקָה","ṣədāqâ",
+    "Righteousness, justice or right conduct.",
+    "Genesis 15:6; Amos 5:24",
+    "Its social and relational dimensions depend on context."],
+
+    ["H1697","Hebrew","דָּבָר","dābār",
+    "Word, matter, event or thing.",
+    "Micah 1:1; Genesis 15:1",
+    "It is not exclusively a term for spoken language."],
+
+    ["H4899","Hebrew","מָשִׁיחַ","māšîaḥ",
+    "Anointed person.",
+    "1 Samuel 24:6; Isaiah 45:1",
+    "The term is applied to different historical individuals."],
+
+    ["H1254","Hebrew","בָּרָא","bārāʾ",
+    "Create, in its principal biblical Qal usage.",
+    "Genesis 1:1; Isaiah 45:7",
+    "Creation from nothing cannot be established from this verb alone."],
+
+    ["G3056","Greek","λόγος","logos",
+    "Word, speech, statement, account or message.",
+    "John 1:1; Acts 6:7",
+    "The specialized significance in John's prologue must be established from its literary context."],
+
+    ["G26","Greek","ἀγάπη","agapē",
+    "Love or affection.",
+    "John 13:35; 1 Corinthians 13",
+    "The noun does not inherently mean unconditional divine love in every occurrence."],
+
+    ["G4102","Greek","πίστις","pistis",
+    "Faith, trust, faithfulness or reliability.",
+    "Romans 3:22; Galatians 5:22",
+    "Grammatical and contextual questions affect how particular occurrences are translated."],
+
+    ["G5485","Greek","χάρις","charis",
+    "Grace, favor, kindness or thanks.",
+    "Ephesians 2:8; Luke 1:30",
+    "Theological meanings must be distinguished from the word's broader usage."],
+
+    ["G1343","Greek","δικαιοσύνη","dikaiosynē",
+    "Righteousness or justice.",
+    "Romans 1:17; Matthew 5:6",
+    "The precise theological implications are contextually and interpretively debated."],
+
+    ["G3341","Greek","μετάνοια","metanoia",
+    "Repentance or change of mind.",
+    "Mark 1:4; Acts 20:21",
+    "Its meaning cannot be reduced to the components of its etymology."],
+
+    ["G1577","Greek","ἐκκλησία","ekklēsia",
+    "Assembly, congregation or church.",
+    "Matthew 16:18; Acts 19:32",
+    "The word does not inherently mean a church building or exclusively a Christian assembly."],
+
+    ["G4151","Greek","πνεῦμα","pneuma",
+    "Spirit, wind or breath.",
+    "John 3:8; Acts 2:4",
+    "Each occurrence requires contextual identification of its referent."],
+
+    ["G5590","Greek","ψυχή","psychē",
+    "Life, self, person or soul.",
+    "Matthew 16:25–26",
+    "The word alone does not establish a complete doctrine of human nature."],
+
+    ["G5547","Greek","Χριστός","Christos",
+    "Anointed, Christ or Messiah.",
+    "Matthew 1:16; John 1:41",
+    "Its application and theological significance depend on context."],
+
+    ["G2962","Greek","κύριος","kyrios",
+    "Lord, master, owner or sir.",
+    "John 20:28; Matthew 25:11",
+    "The title is used for human and divine referents."],
+
+    ["G2316","Greek","θεός","theos",
+    "God or deity.",
+    "John 1:1; Acts 14:11",
+    "Syntax, context and referent are essential to interpretation."],
+
+    ["G4991","Greek","σωτηρία","sōtēria",
+    "Salvation, deliverance or preservation.",
+    "Romans 1:16; Philippians 1:19",
+    "Physical and theological senses must be distinguished."],
+
+    ["G932","Greek","βασιλεία","basileia",
+    "Kingship, reign, royal rule or kingdom.",
+    "Matthew 6:10; Luke 17:20–21",
+    "The term can emphasize royal authority rather than territory alone."],
+
+    ["G1344","Greek","δικαιόω","dikaioō",
+    "Justify, declare righteous or vindicate.",
+    "Romans 3:24; James 2:24",
+    "Specific theological formulations require analysis beyond dictionary definitions."]
+  ];
+
+  const root = document.createElement("div");
+
+  root.className = "dbol";
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+      .dbol{
+        color:#f1efe7;
+        line-height:1.65;
+      }
+
+      .dbol *{
+        box-sizing:border-box;
+      }
+
+      .dbol h2,.dbol h3,.dbol h4{
+        color:#e0c38a;
+        margin-top:0;
+      }
+
+      .dbol .olHero{
+        padding:28px;
+        border:1px solid #574b36;
+        border-radius:18px;
+        background:
+          radial-gradient(
+            ellipse at top right,
+            #75603a50,
+            transparent 70%
+          ),
+          #191a17;
+      }
+
+      .dbol .olAncient{
+        font-family:
+          "Noto Serif Hebrew",
+          "Noto Serif",
+          "Times New Roman",
+          serif;
+      }
+
+      .dbol .olHeroWord{
+        color:#e0c38a;
+        font-size:clamp(28px,6vw,52px);
+        margin-bottom:15px;
+      }
+
+      .dbol .olEyebrow{
+        font-size:11px;
+        color:#c9aa70;
+        letter-spacing:3px;
+      }
+
+      .dbol .olMuted{
+        color:#aaa99e;
+      }
+
+      .dbol .olPanel{
+        background:#191a17;
+        border:1px solid #34352e;
+        border-radius:14px;
+        padding:18px;
+        margin-top:18px;
+      }
+
+      .dbol .olGrid{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(230px,1fr));
+        gap:14px;
+      }
+
+      .dbol .olStats{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(110px,1fr));
+        gap:10px;
+        margin-top:20px;
+      }
+
+      .dbol .olStat{
+        background:#20211d;
+        border:1px solid #34352e;
+        padding:15px;
+        border-radius:10px;
+      }
+
+      .dbol .olStat strong{
+        display:block;
+        font-size:27px;
+        color:#e0c38a;
+      }
+
+      .dbol .olCard{
+        background:#20211d;
+        border:1px solid #3b3c33;
+        border-radius:12px;
+        padding:16px;
+        min-width:0;
+      }
+
+      .dbol input,.dbol select,
+      .dbol textarea,.dbol button{
+        font:inherit;
+        color:#f1efe7;
+        background:#24251f;
+        border:1px solid #49483d;
+        border-radius:8px;
+        padding:11px;
+      }
+
+      .dbol input,.dbol select,
+      .dbol textarea{
+        width:100%;
+      }
+
+      .dbol button{
+        cursor:pointer;
+      }
+
+      .dbol button:hover,
+      .dbol button:focus-visible{
+        background:#393426;
+        border-color:#c9aa70;
+      }
+
+      .dbol button:disabled{
+        opacity:.4;
+        cursor:default;
+      }
+
+      .dbol a{
+        color:#e0c38a;
+        overflow-wrap:anywhere;
+      }
+
+      .dbol .olTabs,.dbol .olActions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin-top:12px;
+      }
+
+      .dbol .olActive{
+        background:#58482f;
+        border-color:#d4b77d;
+      }
+
+      .dbol .olControls{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(135px,1fr));
+        gap:12px;
+        margin:15px 0;
+      }
+
+      .dbol .olWord{
+        font-size:38px;
+        line-height:1.6;
+        color:#e0c38a;
+        overflow-wrap:anywhere;
+      }
+
+      .dbol .olTag{
+        display:inline-block;
+        padding:4px 9px;
+        border:1px solid #65563b;
+        border-radius:20px;
+        color:#d8bb83;
+        font-size:12px;
+      }
+
+      .dbol .olLimit{
+        border-left:3px solid #c9aa70;
+        background:#302a20;
+        padding:12px;
+        border-radius:5px;
+        color:#dacdb4;
+      }
+
+      .dbol .olVerse{
+        padding:12px 0;
+        border-bottom:1px solid #34352e;
+      }
+
+      .dbol .olAlphabet{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(100px,1fr));
+        gap:10px;
+      }
+
+      .dbol .olLetter{
+        text-align:center;
+        padding:12px;
+        background:#20211d;
+        border:1px solid #34352e;
+        border-radius:9px;
+      }
+
+      .dbol .olLetter strong{
+        display:block;
+        font-size:31px;
+        color:#e0c38a;
+      }
+
+      .dbol .olEntry{
+        padding:14px 0;
+        border-bottom:1px solid #34352e;
+      }
+
+      .dbol textarea{
+        min-height:170px;
+        resize:vertical;
+      }
+
+      .dbol .olTable{
+        width:100%;
+        border-collapse:collapse;
+      }
+
+      .dbol .olTable td,
+      .dbol .olTable th{
+        text-align:left;
+        padding:9px;
+        border-bottom:1px solid #34352e;
+        overflow-wrap:anywhere;
+      }
+
+      @media(max-width:650px){
+        .dbol .olGrid{
+          grid-template-columns:1fr;
+        }
+
+        .dbol .olHero{
+          padding:20px 14px;
+        }
+      }
+    </style>
+
+    <section class="olHero">
+
+      <div class="olEyebrow">
+        DESERTBIBLE • LANGUAGE RESEARCH
+      </div>
+
+      <div class="olHeroWord olAncient">
+        דָּבָר &nbsp; • &nbsp; λόγος
+      </div>
+
+      <h2>Original Languages</h2>
+
+      <p>
+        Investigate Scripture through Biblical
+        Hebrew, Aramaic and Koine Greek.
+        Explore lexical meaning, grammatical
+        structure, textual transmission and
+        scholarly language resources.
+      </p>
+
+      <div class="olStats">
+
+        <div class="olStat">
+          <strong>66</strong>
+          Biblical books
+        </div>
+
+        <div class="olStat">
+          <strong>1,189</strong>
+          Chapter selections
+        </div>
+
+        <div class="olStat">
+          <strong>3</strong>
+          Biblical languages
+        </div>
+
+        <div class="olStat">
+          <strong id="olResourceCount"></strong>
+          Research resources
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="olPanel">
+
+      <h3>Language Research Workspace</h3>
+
+      <div class="olTabs">
+
+        <button data-tab="passage">
+          Passage study
+        </button>
+
+        <button data-tab="lexicon">
+          Lexicon
+        </button>
+
+        <button data-tab="grammar">
+          Grammar and morphology
+        </button>
+
+        <button data-tab="alphabet">
+          Alphabets
+        </button>
+
+        <button data-tab="texts">
+          Textual traditions
+        </button>
+
+        <button data-tab="library">
+          Research library
+        </button>
+
+        <button data-tab="saved">
+          Saved studies
+        </button>
+
+        <button data-tab="notes">
+          Notebook
+        </button>
+
+      </div>
+
+      <div id="olOutput"></div>
+
+    </section>
+
+    <section class="olPanel">
+
+      <h3>Language Research Standards</h3>
+
+      <div class="olGrid">
+
+        <div class="olCard">
+          <h4>Context before etymology</h4>
+          <p>
+            A word's historical root does not
+            necessarily determine its meaning
+            in a particular passage.
+          </p>
+        </div>
+
+        <div class="olCard">
+          <h4>Grammar before interpretation</h4>
+          <p>
+            Grammatical forms must be examined
+            within their clauses, sentences
+            and literary contexts.
+          </p>
+        </div>
+
+        <div class="olCard">
+          <h4>Textual transparency</h4>
+          <p>
+            Identify the original-language
+            edition and distinguish manuscript
+            readings from editorial decisions.
+          </p>
+        </div>
+
+        <div class="olCard">
+          <h4>Lexical identifiers</h4>
+          <p>
+            Strong's numbers identify lexical
+            entries. They are not independent
+            translations or complete definitions.
+          </p>
+        </div>
+
+      </div>
+
+      <p class="olLimit">
+        Original-language research can clarify
+        a passage, but grammar or dictionary
+        definitions alone cannot settle every
+        theological or historical disagreement.
+      </p>
+
+      <p>
+        External linguistic research:
+        <a href="https://www.stepbible.org/"
+          target="_blank"
+          rel="noopener noreferrer">
+          STEP Bible
+        </a>
+        and its
+        <a href="https://github.com/STEPBible/STEPBible-Data"
+          target="_blank"
+          rel="noopener noreferrer">
+          dataset documentation
+        </a>.
+      </p>
+
+      <button id="olClose">
+        Close Original Languages
+      </button>
+
+    </section>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  const output = $("olOutput");
+
+  const storageKey =
+    "DesertBible.originalLanguages.v1";
+
+  let saved = [];
+  let notes = "";
+  let bookIndex = 0;
+  let chapter = 1;
+  let verse = "";
+  let view = "passage";
+
+  let englishVerses = [];
+  let originalWords = [];
+  let passageStatus = "";
+  let originalStatus = "";
+
+  let loadCounter = 0;
+
+  const cache = new Map();
+
+  try {
+    const stored = JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    );
+
+    saved = Array.isArray(stored.saved)
+      ? stored.saved : [];
+
+    notes = typeof stored.notes === "string"
+      ? stored.notes : "";
+
+    if (
+      Number.isInteger(stored.bookIndex) &&
+      stored.bookIndex >= 0 &&
+      stored.bookIndex < books.length
+    ) {
+      bookIndex = stored.bookIndex;
+    }
+
+    chapter = Math.min(
+      books[bookIndex][2],
+      Math.max(1, Number(stored.chapter) || 1)
+    );
+
+    verse = String(stored.verse || "");
+
+  } catch(error) {
+    console.warn(
+      "Original Languages storage:",error
+    );
+  }
+
+  function make(tag,text="",className="") {
+    const el = document.createElement(tag);
+
+    el.textContent = text;
+
+    if(className) {
+      el.className = className;
+    }
+
+    return el;
+  }
+
+  function button(text,handler) {
+    const el = make("button",text);
+
+    el.type = "button";
+
+    el.addEventListener("click",handler);
+
+    return el;
+  }
+
+  function link(text,url) {
+    const el = make("a",text);
+
+    el.href = url;
+    el.target = "_blank";
+    el.rel = "noopener noreferrer";
+
+    return el;
+  }
+
+  function field(parent,label,value) {
+    const p = make("p");
+
+    p.append(
+      make("strong",label + ": "),
+      document.createTextNode(String(value))
+    );
+
+    parent.appendChild(p);
+  }
+
+  function actions(parent,items) {
+    const row = make("div","","olActions");
+
+    row.append(...items);
+
+    parent.appendChild(row);
+
+    return row;
+  }
+
+  function saveStorage() {
+    try {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          saved,notes,bookIndex,chapter,verse
+        })
+      );
+
+      return true;
+
+    } catch(error) {
+      return false;
+    }
+  }
+
+  function currentBook() {
+    return books[bookIndex];
+  }
+
+  function chapterReference() {
+    return currentBook()[0] + " " + chapter;
+  }
+
+  function reference() {
+    return chapterReference() +
+      (verse ? ":" + verse : "");
+  }
+
+  function testament() {
+    return bookIndex < 39 ? "OT" : "NT";
+  }
+
+  function language() {
+    if(testament() === "NT") {
+      return "Koine Greek";
+    }
+
+    const name = currentBook()[0];
+
+    if(name === "Daniel") {
+      if(chapter >= 3 && chapter <= 7) {
+        return "Biblical Aramaic";
+      }
+
+      if(chapter === 2) {
+        if(verse && Number(verse) < 4) {
+          return "Biblical Hebrew";
+        }
+
+        if(verse && Number(verse) > 4) {
+          return "Biblical Aramaic";
+        }
+
+        return "Hebrew / Aramaic transition";
+      }
+    }
+
+    if(name === "Ezra") {
+      if(chapter === 5) {
+        return "Biblical Aramaic";
+      }
+
+      if(chapter >= 4 && chapter <= 7) {
+        return "Hebrew and/or Aramaic; check verse";
+      }
+    }
+
+    if(
+      name === "Jeremiah" &&
+      chapter === 10
+    ) {
+      if(verse === "11") {
+        return "Biblical Aramaic";
+      }
+
+      if(!verse) {
+        return "Hebrew with Aramaic at verse 11";
+      }
+    }
+
+    if(name === "Genesis" && chapter === 31) {
+      return "Hebrew with an Aramaic expression at 31:47";
+    }
+
+    return "Biblical Hebrew";
+  }
+
+  function normalizeStrong(value) {
+    const match =
+      String(value).trim().match(/^([HG])0*(\d+)$/i);
+
+    if(!match) {
+      return null;
+    }
+
+    const prefix = match[1].toUpperCase();
+    const number = Number(match[2]);
+
+    if(!Number.isInteger(number) || number < 1) {
+      return null;
+    }
+
+    if(
+      (prefix === "H" && number > 8674) ||
+      (prefix === "G" && number > 5624)
+    ) {
+      return null;
+    }
+
+    return prefix + number;
+  }
+
+  function strongURL(value) {
+    const normalized = normalizeStrong(value);
+
+    if(!normalized) {
+      return "https://www.stepbible.org/";
+    }
+
+    const lang =
+      normalized[0] === "H" ? "hebrew" : "greek";
+
+    return "https://biblehub.com/" +
+      lang + "/" +
+      normalized.slice(1) + ".htm";
+  }
+
+  function stepURL() {
+    return "https://www.stepbible.org/?q=" +
+      encodeURIComponent("reference=" + reference());
+  }
+
+  function download(text,name) {
+    const blob = new Blob(
+      [text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = name;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+
+      alert("Research record copied.");
+
+    } catch(error) {
+      download(
+        text,
+        "DesertBible-language-research.txt"
+      );
+    }
+  }
+
+  function saveItem(item) {
+    const existing = saved.findIndex(
+      row => row.id === item.id
+    );
+
+    if(existing >= 0) {
+      saved.splice(existing,1);
+    } else {
+      saved.push(item);
+    }
+
+    if(!saveStorage()) {
+      alert(
+        "Browser storage unavailable. " +
+        "Download your studies before leaving."
+      );
+    }
+
+    render();
+  }
+
+  function isSaved(id) {
+    return saved.some(row => row.id === id);
+  }
+
+  async function fetchText(url) {
+    if(cache.has(url)) {
+      return cache.get(url);
+    }
+
+    const response = await fetch(url);
+
+    if(!response.ok) {
+      throw new Error(
+        "Source returned HTTP " + response.status
+      );
+    }
+
+    const text = await response.text();
+
+    cache.set(url,text);
+
+    return text;
+  }
+
+  const hebrewFiles = [
+    "Gen","Exod","Lev","Num","Deut",
+    "Josh","Judg","Ruth","1Sam","2Sam",
+    "1Kgs","2Kgs","1Chr","2Chr","Ezra",
+    "Neh","Esth","Job","Ps","Prov",
+    "Eccl","Song","Isa","Jer","Lam",
+    "Ezek","Dan","Hos","Joel","Amos",
+    "Obad","Jonah","Mic","Nah","Hab",
+    "Zeph","Hag","Zech","Mal"
+  ];
+
+  async function loadHebrew() {
+    const file = hebrewFiles[bookIndex];
+
+    const url =
+      "https://raw.githubusercontent.com/" +
+      "openscriptures/morphhb/master/wlc/" +
+      file + ".xml";
+
+    const xmlText = await fetchText(url);
+
+    const xml = new DOMParser().parseFromString(
+      xmlText,
+      "application/xml"
+    );
+
+    if(xml.querySelector("parsererror")) {
+      throw new Error("Invalid XML response.");
+    }
+
+    const verses = Array.from(
+      xml.getElementsByTagNameNS("*","verse")
+    );
+
+    const results = [];
+
+    verses.forEach(node => {
+
+      const id = node.getAttribute("osisID") || "";
+
+      const parts = id.split(".");
+
+      if(Number(parts[1]) !== Number(chapter)) {
+        return;
+      }
+
+      const verseNumber = Number(parts[2]);
+
+      if(!Number.isFinite(verseNumber)) {
+        return;
+      }
+
+      const words = Array.from(
+        node.getElementsByTagNameNS("*","w")
+      );
+
+      words.forEach(word => {
+
+        const text = word.textContent.trim();
+
+        const lemma =
+          word.getAttribute("lemma") || "";
+
+        const morph =
+          word.getAttribute("morph") || "";
+
+        const strongs = [];
+
+        lemma.split(/[\/\s]+/).forEach(part => {
+
+          if(/^\d+[a-z]?$/i.test(part)) {
+
+            const digits = part.match(/^\d+/)[0];
+
+            const id = normalizeStrong(
+              "H" + digits
+            );
+
+            if(id && !strongs.includes(id)) {
+              strongs.push(id);
+            }
+          }
+        });
+
+        results.push({
+          verse:verseNumber,
+          text,
+          lemma,
+          morph,
+          strongs,
+          language:
+            morph.startsWith("A")
+              ? "Aramaic"
+              : morph.startsWith("H")
+                ? "Hebrew"
+                : "Hebrew/Aramaic"
+        });
+      });
+    });
+
+    if(!results.length) {
+      throw new Error(
+        "No matching tagged words found. " +
+        "Source versification may differ."
+      );
+    }
+
+    return results;
+  }
+
+  const greekFiles = [
+    "61-Mt","62-Mk","63-Lk","64-Jn",
+    "65-Ac","66-Ro","67-1Co","68-2Co",
+    "69-Ga","70-Eph","71-Php","72-Col",
+    "73-1Th","74-2Th","75-1Ti","76-2Ti",
+    "77-Tit","78-Phm","79-Heb","80-Jas",
+    "81-1Pe","82-2Pe","83-1Jn","84-2Jn",
+    "85-3Jn","86-Jud","87-Re"
+  ];
+
+  async function loadGreek() {
+    const file = greekFiles[bookIndex - 39];
+
+    const url =
+      "https://raw.githubusercontent.com/" +
+      "morphgnt/sblgnt/master/" +
+      file + "-morphgnt.txt";
+
+    const text = await fetchText(url);
+
+    const results = [];
+
+    text.split(/\r?\n/).forEach(line => {
+
+      const parts = line.trim().split(/\s+/);
+
+      if(
+        parts.length !== 7 ||
+        !/^\d{6}$/.test(parts[0])
+      ) {
+        return;
+      }
+
+      const ch = Number(parts[0].slice(2,4));
+
+      const v = Number(parts[0].slice(4,6));
+
+      if(ch !== Number(chapter)) {
+        return;
+      }
+
+      results.push({
+        verse:v,
+        text:parts[3],
+        lemma:parts[6],
+        morph:parts[1] + " / " + parts[2],
+        strongs:[],
+        language:"Greek"
+      });
+    });
+
+    if(!results.length) {
+      throw new Error(
+        "No matching Greek words found."
+      );
+    }
+
+    return results;
+  }
+
+  async function loadEnglish() {
+    const url =
+      "https://bible-api.com/" +
+      encodeURIComponent(chapterReference()) +
+      "?translation=web";
+
+    const text = await fetchText(url);
+
+    const data = JSON.parse(text);
+
+    if(!Array.isArray(data.verses)) {
+      throw new Error(
+        "English passage unavailable."
+      );
+    }
+
+    return data.verses;
+  }
+
+  async function loadPassage() {
+
+    const request = ++loadCounter;
+
+    englishVerses = [];
+    originalWords = [];
+
+    passageStatus = "Loading English reference text…";
+    originalStatus = "Loading tagged original-language text…";
+
+    render();
+
+    const results = await Promise.allSettled([
+      loadEnglish(),
+      testament() === "OT"
+        ? loadHebrew()
+        : loadGreek()
+    ]);
+
+    if(request !== loadCounter) {
+      return;
+    }
+
+    if(results[0].status === "fulfilled") {
+      englishVerses = results[0].value;
+      passageStatus = "World English Bible";
+    } else {
+      passageStatus =
+        "English text unavailable. " +
+        results[0].reason.message;
+    }
+
+    if(results[1].status === "fulfilled") {
+
+      originalWords = results[1].value;
+
+      originalStatus =
+        testament() === "OT"
+          ? "Open Scriptures Hebrew Bible — WLC"
+          : "SBL Greek New Testament — MorphGNT";
+
+    } else {
+
+      originalStatus =
+        "Original-language source unavailable. " +
+        results[1].reason.message;
+    }
+
+    if(
+      verse &&
+      !englishVerses.some(
+        row => String(row.verse) === verse
+      ) &&
+      !originalWords.some(
+        row => String(row.verse) === verse
+      )
+    ) {
+      verse = "";
+    }
+
+    saveStorage();
+
+    if(view === "passage") {
+      render();
+    }
+  }
+
+  function decodeGreek(code) {
+
+    const parts = code.split(" / ");
+
+    const pos = {
+      "N-":"Noun",
+      "V-":"Verb",
+      "A-":"Adjective",
+      "RA":"Article",
+      "C-":"Conjunction",
+      "P-":"Preposition",
+      "D-":"Adverb",
+      "I-":"Interjection",
+      "RP":"Personal pronoun",
+      "RR":"Relative pronoun",
+      "RD":"Demonstrative pronoun",
+      "RI":"Interrogative pronoun",
+      "RX":"Indefinite pronoun",
+      "X-":"Particle"
+    };
+
+    const morph = parts[1] || "";
+
+    const person = {
+      "1":"First person",
+      "2":"Second person",
+      "3":"Third person"
+    };
+
+    const tense = {
+      "P":"Present",
+      "I":"Imperfect",
+      "F":"Future",
+      "A":"Aorist",
+      "X":"Perfect",
+      "Y":"Pluperfect"
+    };
+
+    const voice = {
+      "A":"Active",
+      "M":"Middle",
+      "P":"Passive"
+    };
+
+    const mood = {
+      "I":"Indicative",
+      "D":"Imperative",
+      "S":"Subjunctive",
+      "O":"Optative",
+      "N":"Infinitive",
+      "P":"Participle"
+    };
+
+    const cases = {
+      "N":"Nominative",
+      "G":"Genitive",
+      "D":"Dative",
+      "A":"Accusative",
+      "V":"Vocative"
+    };
+
+    const number = {
+      "S":"Singular",
+      "P":"Plural"
+    };
+
+    const gender = {
+      "M":"Masculine",
+      "F":"Feminine",
+      "N":"Neuter"
+    };
+
+    return [
+      pos[parts[0]],
+      person[morph[0]],
+      tense[morph[1]],
+      voice[morph[2]],
+      mood[morph[3]],
+      cases[morph[4]],
+      number[morph[5]],
+      gender[morph[6]]
+    ].filter(Boolean).join(" • ");
+  }
+
+  function decodeHebrew(code) {
+
+    const stems = {
+      "q":"Qal",
+      "N":"Niphal",
+      "p":"Piel",
+      "P":"Pual",
+      "h":"Hiphil",
+      "H":"Hophal",
+      "t":"Hithpael"
+    };
+
+    const pos = {
+      "A":"Adjective",
+      "C":"Conjunction",
+      "D":"Adverb",
+      "N":"Noun",
+      "P":"Pronoun",
+      "R":"Preposition",
+      "S":"Suffix",
+      "T":"Particle",
+      "V":"Verb"
+    };
+
+    const conjugations = {
+      "p":"Perfect / qatal",
+      "q":"Sequential perfect",
+      "i":"Imperfect / yiqtol",
+      "w":"Sequential imperfect",
+      "h":"Cohortative",
+      "j":"Jussive",
+      "v":"Imperative",
+      "r":"Active participle",
+      "s":"Passive participle",
+      "a":"Infinitive absolute",
+      "c":"Infinitive construct"
+    };
+
+    const lang = code[0];
+
+    if(lang !== "H" && lang !== "A") {
+      return "";
+    }
+
+    return code.slice(1).split("/").map(part => {
+
+      const result = [
+        lang === "A" ? "Aramaic" : "Hebrew",
+        pos[part[0]]
+      ];
+
+      if(part[0] === "V" && lang === "H") {
+        result.push(
+          stems[part[1]],
+          conjugations[part[2]]
+        );
+      }
+
+      return result.filter(Boolean).join(" • ");
+
+    }).join(" / ");
+  }
+
+  function renderPassage() {
+
+    output.append(
+      make("h3","Passage and Interlinear Study")
+    );
+
+    const controls = make(
+      "div","","olControls"
+    );
+
+    const bookSelect = make("select");
+
+    books.forEach((book,index) => {
+
+      const option = make("option",book[0]);
+
+      option.value = index;
+
+      bookSelect.appendChild(option);
+    });
+
+    bookSelect.value = bookIndex;
+
+    const chapterSelect = make("select");
+
+    for(let i=1;i<=currentBook()[2];i++) {
+
+      const option = make(
+        "option","Chapter " + i
+      );
+
+      option.value = i;
+
+      chapterSelect.appendChild(option);
+    }
+
+    chapterSelect.value = chapter;
+
+    const verseSelect = make("select");
+
+    const all = make("option","Entire chapter");
+
+    all.value = "";
+
+    verseSelect.appendChild(all);
+
+    const verseNumbers = Array.from(new Set([
+      ...englishVerses.map(row => Number(row.verse)),
+      ...originalWords.map(row => Number(row.verse))
+    ])).sort((a,b) => a-b);
+
+    verseNumbers.forEach(number => {
+
+      const option = make(
+        "option","Verse " + number
+      );
+
+      option.value = number;
+
+      verseSelect.appendChild(option);
+    });
+
+    verseSelect.value = verse;
+
+    [
+      ["Book",bookSelect],
+      ["Chapter",chapterSelect],
+      ["Verse",verseSelect]
+    ].forEach(([name,control]) => {
+
+      const label = make("label",name);
+
+      label.appendChild(control);
+
+      controls.appendChild(label);
+    });
+
+    output.appendChild(controls);
+
+    bookSelect.addEventListener("change",() => {
+
+      bookIndex = Number(bookSelect.value);
+
+      chapter = 1;
+      verse = "";
+
+      loadPassage();
+    });
+
+    chapterSelect.addEventListener("change",() => {
+
+      chapter = Number(chapterSelect.value);
+
+      verse = "";
+
+      loadPassage();
+    });
+
+    verseSelect.addEventListener("change",() => {
+
+      verse = verseSelect.value;
+
+      saveStorage();
+      render();
+    });
+
+    actions(output,[
+      button("Load passage",loadPassage),
+
+      button("Previous chapter",() => {
+
+        if(chapter > 1) {
+          chapter--;
+        } else if(bookIndex > 0) {
+          bookIndex--;
+          chapter = currentBook()[2];
+        }
+
+        verse = "";
+
+        loadPassage();
+      }),
+
+      button("Next chapter",() => {
+
+        if(chapter < currentBook()[2]) {
+          chapter++;
+        } else if(bookIndex < books.length-1) {
+          bookIndex++;
+          chapter = 1;
+        }
+
+        verse = "";
+
+        loadPassage();
+      }),
+
+      button(
+        isSaved("passage:" + reference())
+          ? "Remove saved passage"
+          : "Save passage",
+        () => saveItem({
+          id:"passage:" + reference(),
+          type:"Passage",
+          title:reference(),
+          text:reference() + "\n" + language(),
+          bookIndex,chapter,verse
+        })
+      )
+    ]);
+
+    const summary = make(
+      "div","","olCard"
+    );
+
+    summary.style.marginTop = "15px";
+
+    summary.append(
+      make("h3",reference()),
+      make("span",language(),"olTag"),
+      make("p",originalStatus,"olMuted")
+    );
+
+    summary.appendChild(
+      link(
+        "Open passage in STEP Bible",
+        stepURL()
+      )
+    );
+
+    output.appendChild(summary);
+
+    const selectedWords = originalWords.filter(
+      row => !verse ||
+        String(row.verse) === verse
+    );
+
+    const selectedEnglish = englishVerses.filter(
+      row => !verse ||
+        String(row.verse) === verse
+    );
+
+    const preview = make(
+      "div","","olPanel"
+    );
+
+    preview.append(
+      make("h3","English Reference Text"),
+      make("p",passageStatus,"olMuted")
+    );
+
+    selectedEnglish.forEach(row => {
+
+      const p = make(
+        "div","","olVerse"
+      );
+
+      p.append(
+        make("strong",String(row.verse) + " "),
+        document.createTextNode(row.text)
+      );
+
+      preview.appendChild(p);
+    });
+
+    output.appendChild(preview);
+
+    const original = make(
+      "div","","olPanel"
+    );
+
+    original.append(
+      make("h3","Original-Language Text"),
+      make("p",originalStatus,"olMuted")
+    );
+
+    const groups = new Map();
+
+    selectedWords.forEach(word => {
+
+      if(!groups.has(word.verse)) {
+        groups.set(word.verse,[]);
+      }
+
+      groups.get(word.verse).push(word.text);
+    });
+
+    groups.forEach((words,number) => {
+
+      const row = make(
+        "div","","olVerse"
+      );
+
+      const text = make(
+        "div",
+        words.join(" "),
+        "olAncient"
+      );
+
+      text.style.fontSize = "25px";
+
+      text.dir =
+        testament() === "OT" ? "rtl" : "ltr";
+
+      row.append(
+        make("small","Verse " + number),
+        text
+      );
+
+      original.appendChild(row);
+    });
+
+    if(testament() === "OT") {
+
+      original.appendChild(
+        make(
+          "p",
+          "Hebrew/Aramaic numbering follows the source edition and may differ from English verse numbering. Slash marks can indicate morphological segmentation.",
+          "olLimit"
+        )
+      );
+    }
+
+    output.appendChild(original);
+
+    const wordPanel = make(
+      "div","","olPanel"
+    );
+
+    wordPanel.append(
+      make("h3","Word-by-Word Analysis"),
+      make(
+        "p",
+        selectedWords.length +
+        " tagged words in the selection.",
+        "olMuted"
+      )
+    );
+
+    const filter = make("input");
+
+    filter.placeholder =
+      "Search word, lemma, Strong's number or morphology";
+
+    wordPanel.appendChild(filter);
+
+    const result = make("div");
+
+    wordPanel.appendChild(result);
+
+    function drawWords() {
+
+      result.replaceChildren();
+
+      const query =
+        filter.value.trim().toLowerCase();
+
+      const matched = selectedWords.filter(
+        row => [
+          row.text,
+          row.lemma,
+          row.morph,
+          row.strongs.join(" ")
+        ].join(" ").toLowerCase().includes(query)
+      );
+
+      const grid = make(
+        "div","","olGrid"
+      );
+
+      grid.style.marginTop = "15px";
+
+      let rendered = 0;
+
+      function more() {
+
+        const end = Math.min(
+          rendered + 48,
+          matched.length
+        );
+
+        for(let i=rendered;i<end;i++) {
+
+          const word = matched[i];
+
+          const card = make(
+            "article","","olCard"
+          );
+
+          const wordText = make(
+            "div",
+            word.text,
+            "olWord olAncient"
+          );
+
+          wordText.dir =
+            word.language === "Greek"
+              ? "ltr" : "rtl";
+
+          card.append(
+            wordText,
+            make(
+              "span",
+              "Verse " + word.verse,
+              "olTag"
+            )
+          );
+
+          field(
+            card,
+            word.language === "Greek"
+              ? "Dictionary lemma"
+              : "Source lemma code",
+            word.lemma || "Not supplied"
+          );
+
+          field(
+            card,
+            "Language",
+            word.language
+          );
+
+          field(
+            card,
+            "Morphology code",
+            word.morph || "Not supplied"
+          );
+
+          const explanation =
+            word.language === "Greek"
+              ? decodeGreek(word.morph)
+              : decodeHebrew(word.morph);
+
+          if(explanation) {
+            field(
+              card,
+              "Decoded features",
+              explanation
+            );
+          }
+
+          word.strongs.forEach(id => {
+
+            const p = make("p");
+
+            p.appendChild(
+              link(
+                id + " — lexical entry",
+                strongURL(id)
+              )
+            );
+
+            const match = vocabulary.find(
+              item =>
+                normalizeStrong(item[0]) === id
+            );
+
+            if(match) {
+              p.appendChild(
+                document.createTextNode(
+                  " • " + match[4]
+                )
+              );
+            }
+
+            card.appendChild(p);
+          });
+
+          if(word.language === "Greek") {
+
+            card.appendChild(
+              link(
+                "Research Greek lemma in Logeion",
+                "https://logeion.uchicago.edu/" +
+                encodeURIComponent(word.lemma)
+              )
+            );
+          }
+
+          const note = [
+            reference(),
+            "Verse " + word.verse,
+            "Word: " + word.text,
+            "Lemma: " + word.lemma,
+            "Morphology: " + word.morph,
+            "Source: " + originalStatus
+          ].join("\n");
+
+          actions(card,[
+            button(
+              "Copy word record",
+              () => copyText(note)
+            )
+          ]);
+
+          grid.appendChild(card);
+        }
+
+        rendered = end;
+
+        moreButton.hidden =
+          rendered >= matched.length;
+
+        count.textContent =
+          "Showing " + rendered +
+          " of " + matched.length + " words";
+      }
+
+      const count = make(
+        "p","","olMuted"
+      );
+
+      const moreButton = button(
+        "Show more words",
+        more
+      );
+
+      result.append(
+        count,grid,moreButton
+      );
+
+      more();
+
+      if(!matched.length) {
+        result.appendChild(
+          make(
+            "p",
+            "No matching tagged words available."
+          )
+        );
+      }
+    }
+
+    filter.addEventListener("input",drawWords);
+
+    drawWords();
+
+    output.appendChild(wordPanel);
+
+    actions(output,[
+      button("Download passage analysis",() => {
+
+        const report = [
+          "DESERTBIBLE ORIGINAL LANGUAGES",
+          reference(),
+          language(),
+          originalStatus,
+          "",
+          ...selectedWords.map(word =>
+            [
+              "Verse " + word.verse,
+              word.text,
+              word.lemma,
+              word.morph,
+              word.strongs.join(", ")
+            ].join("\t")
+          ),
+          "",
+          "Research sources:",
+          "https://github.com/openscriptures/morphhb",
+          "https://github.com/morphgnt/sblgnt",
+          "https://www.stepbible.org/"
+        ].join("\n");
+
+        download(
+          report,
+          "DesertBible-original-language-study.txt"
+        );
+      })
+    ]);
+
+    output.appendChild(
+      make(
+        "p",
+        "English text and tagged words are displayed by verse; they are not automatically aligned word for word. The morphology decoder expands selected common features. The original source codes remain visible for verification.",
+        "olLimit"
+      )
+    );
+  }
+
+  function renderLexicon() {
+
+    output.append(
+      make("h3","Lexical Research"),
+
+      make(
+        "p",
+        "Explore selected vocabulary and look up additional entries by Strong's number."
+      )
+    );
+
+    const controls = make(
+      "div","","olControls"
+    );
+
+    const search = make("input");
+
+    search.placeholder =
+      "Search love, logos, hesed, H2617...";
+
+    const lang = make("select");
+
+    [
+      "All languages",
+      "Hebrew",
+      "Greek"
+    ].forEach(value => {
+
+      const option = make("option",value);
+
+      option.value = value;
+
+      lang.appendChild(option);
+    });
+
+    controls.append(search,lang);
+
+    output.appendChild(controls);
+
+    const lookup = make(
+      "div","","olCard"
+    );
+
+    lookup.append(
+      make("h4","Full Strong's Reference Lookup")
+    );
+
+    const strongInput = make("input");
+
+    strongInput.placeholder =
+      "Enter H3068 or G3056";
+
+    const status = make(
+      "p","","olMuted"
+    );
+
+    lookup.append(strongInput,status);
+
+    actions(lookup,[
+      button("Open lexical entry",() => {
+
+        const id = normalizeStrong(
+          strongInput.value
+        );
+
+        if(!id) {
+          status.textContent =
+            "Enter H or G followed by a valid Strong's number.";
+          return;
+        }
+
+        status.textContent =
+          "Opening reference entry " + id;
+
+        window.open(
+          strongURL(id),
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }),
+
+      button("Open STEP Bible",() => {
+
+        window.open(
+          "https://www.stepbible.org/",
+          "_blank",
+          "noopener,noreferrer"
+        );
+      })
+    ]);
+
+    output.appendChild(lookup);
+
+    const results = make("div");
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const query =
+        search.value.trim().toLowerCase();
+
+      const matching = vocabulary.filter(
+        row =>
+          (
+            lang.value === "All languages" ||
+            row[1] === lang.value
+          ) &&
+          (
+            !query ||
+            row.join(" ").toLowerCase().includes(query) ||
+            (
+              normalizeStrong(query) &&
+              normalizeStrong(query) ===
+                normalizeStrong(row[0])
+            )
+          )
+      );
+
+      results.appendChild(
+        make(
+          "p",
+          matching.length +
+          " selected vocabulary entries",
+          "olMuted"
+        )
+      );
+
+      const grid = make(
+        "div","","olGrid"
+      );
+
+      matching.forEach(row => {
+
+        const card = make(
+          "article","","olCard"
+        );
+
+        const word = make(
+          "div",
+          row[2],
+          "olWord olAncient"
+        );
+
+        word.dir =
+          row[1] === "Hebrew"
+            ? "rtl" : "ltr";
+
+        card.append(
+          make("span",row[0],"olTag"),
+          word,
+          make("h3",row[3]),
+          make("p",row[4])
+        );
+
+        field(card,"Language",row[1]);
+
+        field(card,"Biblical examples",row[5]);
+
+        card.appendChild(
+          make("p",row[6],"olLimit")
+        );
+
+        card.appendChild(
+          link(
+            "Compare external lexical entry",
+            strongURL(row[0])
+          )
+        );
+
+        const id = "lexicon:" + row[0];
+
+        actions(card,[
+          button(
+            isSaved(id)
+              ? "Remove saved word"
+              : "Save word",
+            () => saveItem({
+              id,
+              type:"Vocabulary",
+              title:row[2] + " — " + row[3],
+              text:row.join("\n")
+            })
+          ),
+
+          button(
+            "Copy lexical note",
+            () => copyText(row.join("\n"))
+          )
+        ]);
+
+        grid.appendChild(card);
+      });
+
+      results.appendChild(grid);
+
+      if(!matching.length) {
+        results.appendChild(
+          make(
+            "p",
+            "No matching curated entry. Use the Strong's lookup above to investigate additional vocabulary."
+          )
+        );
+      }
+    }
+
+    search.addEventListener("input",draw);
+
+    lang.addEventListener("change",draw);
+
+    draw();
+
+    output.appendChild(
+      make(
+        "p",
+        "These vocabulary summaries are editorial learning notes, not exhaustive dictionary articles or quotations from a particular scholar.",
+        "olLimit"
+      )
+    );
+  }
+
+  function renderGrammar() {
+
+    output.append(
+      make("h3","Grammar and Morphology"),
+
+      make(
+        "p",
+        "Explore grammatical concepts with examples and interpretive limitations."
+      )
+    );
+
+    const select = make("select");
+
+    [
+      "All languages",
+      "Hebrew",
+      "Aramaic",
+      "Greek"
+    ].forEach(language => {
+
+      const option = make("option",language);
+
+      option.value = language;
+
+      select.appendChild(option);
+    });
+
+    const search = make("input");
+
+    search.placeholder =
+      "Search aorist, Qal, genitive...";
+
+    const controls = make(
+      "div","","olControls"
+    );
+
+    controls.append(select,search);
+
+    output.appendChild(controls);
+
+    const results = make("div");
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const query =
+        search.value.toLowerCase().trim();
+
+      const grid = make(
+        "div","","olGrid"
+      );
+
+      grammar.filter(row =>
+        (
+          select.value === "All languages" ||
+          row[0] === select.value
+        ) &&
+        (
+          !query ||
+          row.join(" ").toLowerCase().includes(query)
+        )
+      ).forEach(row => {
+
+        const card = make(
+          "div","","olCard"
+        );
+
+        card.append(
+          make("span",row[0],"olTag"),
+          make("h3",row[1]),
+          make("p",row[2]),
+          make("p",row[3],"olAncient"),
+          make("p",row[4],"olLimit")
+        );
+
+        grid.appendChild(card);
+      });
+
+      if(!grid.childElementCount) {
+        grid.appendChild(
+          make("p","No matching grammar topics.")
+        );
+      }
+
+      results.appendChild(grid);
+    }
+
+    select.addEventListener("change",draw);
+
+    search.addEventListener("input",draw);
+
+    draw();
+
+    output.appendChild(
+      link(
+        "Consult full morphology code documentation",
+        "https://github.com/STEPBible/STEPBible-Data"
+      )
+    );
+  }
+
+  function renderAlphabet() {
+
+    output.append(
+      make("h3","Biblical Language Alphabets")
+    );
+
+    const sections = [
+      [
+        "Hebrew and Biblical Aramaic",
+        "The biblical manuscript traditions use a related square-script alphabet. Final letter forms appear at the ends of words.",
+        hebrewAlphabet,
+        "rtl"
+      ],
+      [
+        "Greek",
+        "The Greek alphabet contains 24 letters. Sigma has a distinct lowercase final form.",
+        greekAlphabet,
+        "ltr"
+      ]
+    ];
+
+    sections.forEach(section => {
+
+      const panel = make(
+        "div","","olPanel"
+      );
+
+      panel.append(
+        make("h3",section[0]),
+        make("p",section[1])
+      );
+
+      const grid = make(
+        "div","","olAlphabet"
+      );
+
+      grid.dir = section[3];
+
+      section[2].forEach(row => {
+
+        const card = make(
+          "div","","olLetter"
+        );
+
+        card.dir = "ltr";
+
+        card.append(
+          make("strong",row[0],"olAncient"),
+          make("div",row[1]),
+          make("small",row[2],"olMuted")
+        );
+
+        grid.appendChild(card);
+      });
+
+      panel.appendChild(grid);
+
+      output.appendChild(panel);
+    });
+
+    output.appendChild(
+      make(
+        "p",
+        "The Latin-letter equivalents are simplified scholarly transliterations, not recordings of ancient pronunciation. Hebrew vowel systems and Greek pronunciation changed over time, and modern teaching traditions differ.",
+        "olLimit"
+      )
+    );
+  }
+
+  function renderTexts() {
+
+    const traditions = [
+      [
+        "Masoretic Text",
+        "The received Hebrew textual tradition preserved with vowel points, accents and textual annotations by Masoretic scribes.",
+        "The surviving medieval codices preserve a much older textual tradition.",
+        "https://www.aleppocodex.org/"
+      ],
+      [
+        "Westminster Leningrad Codex",
+        "A digital representation of the Hebrew Bible associated with the Leningrad Codex, dated 1008/1009 CE.",
+        "A manuscript-based edition, not a direct copy of the original biblical autographs.",
+        "https://github.com/openscriptures/morphhb"
+      ],
+      [
+        "Dead Sea Scrolls",
+        "Ancient Jewish manuscripts preserving biblical and nonbiblical writings in Hebrew, Aramaic and Greek.",
+        "The manuscripts exhibit textual diversity and vary considerably in completeness.",
+        "https://www.deadseascrolls.org.il/"
+      ],
+      [
+        "Samaritan Pentateuch",
+        "A distinct textual tradition of the Torah preserved by the Samaritan community.",
+        "Its differences from the Masoretic Text include both shared ancient readings and distinctive arrangements.",
+        "https://www.stepbible.org/"
+      ],
+      [
+        "Septuagint",
+        "Ancient Greek translations of Jewish Scriptures produced and transmitted over an extended period.",
+        "The individual books differ in translation technique and textual history.",
+        "https://www.stepbible.org/"
+      ],
+      [
+        "Aramaic Targums",
+        "Aramaic translations and interpretive renderings of Jewish Scriptures.",
+        "Their expansions and interpretive features must be distinguished from the Hebrew base text.",
+        "https://www.sefaria.org/"
+      ],
+      [
+        "SBL Greek New Testament",
+        "A modern critical Greek New Testament edition edited by Michael W. Holmes.",
+        "It is an editorially established text rather than a transcription of one manuscript.",
+        "https://sblgnt.com/"
+      ],
+      [
+        "Nestle-Aland and UBS",
+        "Modern critical Greek New Testament editions based on comparison of textual witnesses.",
+        "Their editorial decisions and apparatuses require specialist interpretation.",
+        "https://www.die-bibel.de/"
+      ],
+      [
+        "Byzantine Textual Tradition",
+        "A major tradition represented by many Greek New Testament manuscripts.",
+        "Manuscript numerical superiority alone does not determine the earliest recoverable reading.",
+        "https://ntvmr.uni-muenster.de/"
+      ],
+      [
+        "Textus Receptus",
+        "A family of early printed Greek New Testament editions.",
+        "The editions are not identical and should not be treated as one ancient manuscript.",
+        "https://www.stepbible.org/"
+      ],
+      [
+        "Codex Sinaiticus",
+        "A fourth-century Greek biblical manuscript preserving the complete New Testament.",
+        "Its corrections and textual readings are historical witnesses requiring comparison.",
+        "https://www.codexsinaiticus.org/"
+      ],
+      [
+        "Codex Vaticanus",
+        "A fourth-century Greek manuscript containing much of the Christian Bible.",
+        "Its surviving contents are incomplete and represent one important textual witness.",
+        "https://digi.vatlib.it/view/MSS_Vat.gr.1209"
+      ]
+    ];
+
+    output.append(
+      make("h3","Textual Traditions"),
+
+      make(
+        "p",
+        "Explore the distinction between manuscripts, translations, textual traditions and scholarly editions."
+      )
+    );
+
+    const grid = make(
+      "div","","olGrid"
+    );
+
+    traditions.forEach(row => {
+
+      const card = make(
+        "article","","olCard"
+      );
+
+      card.append(
+        make("h3",row[0]),
+        make("p",row[1]),
+        make("p",row[2],"olLimit"),
+        link("Explore research resource",row[3])
+      );
+
+      grid.appendChild(card);
+    });
+
+    output.appendChild(grid);
+  }
+
+  function renderLibrary() {
+
+    output.append(
+      make("h3","Original Languages Research Library")
+    );
+
+    const search = make("input");
+
+    search.placeholder =
+      "Search Hebrew, Greek, lexicons, manuscripts...";
+
+    output.appendChild(search);
+
+    const results = make("div");
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const query =
+        search.value.toLowerCase().trim();
+
+      resources.filter(row =>
+        Object.values(row).join(" ")
+          .toLowerCase().includes(query)
+      ).forEach(resource => {
+
+        const entry = make(
+          "div","","olEntry"
+        );
+
+        entry.append(
+          make("span",resource.type,"olTag"),
+          make("h3",resource.name),
+          make("p",resource.description),
+          link(
+            "Open research resource",
+            resource.url
+          )
+        );
+
+        results.appendChild(entry);
+      });
+
+      if(!results.childElementCount) {
+        results.appendChild(
+          make("p","No matching resources.")
+        );
+      }
+    }
+
+    search.addEventListener("input",draw);
+
+    draw();
+  }
+
+  function renderSaved() {
+
+    output.append(
+      make("h3","Saved Language Studies")
+    );
+
+    if(!saved.length) {
+
+      output.appendChild(
+        make(
+          "p",
+          "No saved studies yet. Save passages or vocabulary entries to build your research collection."
+        )
+      );
+
+      return;
+    }
+
+    saved.forEach(item => {
+
+      const card = make(
+        "div","","olEntry"
+      );
+
+      card.append(
+        make("span",item.type,"olTag"),
+        make("h3",item.title),
+        make("p",item.text)
+      );
+
+      const buttons = [
+        button(
+          "Remove",
+          () => saveItem(item)
+        ),
+
+        button(
+          "Copy",
+          () => copyText(item.text)
+        )
+      ];
+
+      if(
+        item.type === "Passage" &&
+        books[item.bookIndex]
+      ) {
+
+        buttons.unshift(
+          button("Open passage",() => {
+
+            bookIndex = item.bookIndex;
+            chapter = item.chapter;
+            verse = item.verse;
+
+            view = "passage";
+
+            loadPassage();
+          })
+        );
+      }
+
+      actions(card,buttons);
+
+      output.appendChild(card);
+    });
+
+    actions(output,[
+      button("Download saved studies",() => {
+
+        download(
+          saved.map(item =>
+            item.title + "\n" + item.text
+          ).join("\n\n================\n\n"),
+
+          "DesertBible-saved-language-studies.txt"
+        );
+      })
+    ]);
+  }
+
+  function renderNotes() {
+
+    output.append(
+      make("h3","Language Research Notebook"),
+
+      make(
+        "p",
+        "Record lexical observations, grammatical questions, translation comparisons and manuscript research."
+      )
+    );
+
+    const textarea = make("textarea");
+
+    textarea.value = notes;
+
+    textarea.placeholder =
+      "Write your research notes...";
+
+    textarea.addEventListener("input",() => {
+      notes = textarea.value;
+    });
+
+    output.appendChild(textarea);
+
+    const status = make(
+      "p","","olMuted"
+    );
+
+    actions(output,[
+      button("Save notebook",() => {
+
+        status.textContent = saveStorage()
+          ? "Notebook saved on this device."
+          : "Browser storage unavailable. Download your notes.";
+      }),
+
+      button("Download notebook",() => {
+
+        download(
+          notes,
+          "DesertBible-language-notebook.txt"
+        );
+      })
+    ]);
+
+    output.append(
+      status,
+      make(
+        "p",
+        "Saved studies and notes are stored locally in this browser.",
+        "olMuted"
+      )
+    );
+  }
+
+  function render() {
+
+    output.replaceChildren();
+
+    root.querySelectorAll(
+      "[data-tab]"
+    ).forEach(node => {
+
+      const active =
+        node.dataset.tab === view;
+
+      node.classList.toggle(
+        "olActive",active
+      );
+
+      node.setAttribute(
+        "aria-pressed",String(active)
+      );
+    });
+
+    if(view === "passage") {
+      renderPassage();
+    }
+
+    if(view === "lexicon") {
+      renderLexicon();
+    }
+
+    if(view === "grammar") {
+      renderGrammar();
+    }
+
+    if(view === "alphabet") {
+      renderAlphabet();
+    }
+
+    if(view === "texts") {
+      renderTexts();
+    }
+
+    if(view === "library") {
+      renderLibrary();
+    }
+
+    if(view === "saved") {
+      renderSaved();
+    }
+
+    if(view === "notes") {
+      renderNotes();
+    }
+  }
+
+  $("olResourceCount").textContent =
+    resources.length;
+
+  root.querySelectorAll(
+    "[data-tab]"
+  ).forEach(node => {
+
+    node.addEventListener("click",() => {
+
+      view = node.dataset.tab;
+
+      render();
+    });
+  });
+
+  $("olClose").addEventListener("click",() => {
+
+    loadCounter++;
+
+    workspace.remove();
+  });
+
+  loadPassage();
+
+  workspace.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
 
