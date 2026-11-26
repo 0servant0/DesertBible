@@ -75,7 +75,10 @@ if (item[0].trim().toLowerCase() === "scholarly commentary") {
   openVisualExploration(workspace);
   return;
 }
-    
+    if (item[0].trim().toLowerCase() === "original languages") {
+  openOriginalLanguages(workspace);
+  return;
+}
   const passage = document.querySelector("#scripture h2").textContent;
 
   workspace.innerHTML = `
