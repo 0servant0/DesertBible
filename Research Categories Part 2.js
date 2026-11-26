@@ -10756,4 +10756,3411 @@ function openOriginalLanguages(workspace) {
   });
 }
 
+function openArchaeology(workspace) {
+  "use strict";
+
+  const sources = {
+    bm: [
+      "British Museum",
+      "https://www.britishmuseum.org/collection"
+    ],
+    louvre: [
+      "Louvre Collections",
+      "https://collections.louvre.fr/"
+    ],
+    israel: [
+      "Israel Museum",
+      "https://www.imj.org.il/en"
+    ],
+    iaa: [
+      "Israel Antiquities Authority",
+      "https://www.antiquities.org.il/"
+    ],
+    isac: [
+      "Institute for the Study of Ancient Cultures",
+      "https://isac.uchicago.edu/"
+    ],
+    oracc: [
+      "Open Richly Annotated Cuneiform Corpus",
+      "https://oracc.museum.upenn.edu/"
+    ],
+    rinap: [
+      "Royal Inscriptions of the Neo-Assyrian Period",
+      "https://oracc.museum.upenn.edu/rinap/"
+    ],
+    cdli: [
+      "Cuneiform Digital Library Initiative",
+      "https://cdli.earth/"
+    ],
+    dss: [
+      "Dead Sea Scrolls Digital Library",
+      "https://www.deadseascrolls.org.il/"
+    ],
+    imjdss: [
+      "Israel Museum Digital Dead Sea Scrolls",
+      "https://dss.collections.imj.org.il/"
+    ],
+    asor: [
+      "American Society of Overseas Research",
+      "https://www.asor.org/"
+    ],
+    bas: [
+      "Biblical Archaeology Society",
+      "https://www.biblicalarchaeology.org/"
+    ],
+    odyssey: [
+      "Bible Odyssey",
+      "https://www.bibleodyssey.org/"
+    ],
+    met: [
+      "Metropolitan Museum of Art",
+      "https://www.metmuseum.org/art/collection"
+    ],
+    penn: [
+      "Penn Museum Collections",
+      "https://www.penn.museum/collections/"
+    ],
+    unesco: [
+      "UNESCO World Heritage Centre",
+      "https://whc.unesco.org/"
+    ],
+    hadashot: [
+      "Excavations and Surveys in Israel",
+      "https://www.hadashot-esi.org.il/"
+    ],
+    jjar: [
+      "Jerusalem Journal of Archaeology",
+      "https://jjar.huji.ac.il/"
+    ],
+    telDan: [
+      "Jewish Museum — Tel Dan Stele",
+      "https://thejewishmuseum.org/wp-content/uploads/2025/07/JM_Collection_Tel_Dan_Section_Text_FINAL-2.pdf"
+    ],
+    danStudy: [
+      "Michael Langlois — Tel Dan Inscription after 30 Years",
+      "https://ngsba.org/wp-content/uploads/2025/03/Langlois-2024-Tel-Dan-Inscription-IEJ-74-2.pdf"
+    ],
+    inscriptions: [
+      "BAS — Ancient Inscriptions",
+      "https://library.biblicalarchaeology.org/collections/ancient-inscriptions/"
+    ],
+    bibleinterp: [
+      "The Bible and Interpretation",
+      "https://bibleinterp.arizona.edu/"
+    ],
+    edh: [
+      "Epigraphic Database Heidelberg",
+      "https://edh.ub.uni-heidelberg.de/"
+    ],
+    perseus: [
+      "Perseus Digital Library",
+      "https://www.perseus.tufts.edu/"
+    ],
+    pum: [
+      "Papyri.info",
+      "https://papyri.info/"
+    ]
+  };
+
+  const evidence = {
+    direct: {
+      title:"Direct historical attestation",
+      description:
+        "An inscription or material record explicitly identifies a relevant person, population, dynasty, place or event."
+    },
+    material: {
+      title:"Material corroboration",
+      description:
+        "Physical remains support a particular historical circumstance, although identification or dating may require interpretation."
+    },
+    context: {
+      title:"Historical context",
+      description:
+        "Evidence illuminates the culture, institutions or environment associated with biblical literature without independently establishing its narratives."
+    },
+    textual: {
+      title:"Textual witness",
+      description:
+        "A physical manuscript or inscription preserves a reading or textual tradition relevant to biblical literature."
+    },
+    disputed: {
+      title:"Disputed identification",
+      description:
+        "The archaeological remains are real, but their association with a specific biblical person, event or chronology remains contested."
+    }
+  };
+
+  /*
+    RECORD STRUCTURE
+
+    ID, title, date, sorting year, region,
+    findspot, physical type, evidence category,
+    biblical references, description,
+    significance, limitations, sources,
+    image search terms
+  */
+
+  const records = [
+
+    [
+      "ARC-001",
+      "Merneptah Stele",
+      "c. 1208 BCE",
+      -1208,
+      "Egypt",
+      "Thebes, Egypt",
+      "Royal inscription",
+      "direct",
+      ["Exodus","Joshua","Judges"],
+      "An Egyptian royal victory monument from the reign of Pharaoh Merneptah. Its account of campaigns includes a population identified as Israel.",
+      "Provides the earliest generally accepted extra-biblical reference to Israel and places a group bearing that name in Canaan by the late thirteenth century BCE.",
+      "Does not establish the date, route or historical details of the Exodus or Israelite settlement narratives.",
+      ["met","isac","bas"],
+      "Merneptah Stele"
+    ],
+
+    [
+      "ARC-002",
+      "Tel Dan Stele",
+      "9th century BCE",
+      -850,
+      "Levant",
+      "Tel Dan",
+      "Royal inscription",
+      "direct",
+      ["2 Samuel 7","1 Kings 12","2 Kings 8","2 Kings 9"],
+      "Fragments of an Aramaic victory inscription recovered during excavations in 1993 and 1994. The monument is commonly associated with an Aramean ruler, probably Hazael.",
+      "The widely accepted reading House of David provides important evidence for a Judahite royal dynasty associated with the name David.",
+      "The monument does not establish the size of David's kingdom or verify every event in Samuel. Its account of royal deaths differs from the account in 2 Kings 9.",
+      ["telDan","danStudy","israel"],
+      "Tel Dan Stele"
+    ],
+
+    [
+      "ARC-003",
+      "Mesha Stele",
+      "9th century BCE",
+      -840,
+      "Levant",
+      "Dhiban, Jordan",
+      "Royal inscription",
+      "direct",
+      ["2 Kings 3","1 Kings 16"],
+      "A Moabite royal monument recording the achievements of King Mesha and conflict with Israel following the period of Omride rule.",
+      "Independently attests Mesha, Omri and political conflict between Moab and Israel.",
+      "The inscription presents Moab's royal perspective. Proposed readings of damaged passages remain debated.",
+      ["louvre","inscriptions"],
+      "Mesha Stele Louvre"
+    ],
+
+    [
+      "ARC-004",
+      "Black Obelisk of Shalmaneser III",
+      "c. 825 BCE",
+      -825,
+      "Mesopotamia",
+      "Nimrud, Iraq",
+      "Royal monument",
+      "direct",
+      ["2 Kings 9","2 Kings 10"],
+      "An Assyrian monument containing reliefs and inscriptions describing tribute from foreign rulers, including Jehu of Israel.",
+      "Provides independent evidence for Jehu and Israel's relationship with Assyrian imperial power. The tribute episode is conventionally dated to 841 BCE.",
+      "The kneeling figure may represent Jehu or his envoy. The title associating Jehu with Omri does not establish biological descent.",
+      ["bm","oracc"],
+      "Black Obelisk Shalmaneser III"
+    ],
+
+    [
+      "ARC-005",
+      "Kurkh Monolith of Shalmaneser III",
+      "853 BCE",
+      -853,
+      "Mesopotamia",
+      "Kurkh, southeastern Türkiye",
+      "Royal inscription",
+      "direct",
+      ["1 Kings 16","1 Kings 20","1 Kings 22"],
+      "An Assyrian royal inscription describing the Battle of Qarqar and naming Ahab of Israel among members of an opposing coalition.",
+      "Provides an important chronological anchor for Ahab and the international politics of ninth-century BCE Israel.",
+      "The reported military numbers may reflect royal exaggeration. The biblical narratives do not describe the battle itself.",
+      ["bm","oracc"],
+      "Kurkh Monolith Shalmaneser"
+    ],
+
+    [
+      "ARC-006",
+      "Taylor Prism of Sennacherib",
+      "691 BCE",
+      -691,
+      "Mesopotamia",
+      "Nineveh, Iraq",
+      "Clay inscription",
+      "direct",
+      ["2 Kings 18","2 Kings 19","Isaiah 36","Isaiah 37","Micah 1"],
+      "A clay prism preserving Sennacherib's annals, including his campaign against Judah in 701 BCE.",
+      "Identifies Hezekiah, describes Assyrian conquest of Judahite settlements and records the containment of Hezekiah in Jerusalem.",
+      "The annals do not claim the capture of Jerusalem. Their tribute figures differ from the biblical account. They cannot establish supernatural explanations.",
+      ["bm","rinap"],
+      "Taylor Prism Sennacherib"
+    ],
+
+    [
+      "ARC-007",
+      "Lachish Reliefs",
+      "Early 7th century BCE",
+      -690,
+      "Mesopotamia",
+      "Southwest Palace, Nineveh",
+      "Stone relief",
+      "direct",
+      ["2 Kings 18","Isaiah 36","Micah 1:13"],
+      "Assyrian palace reliefs depicting the siege and capture of Lachish during Sennacherib's campaign of 701 BCE.",
+      "Provide visual and inscriptional evidence for the conquest of a major Judahite city.",
+      "Royal victory imagery is selective and propagandistic. The reliefs do not establish Micah's precise composition date.",
+      ["bm","rinap"],
+      "Lachish reliefs British Museum"
+    ],
+
+    [
+      "ARC-008",
+      "Lachish Siege Ramp",
+      "Associated with 701 BCE",
+      -701,
+      "Levant",
+      "Tel Lachish",
+      "Military architecture",
+      "material",
+      ["2 Kings 18","Isaiah 36","Micah 1:13"],
+      "Physical remains of siege works associated with the Assyrian attack on Lachish.",
+      "Complement the Assyrian reliefs and the archaeological destruction of the Judahite city.",
+      "Reconstruction of the siege relies on excavation data and comparison with Assyrian evidence.",
+      ["iaa","asor","bas"],
+      "Lachish Assyrian siege ramp"
+    ],
+
+    [
+      "ARC-009",
+      "Siloam Inscription",
+      "Late 8th century BCE",
+      -700,
+      "Levant",
+      "Jerusalem",
+      "Engineering inscription",
+      "material",
+      ["2 Kings 20:20","2 Chronicles 32:30"],
+      "A Hebrew inscription discovered within the Siloam Tunnel in 1880, describing the meeting of workers excavating the tunnel.",
+      "Provides evidence for ancient Judahite water engineering and literacy.",
+      "The text does not identify Hezekiah by name. The attribution and precise construction chronology depend on additional evidence.",
+      ["jjar","inscriptions"],
+      "Siloam Inscription"
+    ],
+
+    [
+      "ARC-010",
+      "Ketef Hinnom Silver Amulets",
+      "Late 7th–early 6th century BCE",
+      -600,
+      "Levant",
+      "Jerusalem",
+      "Inscribed amulet",
+      "textual",
+      ["Numbers 6:24-26","Deuteronomy 7:9"],
+      "Two small inscribed silver amulets recovered from a burial complex in 1979.",
+      "Preserve blessings with close parallels to biblical priestly blessing traditions and provide evidence for their antiquity.",
+      "They are not complete biblical manuscripts and cannot establish the date of composition of the entire Pentateuch.",
+      ["israel","jjar"],
+      "Ketef Hinnom silver scrolls"
+    ],
+
+    [
+      "ARC-011",
+      "Lachish Letters",
+      "Early 6th century BCE",
+      -588,
+      "Levant",
+      "Tel Lachish",
+      "Inscribed pottery",
+      "context",
+      ["Jeremiah 34","Jeremiah 37","2 Kings 25"],
+      "Hebrew letters written on pottery fragments associated with the final decades of the Judahite monarchy.",
+      "Illuminate military communication, literacy and political conditions before the Babylonian destruction of Judah.",
+      "The letters do not directly identify every event or official described in Jeremiah.",
+      ["bm","iaa"],
+      "Lachish letters ostraca"
+    ],
+
+    [
+      "ARC-012",
+      "Samaria Ostraca",
+      "8th century BCE",
+      -780,
+      "Levant",
+      "Samaria",
+      "Administrative inscription",
+      "context",
+      ["1 Kings 16","Amos","Hosea","Micah 1"],
+      "Inscribed pottery fragments recording deliveries of commodities including wine and oil.",
+      "Provide evidence for administration, personal names and economic organization in the northern kingdom.",
+      "They do not independently establish the specific injustices condemned by the prophets.",
+      ["isac","bas"],
+      "Samaria ostraca"
+    ],
+
+    [
+      "ARC-013",
+      "Kuntillet Ajrud Inscriptions",
+      "Early 8th century BCE",
+      -790,
+      "Levant",
+      "Northeastern Sinai",
+      "Religious inscription",
+      "context",
+      ["Deuteronomy 6","1 Kings 18","Hosea"],
+      "Inscriptions and drawings from a desert site containing religious expressions involving Yahweh and references to asherah.",
+      "Illuminate the diversity of religious practice within the broader Israelite cultural environment.",
+      "The meaning of asherah and its relationship to the drawings and religious expressions remain debated.",
+      ["asor","bibleinterp"],
+      "Kuntillet Ajrud inscriptions"
+    ],
+
+    [
+      "ARC-014",
+      "Deir Alla Inscription",
+      "c. 800 BCE",
+      -800,
+      "Levant",
+      "Deir Alla, Jordan",
+      "Plaster inscription",
+      "direct",
+      ["Numbers 22","Numbers 23","Numbers 24"],
+      "A fragmentary wall inscription referring to Balaam son of Beor as a visionary figure.",
+      "Demonstrates that traditions about a figure sharing Balaam's name and patronymic circulated outside biblical literature.",
+      "Does not independently establish the events of Numbers or the historical identity of the two literary figures.",
+      ["asor","bas"],
+      "Deir Alla Balaam inscription"
+    ],
+
+    [
+      "ARC-015",
+      "Shoshenq I Bubastite Portal",
+      "Late 10th century BCE",
+      -925,
+      "Egypt",
+      "Karnak, Egypt",
+      "Monumental inscription",
+      "material",
+      ["1 Kings 14:25-26","2 Chronicles 12"],
+      "An Egyptian monumental record associated with Shoshenq I and a campaign into the southern Levant.",
+      "Provides external evidence for Egyptian military activity during the period conventionally associated with biblical Shishak.",
+      "The surviving list does not unambiguously record the plundering of Jerusalem or the temple treasures.",
+      ["isac","met"],
+      "Shoshenq Bubastite Portal Karnak"
+    ],
+
+    [
+      "ARC-016",
+      "Amarna Letters",
+      "14th century BCE",
+      -1350,
+      "Egypt",
+      "Tell el-Amarna",
+      "Cuneiform tablets",
+      "context",
+      ["Genesis","Exodus","Joshua","Judges"],
+      "Diplomatic correspondence between Egypt and rulers throughout the ancient Near East, much of it written in Akkadian.",
+      "Illuminates Late Bronze Age city-states, diplomacy, political instability and Egyptian influence in Canaan.",
+      "The references to Habiru cannot automatically be equated with biblical Hebrews or the Israelite conquest.",
+      ["bm","louvre","cdli"],
+      "Amarna letters clay tablets"
+    ],
+
+    [
+      "ARC-017",
+      "Code of Hammurabi",
+      "18th century BCE",
+      -1750,
+      "Mesopotamia",
+      "Susa, Iran",
+      "Legal monument",
+      "context",
+      ["Exodus 21","Exodus 22","Deuteronomy 19"],
+      "A Babylonian royal law collection inscribed on a monumental stone stele and later transported to Susa.",
+      "Provides comparative evidence for legal traditions, social distinctions and judicial principles of the ancient Near East.",
+      "Similar laws do not by themselves establish direct literary borrowing or Mosaic authorship.",
+      ["louvre","oracc"],
+      "Code of Hammurabi stele"
+    ],
+
+    [
+      "ARC-018",
+      "Gilgamesh Flood Tablet",
+      "7th century BCE copy",
+      -650,
+      "Mesopotamia",
+      "Nineveh, Iraq",
+      "Literary tablet",
+      "context",
+      ["Genesis 6","Genesis 7","Genesis 8","Genesis 9"],
+      "A cuneiform tablet preserving the flood narrative in Tablet XI of the Epic of Gilgamesh.",
+      "Provides important comparative material for ancient Near Eastern flood literature.",
+      "Literary similarities cannot establish the geographical extent or historicity of the biblical flood.",
+      ["bm","oracc"],
+      "Gilgamesh flood tablet"
+    ],
+
+    [
+      "ARC-019",
+      "Atrahasis Tablets",
+      "Old Babylonian period",
+      -1650,
+      "Mesopotamia",
+      "Mesopotamia",
+      "Literary tablet",
+      "context",
+      ["Genesis 1","Genesis 2","Genesis 6"],
+      "Cuneiform witnesses to an ancient Mesopotamian composition concerning humanity, divine conflict and a flood.",
+      "Provide comparative literary evidence for ancient creation and flood traditions.",
+      "Comparison must distinguish literary parallels from demonstrable historical dependence.",
+      ["bm","cdli"],
+      "Atrahasis cuneiform tablets"
+    ],
+
+    [
+      "ARC-020",
+      "Babylonian Chronicle",
+      "Records events of 605–594 BCE",
+      -597,
+      "Mesopotamia",
+      "Babylonia",
+      "Historical tablet",
+      "direct",
+      ["2 Kings 24","Jeremiah 24","Daniel 1"],
+      "A Babylonian chronicle recording events from Nebuchadnezzar II's reign, including the capture of Jerusalem in 597 BCE.",
+      "Provides a major external chronological anchor for Babylonian intervention in Judah and the installation of a replacement ruler.",
+      "This surviving tablet does not provide a complete account of the later destruction of Jerusalem in 586 BCE.",
+      ["bm","cdli"],
+      "Babylonian Chronicle Jerusalem 597"
+    ],
+
+    [
+      "ARC-021",
+      "Jehoiachin Ration Tablets",
+      "Early 6th century BCE",
+      -590,
+      "Mesopotamia",
+      "Babylon",
+      "Administrative tablets",
+      "direct",
+      ["2 Kings 24","2 Kings 25:27-30","Jeremiah 52"],
+      "Babylonian administrative records documenting provisions allocated to Jehoiachin, king of Judah, and members of his household.",
+      "Independently attest the presence of a Judahite king and his family in Babylonian exile.",
+      "They do not describe every aspect of his imprisonment, release or subsequent life.",
+      ["cdli","isac","inscriptions"],
+      "Jehoiachin ration tablets"
+    ],
+
+    [
+      "ARC-022",
+      "Cyrus Cylinder",
+      "539–538 BCE",
+      -539,
+      "Mesopotamia",
+      "Babylon",
+      "Royal inscription",
+      "context",
+      ["Ezra 1","Isaiah 44","Isaiah 45","2 Chronicles 36"],
+      "A Babylonian foundation inscription issued after Cyrus II conquered Babylon.",
+      "Illuminates Persian royal restoration policies and religious legitimization in the context of the return from exile.",
+      "Does not explicitly mention Judah, Jerusalem or the biblical decree concerning the Jerusalem temple.",
+      ["bm","oracc"],
+      "Cyrus Cylinder"
+    ],
+
+    [
+      "ARC-023",
+      "Nabonidus Chronicle",
+      "Records events of the 6th century BCE",
+      -539,
+      "Mesopotamia",
+      "Babylonia",
+      "Historical tablet",
+      "direct",
+      ["Daniel 5","Ezra 1"],
+      "A Babylonian chronicle describing events during the reign of Nabonidus and the Persian conquest of Babylon.",
+      "Provides external historical context for the transition from Babylonian to Persian rule.",
+      "Does not independently attest Daniel's banquet narrative or resolve every chronological question in Daniel.",
+      ["bm","cdli"],
+      "Nabonidus Chronicle"
+    ],
+
+    [
+      "ARC-024",
+      "Nabonidus Cylinders",
+      "6th century BCE",
+      -550,
+      "Mesopotamia",
+      "Ur and other Babylonian sites",
+      "Royal inscription",
+      "direct",
+      ["Daniel 5"],
+      "Royal inscriptions of Nabonidus, including examples naming his son Belshazzar.",
+      "Establish the historical existence of Belshazzar and his relationship to the Babylonian royal household.",
+      "Belshazzar's precise political status and Daniel's literary presentation require separate analysis.",
+      ["bm","oracc"],
+      "Nabonidus cylinder Belshazzar"
+    ],
+
+    [
+      "ARC-025",
+      "Al-Yahudu Tablets",
+      "6th–5th centuries BCE",
+      -550,
+      "Mesopotamia",
+      "Babylonia; exact findspots uncertain",
+      "Administrative tablets",
+      "material",
+      ["Jeremiah 29","Ezekiel","Ezra"],
+      "Cuneiform documents recording economic and legal activities involving Judean communities in Babylonia.",
+      "Provide evidence for daily life, settlement and economic integration among Judean exiles and their descendants.",
+      "Many tablets lack documented excavation provenance. They should not be used to identify particular biblical exiles without additional evidence.",
+      ["cdli","isac"],
+      "Al Yahudu cuneiform tablets"
+    ],
+
+    [
+      "ARC-026",
+      "Elephantine Papyri",
+      "5th century BCE",
+      -450,
+      "Egypt",
+      "Elephantine, Egypt",
+      "Papyrus documents",
+      "context",
+      ["Ezra","Nehemiah","Deuteronomy"],
+      "Aramaic documents associated with a Jewish community in Persian-period Egypt.",
+      "Illuminate family arrangements, religious practice, administration and a Jewish temple outside Jerusalem.",
+      "The community's practices cannot automatically be generalized to every contemporary Jewish population.",
+      ["pum","bm","asor"],
+      "Elephantine papyri"
+    ],
+
+    [
+      "ARC-027",
+      "Behistun Inscription",
+      "Late 6th century BCE",
+      -520,
+      "Persia",
+      "Bisotun, Iran",
+      "Rock inscription",
+      "direct",
+      ["Ezra 4","Ezra 5","Ezra 6","Haggai","Zechariah"],
+      "A monumental multilingual inscription of Darius I describing his accession and suppression of rebellions.",
+      "Provides historical and linguistic evidence for Persian imperial rule during the period of the rebuilding of the Jerusalem temple.",
+      "Does not describe the temple reconstruction itself.",
+      ["unesco","oracc"],
+      "Behistun inscription"
+    ],
+
+    [
+      "ARC-028",
+      "Great Isaiah Scroll",
+      "c. 2nd century BCE",
+      -125,
+      "Levant",
+      "Qumran Cave 1",
+      "Manuscript",
+      "textual",
+      ["Isaiah"],
+      "A nearly complete ancient Hebrew manuscript of Isaiah, conventionally designated 1QIsaᵃ.",
+      "Provides exceptionally important evidence for the transmission of Isaiah before the medieval Masoretic codices.",
+      "Its textual differences require comparison with other witnesses. It does not independently verify the events described in Isaiah.",
+      ["imjdss","dss"],
+      "Great Isaiah Scroll"
+    ],
+
+    [
+      "ARC-029",
+      "Habakkuk Pesher",
+      "Late 1st century BCE",
+      -30,
+      "Levant",
+      "Qumran Cave 1",
+      "Manuscript",
+      "textual",
+      ["Habakkuk 1","Habakkuk 2"],
+      "An ancient interpretive manuscript containing passages from Habakkuk accompanied by explanations applied to the community's historical circumstances.",
+      "Documents Second Temple Jewish interpretation and transmission of prophetic literature.",
+      "Its interpretations are not necessarily identical to the original historical references intended by Habakkuk.",
+      ["imjdss","dss"],
+      "Habakkuk Pesher scroll"
+    ],
+
+    [
+      "ARC-030",
+      "Community Rule Scroll",
+      "Second Temple period",
+      -100,
+      "Levant",
+      "Qumran Cave 1",
+      "Manuscript",
+      "context",
+      ["Matthew 3","Luke 3","Acts"],
+      "A sectarian Jewish composition concerning communal organization, ritual purity and religious discipline.",
+      "Illuminates the diversity of Jewish religious life before and around the emergence of Christianity.",
+      "Similarities do not establish that John the Baptist or Jesus belonged to the Qumran community.",
+      ["dss","imjdss"],
+      "Dead Sea Scrolls Community Rule"
+    ],
+
+    [
+      "ARC-031",
+      "Pontius Pilate Inscription",
+      "26–36 CE",
+      30,
+      "Levant",
+      "Caesarea Maritima",
+      "Administrative inscription",
+      "direct",
+      ["Matthew 27","Mark 15","Luke 23","John 18","John 19"],
+      "A Latin inscription discovered in 1961 identifying Pontius Pilate and his position as prefect of Judaea.",
+      "Provides independent physical evidence for the historical Roman administrator named in the Gospel narratives.",
+      "The inscription does not describe the trial or crucifixion of Jesus.",
+      ["israel","iaa","inscriptions"],
+      "Pontius Pilate stone inscription"
+    ],
+
+    [
+      "ARC-032",
+      "Gallio Inscription",
+      "c. 52 CE",
+      52,
+      "Greece",
+      "Delphi, Greece",
+      "Imperial inscription",
+      "direct",
+      ["Acts 18:12-17"],
+      "Fragments of an imperial letter of Claudius identifying Gallio as proconsul of Achaia.",
+      "Provide an important chronological anchor for Paul's stay in Corinth as described in Acts.",
+      "The inscription does not mention Paul or the judicial hearing itself.",
+      ["edh","inscriptions","asor"],
+      "Gallio Delphi inscription"
+    ],
+
+    [
+      "ARC-033",
+      "Erastus Inscription",
+      "Roman imperial period",
+      75,
+      "Greece",
+      "Corinth",
+      "Pavement inscription",
+      "disputed",
+      ["Romans 16:23","Acts 19:22","2 Timothy 4:20"],
+      "A Latin pavement inscription naming an Erastus associated with the office of aedile.",
+      "Demonstrates the presence of a civic official bearing a name also found in Pauline literature.",
+      "The identification of this official with Paul's Erastus is debated, as are chronological and administrative questions.",
+      ["asor","edh"],
+      "Erastus inscription Corinth"
+    ],
+
+    [
+      "ARC-034",
+      "Jerusalem Temple Warning Inscription",
+      "Second Temple period",
+      1,
+      "Levant",
+      "Jerusalem",
+      "Greek inscription",
+      "context",
+      ["Acts 21:27-29","Ephesians 2:14"],
+      "A Greek warning inscription restricting unauthorized access beyond a boundary within the Jerusalem temple precinct.",
+      "Illustrates the historical system of access restrictions associated with the Second Temple.",
+      "Does not directly record Paul's arrest or determine the intended metaphorical meaning of Ephesians.",
+      ["inscriptions","israel"],
+      "Jerusalem temple warning inscription"
+    ],
+
+    [
+      "ARC-035",
+      "Pool of Siloam",
+      "Second Temple period phases",
+      1,
+      "Levant",
+      "Jerusalem",
+      "Water installation",
+      "material",
+      ["John 9"],
+      "Archaeological remains of a large stepped pool in southern ancient Jerusalem.",
+      "Provide physical evidence for a substantial water installation associated with the historical setting of John's account.",
+      "Identification of a location does not independently establish the healing narrative.",
+      ["iaa","jjar","hadashot"],
+      "Pool of Siloam archaeology"
+    ],
+
+    [
+      "ARC-036",
+      "Pool of Bethesda",
+      "Ancient and Roman period phases",
+      1,
+      "Levant",
+      "Jerusalem",
+      "Water installation",
+      "material",
+      ["John 5:1-9"],
+      "Ancient pool structures near the traditional location of the Sheep Gate and later healing-related installations.",
+      "Provide archaeological context for the pool complex mentioned in John.",
+      "The precise architectural sequence requires reconstruction; the site does not establish the reported miracle.",
+      ["iaa","jjar","bas"],
+      "Pool of Bethesda archaeological ruins"
+    ],
+
+    [
+      "ARC-037",
+      "Caiaphas Ossuary",
+      "1st century CE",
+      40,
+      "Levant",
+      "Jerusalem",
+      "Burial artifact",
+      "disputed",
+      ["Matthew 26","John 11:49","John 18"],
+      "An inscribed limestone ossuary associated with a burial complex discovered in 1990 and bearing a name commonly rendered Joseph son of Caiaphas.",
+      "Provides possible material evidence connected with the family of the high priest Caiaphas.",
+      "Identification with the particular high priest described in the Gospels is plausible but not conclusively established by the inscription alone.",
+      ["israel","iaa","inscriptions"],
+      "Caiaphas ossuary"
+    ],
+
+    [
+      "ARC-038",
+      "Yehohanan Crucifixion Remains",
+      "1st century CE",
+      40,
+      "Levant",
+      "Givat HaMivtar, Jerusalem",
+      "Human burial remains",
+      "material",
+      ["Matthew 27","Mark 15","Luke 23","John 19"],
+      "Burial remains of a man whose heel bone preserved an iron nail associated with Roman crucifixion.",
+      "Provide rare physical evidence for crucifixion practices and burial of an executed person in Roman-period Judaea.",
+      "The remains are not those of Jesus and cannot establish an identical procedure in every crucifixion.",
+      ["iaa","israel","bas"],
+      "Yehohanan crucifixion archaeology"
+    ],
+
+    [
+      "ARC-039",
+      "Arch of Titus",
+      "c. 81 CE",
+      81,
+      "Italy",
+      "Rome",
+      "Triumphal monument",
+      "material",
+      ["Matthew 24","Mark 13","Luke 21"],
+      "A Roman monument commemorating Flavian victory, with reliefs depicting spoils associated with the Jerusalem temple.",
+      "Provides material and visual evidence for Roman commemoration of the conquest of Jerusalem in 70 CE.",
+      "The reliefs express imperial ideology and do not independently establish theological interpretations of Jesus' predictions.",
+      ["unesco","met","perseus"],
+      "Arch of Titus menorah relief"
+    ],
+
+    [
+      "ARC-040",
+      "Judaea Capta Coins",
+      "After 70 CE",
+      71,
+      "Roman Empire",
+      "Multiple Roman mints",
+      "Coinage",
+      "direct",
+      ["Matthew 24","Luke 21"],
+      "Roman coins commemorating victory over Judaea following the Jewish revolt.",
+      "Provide contemporary material evidence for imperial representation of the conquest.",
+      "Coin imagery is political propaganda rather than an impartial account of the war.",
+      ["bm","met"],
+      "Judaea Capta Roman coins"
+    ],
+
+    [
+      "ARC-041",
+      "Magdala Synagogue",
+      "1st century CE",
+      30,
+      "Levant",
+      "Migdal, Galilee",
+      "Religious architecture",
+      "context",
+      ["Matthew 4:23","Mark 1:21","Luke 4:15"],
+      "A synagogue complex from the Second Temple period associated with a decorated stone bearing religious imagery.",
+      "Illuminates synagogue architecture and Jewish communal life in early Roman Galilee.",
+      "There is no archaeological proof that Jesus personally taught within this particular building.",
+      ["iaa","hadashot","bas"],
+      "Magdala synagogue stone"
+    ],
+
+    [
+      "ARC-042",
+      "Capernaum Synagogue",
+      "Late Roman or Byzantine period",
+      400,
+      "Levant",
+      "Capernaum",
+      "Religious architecture",
+      "context",
+      ["Mark 1:21","Luke 4:31","John 6:59"],
+      "A monumental limestone synagogue built over earlier remains at ancient Capernaum.",
+      "Documents the continuing religious significance and settlement history of the town.",
+      "The visible limestone building is later than Jesus' lifetime. The interpretation of earlier underlying structures requires care.",
+      ["iaa","asor"],
+      "Capernaum synagogue archaeology"
+    ],
+
+    [
+      "ARC-043",
+      "Theatre of Ephesus",
+      "Hellenistic and Roman phases",
+      50,
+      "Anatolia",
+      "Ephesus, Türkiye",
+      "Public architecture",
+      "material",
+      ["Acts 19:23-41"],
+      "A large ancient theatre developed through Hellenistic and Roman construction phases.",
+      "Provides physical context for the urban assembly and public disturbance described in Acts.",
+      "Its existence does not independently demonstrate that the particular gathering involving Paul's associates occurred.",
+      ["unesco","asor"],
+      "Ephesus Great Theatre"
+    ],
+
+    [
+      "ARC-044",
+      "Temple of Artemis at Ephesus",
+      "Multiple ancient construction phases",
+      -350,
+      "Anatolia",
+      "Ephesus, Türkiye",
+      "Religious architecture",
+      "context",
+      ["Acts 19:23-41"],
+      "Remains and artifacts associated with the celebrated sanctuary of Artemis at Ephesus.",
+      "Document the importance of the Artemis cult within the city's religious and economic environment.",
+      "Archaeological evidence does not establish the historical details of the silversmiths' disturbance in Acts.",
+      ["bm","unesco"],
+      "Temple of Artemis Ephesus archaeology"
+    ],
+
+    [
+      "ARC-045",
+      "Corinth Bema",
+      "Roman imperial period",
+      50,
+      "Greece",
+      "Ancient Corinth",
+      "Civic architecture",
+      "context",
+      ["Acts 18:12-17"],
+      "A raised public platform situated within the Roman forum of Corinth.",
+      "Illustrates the civic and judicial environment of Roman Corinth.",
+      "Identification of this exact platform as the location of Paul's hearing cannot be independently demonstrated.",
+      ["asor","bas"],
+      "Corinth Bema archaeology"
+    ],
+
+    [
+      "ARC-046",
+      "Royal Cemetery of Ur",
+      "c. 2600–2450 BCE",
+      -2500,
+      "Mesopotamia",
+      "Ur, Iraq",
+      "Burial complex",
+      "context",
+      ["Genesis 11:28-31","Genesis 12"],
+      "Elite Mesopotamian tombs containing elaborate burial goods and evidence of royal funerary practices.",
+      "Illuminate the longstanding urban civilization associated with southern Mesopotamia.",
+      "The cemetery predates most proposed patriarchal chronologies and provides no direct evidence for Abraham.",
+      ["penn","bm"],
+      "Royal Cemetery Ur artifacts"
+    ],
+
+    [
+      "ARC-047",
+      "Ziggurat of Ur",
+      "c. 21st century BCE",
+      -2100,
+      "Mesopotamia",
+      "Ur, Iraq",
+      "Religious architecture",
+      "context",
+      ["Genesis 11"],
+      "A monumental stepped temple platform associated with the Third Dynasty of Ur and the cult of the moon god Nanna.",
+      "Illustrates Mesopotamian monumental religious architecture.",
+      "It is not identified as the biblical Tower of Babel and does not establish Abraham's presence.",
+      ["penn","bm","unesco"],
+      "Great Ziggurat of Ur"
+    ],
+
+    [
+      "ARC-048",
+      "Etemenanki Ziggurat",
+      "Especially 1st millennium BCE",
+      -600,
+      "Mesopotamia",
+      "Babylon",
+      "Religious architecture",
+      "context",
+      ["Genesis 11:1-9"],
+      "The Babylonian temple tower associated with the sanctuary of Marduk, known through texts and archaeological remains.",
+      "Provides a meaningful architectural and cultural comparison for the Tower of Babel narrative.",
+      "Literary comparison does not establish that Genesis describes this particular structure or a historical confusion of languages.",
+      ["oracc","unesco","bm"],
+      "Etemenanki Babylon archaeological remains"
+    ],
+
+    [
+      "ARC-049",
+      "Megiddo Six-Chambered Gate",
+      "Iron Age",
+      -950,
+      "Levant",
+      "Tel Megiddo",
+      "Fortification",
+      "disputed",
+      ["1 Kings 9:15","2 Kings 23:29"],
+      "A monumental gate complex belonging to the Iron Age occupation of Megiddo.",
+      "Provides evidence for organized urban construction at an important strategic location.",
+      "The gate's dating and attribution to Solomon or a later political administration are debated.",
+      ["isac","asor","unesco"],
+      "Megiddo six chambered gate"
+    ],
+
+    [
+      "ARC-050",
+      "Hazor Late Bronze Age Destruction",
+      "Late Bronze Age",
+      -1250,
+      "Levant",
+      "Tel Hazor",
+      "Destruction layer",
+      "disputed",
+      ["Joshua 11","Judges 4"],
+      "Excavations reveal substantial destruction affecting the Late Bronze Age city.",
+      "Establishes that a major urban center experienced violent destruction during the transition toward the Iron Age.",
+      "The identity of the destroyers and relationship to Joshua remain debated. Destruction alone does not identify its perpetrators.",
+      ["asor","iaa","unesco"],
+      "Hazor Bronze Age destruction archaeology"
+    ],
+
+    [
+      "ARC-051",
+      "Jericho Fortifications",
+      "Multiple occupation periods",
+      -1550,
+      "Levant",
+      "Tell es-Sultan",
+      "Fortification",
+      "disputed",
+      ["Joshua 2","Joshua 6"],
+      "Ancient settlement remains include fortifications and destruction deposits from different chronological periods.",
+      "Document the long and complex occupation history of Jericho.",
+      "Chronological disagreements and the nature of Late Bronze Age occupation prevent a simple identification of a particular destruction layer with Joshua.",
+      ["unesco","asor","bibleinterp"],
+      "Tell es Sultan Jericho excavations"
+    ],
+
+    [
+      "ARC-052",
+      "Broad Wall of Jerusalem",
+      "Late 8th century BCE",
+      -700,
+      "Levant",
+      "Jerusalem",
+      "Fortification",
+      "material",
+      ["2 Chronicles 32:5","Isaiah 22:10"],
+      "A substantial ancient wall discovered in Jerusalem's Jewish Quarter.",
+      "Supports the existence of major defensive construction during the late Iron Age.",
+      "The remains carry no inscription directly identifying the king who authorized their construction.",
+      ["jjar","iaa"],
+      "Jerusalem Broad Wall archaeology"
+    ],
+
+    [
+      "ARC-053",
+      "Stepped Stone Structure",
+      "Iron Age phases; chronology debated",
+      -1000,
+      "Levant",
+      "Jerusalem",
+      "Monumental architecture",
+      "disputed",
+      ["2 Samuel 5","1 Kings 9"],
+      "A prominent stepped stone construction on the eastern slope of ancient Jerusalem.",
+      "Provides evidence for substantial architectural activity at the early urban site.",
+      "The dating, function and association with Davidic royal construction remain contested.",
+      ["jjar","iaa","bibleinterp"],
+      "Stepped Stone Structure Jerusalem"
+    ],
+
+    [
+      "ARC-054",
+      "Masada",
+      "Herodian and early Roman periods",
+      50,
+      "Levant",
+      "Judaean Desert",
+      "Fortress",
+      "context",
+      ["Matthew 2","Luke 1:5"],
+      "A fortified desert complex extensively developed by Herod the Great and later occupied during the Jewish revolt.",
+      "Illuminates Herodian architecture, Roman siege archaeology and ancient Jewish life.",
+      "Its principal revolt history belongs to the post-New Testament Gospel setting, with literary and archaeological evidence requiring comparison.",
+      ["unesco","iaa"],
+      "Masada Herodian archaeological ruins"
+    ],
+
+    [
+      "ARC-055",
+      "LMLK Stamp Impressions",
+      "Late 8th century BCE",
+      -710,
+      "Levant",
+      "Judah; multiple sites",
+      "Stamped pottery",
+      "context",
+      ["2 Kings 18","2 Chronicles 32","Micah"],
+      "Storage-jar handles bearing royal stamp impressions containing the letters LMLK.",
+      "Provide evidence for centralized administration and commodity distribution in Iron Age Judah.",
+      "The precise administrative purpose and relationship to Assyrian campaign preparations remain subjects of investigation.",
+      ["iaa","israel","jjar"],
+      "LMLK stamped jar handles"
+    ],
+
+    [
+      "ARC-056",
+      "Samaria Capital and Palace Remains",
+      "Iron Age",
+      -850,
+      "Levant",
+      "Sebastia, Samaria",
+      "Royal architecture",
+      "material",
+      ["1 Kings 16:24","Amos 3","Micah 1:5-7"],
+      "Excavated architectural remains document the development of Samaria as a major royal center.",
+      "Provide material context for the northern kingdom's capital and elite institutions.",
+      "Assigning particular structures to individual kings depends on chronology and architectural interpretation.",
+      ["asor","isac","bas"],
+      "Ancient Samaria palace archaeology"
+    ],
+
+    [
+      "ARC-057",
+      "Samaria Ivories",
+      "9th–8th centuries BCE",
+      -800,
+      "Levant",
+      "Samaria",
+      "Decorative artifact",
+      "context",
+      ["1 Kings 22:39","Amos 3:15","Amos 6:4"],
+      "Carved ivory fragments associated with the elite material culture of Samaria.",
+      "Illustrate luxury furnishings, artistic exchange and the wealth of royal environments.",
+      "The ivory fragments cannot be assigned to particular biblical pieces of furniture or specific acts of exploitation.",
+      ["israel","bm","asor"],
+      "Samaria carved ivory artifacts"
+    ],
+
+    [
+      "ARC-058",
+      "Sargon II Royal Inscriptions",
+      "722–705 BCE",
+      -720,
+      "Mesopotamia",
+      "Khorsabad and other Assyrian sites",
+      "Royal inscription",
+      "direct",
+      ["2 Kings 17","Isaiah 20:1","Micah 1"],
+      "Assyrian royal records describing Sargon II's campaigns, including claims concerning Samaria and activity in the southern Levant.",
+      "Provide evidence for Assyrian imperial domination and deportation practices associated with the northern kingdom's collapse.",
+      "The exact division of responsibility for Samaria's conquest between Shalmaneser V and Sargon II requires comparison of multiple sources.",
+      ["rinap","oracc","isac"],
+      "Sargon II Khorsabad inscriptions"
+    ],
+
+    [
+      "ARC-059",
+      "Tiglath-Pileser III Annals",
+      "745–727 BCE",
+      -735,
+      "Mesopotamia",
+      "Nimrud and other Assyrian sites",
+      "Royal inscription",
+      "direct",
+      ["2 Kings 15","2 Kings 16","Isaiah 7"],
+      "Assyrian royal records documenting campaigns, tribute and political control in the Levant.",
+      "Independently identify rulers and geopolitical circumstances associated with the expansion of Assyria during the biblical monarchy.",
+      "The inscriptions are royal accounts and must be interpreted alongside chronological and textual evidence.",
+      ["rinap","bm","oracc"],
+      "Tiglath Pileser III inscriptions"
+    ],
+
+    [
+      "ARC-060",
+      "Beth Shean Egyptian Monuments",
+      "Late Bronze Age",
+      -1250,
+      "Levant",
+      "Beth Shean",
+      "Monumental inscription",
+      "context",
+      ["Joshua 17:11","Judges 1:27","1 Samuel 31"],
+      "Egyptian monuments and architectural remains associated with an administrative center in Canaan.",
+      "Provide evidence for Egyptian influence and political control in the region during the Late Bronze Age.",
+      "The Egyptian remains do not independently establish Saul's death or the events described in 1 Samuel 31.",
+      ["penn","israel","iaa"],
+      "Beth Shean Egyptian stelae"
+    ]
+
+  ].map(row => ({
+    id:row[0],
+    title:row[1],
+    date:row[2],
+    year:row[3],
+    region:row[4],
+    location:row[5],
+    type:row[6],
+    evidence:row[7],
+    references:row[8],
+    description:row[9],
+    significance:row[10],
+    limitations:row[11],
+    sources:row[12],
+    imageQuery:row[13]
+  }));
+
+  const methods = [
+    [
+      "Stratigraphy",
+      "Analyzes relationships between archaeological deposits, structures and occupation layers.",
+      "Disturbed deposits, intrusive objects and later construction may complicate interpretation."
+    ],
+    [
+      "Radiocarbon dating",
+      "Estimates the age of suitable organic material through measurement of radioactive carbon.",
+      "Requires calibration, suitable samples and careful association with the archaeological event being investigated."
+    ],
+    [
+      "Ceramic typology",
+      "Compares pottery forms, manufacture and decoration with established chronological sequences.",
+      "Regional variation and long-lived forms limit chronological precision."
+    ],
+    [
+      "Epigraphy",
+      "Studies inscriptions, scripts, languages and their historical contexts.",
+      "Damaged texts, uncertain readings and restored letters must be identified."
+    ],
+    [
+      "Palaeography",
+      "Examines the development and characteristics of historical writing systems.",
+      "Script dating usually provides ranges rather than exact calendar years."
+    ],
+    [
+      "Numismatics",
+      "Studies coins, their inscriptions, imagery, production and circulation.",
+      "A coin's production date does not necessarily equal the date of the deposit containing it."
+    ],
+    [
+      "Provenance and provenience",
+      "Examines an artifact's ownership history and its precise archaeological find context.",
+      "Unprovenanced objects may have lost essential contextual information and present authenticity risks."
+    ],
+    [
+      "Archaeobotany",
+      "Investigates ancient plant remains to reconstruct diet, agriculture and environmental conditions.",
+      "Preservation and sampling biases influence surviving evidence."
+    ],
+    [
+      "Zooarchaeology",
+      "Studies animal remains to investigate food practices, economy and environmental relationships.",
+      "Animal bone assemblages do not independently establish ethnic identity."
+    ],
+    [
+      "Historical geography",
+      "Compares ancient texts, geography, settlement patterns and archaeological locations.",
+      "Similar place names and changing settlement locations may complicate identification."
+    ],
+    [
+      "Architectural analysis",
+      "Studies buildings, construction techniques, modifications and spatial organization.",
+      "Function and ownership cannot always be determined from architecture alone."
+    ],
+    [
+      "Source criticism",
+      "Evaluates the origin, purpose, audience and reliability of written evidence.",
+      "Royal records and religious literature may express particular ideological perspectives."
+    ],
+    [
+      "Material culture",
+      "Examines artifacts and physical remains as evidence of human behavior.",
+      "Artifact styles cannot automatically be equated with particular ethnic or religious identities."
+    ],
+    [
+      "Archaeological survey",
+      "Documents settlement distributions and surface remains across geographical regions.",
+      "Surface visibility, sampling and chronological resolution affect the results."
+    ],
+    [
+      "Experimental archaeology",
+      "Tests possible ancient techniques through controlled reconstruction and experimentation.",
+      "A successful experiment demonstrates feasibility, not necessarily the exact historical method used."
+    ]
+  ];
+
+  const books = [
+    ["Genesis",50],["Exodus",40],
+    ["Leviticus",27],["Numbers",36],
+    ["Deuteronomy",34],["Joshua",24],
+    ["Judges",21],["Ruth",4],
+    ["1 Samuel",31],["2 Samuel",24],
+    ["1 Kings",22],["2 Kings",25],
+    ["1 Chronicles",29],["2 Chronicles",36],
+    ["Ezra",10],["Nehemiah",13],
+    ["Esther",10],["Job",42],
+    ["Psalms",150],["Proverbs",31],
+    ["Ecclesiastes",12],["Song of Solomon",8],
+    ["Isaiah",66],["Jeremiah",52],
+    ["Lamentations",5],["Ezekiel",48],
+    ["Daniel",12],["Hosea",14],
+    ["Joel",3],["Amos",9],
+    ["Obadiah",1],["Jonah",4],
+    ["Micah",7],["Nahum",3],
+    ["Habakkuk",3],["Zephaniah",3],
+    ["Haggai",2],["Zechariah",14],
+    ["Malachi",4],["Matthew",28],
+    ["Mark",16],["Luke",24],
+    ["John",21],["Acts",28],
+    ["Romans",16],["1 Corinthians",16],
+    ["2 Corinthians",13],["Galatians",6],
+    ["Ephesians",6],["Philippians",4],
+    ["Colossians",4],["1 Thessalonians",5],
+    ["2 Thessalonians",3],["1 Timothy",6],
+    ["2 Timothy",4],["Titus",3],
+    ["Philemon",1],["Hebrews",13],
+    ["James",5],["1 Peter",5],
+    ["2 Peter",3],["1 John",5],
+    ["2 John",1],["3 John",1],
+    ["Jude",1],["Revelation",22]
+  ];
+
+  const root = document.createElement("div");
+
+  root.className = "dbar";
+
+  workspace.replaceChildren(root);
+
+  root.innerHTML = `
+    <style>
+
+      .dbar{
+        color:#f1efe7;
+        line-height:1.65;
+      }
+
+      .dbar *{
+        box-sizing:border-box;
+      }
+
+      .dbar h2,.dbar h3,.dbar h4{
+        color:#e0c38a;
+        margin-top:0;
+      }
+
+      .dbar .arHero{
+        padding:30px;
+        border:1px solid #645337;
+        border-radius:18px;
+        background:
+          radial-gradient(
+            ellipse at top right,
+            #ac88434d,
+            transparent 65%
+          ),
+          linear-gradient(
+            135deg,#22221c,#141511
+          );
+      }
+
+      .dbar .arEyebrow{
+        color:#c9aa70;
+        font-size:11px;
+        letter-spacing:3px;
+      }
+
+      .dbar .arHero h2{
+        font-size:clamp(30px,5vw,46px);
+        margin:12px 0;
+      }
+
+      .dbar .arMuted{
+        color:#aaa99e;
+      }
+
+      .dbar .arPanel{
+        background:#191a17;
+        border:1px solid #34352e;
+        border-radius:14px;
+        padding:18px;
+        margin-top:18px;
+      }
+
+      .dbar .arStats{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(110px,1fr));
+        gap:12px;
+        margin-top:22px;
+      }
+
+      .dbar .arStat{
+        background:#25251f;
+        border:1px solid #494335;
+        border-radius:11px;
+        padding:14px;
+      }
+
+      .dbar .arStat strong{
+        display:block;
+        font-size:28px;
+        color:#e0c38a;
+      }
+
+      .dbar .arGrid{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(260px,1fr));
+        gap:16px;
+      }
+
+      .dbar .arCard{
+        border:1px solid #454337;
+        background:#20211d;
+        border-radius:13px;
+        padding:18px;
+        min-width:0;
+        transition:border-color .2s;
+      }
+
+      .dbar .arCard:hover{
+        border-color:#8b7650;
+      }
+
+      .dbar .arIcon{
+        width:48px;
+        height:48px;
+        display:grid;
+        place-items:center;
+        font-size:25px;
+        border:1px solid #65563a;
+        border-radius:10px;
+        background:#383126;
+        margin-bottom:15px;
+      }
+
+      .dbar .arTabs,.dbar .arActions{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin:14px 0;
+      }
+
+      .dbar button,.dbar input,
+      .dbar select,.dbar textarea{
+        font:inherit;
+        background:#25261f;
+        color:#f1efe7;
+        padding:10px 12px;
+        border:1px solid #504b3d;
+        border-radius:8px;
+      }
+
+      .dbar button{
+        cursor:pointer;
+      }
+
+      .dbar button:hover,
+      .dbar button:focus-visible{
+        background:#403627;
+        border-color:#c9aa70;
+      }
+
+      .dbar button:disabled{
+        opacity:.4;
+        cursor:default;
+      }
+
+      .dbar button.arActive{
+        background:#59482c;
+        border-color:#d1b579;
+      }
+
+      .dbar input,.dbar select,
+      .dbar textarea{
+        width:100%;
+      }
+
+      .dbar textarea{
+        min-height:180px;
+        resize:vertical;
+      }
+
+      .dbar a{
+        color:#e0c38a;
+        overflow-wrap:anywhere;
+      }
+
+      .dbar .arControls{
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(145px,1fr));
+        gap:12px;
+        margin:15px 0;
+      }
+
+      .dbar .arTag{
+        display:inline-block;
+        border:1px solid #665638;
+        border-radius:20px;
+        color:#ddc18a;
+        padding:4px 9px;
+        font-size:12px;
+        margin:3px 3px 3px 0;
+      }
+
+      .dbar .arLimit{
+        border-left:3px solid #c9aa70;
+        background:#302a20;
+        border-radius:5px;
+        padding:12px;
+        color:#dfd0b5;
+        margin:12px 0;
+      }
+
+      .dbar .arEvidence{
+        border-left:3px solid #8ea68a;
+        background:#262e24;
+        border-radius:5px;
+        padding:12px;
+        margin:12px 0;
+      }
+
+      .dbar .arTimeline{
+        border-left:2px solid #826d47;
+        margin-left:12px;
+        padding-left:22px;
+      }
+
+      .dbar .arEvent{
+        position:relative;
+        margin-bottom:16px;
+        padding:15px;
+        border:1px solid #454337;
+        border-radius:10px;
+        background:#20211d;
+      }
+
+      .dbar .arEvent:before{
+        content:"";
+        position:absolute;
+        left:-29px;
+        top:25px;
+        width:11px;
+        height:11px;
+        border-radius:50%;
+        background:#c9aa70;
+        border:2px solid #191a17;
+      }
+
+      .dbar .arEntry{
+        padding:16px 0;
+        border-bottom:1px solid #34352e;
+      }
+
+      .dbar .arReference{
+        border-bottom:1px solid #454337;
+        padding:10px 0;
+      }
+
+      .dbar .arTableWrap{
+        overflow-x:auto;
+      }
+
+      .dbar table{
+        width:100%;
+        border-collapse:collapse;
+      }
+
+      .dbar td,.dbar th{
+        padding:10px;
+        border-bottom:1px solid #454337;
+        text-align:left;
+        vertical-align:top;
+      }
+
+      @media(max-width:650px){
+
+        .dbar .arHero{
+          padding:22px 15px;
+        }
+
+        .dbar .arGrid{
+          grid-template-columns:1fr;
+        }
+
+        .dbar .arPanel{
+          padding:14px;
+        }
+      }
+
+    </style>
+
+    <section class="arHero">
+
+      <div class="arEyebrow">
+        DESERTBIBLE • MATERIAL EVIDENCE
+      </div>
+
+      <h2>Biblical Archaeology</h2>
+
+      <p>
+        Unearth the historical world of Scripture.
+        Investigate ancient inscriptions,
+        excavations, monuments, manuscripts
+        and material culture through
+        documented archaeological evidence.
+      </p>
+
+      <div class="arStats">
+
+        <div class="arStat">
+          <strong id="arRecordCount"></strong>
+          Evidence records
+        </div>
+
+        <div class="arStat">
+          <strong id="arSourceCount"></strong>
+          Research resources
+        </div>
+
+        <div class="arStat">
+          <strong id="arRegionCount"></strong>
+          Geographic regions
+        </div>
+
+        <div class="arStat">
+          <strong>66</strong>
+          Book selections
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="arPanel">
+
+      <h3>Archaeological Research Workspace</h3>
+
+      <div class="arTabs">
+
+        <button data-ar-tab="catalogue">
+          Artifact catalogue
+        </button>
+
+        <button data-ar-tab="sites">
+          Excavation explorer
+        </button>
+
+        <button data-ar-tab="timeline">
+          Evidence timeline
+        </button>
+
+        <button data-ar-tab="scripture">
+          Biblical connections
+        </button>
+
+        <button data-ar-tab="methods">
+          Research methods
+        </button>
+
+        <button data-ar-tab="library">
+          Museum and research library
+        </button>
+
+        <button data-ar-tab="saved">
+          Saved evidence
+        </button>
+
+        <button data-ar-tab="notes">
+          Research notebook
+        </button>
+
+      </div>
+
+      <div id="arOutput"></div>
+
+    </section>
+
+    <section class="arPanel">
+
+      <h3>Archaeological Evidence Standards</h3>
+
+      <div id="arStandards" class="arGrid"></div>
+
+      <p class="arLimit">
+        Archaeology can establish material
+        circumstances and independently attest
+        historical people, institutions and events.
+        It cannot independently establish divine
+        intervention, inspiration or the theological
+        truth of a passage.
+      </p>
+
+      <button id="arClose">
+        Close Archaeology
+      </button>
+
+    </section>
+  `;
+
+  const $ = id => root.querySelector("#" + id);
+
+  const output = $("arOutput");
+
+  const storageKey =
+    "DesertBible.archaeology.v1";
+
+  const regions = Array.from(
+    new Set(records.map(record => record.region))
+  ).sort();
+
+  const types = Array.from(
+    new Set(records.map(record => record.type))
+  ).sort();
+
+  let saved = [];
+  let notes = "";
+  let view = "catalogue";
+  let selected = null;
+
+  let filters = {
+    search:"",
+    region:"",
+    type:"",
+    evidence:"",
+    period:"",
+    sort:"featured"
+  };
+
+  let page = 1;
+  const pageSize = 12;
+
+  let bookIndex = 32;
+  let chapter = 1;
+
+  let requestCounter = 0;
+
+  try {
+
+    const previous = JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    );
+
+    saved = Array.isArray(previous.saved)
+      ? previous.saved.filter(
+          id => records.some(r => r.id === id)
+        )
+      : [];
+
+    notes = typeof previous.notes === "string"
+      ? previous.notes : "";
+
+  } catch(error) {
+    console.warn(
+      "Archaeology storage:",error
+    );
+  }
+
+  function make(tag,text="",className="") {
+
+    const el = document.createElement(tag);
+
+    el.textContent = text;
+
+    if(className) {
+      el.className = className;
+    }
+
+    return el;
+  }
+
+  function button(text,handler) {
+
+    const el = make("button",text);
+
+    el.type = "button";
+
+    el.addEventListener("click",handler);
+
+    return el;
+  }
+
+  function link(text,url) {
+
+    const el = make("a",text);
+
+    el.href = url;
+    el.target = "_blank";
+    el.rel = "noopener noreferrer";
+
+    return el;
+  }
+
+  function field(parent,label,value) {
+
+    const p = make("p");
+
+    p.append(
+      make("strong",label + ": "),
+      document.createTextNode(String(value))
+    );
+
+    parent.appendChild(p);
+  }
+
+  function actions(parent,items) {
+
+    const row = make(
+      "div","","arActions"
+    );
+
+    row.append(...items);
+
+    parent.appendChild(row);
+
+    return row;
+  }
+
+  function selectControl(items,value,onChange) {
+
+    const select = make("select");
+
+    items.forEach(item => {
+
+      const option = make(
+        "option",item[1]
+      );
+
+      option.value = item[0];
+
+      select.appendChild(option);
+    });
+
+    select.value = value;
+
+    select.addEventListener(
+      "change",
+      () => onChange(select.value)
+    );
+
+    return select;
+  }
+
+  function control(parent,name,element) {
+
+    const label = make("label",name);
+
+    label.appendChild(element);
+
+    parent.appendChild(label);
+  }
+
+  function saveStorage() {
+
+    try {
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({saved,notes})
+      );
+
+      return true;
+
+    } catch(error) {
+      return false;
+    }
+  }
+
+  function toggleSaved(id,element) {
+
+    if(saved.includes(id)) {
+      saved = saved.filter(value => value !== id);
+    } else {
+      saved.push(id);
+    }
+
+    if(!saveStorage()) {
+      alert(
+        "Browser storage unavailable. " +
+        "Download your research before leaving."
+      );
+    }
+
+    if(element) {
+
+      element.textContent = saved.includes(id)
+        ? "Remove bookmark"
+        : "Bookmark evidence";
+    }
+
+    if(view === "saved") {
+      render();
+    }
+  }
+
+  function download(text,name) {
+
+    const blob = new Blob(
+      [text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = name;
+
+    document.body.appendChild(a);
+
+    a.click();
+    a.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+  }
+
+  async function copyText(text) {
+
+    try {
+
+      await navigator.clipboard.writeText(text);
+
+      alert("Research record copied.");
+
+    } catch(error) {
+
+      download(
+        text,
+        "DesertBible-archaeology-record.txt"
+      );
+    }
+  }
+
+  function report(record) {
+
+    return [
+      "DESERTBIBLE ARCHAEOLOGICAL RESEARCH",
+      "",
+      record.id + " — " + record.title,
+      "Date: " + record.date,
+      "Findspot: " + record.location,
+      "Region: " + record.region,
+      "Physical type: " + record.type,
+      "Evidence classification: " +
+        evidence[record.evidence].title,
+      "",
+      "Biblical connections:",
+      record.references.join("; "),
+      "",
+      "Description:",
+      record.description,
+      "",
+      "Historical significance:",
+      record.significance,
+      "",
+      "Evidence limitations:",
+      record.limitations,
+      "",
+      "Research resources:",
+      ...record.sources.map(
+        key => sources[key].join(" — ")
+      ),
+      "",
+      "Record accessed: " +
+        new Date().toISOString().slice(0,10),
+      "",
+      "Editorial research summary. Consult original publications before academic citation."
+    ].join("\n");
+  }
+
+  function imageURL(record) {
+
+    return "https://commons.wikimedia.org/" +
+      "w/index.php?title=Special:MediaSearch" +
+      "&type=image&search=" +
+      encodeURIComponent(record.imageQuery);
+  }
+
+  function mapURL(location) {
+
+    return "https://www.google.com/maps/search/" +
+      "?api=1&query=" +
+      encodeURIComponent(location);
+  }
+
+  function iconFor(record) {
+
+    if(record.type.includes("inscription")) {
+      return "𒀭";
+    }
+
+    if(record.type.includes("tablet")) {
+      return "▤";
+    }
+
+    if(record.type.includes("Manuscript")) {
+      return "📜";
+    }
+
+    if(record.type.includes("architecture") ||
+       record.type.includes("Fortification")) {
+      return "🏛";
+    }
+
+    if(record.type.includes("Coin")) {
+      return "◉";
+    }
+
+    return "◇";
+  }
+
+  function recordCard(record) {
+
+    const card = make(
+      "article","","arCard"
+    );
+
+    card.append(
+      make(
+        "div",
+        iconFor(record),
+        "arIcon"
+      ),
+      make(
+        "small",
+        record.id,
+        "arMuted"
+      ),
+      make("h3",record.title),
+      make("span",record.date,"arTag"),
+      make("span",record.region,"arTag")
+    );
+
+    field(
+      card,
+      "Evidence",
+      evidence[record.evidence].title
+    );
+
+    field(card,"Findspot",record.location);
+
+    card.append(
+      make("p",record.description),
+      make(
+        "p",
+        record.references.join(" • "),
+        "arMuted"
+      )
+    );
+
+    const saveButton = button(
+      saved.includes(record.id)
+        ? "Remove bookmark"
+        : "Bookmark evidence",
+      () => toggleSaved(record.id,saveButton)
+    );
+
+    actions(card,[
+      button("Investigate evidence",() => {
+
+        selected = record.id;
+
+        render();
+      }),
+      saveButton
+    ]);
+
+    card.appendChild(
+      link(
+        "Explore artifact photographs",
+        imageURL(record)
+      )
+    );
+
+    return card;
+  }
+
+  function recordDetail(record) {
+
+    output.appendChild(
+      button("← Return to research results",() => {
+
+        selected = null;
+
+        render();
+      })
+    );
+
+    const detail = make(
+      "article","","arPanel"
+    );
+
+    detail.append(
+      make(
+        "small",
+        record.id,
+        "arMuted"
+      ),
+      make("h2",record.title),
+      make("span",record.date,"arTag"),
+      make("span",record.region,"arTag"),
+      make("span",record.type,"arTag")
+    );
+
+    field(
+      detail,
+      "Findspot",
+      record.location
+    );
+
+    field(
+      detail,
+      "Evidence classification",
+      evidence[record.evidence].title
+    );
+
+    detail.append(
+      make("h3","Artifact description"),
+      make("p",record.description),
+      make("h3","Historical significance"),
+      make(
+        "p",
+        record.significance,
+        "arEvidence"
+      ),
+      make("h3","Limitations and uncertainties"),
+      make(
+        "p",
+        record.limitations,
+        "arLimit"
+      ),
+      make("h3","Biblical connections")
+    );
+
+    record.references.forEach(reference => {
+
+      const row = make(
+        "div","","arReference"
+      );
+
+      row.appendChild(
+        link(
+          reference,
+          "https://www.stepbible.org/?q=" +
+          encodeURIComponent(
+            "reference=" + reference
+          )
+        )
+      );
+
+      detail.appendChild(row);
+    });
+
+    detail.appendChild(
+      make("h3","Photographs and location")
+    );
+
+    actions(detail,[
+      link(
+        "Find artifact photographs",
+        imageURL(record)
+      ),
+      link(
+        "Explore geographic findspot",
+        mapURL(record.location)
+      )
+    ]);
+
+    detail.append(
+      make(
+        "p",
+        "Geographic links identify the named location, not necessarily an exact excavation trench.",
+        "arMuted"
+      ),
+      make("h3","Research resources")
+    );
+
+    record.sources.forEach(key => {
+
+      const source = sources[key];
+
+      const p = make("p");
+
+      p.appendChild(
+        link(source[0],source[1])
+      );
+
+      detail.appendChild(p);
+    });
+
+    detail.appendChild(
+      make(
+        "p",
+        "Resource links include institutional collections and research gateways. Search the artifact name in the relevant collection. These are not all item-level excavation citations.",
+        "arMuted"
+      )
+    );
+
+    detail.appendChild(
+      make("h3","Research citation")
+    );
+
+    const citation = make("textarea");
+
+    citation.value = report(record);
+
+    citation.readOnly = true;
+
+    detail.appendChild(citation);
+
+    const saveButton = button(
+      saved.includes(record.id)
+        ? "Remove bookmark"
+        : "Bookmark evidence",
+      () => toggleSaved(record.id,saveButton)
+    );
+
+    actions(detail,[
+      saveButton,
+
+      button("Copy research record",() => {
+        copyText(report(record));
+      }),
+
+      button("Download evidence record",() => {
+
+        download(
+          report(record),
+          record.id + "-research.txt"
+        );
+      }),
+
+      button("Add to notebook",() => {
+
+        notes +=
+          (notes ? "\n\n" : "") +
+          report(record);
+
+        saveStorage();
+
+        selected = null;
+        view = "notes";
+
+        render();
+      })
+    ]);
+
+    output.appendChild(detail);
+
+    detail.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+
+  function matchesPeriod(record,period) {
+
+    if(period === "bronze") {
+      return record.year < -1200;
+    }
+
+    if(period === "iron") {
+      return record.year >= -1200 &&
+        record.year < -586;
+    }
+
+    if(period === "exile") {
+      return record.year >= -586 &&
+        record.year < -332;
+    }
+
+    if(period === "hellenistic") {
+      return record.year >= -332 &&
+        record.year < -63;
+    }
+
+    if(period === "roman") {
+      return record.year >= -63;
+    }
+
+    return true;
+  }
+
+  function filteredRecords() {
+
+    const query =
+      filters.search.trim().toLowerCase();
+
+    const list = records.filter(record => {
+
+      const text = [
+        record.title,
+        record.location,
+        record.region,
+        record.date,
+        record.type,
+        record.description,
+        record.significance,
+        record.limitations,
+        record.references.join(" "),
+        evidence[record.evidence].title
+      ].join(" ").toLowerCase();
+
+      return (
+        !query || text.includes(query)
+      ) && (
+        !filters.region ||
+        record.region === filters.region
+      ) && (
+        !filters.type ||
+        record.type === filters.type
+      ) && (
+        !filters.evidence ||
+        record.evidence === filters.evidence
+      ) && matchesPeriod(
+        record,
+        filters.period
+      );
+    });
+
+    if(filters.sort === "oldest") {
+      list.sort((a,b) => a.year-b.year);
+    }
+
+    if(filters.sort === "newest") {
+      list.sort((a,b) => b.year-a.year);
+    }
+
+    if(filters.sort === "name") {
+      list.sort((a,b) =>
+        a.title.localeCompare(b.title)
+      );
+    }
+
+    return list;
+  }
+
+  function renderCatalogue() {
+
+    output.append(
+      make("h3","Archaeological Evidence Catalogue"),
+
+      make(
+        "p",
+        "Search discoveries by name, biblical reference, location, period or evidence classification."
+      )
+    );
+
+    const search = make("input");
+
+    search.value = filters.search;
+
+    search.placeholder =
+      "Search Micah, Lachish, Assyria, Pilate...";
+
+    output.appendChild(search);
+
+    const controls = make(
+      "div","","arControls"
+    );
+
+    const results = make("div");
+
+    function update(key,value) {
+
+      filters[key] = value;
+
+      page = 1;
+
+      draw();
+    }
+
+    control(
+      controls,
+      "Region",
+      selectControl(
+        [["","All regions"],
+        ...regions.map(x => [x,x])],
+        filters.region,
+        value => update("region",value)
+      )
+    );
+
+    control(
+      controls,
+      "Artifact type",
+      selectControl(
+        [["","All types"],
+        ...types.map(x => [x,x])],
+        filters.type,
+        value => update("type",value)
+      )
+    );
+
+    control(
+      controls,
+      "Evidence type",
+      selectControl(
+        [["","All classifications"],
+        ...Object.entries(evidence).map(
+          ([key,value]) => [key,value.title]
+        )],
+        filters.evidence,
+        value => update("evidence",value)
+      )
+    );
+
+    control(
+      controls,
+      "Date range",
+      selectControl(
+        [
+          ["","All periods"],
+          ["bronze","Before 1200 BCE"],
+          ["iron","1200–587 BCE"],
+          ["exile","586–333 BCE"],
+          ["hellenistic","332–64 BCE"],
+          ["roman","63 BCE onward"]
+        ],
+        filters.period,
+        value => update("period",value)
+      )
+    );
+
+    control(
+      controls,
+      "Sort results",
+      selectControl(
+        [
+          ["featured","Catalogue order"],
+          ["oldest","Oldest first"],
+          ["newest","Newest first"],
+          ["name","Alphabetical"]
+        ],
+        filters.sort,
+        value => update("sort",value)
+      )
+    );
+
+    output.appendChild(controls);
+
+    actions(output,[
+      button("Reset filters",() => {
+
+        filters = {
+          search:"",
+          region:"",
+          type:"",
+          evidence:"",
+          period:"",
+          sort:"featured"
+        };
+
+        page = 1;
+
+        render();
+      }),
+
+      button("Export matching records",() => {
+
+        download(
+          filteredRecords().map(report)
+            .join("\n\n================\n\n"),
+          "DesertBible-archaeology-results.txt"
+        );
+      })
+    ]);
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const list = filteredRecords();
+
+      const totalPages = Math.max(
+        1,
+        Math.ceil(list.length/pageSize)
+      );
+
+      page = Math.min(page,totalPages);
+
+      results.appendChild(
+        make(
+          "p",
+          list.length +
+          " matching evidence records",
+          "arMuted"
+        )
+      );
+
+      const grid = make(
+        "div","","arGrid"
+      );
+
+      list.slice(
+        (page-1)*pageSize,
+        page*pageSize
+      ).forEach(record => {
+
+        grid.appendChild(
+          recordCard(record)
+        );
+      });
+
+      results.appendChild(grid);
+
+      if(!list.length) {
+
+        results.appendChild(
+          make(
+            "p",
+            "No matching records in this catalogue. Try broader search terms or remove filters."
+          )
+        );
+      }
+
+      const previous = button(
+        "Previous page",
+        () => {
+
+          page--;
+
+          draw();
+        }
+      );
+
+      previous.disabled = page <= 1;
+
+      const next = button(
+        "Next page",
+        () => {
+
+          page++;
+
+          draw();
+        }
+      );
+
+      next.disabled = page >= totalPages;
+
+      actions(results,[
+        previous,
+        make(
+          "span",
+          "Page " + page +
+          " of " + totalPages
+        ),
+        next
+      ]);
+    }
+
+    search.addEventListener(
+      "input",
+      () => update("search",search.value)
+    );
+
+    draw();
+  }
+
+  function renderSites() {
+
+    output.append(
+      make("h3","Excavation and Findspot Explorer"),
+
+      make(
+        "p",
+        "Explore archaeological locations and the objects associated with them."
+      )
+    );
+
+    const search = make("input");
+
+    search.placeholder =
+      "Search Jerusalem, Nineveh, Corinth...";
+
+    output.appendChild(search);
+
+    const results = make("div");
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const query =
+        search.value.trim().toLowerCase();
+
+      const grouped = new Map();
+
+      records.forEach(record => {
+
+        if(!grouped.has(record.location)) {
+          grouped.set(record.location,[]);
+        }
+
+        grouped.get(record.location).push(record);
+      });
+
+      const grid = make(
+        "div","","arGrid"
+      );
+
+      grid.style.marginTop = "15px";
+
+      Array.from(grouped.entries())
+        .sort((a,b) => a[0].localeCompare(b[0]))
+        .forEach(([location,list]) => {
+
+          const text = [
+            location,
+            ...list.map(record =>
+              record.title + " " + record.region
+            )
+          ].join(" ").toLowerCase();
+
+          if(query && !text.includes(query)) {
+            return;
+          }
+
+          const card = make(
+            "article","","arCard"
+          );
+
+          card.append(
+            make("div","🏛","arIcon"),
+            make("h3",location),
+            make(
+              "p",
+              list.length +
+              " related catalogue records",
+              "arMuted"
+            )
+          );
+
+          list.forEach(record => {
+
+            const row = make("p");
+
+            row.appendChild(
+              button(record.title,() => {
+
+                selected = record.id;
+
+                render();
+              })
+            );
+
+            card.appendChild(row);
+          });
+
+          card.appendChild(
+            link(
+              "Explore location on map",
+              mapURL(location)
+            )
+          );
+
+          grid.appendChild(card);
+        });
+
+      if(!grid.childElementCount) {
+        grid.appendChild(
+          make("p","No matching findspots.")
+        );
+      }
+
+      results.appendChild(grid);
+    }
+
+    search.addEventListener("input",draw);
+
+    draw();
+  }
+
+  function renderTimeline() {
+
+    output.append(
+      make("h3","Archaeological Evidence Timeline"),
+
+      make(
+        "p",
+        "Explore the chronological development of material evidence from ancient Mesopotamia to the Roman and Byzantine periods."
+      ),
+
+      make(
+        "p",
+        "Dates refer to artifact production, associated events or approximate occupation periods. Representative sorting years are not exact archaeological dates.",
+        "arLimit"
+      )
+    );
+
+    const select = selectControl(
+      [
+        ["","All periods"],
+        ["bronze","Before 1200 BCE"],
+        ["iron","1200–587 BCE"],
+        ["exile","586–333 BCE"],
+        ["hellenistic","332–64 BCE"],
+        ["roman","63 BCE onward"]
+      ],
+      "",
+      draw
+    );
+
+    output.appendChild(select);
+
+    const timeline = make(
+      "div","","arTimeline"
+    );
+
+    timeline.style.marginTop = "20px";
+
+    output.appendChild(timeline);
+
+    function draw() {
+
+      timeline.replaceChildren();
+
+      records.filter(record =>
+        matchesPeriod(record,select.value)
+      ).sort((a,b) =>
+        a.year-b.year
+      ).forEach(record => {
+
+        const event = make(
+          "article","","arEvent"
+        );
+
+        event.append(
+          make(
+            "span",record.date,"arTag"
+          ),
+          make("h3",record.title),
+          make(
+            "p",
+            record.location,
+            "arMuted"
+          ),
+          make("p",record.significance),
+          button("Study this evidence",() => {
+
+            selected = record.id;
+
+            render();
+          })
+        );
+
+        timeline.appendChild(event);
+      });
+    }
+
+    draw();
+  }
+
+  function matchPassage(record,name,ch) {
+
+    return record.references.some(reference => {
+
+      if(reference === name) {
+        return true;
+      }
+
+      if(!reference.startsWith(name + " ")) {
+        return false;
+      }
+
+      const rest =
+        reference.slice(name.length).trim();
+
+      const match = rest.match(/^(\d+)/);
+
+      return match &&
+        Number(match[1]) === Number(ch);
+    });
+  }
+
+  function renderScripture() {
+
+    output.append(
+      make("h3","Biblical Archaeology Connections"),
+
+      make(
+        "p",
+        "Select a biblical book and chapter to investigate relevant material evidence."
+      )
+    );
+
+    const controls = make(
+      "div","","arControls"
+    );
+
+    const bookSelect = selectControl(
+      books.map(
+        (row,index) => [String(index),row[0]]
+      ),
+      String(bookIndex),
+      value => {
+
+        bookIndex = Number(value);
+
+        chapter = 1;
+
+        render();
+      }
+    );
+
+    const chapters = Array.from(
+      {length:books[bookIndex][1]},
+      (_,index) => [
+        String(index+1),
+        "Chapter " + (index+1)
+      ]
+    );
+
+    const chapterSelect = selectControl(
+      chapters,
+      String(chapter),
+      value => {
+
+        chapter = Number(value);
+
+        render();
+      }
+    );
+
+    control(controls,"Book",bookSelect);
+
+    control(
+      controls,"Chapter",chapterSelect
+    );
+
+    output.appendChild(controls);
+
+    const reference =
+      books[bookIndex][0] + " " + chapter;
+
+    output.appendChild(
+      make("h3",reference)
+    );
+
+    const preview = make(
+      "div","","arPanel"
+    );
+
+    preview.append(
+      make(
+        "h4",
+        "Scripture reference — World English Bible"
+      )
+    );
+
+    const passage = make(
+      "div",
+      "Select Load Scripture to read the passage."
+    );
+
+    const loadButton = button(
+      "Load Scripture",
+      async () => {
+
+        const request = ++requestCounter;
+
+        loadButton.disabled = true;
+
+        passage.textContent =
+          "Loading Scripture…";
+
+        try {
+
+          const response = await fetch(
+            "https://bible-api.com/" +
+            encodeURIComponent(reference) +
+            "?translation=web"
+          );
+
+          if(!response.ok) {
+            throw new Error(
+              "HTTP " + response.status
+            );
+          }
+
+          const data = await response.json();
+
+          if(request !== requestCounter) {
+            return;
+          }
+
+          if(!Array.isArray(data.verses)) {
+            throw new Error(
+              "Passage unavailable."
+            );
+          }
+
+          passage.replaceChildren();
+
+          data.verses.forEach(verse => {
+
+            const row = make(
+              "div","","arReference"
+            );
+
+            row.append(
+              make(
+                "strong",
+                verse.verse + " "
+              ),
+              document.createTextNode(
+                verse.text
+              )
+            );
+
+            passage.appendChild(row);
+          });
+
+        } catch(error) {
+
+          passage.textContent =
+            "Scripture could not be retrieved. " +
+            "Use the external Scripture link.";
+
+        } finally {
+
+          loadButton.disabled = false;
+        }
+      }
+    );
+
+    preview.append(
+      loadButton,
+      passage,
+      link(
+        "Open passage in STEP Bible",
+        "https://www.stepbible.org/?q=" +
+        encodeURIComponent(
+          "reference=" + reference
+        )
+      )
+    );
+
+    output.appendChild(preview);
+
+    const matched = records.filter(record =>
+      matchPassage(
+        record,
+        books[bookIndex][0],
+        chapter
+      )
+    );
+
+    const section = make(
+      "div","","arPanel"
+    );
+
+    section.append(
+      make("h3","Related Archaeological Evidence"),
+      make(
+        "p",
+        matched.length +
+        " related catalogue records",
+        "arMuted"
+      )
+    );
+
+    if(!matched.length) {
+
+      section.appendChild(
+        make(
+          "p",
+          "No archaeological records are currently indexed specifically to this selection. This does not establish an absence of relevant historical evidence.",
+          "arLimit"
+        )
+      );
+    }
+
+    const grid = make(
+      "div","","arGrid"
+    );
+
+    matched.forEach(record => {
+
+      grid.appendChild(
+        recordCard(record)
+      );
+    });
+
+    section.appendChild(grid);
+
+    output.appendChild(section);
+
+    output.appendChild(
+      make(
+        "p",
+        "Biblical connections are editorial research associations. Book-level references provide general context and do not necessarily apply directly to every chapter.",
+        "arLimit"
+      )
+    );
+  }
+
+  function renderMethods() {
+
+    output.append(
+      make("h3","Archaeological Research Methods"),
+
+      make(
+        "p",
+        "Understand how archaeological evidence is discovered, dated, interpreted and evaluated."
+      )
+    );
+
+    const grid = make(
+      "div","","arGrid"
+    );
+
+    methods.forEach(row => {
+
+      const card = make(
+        "article","","arCard"
+      );
+
+      card.append(
+        make("h3",row[0]),
+        make("p",row[1]),
+        make("p",row[2],"arLimit")
+      );
+
+      grid.appendChild(card);
+    });
+
+    output.appendChild(grid);
+
+    const checklist = make(
+      "section","","arPanel"
+    );
+
+    checklist.append(
+      make("h3","Evidence Evaluation Checklist"),
+
+      make(
+        "p",
+        "Use this checklist when assessing archaeological claims."
+      )
+    );
+
+    [
+      "Identify the original excavation or publication.",
+      "Confirm the artifact's documented findspot.",
+      "Check the proposed date and dating method.",
+      "Distinguish surviving text from reconstructed text.",
+      "Consult alternative scholarly interpretations.",
+      "Determine whether the evidence directly supports the stated claim.",
+      "Identify possible political or religious bias in ancient sources.",
+      "Separate archaeological conclusions from theological interpretations.",
+      "Record collection numbers and publication details when available.",
+      "Document remaining uncertainty."
+    ].forEach(text => {
+
+      const row = make(
+        "label","","arReference"
+      );
+
+      row.style.display = "flex";
+      row.style.gap = "10px";
+
+      const check = make("input");
+
+      check.type = "checkbox";
+
+      check.style.width = "auto";
+
+      row.append(
+        check,
+        document.createTextNode(text)
+      );
+
+      checklist.appendChild(row);
+    });
+
+    output.appendChild(checklist);
+  }
+
+  function renderLibrary() {
+
+    output.append(
+      make(
+        "h3",
+        "Museum and Academic Research Library"
+      ),
+
+      make(
+        "p",
+        "Access institutional collections, archaeological publications, ancient inscriptions and manuscript archives."
+      )
+    );
+
+    const search = make("input");
+
+    search.placeholder =
+      "Search museum, inscriptions, archaeology...";
+
+    output.appendChild(search);
+
+    const results = make("div");
+
+    output.appendChild(results);
+
+    function draw() {
+
+      results.replaceChildren();
+
+      const query =
+        search.value.toLowerCase().trim();
+
+      Object.values(sources).filter(source =>
+        source.join(" ")
+          .toLowerCase().includes(query)
+      ).forEach(source => {
+
+        const entry = make(
+          "div","","arEntry"
+        );
+
+        entry.append(
+          make("h3",source[0]),
+          link(
+            "Open research resource",
+            source[1]
+          )
+        );
+
+        results.appendChild(entry);
+      });
+
+      if(!results.childElementCount) {
+
+        results.appendChild(
+          make("p","No matching resources.")
+        );
+      }
+    }
+
+    search.addEventListener("input",draw);
+
+    draw();
+
+    const publications = make(
+      "div","","arPanel"
+    );
+
+    publications.append(
+      make("h3","Recommended Academic Reading"),
+
+      make(
+        "p",
+        "Amihai Mazar — Archaeology of the Land of the Bible: 10,000–586 B.C.E. (1990)."
+      ),
+
+      make(
+        "p",
+        "Ephraim Stern — Archaeology of the Land of the Bible, Volume II: The Assyrian, Babylonian, and Persian Periods, 732–332 B.C.E. (2001)."
+      ),
+
+      make(
+        "p",
+        "William G. Dever — Beyond the Texts: An Archaeological Portrait of Ancient Israel and Judah (2017)."
+      ),
+
+      make(
+        "p",
+        "Israel Finkelstein and Neil Asher Silberman — The Bible Unearthed (2001)."
+      ),
+
+      make(
+        "p",
+        "Eric H. Cline — Biblical Archaeology: A Very Short Introduction (2009)."
+      ),
+
+      make(
+        "p",
+        "Jodi Magness — The Archaeology of the Holy Land: From the Destruction of Solomon's Temple to the Muslim Conquest (2012)."
+      ),
+
+      link(
+        "Find books through WorldCat",
+        "https://search.worldcat.org/"
+      ),
+
+      make(
+        "p",
+        "These publications represent different scholarly approaches. Their conclusions should be compared rather than treated as interchangeable.",
+        "arLimit"
+      )
+    );
+
+    output.appendChild(publications);
+  }
+
+  function renderSaved() {
+
+    output.append(
+      make("h3","Saved Archaeological Evidence")
+    );
+
+    const list = records.filter(record =>
+      saved.includes(record.id)
+    );
+
+    if(!list.length) {
+
+      output.appendChild(
+        make(
+          "p",
+          "Bookmark archaeological records to build your personal evidence collection."
+        )
+      );
+
+      return;
+    }
+
+    const grid = make(
+      "div","","arGrid"
+    );
+
+    list.forEach(record => {
+
+      grid.appendChild(
+        recordCard(record)
+      );
+    });
+
+    output.appendChild(grid);
+
+    actions(output,[
+      button("Download evidence collection",() => {
+
+        download(
+          list.map(report)
+            .join("\n\n================\n\n"),
+          "DesertBible-archaeology-collection.txt"
+        );
+      })
+    ]);
+  }
+
+  function renderNotes() {
+
+    output.append(
+      make("h3","Archaeological Research Notebook"),
+
+      make(
+        "p",
+        "Record observations, source comparisons, excavation questions and evidence assessments."
+      )
+    );
+
+    const area = make("textarea");
+
+    area.value = notes;
+
+    area.placeholder =
+      "Enter archaeological research notes...";
+
+    area.addEventListener("input",() => {
+      notes = area.value;
+    });
+
+    output.appendChild(area);
+
+    const status = make(
+      "p","","arMuted"
+    );
+
+    actions(output,[
+      button("Save notebook",() => {
+
+        status.textContent = saveStorage()
+          ? "Notebook saved in this browser."
+          : "Storage unavailable. Download your notebook.";
+      }),
+
+      button("Download notebook",() => {
+
+        download(
+          notes,
+          "DesertBible-archaeology-notebook.txt"
+        );
+      }),
+
+      button("Copy notebook",() => {
+        copyText(notes);
+      })
+    ]);
+
+    output.append(
+      status,
+
+      make(
+        "p",
+        "Bookmarks and notebook entries are stored locally on this device.",
+        "arMuted"
+      )
+    );
+  }
+
+  function render() {
+
+    requestCounter++;
+
+    output.replaceChildren();
+
+    root.querySelectorAll(
+      "[data-ar-tab]"
+    ).forEach(node => {
+
+      const active =
+        node.dataset.arTab === view;
+
+      node.classList.toggle(
+        "arActive",active
+      );
+
+      node.setAttribute(
+        "aria-pressed",String(active)
+      );
+    });
+
+    if(selected) {
+
+      const record = records.find(
+        item => item.id === selected
+      );
+
+      if(record) {
+
+        recordDetail(record);
+
+        return;
+      }
+    }
+
+    if(view === "catalogue") {
+      renderCatalogue();
+    }
+
+    if(view === "sites") {
+      renderSites();
+    }
+
+    if(view === "timeline") {
+      renderTimeline();
+    }
+
+    if(view === "scripture") {
+      renderScripture();
+    }
+
+    if(view === "methods") {
+      renderMethods();
+    }
+
+    if(view === "library") {
+      renderLibrary();
+    }
+
+    if(view === "saved") {
+      renderSaved();
+    }
+
+    if(view === "notes") {
+      renderNotes();
+    }
+  }
+
+  $("arRecordCount").textContent =
+    records.length;
+
+  $("arSourceCount").textContent =
+    Object.keys(sources).length;
+
+  $("arRegionCount").textContent =
+    regions.length;
+
+  Object.values(evidence).forEach(item => {
+
+    const card = make(
+      "div","","arCard"
+    );
+
+    card.append(
+      make("h4",item.title),
+      make("p",item.description)
+    );
+
+    $("arStandards").appendChild(card);
+  });
+
+  root.querySelectorAll(
+    "[data-ar-tab]"
+  ).forEach(node => {
+
+    node.addEventListener("click",() => {
+
+      selected = null;
+
+      view = node.dataset.arTab;
+
+      render();
+    });
+  });
+
+  $("arClose").addEventListener("click",() => {
+
+    requestCounter++;
+
+    workspace.remove();
+  });
+
+  render();
+
+  workspace.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
 
